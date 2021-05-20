@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://unpkg.com/textures@1.2.0/dist/textures.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+
+        <style>
+            /* COLOUR PALETTES */
+            :root {
+                --chartLightGreen:  #cbe197;
+                --chartGray:        #b1b1b0;
+                --chartTeal:        #52baba;
+                --chartEmerald:     #00502e;
+                --chartPowderBlue:  #9bddfa;
+                --chartGreen:       #77bf00;
+                --chartDarkGreen:   #009857;
+                --chartOrange:      #cea98d;
+                --chartBlue:        #00568f;
+                --chartPurple:      #816bb4;
+                --chartLightGrey:   #cfcfcf;
+                --chartYellow:      #ffd300;
+            }
+
+            body{ 
+            }
+            .hidden{ 
+                display: none;
+            }
+            text { 
+                font-family: 'DIN Next LT Pro';
+            }
+            .landfill{
+                fill: var(--chartGray);
+            }
+            .diversion{
+                fill:  var(--chartGreen);
+            }
+            .bar-label{
+                font-size: 14px;
+                alignment-baseline: middle;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <div class = "svg-container">
+            <svg id = "wave-vis">
+            </svg>
+        </div>
+    </body>
+    
+    <script>
+        ///////////////////////////////
+        // 0. DATA AND SETTINGS     ///
+        ///////////////////////////////
+
+        const data = {          // INitiate data object that populated by the parseData() function, 
+            byPeriod: { }
+        }
+
+        const settings = {
+            svgID:          'wave-vis',
+            period:         '2018/19', 
+            dims: {
+                height:     720, 
+                width:      1080,
+                margin: {
+                    top: 100, right: 100, bottom: 100, left: 100
+                }
+            },    
+            geometry: {
+                radiusGap:      70,
+                innerRadius:    250,
+                outerRadius:    720 /2,
+                padAngle:       0.01
+            },
+            scales:                  {}, /// Object to hold flow width scales globally (noteL scales defined from parsed data in the renderVis() function )
+        }
+
+        //////////////////////////////////////
+        // 1. PARSE AND WRANGLE DATA       ///
+        //////////////////////////////////////
+
+        async function parseData() {        
+            // This function will take a data source, then parse/wrangle and return/populate the data structure(s) below 
+            // Manual entry is done here for prototyping, using the 2018/19 data
+            data.byPeriod["2018/19"] = [
+                {
+                    "Material": "Aggregates, masonry, soil",
+                    "Volume": 7415,
+                    "Diversion": 0.85
+                },
+                {
+                    "Material": "Glass",
+                    "Volume": 278,
+                    "Diversion": 0.70
+                },
+                {
+                    "Material": "Organics",
+                    "Volume": 2754,
+                    "Diversion": 0.48
+                },
+                {
+                    "Material": "Plastics",
+                    "Volume": 606,
+                    "Diversion": 0.24
+                },
+                {
+                    "Material": "Metals",
+                    "Volume": 1614,
+                    "Diversion": 0.91
+                },
+                {
+                    "Material": "Paper / cardboard",
+                    "Volume": 1781,
+                    "Diversion": 0.70
+                },
+                {
+                    "Material": "Textiles",
+                    "Volume": 188,
+                    "Diversion": 0.01
+                },
+                {
+                    "Material": "Other",
+                    "Volume": 679,
+                    "Diversion": 0.10
+                }
+            ]
+
+            // data.byPeriod["2018/19"]  = [
+            //     {
+            //         "Material": "Aggregates, masonry, soil",
+            //         "Volume": 7415,
+            //         "Diversion": 0.85
+            //     },
+            //     {
+            //         "Material": "Glass",
+            //         "Volume": 278,
+            //         "Diversion": 0.70
+            //     },
+            //     {
+            //         "Material": "Organics",
+            //         "Volume": 2754,
+            //         "Diversion": 0.48
+            //     },
+            //     {
+            //         "Material": "Plastics",
+            //         "Volume": 606,
+            //         "Diversion": 0.24
+            //     },
+            //     {
+            //         "Material": "Metals",
+            //         "Volume": 1614,
+            //         "Diversion": 0.91
+            //     },
+            //     {
+            //         "Material": "Paper / cardboard",
+            //         "Volume": 1781,
+            //         "Diversion": 0.70
+            //     },
+            //     {
+            //         "Material": "Textiles",
+            //         "Volume": 188,
+            //         "Diversion": 0.01
+            //     },
+            //     {
+            //         "Material": "Other",
+            //         "Volume": 679,
+            //         "Diversion": 0.10
+            //     }
+            // ]   
+
+
+        };
+
+
+        ///////////////////////////////////////////////////
+        // 2. RENDER THE RADIAL BAR CHART VISUALISATION ///
+        ///////////////////////////////////////////////////
+
+        async function renderRadialBar(data, settings){
+            // Reference data objects 
+            const dataset = data.byPeriod[settings.period],
+                icons = {         //
+                'Aggregates, masonry, soil':    'M4.348 5.885c-2.614 0-3.923 3.161-2.074 5.01 1.848 1.848 5.009.54 5.009-2.075a2.934 2.934 0 00-2.935-2.935zm0 4.23c-1.154 0-1.731-1.395-.915-2.211.815-.816 2.21-.238 2.21.916 0 .715-.58 1.295-1.295 1.295zm12.336 6.902c.008-2.624-3.162-3.945-5.02-2.092-1.858 1.852-.546 5.026 2.078 5.026a2.934 2.934 0 002.942-2.934zm-4.237 0c-.008-1.166 1.4-1.754 2.225-.93.823.824.235 2.232-.93 2.225-.715 0-1.295-.58-1.295-1.295zm-17.656-3.28a.82.82 0 011.4-.579.82.82 0 11-1.4.58zm5.189 1.165a.82.82 0 011.399-.58.82.82 0 11-1.4.58zm6.13 5.049a.82.82 0 01-.579-1.4.82.82 0 11.58 1.4zm2.394-4.984a.82.82 0 01-.58-1.399.82.82 0 11.58 1.4zm-11.098 2.46a.82.82 0 01.58 1.399.82.82 0 11-.58-1.4zM24.76 20.59L8.086 3.915a5.738 5.738 0 00-8.102 0l-.257.256c-.063-.43-.14-.86-.245-1.281l-.11-.44a1.478 1.478 0 00-1.789-1.074l-3.206.8-4.262-17.092A9.01 9.01 0 00-6.5-18.317a2.47 2.47 0 00.118-2.192 2.439 2.439 0 00-1.642-1.411 2.505 2.505 0 00-2.78 1.222 4.102 4.102 0 01-5.753 1.435 2.504 2.504 0 00-3.029.225 2.435 2.435 0 00-.788 2.017 2.47 2.47 0 001.133 1.88 9.003 9.003 0 004.583 1.408l4.263 17.099-3.207.8a1.475 1.475 0 00-1.075 1.788l.11.44A13.098 13.099 0 00-13.22 9.74a5.201 5.201 0 00-1.896 1.206l-9.644 9.644a.82.82 0 00.58 1.399h48.36a.82.82 0 00.58-1.4zM-18.741-17.16a.797.797 0 01.26-.668.866.866 0 011.042-.053 5.74 5.74 0 008.06-2.01.853.853 0 01.944-.442.796.796 0 01.545.468.838.838 0 01-.042.746 7.381 7.381 0 01-10.423 2.599.84.84 0 01-.386-.64zm5.748 3.33c.27-.041.54-.082.808-.149.266-.066.527-.15.784-.24l4.187 16.79-1.59.397zm.015 19.826l-.07-.28 10.87-2.71.07.28a11.503 11.504 0 01.328 2.39l-3.73 3.729-.77-3.088a.82.82 0 00-1.592.397l1.009 4.043-.516.516-.329-.328a5.22 5.22 0 00-3.783-1.528 11.463 11.464 0 01-1.487-3.42zm-.979 6.108a3.604 3.604 0 015.09 0l.328.328-7.92 7.917h-5.743zm-.184 8.245L1.143 5.073a4.097 4.097 0 015.784.001L22.202 20.35z',
+                'Glass':                        'M7.292 20.833H-3.125a1.041 1.041 0 01-1.042-1.041V-3.125a1.041 1.041 0 011.042-1.042H7.208a1.04 1.04 0 01.737.305 1.338 1.338 0 01.388.82v22.834a1.041 1.041 0 01-1.041 1.041zm-9.375-2.083H6.25V-2.083h-8.333zm4.166-37.5h-4.166a1.042 1.042 0 010-2.083h4.166a1.042 1.042 0 010 2.083zM5.134 25h-9.779a3.693 3.693 0 01-3.688-3.689V-2.083a10.398 10.398 0 012.725-5.699 29.42 29.42 0 002.386-3.433l.097-.162v-10.816c0-2.605 1.546-2.807 2.02-2.807h2.21a2.023 2.023 0 012.02 2.02v11.624l.226.374a24.995 24.995 0 002.46 3.357A9.369 9.369 0 018.24-3.27a6.513 6.513 0 01.093 1.187V21.8A3.203 3.203 0 015.134 25zM-1.01-22.92c.025.065-.032.288-.032.727v11.106a1.047 1.047 0 01-.15.538l-.246.41a31.309 31.309 0 01-2.557 3.675 8.426 8.426 0 00-2.255 4.38v23.395a1.607 1.607 0 001.605 1.606h9.78A1.117 1.117 0 006.25 21.8V-2.083a4.655 4.655 0 00-.065-.849A7.868 7.868 0 004.23-6.268a27.113 27.113 0 01-2.661-3.636l-.377-.622a1.039 1.039 0 01-.15-.539V-22.98z',
+                'Organics':                     'M24.693-19.657a1.337 1.337 0 00-.948-.483 83.169 83.169 0 00-4.71-.117c-15.562 0-21.91 3.082-24.496 5.668C-11.4-8.652-10.327-.008-9.81 2.69a40.338 40.338 0 00-2.227 3.037 23.104 23.104 0 01-1.711-1.71 5.294 5.294 0 001.983-2.616c1.165-3.316-.7-7.518-1.85-9.276-1.257-1.923-1.535-6.977-1.535-8.763a1.338 1.338 0 00-2.19-1.033c-6.961 5.733-8.963 14.066-6.876 18.81 1.204 2.736 3.343 4.243 6.021 4.243.733 0 1.38-.114 1.876-.24a25.112 25.112 0 002.859 2.904c-3.35 5.946-3.721 10.486-3.745 10.834a1.336 1.336 0 001.337 1.426 1.34 1.34 0 001.333-1.242c.003-.036.298-3.716 2.894-8.702A36.17 36.17 0 01-7.883 4.62c2.387.435 4.698.668 6.87.668 22.703 0 25.972-23.684 26.002-23.923a1.328 1.328 0 00-.296-1.021zM-18.194 2.707c-1.62 0-2.788-.866-3.571-2.646-1.733-3.94.543-9.694 4.077-13.676.197 2.336.675 5.433 1.834 7.206 1.005 1.538 2.32 4.777 1.564 6.923a2.649 2.649 0 01-1.11 1.392c-.78-1.164-1.442-2.474-1.74-3.86a1.337 1.337 0 10-2.618.565c.317 1.472.938 2.85 1.687 4.09-.041.002-.08.006-.123.006zM18.35-8.121C13.26.283 5.065 3.807-5.848 2.247-3.098-.72.57-3.832 5.454-6.711a1.337 1.337 0 10-1.359-2.305C-.792-6.136-4.553-3.036-7.458.014c-.268-3.308 0-8.822 3.89-12.71 3.103-3.105 11.342-4.884 22.604-4.884 1.215 0 2.256.022 3.032.047-.431 1.974-1.47 5.7-3.718 9.412z',
+                'Plastics':                     'M-3.906-25a1.944 1.944 0 00-1.94 1.939v3.854c0 .61.332 1.1.774 1.454l-5.183 4.622a.928.928 0 00-.308.69v5.674c0 1.238.666 2.28 1.606 2.948-.952.813-1.607 1.974-1.607 3.321 0 1.461.766 2.703 1.86 3.511-1.093.808-1.86 2.049-1.86 3.509s.766 2.703 1.86 3.51c-1.094.809-1.86 2.051-1.86 3.512 0 1.46.767 2.7 1.86 3.508-1.094.809-1.86 2.05-1.86 3.511A4.446 4.446 0 00-6.127 25H6.126a4.446 4.446 0 004.437-4.437c0-1.46-.765-2.702-1.86-3.51 1.094-.809 1.86-2.05 1.86-3.51s-.766-2.702-1.86-3.51c1.094-.808 1.86-2.05 1.86-3.511 0-1.46-.766-2.7-1.86-3.509 1.095-.808 1.86-2.05 1.86-3.51 0-1.348-.655-2.509-1.607-3.322.94-.668 1.607-1.71 1.607-2.948v-5.673a.928.928 0 00-.309-.69l-5.183-4.623c.442-.354.774-.845.774-1.454v-3.854A1.944 1.944 0 003.906-25zm0 1.852h7.812c.05 0 .087.036.087.087v3.854c0 .05-.036.089-.087.089h-7.812a.085.085 0 01-.087-.09v-3.853c0-.051.036-.087.087-.087zm1.074 5.881h5.664l5.88 5.242v5.258c0 1.013-.82 1.833-1.833 1.833H-6.88a1.832 1.832 0 01-1.833-1.833v-5.258zM-6.127-3.083H6.126a2.585 2.585 0 110 5.17H-6.127a2.585 2.585 0 110-5.17zm0 7.022H6.126a2.583 2.583 0 110 5.168H-6.127a2.585 2.585 0 110-5.168zm0 7.02H6.126a2.585 2.585 0 110 5.168H-6.127a2.583 2.583 0 110-5.168zm0 7.02H6.126a2.585 2.585 0 110 5.17H-6.127a2.585 2.585 0 110-5.17z',
+                'Metals':                       'M-9.375-9.943c0 .471.38.852.852.852H8.523a.851.851 0 100-1.704H-8.523a.851.851 0 00-.852.852zm17.898-8.239H3.835l1.137-3.977C5.415-23.66 4.83-25 3.267-25H1.96c-1.562 0-2.528.568-3.096 2.273l-1.705 4.545h-5.682c0 2.273-3.977 6.25-3.977 6.25v31.818S-9.09 23.011-9.09 25H9.09c0-1.989 3.41-5.114 3.41-5.114v-31.818s-3.977-4.04-3.977-6.25zM2.13-23.295c1.704 0 1.136 1.136.568 2.272H-.142c.568-1.704 1.136-2.272 2.273-2.272zM.994-19.318c.762 0 1.233.477 1.279 1.136h-3.551c.431-.659 1.511-1.136 2.272-1.136zm6.404 42.045H-7.398l-1.693-2.272H9.091c-.551.693-1.313 1.465-1.693 2.272zm-17.625-3.409v-30.682c1.136-1.136 2.84-2.84 3.409-4.545H6.818c.568 1.704 2.313 3.358 3.41 4.545v30.682L9.09 18.75H-9.091z',
+                'Paper / cardboard':            'M-.281-12.63H6.98c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023H-.28c-.563 0-1.023.46-1.023 1.023 0 .562.41 1.022 1.023 1.022zm0-3.631H6.98c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023H-.28c-.563 0-1.023.46-1.023 1.023 0 .562.41 1.023 1.023 1.023zM5.753 7.824c0-.563-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.023 1.023 1.023H4.73c.563 0 1.023-.46 1.023-1.023zm-21.12-3.17H4.73c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.022 1.023 1.022zm0-4.194H4.73C5.293.46 5.753 0 5.753-.562c0-.563-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.022 1.023 1.022zm0-4.193H4.73c.563 0 1.023-.46 1.023-1.023 0-.562-.46-1.022-1.023-1.022h-20.096c-.563 0-1.023.46-1.023 1.022 0 .563.46 1.023 1.023 1.023zm0-4.193h8.08c.563 0 1.023-.46 1.023-1.023v-8.08c0-.562-.46-1.022-1.023-1.022h-8.08c-.562 0-1.022.46-1.022 1.023v8.08c0 .562.46 1.022 1.023 1.022zm1.023-8.08h6.034v6.034h-6.034zm1.79 38.506h31.807c.562 0 1.023-.46 1.023-1.023v-37.38c0-.563-.46-1.023-1.023-1.023h-5.727v-4.551c0-.563-.46-1.023-1.023-1.023h-31.756c-.562 0-1.023.46-1.023 1.023v37.38c0 .563.46 1.023 1.023 1.023h5.676v4.551c0 .563.41 1.023 1.023 1.023zM18.18-14.88v35.335h-29.71v-3.529h24.085c.563 0 1.023-.46 1.023-1.023V-14.88zm-36.409-5.575h29.761v35.336H-18.23z',
+                'Textiles':                     'M7.766-20.25a1.399 1.399 0 00-.344.024 43.712 43.712 0 01-7.427.641 41.493 41.493 0 01-7.39-.641 1.335 1.335 0 00-.262-.021c-.153 0-.33.021-.501.101L-24.2-13.802c-.587.235-.916.86-.764 1.466l2.088 9.537c.136.68.8 1.096 1.465.963l6.364-1.325v22.167c0 .692.573 1.265 1.266 1.265h27.567c.692 0 1.246-.573 1.246-1.265V-3.161l6.384 1.325a1.245 1.245 0 001.466-.963l2.088-9.577c.135-.605-.22-1.195-.763-1.426L8.105-20.167v-.02a1.309 1.309 0 00-.339-.062zM-6.03-17.536c2.003.269 4.012.462 6.025.462 2.022 0 4.02-.198 6.022-.462-.287 1.12-.679 2.214-1.486 3.013a6.403 6.403 0 01-4.536 1.867 6.377 6.377 0 01-4.518-1.867c-.807-.8-1.22-1.892-1.507-3.013zm-2.55.241c.358 1.732 1.074 3.361 2.29 4.558a8.884 8.884 0 006.285 2.59c2.445 0 4.683-.98 6.303-2.59 1.205-1.195 1.903-2.831 2.268-4.558l13.714 5.443-1.585 7.306-6.547-1.365-.059-.019a1.17 1.17 0 00-.302-.04 1.28 1.28 0 00-1.264 1.265v22.447h-25.057V-4.706c0-.039.006-.149-.021-.262-.001-.006-.018.006-.02 0-.142-.66-.797-1.113-1.466-.963l-6.665 1.384-1.568-7.306z',
+                'Other':                        'M0-22.5c-12.41 0-22.5 10.09-22.5 22.5S-12.41 22.5 0 22.5 22.5 12.41 22.5 0 12.41-22.5 0-22.5zm0 2.872c10.857 0 19.628 8.771 19.628 19.628S10.857 19.628 0 19.628-19.628 10.857-19.628 0-10.858-19.628 0-19.628z'
+            }
+            console.log(dataset)
+
+            ////////////////////////////////
+            //// SETUP SVG AND LAYERS   ////
+            ////////////////////////////////
+
+            // Setup SVG canvas
+            const vis = d3.select(`#${settings.svgID}`)
+                .attr('viewBox', `0 0 ${settings.dims.width} ${settings.dims.height}`)
+                .attr('preserveAspectRatio', 'xMidYMid meet')
+                .append("g")
+                    .attr("transform", `translate(${settings.dims.width / 2} , ${settings.dims.height / 2})`)
+
+            const chart = vis.append('g').classed('radial-chart-group', true)
+            const defs = d3.select(`#${settings.svgID}`).append('defs')
+
+            ////////////////////////////////
+            //// SETUP SCALES   ////
+            ////////////////////////////////
+
+            // X scale: materials categories
+            settings.scales.x = d3.scaleBand()
+                .range([0, 2 * Math.PI])    
+                .domain(dataset.map(d => d.Material))
+
+            // Y scale outer scale
+            settings.scales.yOuter = d3.scaleRadial()
+                .range([settings.geometry.innerRadius, settings.geometry.outerRadius - 80])   
+                .domain([0, d3.max(dataset.map(d => d.Volume  * ( 1 - d.Diversion))) ] )
+
+            // Y Scale inner scale
+            settings.scales.yInner = d3.scaleRadial()
+                .range([settings.geometry.innerRadius, 70])   
+                .domain([0,  d3.max(dataset.map(d => d.Volume  * d.Diversion))  ])
+
+            ////////////////////////////////
+            //// RENDER RADIAL BAR CHART ////
+            ////////////////////////////////
+
+            // a. Outer bars
+            chart.append("g").classed('landfill-bars-group', true)
+                .selectAll("path")
+                .data(dataset)
+                .join("path")
+                .attr("class", "landfill")
+                .attr("d", d3.arc()   
+                    .innerRadius(0)
+                    .outerRadius( d => settings.scales.yOuter(d.Volume * ( 1 - d.Diversion)) )
+                    .startAngle( d  => settings.scales.x(d.Material))
+                    .endAngle( d => settings.scales.x(d.Material) + settings.scales.x.bandwidth())
+                    .padAngle(settings.geometry.padAngle)
+                    .padRadius(settings.geometry.innerRadius))
+                    .attr('clip-path', "url(#outer-clip)")
+
+
+            // b. Icon ring clipPath
+            defs.append('clipPath').attr('id', 'outer-clip')
+                .append('path')
+                .attr("d", d3.arc()   
+                    .innerRadius(settings.geometry.innerRadius)
+                    .outerRadius(settings.geometry.outerRadius)
+                    .startAngle(0)
+                    .endAngle( 2 * Math.PI)
+                )
+
+            // c. Inner bars
+            vis.append("g").classed('diversion-bars-group', true)
+                .selectAll("path")
+                .data(dataset)
+                .join("path")
+                .attr("class", "bar diversion")
+                .attr("d", d3.arc()  
+                    .outerRadius( d => settings.scales.yInner(0) - settings.geometry.radiusGap )
+                    .innerRadius( d => settings.scales.yInner(d.Volume * d.Diversion) - settings.geometry.radiusGap)
+                    .startAngle( d =>  settings.scales.x(d.Material) )
+                    .endAngle( d => settings.scales.x(d.Material) + settings.scales.x.bandwidth())
+                    .padAngle(settings.geometry.padAngle)
+                    .padRadius(settings.geometry.innerRadius - settings.geometry.radiusGap)
+                )
+
+            // c. Icon ring 
+            vis.append("g").classed('icon-ring-group', true)
+                .selectAll(".icon-ring-group * g")
+                .data(dataset)
+                .join("g")
+                    .attr("text-anchor", d => (settings.scales.x(d.Material) + settings.scales.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
+                    .attr("transform", d => "rotate(" + ((settings.scales.x(d.Material) + settings.scales.x.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (settings.geometry.innerRadius - settings.geometry.radiusGap/2 ) + ",0)")
+                    .append("path").classed('material-icon', true)
+                        .attr('d', d => icons[d.Material])
+                        .attr("transform-origin", "0% 0%")
+                        .attr("transform", d => (settings.scales.x(d.Material) + settings.scales.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(90)" : "rotate(90)")
+                        .attr('x', 0) 
+                        .attr('y', 0) 
+                        .attr('dy', 0) 
+                        .call(helpers.wrap, 80, 1)
+
+            // Add the labels
+            vis.append("g").classed('bar-labels-group', true)
+                .selectAll(".bar-labels-group * g")
+                .data(dataset)
+                .join("g")
+                    .attr("text-anchor", d => (settings.scales.x(d.Material) + settings.scales.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
+                    .attr("transform", d => "rotate(" + ((settings.scales.x(d.Material) + settings.scales.x.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (settings.scales.yOuter(d.Volume * ( 1 - d.Diversion))+10) + ",0)")
+                    .append("text").classed('bar-label', true)
+                        .text( d => d.Material)
+                        .attr("transform", d => (settings.scales.x(d.Material) + settings.scales.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)")
+                        .attr('x', 0) 
+                        .attr('y', 0) 
+                        .attr('dy', 0) 
+                        .call(helpers.wrap, 80, 1)
+
+        }
+
+    /////////////////////////////
+    /// X HELPER FUNCTIONS    ///
+    /////////////////////////////
+
+    const helpers= {
+        numberFormatters: {
+            formatComma:           	d3.format(",.0f"),
+            formatComma1dec:       	d3.format(",.1f"),
+            formatComma2dec:       	d3.format(",.2f"),
+            formatInteger:         	d3.format(".0f"),   
+            formatCostInteger:     	d3.format("$,.0f"),  
+            formatCost1dec:        	d3.format("$,.1f"),  
+            formatPct:          	d3.format(".0%"), 
+            formatPct1dec:          d3.format(".1%")  
+        },
+        numberParsers: {
+            parseDateSlash: d3.timeParse("%d/%m/%Y")
+        },
+        camelize: function(str) {
+            return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+                if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+                return index === 0 ? match.toLowerCase() : match.toUpperCase();
+            });
+        }, 
+        slugify: function (str) {
+            str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+            const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                to   = "aaaaeeeeiiiioooouuuunc------"
+            for (var i=0, l=from.length ; i<l ; i++) {
+                str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+            }
+            str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                .replace(/-+/g, '-'); // collapse dashes
+            return str;
+        }, 
+        wrap: function(text, width, lineHeight, centerVertical = false) {
+            text.each(function() {
+                let text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    y = text.attr("y"),
+                    x = text.attr("x"),
+                    fontSize = parseFloat(text.style("font-size")),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan")
+                            .attr("x", x)
+                            .attr("y",  y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }                    
+                }            
+                if(centerVertical){
+                    text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                }
+            })
+        }
+    }
+
+    async function init(){
+        await parseData()
+        await renderRadialBar(data, settings)
+    }
+    init()
+
+
+    </script>
+</html>
+

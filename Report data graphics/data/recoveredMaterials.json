@@ -1,0 +1,77 @@
+{
+  "name": "recycled",
+  "children": [
+    {
+      "name": "Aggregates, masonry, soil",
+      "type": "material-group",
+      "color": "#b1b1b0",
+      "children": [
+        {"name": "Aggregates", "value": 5015.000, "type": "recovered"},
+        {"name": "Soil and sand", "value": 288.000, "type": "recovered"},
+        {"name": "Fill material", "value": 1012.000, "type": "recovered"},
+        {"name": "Landfilled", "value": 1100.000, "type": "landfill"}
+      ]
+    },
+    {
+      "name": "Organics",
+      "type": "material-group",
+      "color": "#cea98d",
+      "children": [
+        {"name": "Compost and soil conditioners", "value": 1007.000, "type": "recovered"},
+        {"name": "Mulch", "value": 310.000, "type": "recovered"},
+        {"name": "Landfilled", "value": 1438.000, "type": "landfill"}
+      ]
+    },
+    {
+      "name": "Paper and cardboard",
+      "type": "material-group",
+      "color": "#ffd300",
+      "children": [
+        {"name": "Cardboard and newsprint", "value": 765.000, "type": "recovered"},
+        {"name": "Export", "value": 484.000, "type": "recovered"},
+        {"name": "Landfilled", "value": 532.000, "type": "landfill"}
+      ]
+    },
+    {
+      "name": "Metals",
+      "type": "material-group",
+      "color": "#52baba",
+      "children": [
+        {"name": "Local reprocessing", "value": 987.000, "type": "recovered"},
+        {"name": "Export", "value": 487.000, "type": "recovered"},
+        {"name": "Landfilled", "value": 140.000, "type": "landfill"}
+      ]
+    },
+    {
+      "name": "Plastics",
+      "type": "material-group",
+      "color": "#9bddfa",
+      "children": [
+        {"name": "New plastic products", "value": 61.000, "type": "recovered"},
+        {"name": "Mixed plastic exports", "value": 82.000, "type": "recovered"},
+        {"name": "Landfilled", "value": 436.000, "type": "landfill"}
+      ]
+    },
+    {
+      "name": "Glass",
+      "type": "material-group",
+      "color": "#816bb4",
+      "children": [
+        {"name": "Glass cullet", "value": 77.000, "type": "recovered"},
+        {"name": "Glass fines", "value": 104.000, "type": "recovered"},
+        {"name": "Export (mixed)", "value": 14.000, "type": "recovered"},
+        {"name": "Landfilled", "value": 83.000, "type": "landfill"}
+      ]
+    },
+    {
+      "name": "Rubber (incl. tyres)",
+      "type": "material-group",
+      "color": "#00502e",
+      "children": [
+        {"name": "Crumb rubber", "value": 30.000, "type": "recovered"},
+        {"name": "Tyre derived fuel for export", "value": 24.000, "type": "recovered"},
+        {"name": "Baled tyres for export", "value": 18.000, "type": "recovered"}
+      ]
+    }
+  ]
+}

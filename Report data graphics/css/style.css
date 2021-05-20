@@ -1,0 +1,67 @@
+
+/* COLOUR PALETTES */
+:root {
+    /** OLD BRAND GUIDELINES **/
+    --svGreen:                            #9ACA3C;
+    --gippslandGreen:                     #CED99E;
+    --secondary_greatOceanBlue:           #0070BB;
+    --secondary_hepburnClay:              #9B0B32;
+    --secondary_meredithGold:             #E3BA5A;
+    --campaign_corrangamiteEggplant:      #550055;
+    --campaign_corrangamiteEggplantLight: #B273B2;
+    --campaign_gannarawwaPink:            #D00236;
+    --campaign_gannarawwaPinkLight:       #EE5F83;
+    --campaign_surfCoastTeal:             #00848F;
+    --campaign_surfCoastTealLight:        #47ABB4;
+    --campaign_queenscliffeMarine:        #0A3055;
+    --campaign_queenscliffeMarineLight:   #7991A9;
+    --campaign_milduraOrange:             #D3410B;
+    --campaign_milduraOrangeLight:        #F2855D;
+    --campaign_otwaysGreen:               #008848;
+    --campaign_otwaysGreenLight:          #8DBF87;
+    --monochrome_youYangsGranite:         #B2B2B2;
+    --monochrome_lakeMountainMorning:     #CCCCCC;
+    --monochrome_mtBullaMist:             #E5E5E5;
+    /** NEW BRAND GUIDELINES **/
+    --chartLightGreen:  #cbe197;
+    --chartGray:        #b1b1b0;
+    --chartTeal:        #52baba;
+    --chartEmerald:     #00502e;
+    --chartPowderBlue:  #9bddfa;
+    --chartGreen:       #77bf00;
+    --chartDarkGreen:   #009857;
+    --chartOrange:      #cea98d;
+    --chartBlue:        #00568f;
+    --chartPurple:      #816bb4;
+    --chartLightGrey:   #cfcfcf;
+    --chartYellow:      #ffd300;
+
+}
+
+@font-face {
+    font-family: 'DIN Next LT Pro';
+    src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+        url('../fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+        url('../fonts/DINNextLTPro-Bold.woff') format('woff'),
+        url('../fonts/DINNextLTPro-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+  }
+@font-face {
+    font-family: 'DIN Next LT Pro';
+    src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+        url('../fonts/DINNextLTPro-Light.woff2') format('woff2'),
+        url('../fonts/DINNextLTPro-Light.woff') format('woff'),
+        url('../fonts/DINNextLTPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+  }
+@font-face {
+    font-family: 'DIN Next LT Pro';
+    src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+        url('../DINNextLTPro-UltraLight.woff2') format('woff2'),
+        url('../DINNextLTPro-UltraLight.woff') format('woff'),
+        url('../DINNextLTPro-UltraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+  }

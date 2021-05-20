@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+
+        <style>
+            /* COLOUR PALETTES */
+            :root {
+                /** OLD BRAND GUIDELINES **/
+                --svGreen:                            #9ACA3C;
+                --gippslandGreen:                     #CED99E;
+                --secondary_greatOceanBlue:           #0070BB;
+                --secondary_hepburnClay:              #9B0B32;
+                --secondary_meredithGold:             #E3BA5A;
+                --campaign_corrangamiteEggplant:      #550055;
+                --campaign_corrangamiteEggplantLight: #B273B2;
+                --campaign_gannarawwaPink:            #D00236;
+                --campaign_gannarawwaPinkLight:       #EE5F83;
+                --campaign_surfCoastTeal:             #00848F;
+                --campaign_surfCoastTealLight:        #47ABB4;
+                --campaign_queenscliffeMarine:        #0A3055;
+                --campaign_queenscliffeMarineLight:   #7991A9;
+                --campaign_milduraOrange:             #D3410B;
+                --campaign_milduraOrangeLight:        #F2855D;
+                --campaign_otwaysGreen:               #008848;
+                --campaign_otwaysGreenLight:          #8DBF87;
+                --monochrome_youYangsGranite:         #B2B2B2;
+                --monochrome_lakeMountainMorning:     #CCCCCC;
+                --monochrome_mtBullaMist:             #E5E5E5;
+                /** NEW BRAND GUIDELINES **/
+                --chartLightGreen:  #cbe197;
+                --chartGray:        #b1b1b0;
+                --chartTeal:        #52baba;
+                --chartEmerald:     #00502e;
+                --chartPowderBlue:  #9bddfa;
+                --chartGreen:       #77bf00;
+                --chartDarkGreen:   #009857;
+                --chartOrange:      #cea98d;
+                --chartBlue:        #00568f;
+                --chartPurple:      #816bb4;
+                --chartLightGrey:   #cfcfcf;
+                --chartYellow:      #ffd300;
+            }
+
+        /****************************/
+        /*** IMPORTED FONTS       ***/
+        /****************************/
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('../fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('../fonts/DINNextLTPro-Bold.woff') format('woff'),
+                    url('../fonts/DINNextLTPro-Bold.ttf') format('truetype');
+                font-weight: 700;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('../fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('../fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('../fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('../DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('../DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('../DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 200;
+                font-style: normal;
+            }
+
+
+            /***************************/
+            /*****  TYPOGRAPHY       ***/
+            /***************************/
+
+            body{
+                font-family: 'DIN Next LT Pro';
+            }
+
+            /***************************/
+            /*****  GENERAL STYLING  ***/
+            /***************************/
+            body{ 
+            }
+            .hidden{ 
+                display: none;
+            }
+            text { 
+                font-family: 'DIN Next LT Pro';
+            }
+            .main-title{
+                font-size: 30px;
+                font-weight: bold;
+                padding-top: 3rem;
+                fill: var(--chartEmerald);
+                color: var(--chartEmerald);
+                dominant-baseline: 'hanging'
+            }
+            .main-subtitle{
+                font-size: 14px;
+                fill: var(--chartEmerald);
+                color: var(--chartEmerald);
+                dominant-baseline: 'hanging'
+            }
+            .material-group{
+                stroke-width:  0.75px; 
+                fill: transparent;
+                stroke:  var(--chartEmerald);
+                stroke-dasharray: 5px 5px;
+            }
+            .landfill{
+                fill: url(#diagonalHatch);
+            }
+            .recovered{
+                fill:  url(#diagonalHatchGreen);
+            }
+            .circle-label,
+            .circle-label-small{
+                font-size: 18px;
+                font-weight: bold;
+                text-anchor: middle;
+                dominant-baseline: middle;
+                fill:  var(--chartEmerald);
+                stroke:  none;
+                mix-blend-mode: hard-light;
+            }
+            .circle-label-small{
+                font-size: 14px;
+                font-weight: bold;
+            }
+            .circle-icon{
+                fill:  #fff;
+                stroke:  none;
+                opacity: 0.5
+
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <div class = 'main-title'>Victorian waste breakdown</div>
+        <div class = 'main-subtitle'>An interactive breakdown of waste by material types collected in 2018/19 and their destination</div>
+        <div class = "svg-container">
+            <svg id = "circle-pack-vis"></svg>
+        </div>
+    </body>
+    
+    <script>
+        ///////////////////////////////
+        // 0. DATA AND SETTINGS     ///
+        ///////////////////////////////
+
+        const data = {          // INitiate data object that populated by the parseData() function, 
+            byPeriod: { }
+        }
+
+        const settings = {
+            svgID:          'circle-pack-vis',
+            period:         '2018/19', 
+            dims: {
+                height:     720, 
+                width:      720,
+                margin: {
+                    top: 100, right: 100, bottom: 100, left: 100
+                }
+            },    
+            scales:                  {}, /// Object to hold flow width scales globally (noteL scales defined from parsed data in the renderVis() function )
+        }
+
+        //////////////////////////////////////
+        // 1. PARSE AND WRANGLE DATA       ///
+        //////////////////////////////////////
+
+        async function parseData() {        
+            // This function will take a data source, then parse/wrangle and return/populate the data structure(s) below 
+            // Manual entry is done here for prototyping, using the 2018/19 data
+            data.byPeriod["2018/19"] = {
+                "name": "recycled",
+                "type": "material-group",
+                "children": [
+                    {
+                        "name": "Aggregates, masonry, soil",
+                        "type": "material-group",
+                        "color": "#b1b1b0",
+                        "children": [
+                            {"name": "Recycled aggregates", "value": 5015.000, "type": "recovered"},
+                            {"name": "Recycled soil and sand", "value": 288.000, "type": "recovered"},
+                            {"name": "Recycled fill material", "value": 1012.000, "type": "recovered"},
+                            {"name": "Landfill", "value": 1100.000, "type": "landfill"}
+                        ]
+                    },
+                    {
+                        "name": "Organics",
+                        "type": "material-group",
+                        "color": "#cea98d",
+                        "children": [
+                            {"name": "Recycled compost and soil conditioners", "value": 1007.000, "type": "recovered"},
+                            {"name": "Recycled mulch", "value": 310.000, "type": "recovered"},
+                            {"name": "Landfill", "value": 1438.000, "type": "landfill"}
+                        ]
+                    },
+                    {
+                        "name": "Paper and cardboard",
+                        "type": "material-group",
+                        "color": "#ffd300",
+                        "children": [
+                            {"name": "Recycled cardboard and newsprint", "value": 765.000, "type": "recovered"},
+                            {"name": "Recycled cardboard and newsprint (export)", "value": 484.000, "type": "recovered"},
+                            {"name": "Landfill", "value": 532.000, "type": "landfill"}
+                        ]
+                    },
+                    {
+                        "name": "Metals",
+                        "type": "material-group",
+                        "color": "#52baba",
+                        "children": [
+                            {"name": "Reprocessed metals (local)", "value": 987.000, "type": "recovered"},
+                            {"name": "Reprocessed metals (export)", "value": 487.000, "type": "recovered"},
+                            {"name": "Landfill", "value": 140.000, "type": "landfill"}
+                        ]
+                    },
+                    {
+                        "name": "Plastics",
+                        "type": "material-group",
+                        "color": "#9bddfa",
+                        "children": [
+                            {"name": "New plastic products", "value": 61.000, "type": "recovered"},
+                            {"name": "Mixed plastic exports", "value": 82.000, "type": "recovered"},
+                            {"name": "Landfill", "value": 436.000, "type": "landfill"}
+                        ]
+                    },
+                    {
+                        "name": "Glass",
+                        "type": "material-group",
+                        "color": "#816bb4",
+                        "children": [
+                            {"name": "Recycled glass cullet", "value": 77.000, "type": "recovered"},
+                            {"name": "Recycled glass fines", "value": 104.000, "type": "recovered"},
+                            {"name": "Recycled mixed glass (export))", "value": 14.000, "type": "recovered"},
+                            {"name": "Landfill", "value": 83.000, "type": "landfill"}
+                        ]
+                    },
+                    {
+                        "name": "Rubber",
+                        "type": "material-group",
+                        "color": "#00502e",
+                        "children": [
+                            {"name": "Recycled crumb rubber", "value": 30.000, "type": "recovered"},
+                            {"name": "Tyre derived fuel for export", "value": 24.000, "type": "recovered"},
+                            {"name": "Baled tyres for export", "value": 18.000, "type": "recovered"}
+                        ]
+                    }
+                ]
+            }
+
+        };
+
+        ///////////////////////////////////////////////////
+        // 2. RENDER THE CIRCLE PACK VISUALISATION ///
+        ///////////////////////////////////////////////////
+
+        async function renderCirclePack(data, settings) {
+            data = data.byPeriod[settings.period]
+            const root = pack(data)
+            let focus = root;
+            let view;
+
+            const iconsPaths ={ 
+                recovered: 'M-5.498 9.383c-1.103-.555-2.463-.156-3.68-.277h-4.094c1.078-.92 1.428-4.537 2.998-3.573.973.468 1.828 1.311 2.895 1.49 1.058-.597.031-1.954-.039-2.884-.95-3.505-1.788-7.049-2.81-10.53-.797-.709-1.911.193-2.844.27l-10.194 2.734c-1.482 1.03.86 1.776 1.642 2.33.903.384 1.598.823.686 1.69-1.28 2.32-2.757 4.543-3.894 6.931-.706 2.9 2.02 5.095 3.06 7.572 1.402 1.658 1.8 5.158 4.532 4.908h11.13c1.43-.236.717-1.984.89-3.01-.038-2.423.074-4.86-.056-7.276l-.222-.375zm-17.88-1.943c1.45-2.558 2.964-5.084 4.372-7.662.066-1.238-1.551-1.46-2.364-2.112-.522-.397 1.402-.47 1.872-.736l8.336-2.205 2.776 10.494c-1.02-.473-1.917-1.41-3.07-1.411-1.605 1.77-2.504 4.232-3.87 6.242-1.362 2.323-2.636 4.714-4.053 6.996-1.38-2.54-3.025-4.962-4.304-7.537-.128-.696-.04-1.446.306-2.069zm16.88 11.383c-3.904-.045-7.82.09-11.715-.07-.096-1.947 1.96-3.845 2.752-5.754.835-.949.973-3.108 2.639-2.616h6.38l-.056 8.44zM2.22-9.94c-1.116.7-2.347 1.248-3.39 2.046C-1.621-6.55.334-6.697 1.162-6.316 4.68-5.36 8.194-4.39 11.714-3.443c1.084-.272.875-1.724 1.27-2.575.918-3.529 1.99-7.03 2.811-10.577-.647-1.28-1.922.193-2.784.508-.74.431-1.57 1.197-1.841-.083-1.4-2.306-2.6-4.748-4.145-6.955-1.658-1.79-4.202-1.03-6.351-1.195-2.29.038-4.59-.079-6.873.063-1.694.908-2.054 3.1-3.194 4.555-1.268 2.202-2.713 4.59-3.879 6.647.81 2.135 4.068 2.69 5.865 4.167 1.544 1.105 3.893 2.699 4.566-.168.997-1.269 1.984-4.222 2.98-4.44.7 1.182 1.383 2.374 2.08 3.557zm2.276-13.104c2.04.168 2.533 2.463 3.528 3.883.984 1.664 1.889 3.38 2.922 5.012 1.02.557 1.926-.648 2.86-.999.862-.583-.161 1.28-.138 1.787L11.38-4.886.942-7.718c.908-.636 2.103-.973 2.777-1.832-.56-2.402-2.479-4.416-3.554-6.663-1.344-2.268-2.6-4.604-3.998-6.83h8.33zm-5.275 7.94c-1.254 2.15-2.479 4.317-3.775 6.44-2.454-1.407-4.883-2.856-7.33-4.274 1.886-3.193 3.714-6.42 5.608-9.606 1.718-1.128 2.255 2.87 3.376 3.886.723 1.172 1.326 2.432 2.121 3.554zm25.43 22.599C22.81 4.083 20.82.746 18.877-2.61c-1.389-.975-3.134 1.17-4.615 1.696C12.766.395 9.938.721 9.181 2.575c1.065 2.242 2.45 4.345 3.644 6.53H8.327c-.034-1.3.072-2.616-.057-3.908-.885-1.12-1.774.66-2.494 1.177-2.594 2.641-5.327 5.165-7.832 7.882-.081 1.059 1.167 1.594 1.74 2.374 2.57 2.533 5.044 5.178 7.672 7.64 1.44.15.85-1.729.971-2.625-.014-.855-.27-1.952.977-1.545 2.683-.059 5.386.124 8.056-.106 2.897-.84 3.466-4.29 5.09-6.455.675-1.937 3.288-3.884 2.201-6.043zM14.38 9.16a558.529 558.529 0 00-3.72-6.496c2.442-1.41 4.888-2.81 7.33-4.22 1.868 3.347 3.898 6.61 5.639 10.025-.084 1.213-1.9.497-2.762.691h-6.487zm4.22 8.496c-1.134 1.734-3.391 1.011-5.123 1.166-1.936.015-3.875-.03-5.809.021-1.049.61-.463 2.072-.617 3.1-.09.63-1.105-.993-1.567-1.269l-6.095-6.183 7.718-7.663c.082 1.09-.201 2.255.222 3.276 1.248.551 2.72.16 4.07.278h11.366l-4.165 7.274z'
+            }
+
+            const svg = d3.select(`#${settings.svgID}`)
+                .attr("viewBox", `-${settings.dims.width / 2} -${settings.dims.height / 2} ${settings.dims.width} ${settings.dims.height}`)
+                .style("cursor", "pointer")
+                .on("click", (event) => zoom(event, root));
+
+            const defs = svg.append('defs')
+            // Patterns
+            defs.append('pattern')
+                .attr('id', 'diagonalHatch')
+                .attr('patternUnits', 'userSpaceOnUse')
+                .attr('width', 4)
+                .attr('height', 4)
+                .append('path')
+                    .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
+                    .attr('stroke', '#010101')
+                    .attr('stroke-width', 0.25)
+                    .attr("opacity", 1);
+
+            defs.append('pattern')
+                .attr('id', 'diagonalHatchGreen')
+                .attr('patternUnits', 'userSpaceOnUse')
+                .attr('width', 4)
+                .attr('height', 4)
+                .append('path')
+                    .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
+                    .attr('stroke', '#77bf00')
+                    .attr('stroke-width', 0.25)
+                    .attr("opacity", 1);
+
+            const node = svg.append("g").classed('node-group', true)
+                .selectAll("circle")
+                .data(root.descendants().slice(1))
+                .join("circle")
+                    .attr("class", d => `${helpers.slugify(d.data.name)} ${helpers.slugify(d.data.type)}` )
+                    .attr("pointer-events", d => !d.children ? "none" : null)
+                    .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
+                    .on("mouseout", function() { d3.select(this).attr("stroke", null); })
+                    .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
+
+            /////////////////////////
+            ////// ADD LABELS  //////
+            /////////////////////////
+            let width
+            const label = svg.append("g").classed('label-group', true)
+                .attr("pointer-events", "none")
+                .selectAll("text")
+                .data(root.descendants())
+                .join("text")
+                    .attr("class", d =>  `circle-label ${helpers.slugify(d.data.name)} ${helpers.slugify(d.data.type)}`)
+                    .style("fill-opacity", d => d.parent === root ? 1 : 0)
+                    .style("display", d => d.parent === root ? "inline" : "none")   
+                    .text(d => d.data.name)
+
+            const label2 = svg.append("g").classed('label-group', true)
+                .attr("pointer-events", "none")
+                .selectAll("text")
+                .data(root.descendants())
+                .join("text")
+                    .attr("class", d =>  `circle-label-small ${helpers.slugify(d.data.name)} ${helpers.slugify(d.data.type)}`)
+                    .style("fill-opacity", d => d.parent === root ? 1 : 0)
+                    .style("display", d => d.parent === root ? "inline" : "none")   
+                    .text(d => {console.log(d) ; return `${helpers.numberFormatters.formatComma(d.value)} kt`})
+
+            zoomTo([root.x, root.y, root.r * 2]);
+
+            function zoomTo(v) {
+                const k = settings.dims.width / v[2];
+                view = v;
+                label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+                label2.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k + 18})`);
+                node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+                node.attr("r", d => d.r * k);
+            }
+
+            function zoom(event, d) {
+                const focus0 = focus;
+                focus = d;
+                const transition = svg.transition()
+                    .duration(event.altKey ? 7500 : 750)
+                    .tween("zoom", d => {
+                        const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
+                        return t => zoomTo(i(t));
+                    });
+                label.filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+                    .transition(transition)
+                        .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+                        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+                        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+                label2.filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+                    .transition(transition)
+                        .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+                        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+                        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+            }
+
+            function pack(data) {
+                return d3.pack()
+                    .size([settings.dims.width * 0.7, settings.dims.height * 0.7])
+                    .padding(3)
+                (d3.hierarchy(data)
+                    .sum(d => d.value)
+                    .sort((a, b) => b.value - a.value))
+            }
+        };
+
+
+    /////////////////////////////
+    /// X HELPER FUNCTIONS    ///
+    /////////////////////////////
+
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (var i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight, centerVertical = false) {
+                console.log(width)
+
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                    if(centerVertical){
+                        text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                    }
+                })
+            }
+        }
+
+        async function init(){
+            await parseData()
+            await renderCirclePack(data, settings)
+        }
+        init()
+
+    </script>
+</html>
+

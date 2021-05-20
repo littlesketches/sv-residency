@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <style>
+            /* COLOUR PALETTES */
+            :root {
+                /** OLD BRAND GUIDELINES **/
+                --svGreen:                            #9ACA3C;
+                --gippslandGreen:                     #CED99E;
+                --secondary_greatOceanBlue:           #0070BB;
+                --secondary_hepburnClay:              #9B0B32;
+                --secondary_meredithGold:             #E3BA5A;
+                --campaign_corrangamiteEggplant:      #550055;
+                --campaign_corrangamiteEggplantLight: #B273B2;
+                --campaign_gannarawwaPink:            #D00236;
+                --campaign_gannarawwaPinkLight:       #EE5F83;
+                --campaign_surfCoastTeal:             #00848F;
+                --campaign_surfCoastTealLight:        #47ABB4;
+                --campaign_queenscliffeMarine:        #0A3055;
+                --campaign_queenscliffeMarineLight:   #7991A9;
+                --campaign_milduraOrange:             #D3410B;
+                --campaign_milduraOrangeLight:        #F2855D;
+                --campaign_otwaysGreen:               #008848;
+                --campaign_otwaysGreenLight:          #8DBF87;
+                --monochrome_youYangsGranite:         #B2B2B2;
+                --monochrome_lakeMountainMorning:     #CCCCCC;
+                --monochrome_mtBullaMist:             #E5E5E5;
+                /** NEW BRAND GUIDELINES **/
+                --chartLightGreen:  #cbe197;
+                --chartGray:        #b1b1b0;
+                --chartTeal:        #52baba;
+                --chartEmerald:     #00502e;
+                --chartPowderBlue:  #9bddfa;
+                --chartGreen:       #77bf00;
+                --chartDarkGreen:   #009857;
+                --chartOrange:      #cea98d;
+                --chartBlue:        #00568f;
+                --chartPurple:      #816bb4;
+                --chartLightGrey:   #cfcfcf;
+                --chartYellow:      #ffd300;
+            }
+
+        /****************************/
+        /*** IMPORTED FONTS       ***/
+        /****************************/
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('../fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('../fonts/DINNextLTPro-Bold.woff') format('woff'),
+                    url('../fonts/DINNextLTPro-Bold.ttf') format('truetype');
+                font-weight: 700;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('../fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('../fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('../fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('../DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('../DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('../DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 200;
+                font-style: normal;
+            }
+
+
+            /***************************/
+            /*****  TYPOGRAPHY       ***/
+            /***************************/
+
+            body{
+                font-family: 'DIN Next LT Pro';
+            }
+
+            /***************************/
+            /*****  GENERAL STYLING  ***/
+            /***************************/
+            .hidden{ 
+                display: none;
+            }
+            text { 
+                font-family: 'DIN Next LT Pro';
+            }
+            /*** TYPOGRAPHY INCL. ELEMENT COLOUR PALLETT****/
+            .main-title{
+                font-size: 30px;
+                font-weight: bold;
+                fill: var(--chartEmerald);
+                dominant-baseline: 'hanging'
+            }
+            .main-subtitle{
+                font-size: 14px;
+                fill: var(--chartEmerald);
+                dominant-baseline: 'hanging'
+            }
+            .generation-headline,
+            .generation-headline-figure,
+            .waste-stream-headline,
+            .generation-unit,
+            .label.waste-stream,
+            .data-label.waste-stream,
+            .icon.waste-stream{
+                fill: var(--campaign_queenscliffeMarineLight);
+            }
+            .generation-headline-figure{
+                font-size: 90px;
+                font-weight: bold;
+                text-anchor: end;
+                letter-spacing: -6px;
+            }
+            .generation-headline,
+            .waste-stream-headline,
+            .generation-unit{
+                font-size: 24px;
+            }
+            .generation-unit{
+                font-weight: bold;
+            }
+            .landfill-label-bg{
+                fill: #fff;
+                opacity: 0.9;
+                display: none;
+            }
+            .landfill.icon,
+            .landfill-headline,
+            .landfill-unit{
+                fill: var(--chartGray);
+                font-weight: bold;
+                dominant-baseline: hanging;
+                mix-blend-mode: exclusion;
+            }
+            .landfill-headline{
+                font-size: 60px;
+                letter-spacing: -2px;
+            }
+            .landfill-unit{
+                font-size: 16px;
+            }
+            .diversion-headline{
+                font-size: 80px;
+                letter-spacing: -2px;
+                font-weight: bold;
+            }
+            .diversion-unit{
+                font-size: 20px;
+                font-weight: bold;
+            }
+            .label.waste-stream{
+                font-size: 14px;
+                font-weight: bold;
+            }
+            .data-label.waste-stream{
+                font-size: 14px;
+            }
+            .diversion-main-label{
+                font-size: 44px;
+                font-weight: bold;
+                fill:  var(--chartDarkGreen);
+                letter-spacing: 1px
+            }
+
+            .diversion-pct-number,
+            .diversion-pct-unit{
+                font-weight: bold;
+                stroke:  var(--chartDarkGreen);
+                fill: none;
+            }
+            .diversion-pct-number{
+                font-size: 150px;
+                stroke-width: 4px;
+                letter-spacing: -6px;
+                dominant-baseline: middle;
+                text-anchor: middle;
+            }
+            .diversion-pct-unit{
+                font-size: 45px;
+                stroke-width: 2px;
+                dominant-baseline: hanging;
+            }
+
+            /*** VISUALS ELEMENTS ****/
+            .flow{
+                fill: none;
+                stroke-linecap: butt;
+                stroke-linejoin: round;
+                mix-blend-mode: hard-light;
+            }
+            .diversion-label-path{
+                fill: none;
+                stroke-width: 1px;
+                stroke: none ;
+            }
+            .donut-arc{
+                stroke: #fff;
+                stroke-width: 0.5px;
+                fill: #cfcfcf;
+            }
+            .donut-arc.diversion,
+            .donut-diversion-pct{
+                fill: var(--chartDarkGreen);
+            }
+            .donut-diversion-pct{
+                font-size: 20px;
+                font-weight: bold;
+                text-anchor: middle;
+                dominant-baseline: middle;
+            }
+            .donut-chart-bg{
+                fill: #fff;
+            }
+
+            /*************************/
+            /*************************/
+            .lga-label-title{
+                font-size: 30px;
+                font-weight: bold;
+                fill:  var(--chartDarkGreen);
+            }
+            .lga-label-small{
+                font-size: 24px;
+                font-weight: bold;
+                fill: rgba(0, 0, 0, 0.7);
+                mix-blend-mode: darken;
+            }
+            .lga-label-headline{
+                font-size: 60px;
+                font-weight: bold;
+            }
+            .lga-annotation{
+                font-size: 12px;
+            }
+            .lga-label{
+                font-size: 16px;
+                font-weight: bold;
+            } 
+            .garbage{
+                fill: #D87B84;
+            }
+            .recyclables {
+                fill: #E0C883;
+            }
+            .organics {
+                fill: #8CD587;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class = "svg-container">
+            <svg id = "wave-vis">
+            </svg>
+        </div>
+        <div class = "svg-container">
+            <svg id = "streetscene-vis" viewBox="0 0 1080 720">
+                <defs>
+                    <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                    <rect width="115.155" height="116.277" x="361.85" y="57.914" fill="#a00" stroke="#000" stroke-width=".265" opacity=".7" ry="1.43"/>
+                    </clipPath>
+                    <clipPath id="b" clipPathUnits="userSpaceOnUse">
+                    <path d="M120.873 138.9a.128.128 0 00-.128.129v3.888l-13.881.05a.108.108 0 00-.109.107v20.91c0 .06.049.107.109.107 20.582-.111 63.248.059 63.248.059s.128-18.903.128-25.071a.128.128 0 00-.128-.128z"/>
+                    </clipPath>
+                    <clipPath id="c" clipPathUnits="userSpaceOnUse">
+                    <path d="M454.47 565.641c-1.458 3.59 1.091 9.254 1.091 9.254h-22.366c-6.882 0-12.422 4.559-12.422 10.222 0 5.664 5.54 10.223 12.422 10.223l26.93-.199 2.68 5.076h172.574V565.74z" opacity=".4"/>
+                    </clipPath>
+                </defs>
+                <g transform="scale(3.75)">
+                    <rect width="384.401" height="187.355" x="-43.048" y="-.004" fill="#e0edd7" ry=".771"/>
+                    <path fill="#c9d9cf" d="M134.977 173.925v-8.664h-13.862v-23.97h-11.263v8.664h-5.198v10.974h-6.065V132.05h-7.508v31.767H74.597l.023-25.99h-6.642v25.99h-7.22V153.71h-5.776v-8.375H48.34v12.707h-4.043v-17.328h-3.755v21.37h-4.909v-32.921h-9.138l-.103 32.922h-3.177v-8.664H17.44v8.375h-4.91v-13.862H4.445v13.862H1.556v-10.974H-4.22v23.103z"/>
+                    <path fill="#b4ccc6" d="M130.051 174.328v-4.176h-5.354v-8.567h-8.46v8.78h-3.105v-11.564h-6.853v5.354h-6.532v-5.14h-2.891v8.246h-4.712v-20.667H75.761v10.6h-9.424v-23.022H59.27v24.415H48.714v-6.446H38.64v11.735H21.4v-13.501h-5.608v15.786H7.38v-4.466H.837v6.44H-4.22v6.75z"/>
+                    <path fill="teal" d="M336.484 170.213C222.7 159.893 86.36 160.091-3.758 171.3l-.176 5.792 340.594-1.086z"/>
+                    <g transform="translate(-278.84 1.616)">
+                        <rect width="51.053" height="2.749" x="237.574" y="145.217" fill="#6b87a4" ry="1"/>
+                        <path fill="#efe2bb" d="M241.396 147.966h45.126l40.244-3.376v22.138l-85.37 3.905z"/>
+                        <path fill="#c8b7b7" d="M240.587 166.978h47.449l39.642-3.175v4.184l-87.091 2.646z"/>
+                        <path fill="navy" d="M241.396 148.091h6.942v11.125h-6.942z" opacity=".5"/>
+                        <path fill="#9cb8d6" d="M264.565 127.407v17.732h21.796l-.173.132 47.256-.104-23.711-17.668v-.092l-3.312-2.39z" style="d:m 271.00535999999999603,144.95439999999999259 -29.52356999999999942,.14943000000000001 14.6323799999999995,-25.64288000000000167 z"/>
+                        <rect width="9.612" height="1.51" x="239.25" y="159.138" fill="#6b87a4" ry=".549"/>
+                        <path fill="#e3dbdb" d="M288.236 145.167l-47.256.104 23.42-17.864z"/>
+                        <path fill="#616298" d="M292.294 152.14l12.139-1.059v8.497l-12.139 1.059z" opacity=".5"/>
+                        <path fill="#ac9d93" d="M256.781 152.88h9.171v17.597h-9.171z"/>
+                        <path fill="#6b87a4" d="M288.49 145.177l41.9-2.87a.993.993 0 011.064.926l.05.747a1.002 1.002 0 01-.93 1.07l-41.9 2.87a.993.993 0 01-1.065-.926l-.05-.748a1.002 1.002 0 01.93-1.07z"/>
+                        <path fill="#616298" d="M309.552 150.582l12.139-1.058v8.497l-12.139 1.058z" opacity=".5"/>
+                        <path fill="#616298" d="M272.672 152.774h8.508v7.993h-8.508z" opacity=".5"/>
+                    </g>
+                    <path fill="#c9d9cf" d="M137.054 163.825v-8.664h13.862v-23.97h11.263v8.664h5.198v10.974h6.065V121.95h7.508v31.767h16.484l-.023-25.99h6.642v25.99h7.22V143.61h5.776v-8.375h6.642v12.706h4.043v-17.327h3.754v21.37h4.91v-32.922h9.138l.103 32.923h3.177v-8.664h5.776v8.375h4.909v-13.862h8.086v13.862h2.888v-10.974h5.776v23.103z"/>
+                    <path fill="#b4ccc6" d="M141.98 164.228v-4.176h5.354v-8.567h8.46v8.78h3.105v-11.564h6.853v5.354h6.532v-5.14h2.891v8.245h4.712v-20.666h16.383v10.6h9.424v-23.022h7.067v24.415h10.556v-6.447h10.073v11.736h17.24v-13.501h5.609v15.786h8.412v-4.466h6.543v6.44h5.057v6.75z"/>
+                    <rect width="96.505" height="2.749" x="237.574" y="145.217" fill="#6b87a4" ry="1"/>
+                    <path fill="#efe2bb" d="M241.396 147.966h93.012v22.667h-93.012z"/>
+                    <path fill="#c8b7b7" d="M240.587 164.862h94.499v5.771h-94.499z"/>
+                    <path fill="#616298" d="M241.396 148.091h6.942v11.125h-6.942z"/>
+                    <path fill="#9cb8d6" d="M264.565 127.407v17.732h21.796l-.173.132 47.256-.104-23.711-17.668v-.092h-.124z" style="d:m 271.00535999999999603,144.95439999999999259 -29.52356999999999942,.14943000000000001 14.6323799999999995,-25.64288000000000167 z"/>
+                    <rect width="9.612" height="1.51" x="239.25" y="159.138" fill="#6b87a4" ry=".549"/>
+                    <path fill="#eeebdd" d="M288.236 145.167l-47.256.104 23.42-17.864z"/>
+                    <g transform="translate(-34.61 -.224)">
+                        <path fill="#c87137" d="M326.005 171.342v-10.677h-6.452c-2.762 8.62-6.111 6.06-8.17-3.041l-2.921.139c1.19 7.69 4.883 16.973 11.871 9.926v3.3z"/>
+                        <circle cx="310.077" cy="141.019" r="10.497" fill="teal"/>
+                        <circle cx="318.935" cy="153.631" r="8.679" fill="#71c837"/>
+                        <circle cx="330.491" cy="157.561" r="8.679" fill="#aade87"/>
+                        <circle cx="303.976" cy="152.282" r="8.679" fill="#aade87"/>
+                    </g>
+                    <g transform="translate(-105.493 -4.398)">
+                        <path fill="#c87137" d="M326.005 171.342v-10.677h-6.452c-2.762 8.62-6.111 6.06-8.17-3.041l-2.921.139c1.19 7.69 4.883 16.973 11.871 9.926v3.3z"/>
+                        <circle cx="313.046" cy="141.16" r="10.497" fill="teal"/>
+                        <circle cx="321.762" cy="154.903" r="8.679" fill="#71c837"/>
+                        <circle cx="330.349" cy="155.44" r="8.679" fill="#aade87"/>
+                        <circle cx="309.066" cy="155.392" r="8.679" fill="#aade87"/>
+                    </g>
+                    <g transform="matrix(.92228 0 0 .92228 -203.556 8.37)">
+                        <path fill="#c87137" d="M292.244 172.695V162.02h-6.452c-2.762 8.62-6.11 6.06-8.169-3.041l-2.922.138c1.19 7.691 4.883 16.973 11.872 9.927v3.3z"/>
+                        <circle cx="285.205" cy="154.511" r="9.265" fill="#aade87"/>
+                        <circle cx="277.169" cy="141.781" r="10.497" fill="#87de87"/>
+                        <circle cx="295.94" cy="159.145" r="8.033" fill="#b3ff80"/>
+                        <circle cx="269.364" cy="152.865" r="11.612" fill="#cfa"/>
+                    </g>
+                    <g transform="matrix(.92228 0 0 .92228 -249.186 11.802)">
+                        <path fill="#c87137" d="M292.244 172.695V162.02h-6.452c-2.762 8.62-6.11 6.06-8.169-3.041l-2.922.138c1.19 7.691 4.883 16.973 11.872 9.927v3.3z"/>
+                        <circle cx="285.205" cy="154.511" r="9.265" fill="#aade87"/>
+                        <circle cx="277.169" cy="141.781" r="10.497" fill="#87de87"/>
+                        <circle cx="295.94" cy="159.145" r="8.033" fill="#b3ff80"/>
+                        <circle cx="269.364" cy="152.865" r="11.612" fill="#cfa"/>
+                    </g>
+                    <g>
+                        <path fill="#486a80" d="M334.731 172.093c-113.113-4.992-287.805-4.896-377.39.525l-.176 2.8 377.741-.524z"/>
+                        <rect width="383.858" height="15.987" x="-42.8" y="174.622" fill="#9bc2a2" ry=".54"/>
+                        <rect width="383.858" height="3.799" x="-42.8" y="178.042" fill="#c4c09f" ry=".128"/>
+                        <g transform="translate(12.17)">
+                        <rect width="49.371" height="11.66" x="110.715" y="156.812" fill="#8ca18e" ry="2.729" transform="skewX(-.79) scale(1 .9999)"/>
+                        <rect width="9.679" height="7.372" x="84.581" y="162.691" fill="#4c6463" rx=".994"/>
+                        <rect width="6.584" height="9.51" x="82.612" y="161.087" fill="#eaf3e0" ry="2.58"/>
+                        <path fill="#a4c283" d="M104.928 139.056c-3.213.22-6.522.047-9.765.034-4.368-.07-7.88 4.213-7.97 7.225v15.093c0 .804.647 1.452 1.451 1.452h16.284c1.43 0 2.58-1.151 2.58-2.58v-18.644c0-1.43-1.15-2.58-2.58-2.58zm-11.19 3.33h7.356c.554 0 1 .446 1 1v7.944c0 .554-.446 1-1 1h-9.472c-.554 0-1.263-1.664-1.112-2.197l1.93-6.822c.15-.533.744-.925 1.298-.925z"/>
+                        <path fill="#1a1a1a" d="M94.088 159.136h14.296v9.183H94.088z"/>
+                        <path fill="#89d684" d="M157.036 124.721c-.996.006-1.846.51-2.022 1.928H124.81c-2.216 0-4.052 1.785-4 4 .069 2.386-.045 8.585-.06 9.357l-4.032.054s-1.176-5.292-3.37-6.134c-1.05-.402-3.522-.726-4.583-.018-2.016 1.346-1.619 5.32-1.706 10.245v10.655c0 2.216 1.784 4 4 4h11.394c.692 1.024 1.653 2.245 2.357 2.53h34.165c4.432 0 8-3.569 8-8v-18.689a7.98 7.98 0 00-7.899-7.997c-.175-1.423-1.03-1.93-2.03-1.93h-.01z"/>
+                        <path fill="#758b7b" d="M108.528 168.079c-.667-5.632-2.542-8.408-6.891-8.87-6.248.178-7.558 4.52-7.623 9.481-.042.97-2.145 1.116-2.107.112-.15-5.216-.788-12.362 10.26-12.294 5.34.068 8.465 4.555 8.532 11.563-.039 1.198-2.135 2.023-2.656.116z"/>
+                        <g transform="translate(.593 -.27)">
+                            <ellipse cx="96.684" cy="142.934" fill="#424e42" rx="2.156" ry="4.717" transform="matrix(.99678 .08013 -.0749 .9972 0 0)"/>
+                            <ellipse cx="86.421" cy="150.037" fill="#dbecea" rx="1.51" ry="4.34"/>
+                        </g>
+                        <path fill="#4c6b44" d="M157.036 124.721c-.996.006-1.846.51-2.022 1.928H124.81c-2.216 0-4.052 1.785-4 4 .069 2.386-.045 8.585-.06 9.357l-4.032.054s-1.176-5.292-3.37-6.134c-1.05-.402-3.522-.726-4.583-.018-2.016 1.346-1.619 5.32-1.706 10.245v10.655c0 2.216 1.784 4 4 4h11.394c.692 1.024 1.653 2.245 2.357 2.53h34.165c4.432 0 8-3.569 8-8v-18.689a7.98 7.98 0 00-7.899-7.997c-.175-1.423-1.03-1.93-2.03-1.93h-.01z" clip-path="url(#b)"/>
+                        <path fill="#5d7a5a" d="M593.521 471.387c-3.762.022-6.977 1.93-7.64 7.287H471.719c-8.376 0-15.316 6.744-15.117 15.117.26 9.019-.172 32.447-.227 35.367l-15.238.203s-4.447-20-12.741-23.182c-3.968-1.522-13.31-2.745-17.318-.07-7.62 5.087-6.12 20.107-6.45 38.721v40.27c0 8.375 6.743 15.119 15.118 15.119h43.065c2.616 3.87 6.246 8.486 8.908 9.56H600.846a30.17 30.17 0 0030.236-30.236V508.91c0-16.622-13.281-30.022-29.853-30.226-.663-5.38-3.897-7.297-7.674-7.297h-.034z" clip-path="url(#c)" transform="scale(.26458)"/>
+                        <rect width="10.537" height="3.257" x="140.334" y="128.557" fill="#c2dfab" ry="1.629"/>
+                        </g>
+                        <g transform="translate(12.251 .08)">
+                        <circle cx="147.711" cy="168.376" r="5.227" fill="#313e39"/>
+                        <circle cx="147.711" cy="168.376" r="4.181" fill="#425046"/>
+                        <circle cx="147.711" cy="168.376" r="1.447" fill="#748577"/>
+                        </g>
+                        <g transform="translate(-1.795 .16)">
+                        <circle cx="147.711" cy="168.376" r="5.227" fill="#313e39"/>
+                        <circle cx="147.711" cy="168.376" r="4.181" fill="#425046"/>
+                        <circle cx="147.711" cy="168.376" r="1.447" fill="#748577"/>
+                        </g>
+                        <g transform="translate(-34.248 .073)">
+                        <circle cx="147.711" cy="168.376" r="5.227" fill="#313e39"/>
+                        <circle cx="147.711" cy="168.376" r="4.181" fill="#425046"/>
+                        <circle cx="147.711" cy="168.376" r="1.447" fill="#748577"/>
+                        </g>
+                        <path fill="#5992c7" d="M58.448 98.771l-5.55.351c-7.965-.286-9.51 7.141-9.481 11.183v72.813c0 .2.742.362 1.663.362s1.663-.162 1.663-.362v-72.813c.383-6.253 3.95-7.746 6.225-7.74l5.269-.14z" opacity=".8"/>
+                        <rect width="9.203" height="2.74" x="58.939" y="101.651" fill="#39506a" rx="22.619" ry=".362"/>
+                        <path fill="#f0ecc9" d="M58.237 102.565h10.889c-.25-2.346 1.366-5.298-5.972-5.34-2.57.102-4.381.864-4.987 1.968z"/>
+                        <path fill="#e6e7c1" d="M51.492 101.727c-4.874-.075-6.415 6.088-6.385 10.13v71.754c0 .2-.317.362.604.362.922 0 1.665-.161 1.664-.362l-.53-71.754c.383-6.254 2.574-8.49 4.638-9.329 1.93-.285 1.509-.648.009-.8z"/>
+                        <path fill="#e3dbdb" d="M58.237 102.565h4.707c1.535.25.884-5.041.21-5.34-2.57.102-4.381.864-4.987 1.968z"/>
+                        <g transform="translate(-2.646)">
+                        <ellipse cx="67.39" cy="174.944" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#4c5e57" d="M66.278 163l9.702.035v13.64l-7.847.114c-.421.053-.623-.191-.65-.683z"/>
+                        <path fill="#3f4c4a" d="M75.896 163.105l3.755-1.058-.765 12.597c-.194.429-.455.69-.74.89l-2.216 1.083z"/>
+                        <ellipse cx="76.641" cy="175.049" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#da7a83" d="M64.116 161.535c.024.095.049 1.472.049 1.472l11.84.097 3.762-.912.096-2.127-2.054-.17c-.192-1.772-.751-3.129-3.868-1.595l-3.505.146c-3.178-1.335-2.265.836-3.263 1.377l-1.233.097.073 1.354z"/>
+                        <path fill="#333" d="M66.379 160.632l8.793.029c3.646-.396 2.787-.363 0 .555H66.35z" opacity=".1"/>
+                        <path d="M76.943 159.818l-1.43.342c-.181-.712-.32-1.27.873-1.497.81-.04.638.616.557 1.155z" opacity=".1"/>
+                        <path d="M69.727 158.658c-1.145-.089-1.4.408-1.58 1.276-.183-.712-.248-1.39.664-1.542.81-.04.7.019.916.266z" opacity=".1"/>
+                        <path d="M74.033 158.51c-.596.237-.48.511-.467 1.35-.182-.713-.634-1.138.352-1.483.81-.04.538.211.115.132z" opacity=".1"/>
+                        <path fill="#333" d="M64.637 161.96h10.938c.871-.094 3.747-1.321 3.405-.927-.812.934.032.571-3.405 1.766H64.637z" opacity=".1"/>
+                        </g>
+                        <g transform="translate(10.74 -.094)">
+                        <ellipse cx="67.39" cy="174.944" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#4c5e57" d="M66.278 163l9.702.035v13.64l-7.847.114c-.421.053-.623-.191-.65-.683z"/>
+                        <path fill="#3f4c4a" d="M75.896 163.105l3.755-1.058-.765 12.597c-.194.429-.455.69-.74.89l-2.216 1.083z"/>
+                        <ellipse cx="76.641" cy="175.049" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#e1c97e" d="M64.116 161.535c.024.095.049 1.472.049 1.472l11.84.097 3.762-.912.096-2.127-2.054-.17c-.192-1.772-.751-3.129-3.868-1.595l-3.505.146c-3.178-1.335-2.265.836-3.263 1.377l-1.233.097.073 1.354z"/>
+                        <path fill="#333" d="M66.379 160.632l8.793.029c3.646-.396 2.787-.363 0 .555H66.35z" opacity=".1"/>
+                        <path d="M76.943 159.818l-1.43.342c-.181-.712-.32-1.27.873-1.497.81-.04.638.616.557 1.155z" opacity=".1"/>
+                        <path d="M69.727 158.658c-1.145-.089-1.4.408-1.58 1.276-.183-.712-.248-1.39.664-1.542.81-.04.7.019.916.266z" opacity=".1"/>
+                        <path d="M74.033 158.51c-.596.237-.48.511-.467 1.35-.182-.713-.634-1.138.352-1.483.81-.04.538.211.115.132z" opacity=".1"/>
+                        <path fill="#333" d="M64.637 161.96h10.938c.871-.094 3.747-1.321 3.405-.927-.812.934.032.571-3.405 1.766H64.637z" opacity=".1"/>
+                        </g>
+                        <g transform="matrix(-1 0 0 1 316.898 -.038)">
+                        <ellipse cx="67.39" cy="174.944" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#4c5e57" d="M66.278 163l9.702.035v13.64l-7.847.114c-.421.053-.623-.191-.65-.683z"/>
+                        <path fill="#3f4c4a" d="M75.896 163.105l3.755-1.058-.765 12.597c-.194.429-.455.69-.74.89l-2.216 1.083z"/>
+                        <ellipse cx="76.641" cy="175.049" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#89d684" d="M64.116 161.535c.024.095.049 1.472.049 1.472l11.84.097 3.762-.912.096-2.127-2.054-.17c-.192-1.772-.751-3.129-3.868-1.595l-3.505.146c-3.178-1.335-2.265.836-3.263 1.377l-1.233.097.073 1.354z"/>
+                        <path fill="#333" d="M66.379 160.632l8.793.029c3.646-.396 2.787-.363 0 .555H66.35z" opacity=".1"/>
+                        <path d="M76.943 159.818l-1.43.342c-.181-.712-.32-1.27.873-1.497.81-.04.638.616.557 1.155z" opacity=".1"/>
+                        <path d="M69.727 158.658c-1.145-.089-1.4.408-1.58 1.276-.183-.712-.248-1.39.664-1.542.81-.04.7.019.916.266z" opacity=".1"/>
+                        <path d="M74.033 158.51c-.596.237-.48.511-.467 1.35-.182-.713-.634-1.138.352-1.483.81-.04.538.211.115.132z" opacity=".1"/>
+                        <path fill="#333" d="M64.637 161.96h10.938c.871-.094 3.747-1.321 3.405-.927-.812.934.032.571-3.405 1.766H64.637z" opacity=".1"/>
+                        </g>
+                        <g transform="matrix(-1 0 0 1 301.397 -.094)">
+                        <ellipse cx="67.39" cy="174.944" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#4c5e57" d="M66.278 163l9.702.035v13.64l-7.847.114c-.421.053-.623-.191-.65-.683z"/>
+                        <path fill="#3f4c4a" d="M75.896 163.105l3.755-1.058-.765 12.597c-.194.429-.455.69-.74.89l-2.216 1.083z"/>
+                        <ellipse cx="76.641" cy="175.049" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#da7a83" d="M64.116 161.535c.024.095.049 1.472.049 1.472l11.84.097 3.762-.912.096-2.127-2.054-.17c-.192-1.772-.751-3.129-3.868-1.595l-3.505.146c-3.178-1.335-2.265.836-3.263 1.377l-1.233.097.073 1.354z"/>
+                        <path fill="#333" d="M66.379 160.632l8.793.029c3.646-.396 2.787-.363 0 .555H66.35z" opacity=".1"/>
+                        <path d="M76.943 159.818l-1.43.342c-.181-.712-.32-1.27.873-1.497.81-.04.638.616.557 1.155z" opacity=".1"/>
+                        <path d="M69.727 158.658c-1.145-.089-1.4.408-1.58 1.276-.183-.712-.248-1.39.664-1.542.81-.04.7.019.916.266z" opacity=".1"/>
+                        <path d="M74.033 158.51c-.596.237-.48.511-.467 1.35-.182-.713-.634-1.138.352-1.483.81-.04.538.211.115.132z" opacity=".1"/>
+                        <path fill="#333" d="M64.637 161.96h10.938c.871-.094 3.747-1.321 3.405-.927-.812.934.032.571-3.405 1.766H64.637z" opacity=".1"/>
+                        </g>
+                        <g transform="matrix(-1 0 0 1 283.779 -.094)">
+                        <ellipse cx="67.39" cy="174.944" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#4c5e57" d="M66.278 163l9.702.035v13.64l-7.847.114c-.421.053-.623-.191-.65-.683z"/>
+                        <path fill="#3f4c4a" d="M75.896 163.105l3.755-1.058-.765 12.597c-.194.429-.455.69-.74.89l-2.216 1.083z"/>
+                        <ellipse cx="76.641" cy="175.049" fill="#252d2f" rx="1.153" ry="2.045"/>
+                        <path fill="#e1c97e" d="M64.116 161.535c.024.095.049 1.472.049 1.472l11.84.097 3.762-.912.096-2.127-2.054-.17c-.192-1.772-.751-3.129-3.868-1.595l-3.505.146c-3.178-1.335-2.265.836-3.263 1.377l-1.233.097.073 1.354z"/>
+                        <path fill="#333" d="M66.379 160.632l8.793.029c3.646-.396 2.787-.363 0 .555H66.35z" opacity=".1"/>
+                        <path d="M76.943 159.818l-1.43.342c-.181-.712-.32-1.27.873-1.497.81-.04.638.616.557 1.155z" opacity=".1"/>
+                        <path d="M69.727 158.658c-1.145-.089-1.4.408-1.58 1.276-.183-.712-.248-1.39.664-1.542.81-.04.7.019.916.266z" opacity=".1"/>
+                        <path d="M74.033 158.51c-.596.237-.48.511-.467 1.35-.182-.713-.634-1.138.352-1.483.81-.04.538.211.115.132z" opacity=".1"/>
+                        <path fill="#333" d="M64.637 161.96h10.938c.871-.094 3.747-1.321 3.405-.927-.812.934.032.571-3.405 1.766H64.637z" opacity=".1"/>
+                        </g>
+                    </g>
+                    <g fill="#fff">
+                        <path d="M242.88 87.032h31.267c4.385 0 7.916 3.138 7.916 7.034v14.383c0 3.897-3.53 7.035-7.916 7.035H242.88c-4.386 0-7.916-3.138-7.916-7.035V94.066c0-3.896 3.53-7.034 7.916-7.034z" style="font-variation-settings:normal"/>
+                        <path d="M256.01 114.23l-10.743 45.457 20.955-45.694z"/>
+                        <path d="M166.55 86.868h32.326c4.385 0 7.916 3.137 7.916 7.034v14.383c0 3.897-3.53 7.035-7.916 7.035H166.55c-4.385 0-7.915-3.138-7.915-7.035V93.902c0-3.897 3.53-7.034 7.915-7.034z" style="font-variation-settings:normal"/>
+                        <path d="M176.578 114.76l36.873 45.183-26.662-45.421z"/>
+                        <path d="M90.486 87.978h32.854c4.386 0 7.916 3.137 7.916 7.034v14.383c0 3.897-3.53 7.034-7.916 7.034H90.486c-4.386 0-7.916-3.137-7.916-7.034V95.012c0-3.897 3.53-7.034 7.916-7.034z" style="font-variation-settings:normal"/>
+                        <path d="M100.298 115.83l-26.86 44.113 37.072-44.35z"/>
+                    </g>                    
+                </g>
+            </svg>
+        </div>
+
+    </body>
+
+    <script>
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////
+        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
+        /////////////////////////////////////////////////////////////////////////////////
+
+        Tabletop.init({
+            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
+            callback: async(loadedData) => {
+                // 1. Parse WRRG Data
+                await parseData(loadedData.byStream.elements, loadedData.byMaterial.elements)
+                await renderWasteVis(data, settings)
+                await renderLgaVis()
+            },
+            simpleSheet: false,
+            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExportDestination'  ]   // Specifies which Google sheets to bring in (and in what order)
+        });
+
+
+
+        //////////////////////////////////
+        // 0. SETUP DATA AND SETTINGS  ///
+        //////////////////////////////////
+
+        const data = {          // Initiate data object that populated by the parseData() function, 
+            byPeriod: { }
+        }
+
+        const settings = {
+            svgID:          'wave-vis',
+            year:         '2019/20', 
+            dims: {
+                height:     720, 
+                width:      1080,
+                margin: {
+                    top: 50, right: 50, bottom: 50, left: 50
+                },
+                linkSpacing: 15
+            },    
+            streamOrder:            ['Municipal solid waste', 'Commercial and industrial', 'Construction and demolition'],
+            scales:                  {}, /// Object to hold flow width scales globally (noteL scales defined from parsed data in the renderVis() function )
+            targets:                ['Local processing', 'Storage', 'Export', 'Landfill'],
+            palette: {
+                collection:                         'var(--campaign_queenscliffeMarineLight)',
+                landfill:                           'var(--chartGray)',
+                diversionByStream: {
+                    "Municipal solid waste":        'var(--chartLightGreen)',
+                    "Commercial and industrial":    'var(--chartLightGreen)',
+                    "Construction and demolition":  'var(--chartLightGreen)'
+                },
+            },
+
+            geometry: {         // Specified below relative to dims
+                minFlowWidth:           5,
+                maxFlowWidth:           100, 
+                flowSpacing:            3,          // Spacing between each flow
+                generationTotalsGroup:   '',        // Position of  stream totals data group (left point))
+                streamIconGroup:        '',         // Position of stream icon group (central point)
+                streamLabelGroup:       '',         // Position of label (central point)         
+                streamDataLabelGroup:   '',         // Position of data labels for landfill and diversion flows  (central point)        
+                streamNodeGroup:        '',         // Position of center node/flow starting point
+                streamNodeSpacing:      '',         // Horizontal spacing between stream nodes
+                diversionCurveRadius:   '',         // Radius of the outmost return loop
+                diversionCurveCentre:   '',         // Centre point for circular curve    
+                landfillNodeGroup:      '',         // Position of the landfill node
+            }
+        }
+
+        // Set relative geometry points for placement of elements
+        settings.geometry.generationTotalsGroup = {x: settings.dims.margin.left,  y: settings.dims.height * 0.195 }
+        settings.geometry.streamIconGroup       = {x: settings.dims.width * 0.11 + settings.dims.margin.left,  y: settings.dims.height * 0.36 }
+        settings.geometry.streamDonutGroup      = {x: settings.dims.width * 0.11 + settings.dims.margin.left,  y: settings.dims.height * 0.5 }
+        settings.geometry.streamLabelGroup      = {x: settings.dims.width * 0.11 + settings.dims.margin.left,  y: settings.dims.height * 0.345 }
+        settings.geometry.streamDataLabelGroup  = {x: settings.dims.width * 0.11 + settings.dims.margin.left,  y: settings.dims.height * 0.395 }
+        settings.geometry.streamNodeGroup       = {x: settings.dims.width * 0.11 + settings.dims.margin.left,  y: settings.dims.height * 0.50 }
+        settings.geometry.diversionVolumeGroup  = {x: settings.dims.width * 0.85 - settings.dims.margin.right,  y: settings.dims.height * 0.50 }
+        settings.geometry.streamNodeSpacing     = settings.dims.width * 0.115
+        settings.geometry.diversionCurveRadius  = {outer: settings.dims.height * 0.7  }         // Set the outermost loop radius 
+        settings.geometry.diversionCurveCentre  = {x: settings.dims.width * 0.5, y: settings.dims.height * 0.4 }  // Centered horizontally and slightly above vertical center to allow room for landfill flows
+        settings.geometry.landfillNodeGroup     = {x: settings.dims.width * 0.9 - settings.dims.margin.right,  y: settings.dims.height * 0.885 }
+
+
+        //////////////////////////////////////
+        // A. PARSE AND WRANGLE DATA       ///
+        //////////////////////////////////////
+
+        async function parseData(wasteStreamData, materialData) {      
+            console.log(wasteStreamData)
+            console.log(materialData)
+
+            // This function will take a data source, then parse/wrangle and return/populate the data structure(s) below 
+            // Manual entry is done here for prototyping, using the 2018/19 data
+            data.byPeriod["2019/20"] = {
+                periodType: {
+                    reporting: 'annual',
+                    per:        'year'
+                },
+                byStream: {
+                    "Municipal solid waste": { // In millions of tonnes 
+                        Diverted:       1.379,
+                        Landfilled:     1.788
+                    },
+                    "Commercial and industrial": {
+                        Diverted:       2.076,
+                        Landfilled:     1.963
+                    },
+                    "Construction and demolition": {
+                        Diverted:       6.539,
+                        Landfilled:     1.057
+                    }
+                }
+            }
+            // Add totals
+             data.byPeriod[settings.year].byStream.Total = {
+                Diverted:  d3.sum(Object.values(data.byPeriod[settings.year].byStream).map(d => d.Diverted)),
+                Landfilled:  d3.sum(Object.values(data.byPeriod[settings.year].byStream).map(d => d.Landfilled))
+            } 
+        };
+
+
+        ////////////////////////////////////
+        // B. RENDER THE FLOW GRAPHIC    ///
+        ////////////////////////////////////
+
+        async function renderWasteVis(data, settings){
+            // 0. REFERENCES FOR DATA AND SVG PATH OBJECTS
+                const dataset = data.byPeriod[settings.year],
+                    byStreamData = dataset.byStream,
+                    icons = {      
+                        'Municipal solid waste':        'M43.232 28.361v16.29a2 2 0 01-1.998 1.997H8.708A2 2 0 016.71 44.65V28.361a2 2 0 011.998-1.997 2 2 0 011.998 1.997v14.292h28.633V28.36a2 2 0 011.998-1.997c1.024 0 1.895.922 1.895 1.997zm6.198-1.383L26.38 3.928a1.948 1.948 0 00-2.766 0L.564 26.978a1.98 1.98 0 000 2.767c.41.358.87.563 1.434.563.563 0 1.024-.205 1.383-.563L24.997 8.128l21.616 21.617c.768.768 2.049.768 2.766 0 .82-.769.82-1.998.051-2.767z',
+                        'Commercial and industrial':    'M25 37.083h-2.5a.833.833 0 000 1.667H25a.833.833 0 000-1.667zm20.833 3.75h-2.916a.833.833 0 000 1.667h2.916a.833.833 0 000-1.667zm0-5h-2.916a.833.833 0 000 1.667h2.916a.833.833 0 000-1.667zm-3.75-14.166a.833.833 0 00.834.833h2.916a.833.833 0 000-1.667h-2.916a.833.833 0 00-.834.834zm3.75 4.166h-2.916a.833.833 0 000 1.667h2.916a.833.833 0 000-1.667zm0 5h-2.916a.833.833 0 000 1.667h2.916a.833.833 0 000-1.667zm-14.583 6.25h-2.917a.833.833 0 000 1.667h2.917a.833.833 0 000-1.667zm-6.25-15h-2.5a.833.833 0 000 1.667H25a.833.833 0 000-1.667zm6.25 0h-2.917a.833.833 0 000 1.667h2.917a.833.833 0 000-1.667zm-6.25 5h-2.5a.833.833 0 000 1.667H25a.833.833 0 000-1.667zm6.25 0h-2.917a.833.833 0 000 1.667h2.917a.833.833 0 000-1.667zm-6.25 5h-2.5a.833.833 0 000 1.667H25a.833.833 0 000-1.667zm6.25 0h-2.917a.833.833 0 000 1.667h2.917a.833.833 0 000-1.667zM8.333 37.917a.833.833 0 000-1.667h-2.5a.833.833 0 000 1.667zm3.334 0h2.916a.833.833 0 000-1.667h-2.916a.833.833 0 000 1.667zM5.833 33.75h2.5a.833.833 0 000-1.667h-2.5a.833.833 0 000 1.667zm5.834 0h2.916a.833.833 0 000-1.667h-2.916a.833.833 0 000 1.667zM4.458 10.824a.84.84 0 00.125.01A1.668 1.668 0 016.25 12.5a.833.833 0 001.667 0A3.337 3.337 0 004.77 9.172a.845.845 0 00-.094-.005.973.973 0 01-.7-.302.784.784 0 01-.226-.572.83.83 0 01.832-.793h7.5a.833.833 0 000-1.667H7.5a.834.834 0 01-.594-1.418.845.845 0 01.594-.248h16.667a.834.834 0 01.594 1.419.845.845 0 01-.594.247H18.75a.833.833 0 000 1.667.834.834 0 01.595 1.419.845.845 0 01-.595.248h-3.333a3.337 3.337 0 00-3.334 3.333.833.833 0 001.667 0 1.668 1.668 0 011.667-1.667h3.333A2.493 2.493 0 0021.104 7.5h3.063a2.5 2.5 0 000-5H7.5a2.493 2.493 0 00-2.354 3.333h-.563a2.498 2.498 0 00-2.497 2.38 2.426 2.426 0 00.685 1.802 2.652 2.652 0 001.687.809zm44.709 1.26h-2.709V8.75a.833.833 0 00-.833-.833h-6.042V5a.833.833 0 00-1.666 0v2.917h-6.042a.833.833 0 00-.833.833v3.333h-2.709a.833.833 0 00-.833.834v4.166h-9.583a.833.833 0 00-.834.834v5.833h-1.799l-1.042-5.993-.504-2.9a.833.833 0 00-.821-.69H7.083a.833.833 0 00-.82.69L4.715 23.75H2.5a2.498 2.498 0 00-.833 4.854v18.063a.833.833 0 00.833.833h46.667a.833.833 0 00.833-.833v-33.75a.833.833 0 00-.833-.834zm-16.459-2.5h12.084v2.5H32.708zm-20.492 6.25l.217 1.25H7.567l.218-1.25zM7.277 18.75h5.446l.87 5H6.408zM2.5 25.417h14.583v1.666H2.5a.833.833 0 010-1.666zm.833 3.333h13.75v17.083h-4.166v-3.75a.833.833 0 00-.834-.833H7.917a.833.833 0 00-.834.833v3.75h-3.75zM8.75 45.833v-2.916h2.5v2.916zm16.667 0v-2.916h2.5v2.916zm4.166 0v-3.75a.833.833 0 00-.833-.833h-4.167a.833.833 0 00-.833.833v3.75h-5V18.75H35v27.083zm18.75 0H36.667V42.5h2.083a.833.833 0 000-1.667h-2.083V37.5h2.083a.833.833 0 000-1.667h-2.083V32.5h2.083a.833.833 0 000-1.667h-2.083V27.5h2.083a.833.833 0 000-1.667h-2.083V22.5h2.083a.833.833 0 000-1.667h-2.083v-2.916a.833.833 0 00-.834-.834h-6.666V13.75h19.166z',
+                        'Construction and demolition':  'M43.62 10.977h1.15v8.103h-1.15zm3.696 11.092h-6.241l3.12-3.908zm-3.85-1.15h1.465L44.195 20zm4.494 4.828H40.43a.807.807 0 01-.805-.804v-3.219c0-.442.363-.804.805-.804h7.535c.442 0 .804.362.804.804v3.219a.816.816 0 01-.81.804zm-7.184-1.15h6.839V22.07h-6.84zM9.3 11.287l.97-.616 5.53 8.716-.97.616zm.004 8.103l5.532-8.72.971.616-5.533 8.72zm-.005.581l.971-.616 5.53 8.716-.97.616zm.004 8.102l5.53-8.715.97.615-5.53 8.716zm-.005.638l.97-.616 5.53 8.715-.97.615zm.002 8.1l5.53-8.716.97.615-5.53 8.716zm0 .586l.97-.616 5.53 8.716-.97.616zm0 8.097l5.532-8.72.97.616-5.532 8.72zm5.892-44.357l.25-1.122L44.407 6.45l-.249 1.122zM6.695 16.954H.891a.807.807 0 01-.805-.805V5.517c0-.442.362-.804.805-.804H6.7c.443 0 .805.362.805.804V16.15a.816.816 0 01-.81.805zm-5.46-1.15h5.116V5.863H1.236zm23.966-5.402H27.5v1.15h-2.299zm23.104 1.15H30.19v-1.15h16.965V9.96l-3.069-2.374H7.5v2.816h14.943v1.15H6.35V6.437h38.126l3.5 2.707c.207.16.328.402.328.666zm-1.03-1.5zM19.34 50H5.776v-3.057c0-.943.77-1.713 1.713-1.713h10.143c.943 0 1.713.77 1.713 1.713V50zM6.92 48.85h11.265v-1.907a.564.564 0 00-.563-.564H7.483a.564.564 0 00-.563.564v1.908zm8.978-2.47H9.213V10.401h6.684zm-5.535-1.15h4.385V11.552h-4.385zm5.535-37.644H8.753l4.494-7.19A.836.836 0 0113.96 0h1.937zm-5.07-1.15h3.92V1.15h-.615zm33.914 25h1.15v3.104h-1.15zm-3.39-1.723H42.5v4.827h-1.15zm-4.34 1.724h1.15v3.103h-1.15zm-7.73-5.632h1.15v3.448h-1.15zm-3.39-1.725h1.15v5.173h-1.15zm20 21.322h-4.54v-6.436h4.54zm-3.391-1.15h2.241v-4.137H42.5zm-4.34 1.15h-4.54v-6.436h4.54zm-3.39-1.15h2.241v-4.137h-2.24zm-4.339-9.137h-4.54v-6.437h4.54zm-3.39-1.15h2.24v-4.137h-2.24zm3.39 11.437h-4.54v-6.436h4.54zm-3.39-1.15h2.24v-4.137h-2.24zM49.913 50H21.868V28.678H34.77v5.288h15.144zm-26.897-1.15h25.747V35.116H33.621v-5.287H23.017z',
+                        'Landfill':                     'M40.323 27.42h1.612v1.612h-1.612zm8.064-14.517H50v1.613h-1.613zm-14.516 22.58h1.613v1.614H33.87zm14.28-8.634l-1.14 1.14.472.473a3.11 3.11 0 01.904 2.183 3.11 3.11 0 01-.904 2.183l-.473.473 1.14 1.14.473-.472A4.732 4.732 0 0050 30.645a4.732 4.732 0 00-1.377-3.323zm-4.603-4.847c0 1.629.635 3.16 1.787 4.313l.869.868 1.14-1.14-.869-.87a4.457 4.457 0 01-1.314-3.171c0-1.405.671-2.747 1.795-3.59l1.109-.831-.968-1.29-1.11.83a6.13 6.13 0 00-2.439 4.88zm-1.431-6.01l1.109-.83-.968-1.291-1.109.831a6.13 6.13 0 00-2.44 4.88c0 1.63.635 3.16 1.787 4.313l.87.87 1.14-1.14-.87-.87a4.46 4.46 0 01-1.313-3.173c0-1.405.67-2.747 1.794-3.59zm1.668-2.852l1.14 1.14.473-.473a4.667 4.667 0 001.376-3.323 4.667 4.667 0 00-1.376-3.324l-.473-.472-1.14 1.14.472.473c.583.583.904 1.359.904 2.183 0 .824-.32 1.6-.904 2.183zm-6.67-9.525a10.078 10.078 0 016.008-2.002c1.124 0 2.038.914 2.038 2.039a1.19 1.19 0 01-1.187 1.187 1.18 1.18 0 01-1.062-.657l-.255-.51-1.442.722.255.51a2.784 2.784 0 002.504 1.548c1.544 0 2.8-1.257 2.8-2.8A3.655 3.655 0 0043.123 0a11.7 11.7 0 00-6.976 2.325l-.34.256.967 1.29zm.15 7.799l-10.07.56a3.18 3.18 0 00-2.07 5.42l.918.919 1.14-1.14-.918-.919a1.567 1.567 0 011.02-2.67l10.07-.56a3.143 3.143 0 00.588-6.184 1.115 1.115 0 01-.846-1.084V4.84h-1.613v.917c0 1.255.85 2.344 2.068 2.649a1.528 1.528 0 01-.286 3.009zM3.973 21.48a2.1 2.1 0 00-.747 1.598v.616a2.113 2.113 0 003.055 1.889l.17-.086v.308h1.614v-.308l.17.085a2.113 2.113 0 003.056-1.888v-.616a2.113 2.113 0 00-2.112-2.111c-.068 0-.134.017-.2.023L5.966 14.97l7.329-3.67 3.937 7.252a3.7 3.7 0 00-.77.825 5.314 5.314 0 00-3.96 2.351l-.27.407 1.341.894.271-.406a3.707 3.707 0 013.09-1.654h.499l.222-.446a2.102 2.102 0 011.89-1.167h.615v-1.613h-.616c-.295 0-.582.037-.86.102l-3.971-7.315a1.618 1.618 0 00-2.158-.678L2.51 14.897a1.635 1.635 0 00-.726 2.186zm1.587 2.66c-.315.158-.721-.094-.721-.446v-.616c0-.352.406-.605.721-.446l.892.446v.616zm4.117-1.062v.616c0 .352-.404.605-.721.446l-.891-.446v-.616l.89-.446c.317-.159.722.094.722.446zm-5.152-7.387l2.638 5.276h-.711v.308l-.17-.085a2.114 2.114 0 00-.75-.2l-2.297-4.654zm22.979 6.443l1.443-.722a3.704 3.704 0 00-3.33-2.058h-.158a3.7 3.7 0 00-3.069-1.613h-.616v1.613h.616a2.1 2.1 0 011.888 1.167l.224.446h1.114a2.1 2.1 0 011.888 1.167zm-9.762 3.671v-1.612h-.138a6.272 6.272 0 00-4.464 1.849l1.14 1.14a4.669 4.669 0 013.324-1.377zm4.839 3.226h1.613v1.613H22.58zm-8.065 1.613h1.613v1.613h-1.613zm3.226 14.516h1.613v1.613h-1.613zm6.452-6.451h1.612v1.613h-1.612zm-4.34-27.42c.325 0 .652-.077.944-.222l.17-.086v.308h1.613v-.308l.17.085a2.113 2.113 0 003.056-1.888v-.616a2.113 2.113 0 00-3.056-1.889l-.17.086v-.308h-1.613v.308l-.17-.085a2.113 2.113 0 00-3.056 1.888v.616c0 1.165.947 2.111 2.111 2.111zm3.618-3.173c.317-.157.722.094.722.446v.616c0 .352-.405.606-.722.446l-.891-.446v-.616zm-4.117.446c0-.352.407-.603.722-.446l.89.446v.616l-.89.446c-.316.159-.722-.094-.722-.446zm12.267 19.939l-.085.17 1.443.722.085-.171a7.68 7.68 0 00.806-3.417h-1.613c0 .931-.22 1.863-.636 2.696zm4.49-5.334l.588-2.237c.217-.829-.265-1.684-1.098-1.949l-1.115-.354a1.678 1.678 0 00-1.998.805l-1.219 2.323c-2.264.63-4.168 2.031-5.392 3.975l-.179.284c-.097-.04-.193-.083-.293-.117l-.151-.05-.511 1.529.151.05a4.343 4.343 0 012.663 2.51 3.673 3.673 0 003.426 2.321c.4 0 .792-.064 1.166-.189l1.065-.354a2.1 2.1 0 011.312 0l1.508.502.51-1.53-.152-.05.22-.629a8.662 8.662 0 00-.5-6.84zm-3.407 7.016l-1.065.355a2.067 2.067 0 01-2.583-1.198 5.953 5.953 0 00-1.943-2.545l.13-.206c1.062-1.687 2.753-2.88 4.762-3.359l.356-.084 1.555-2.964c.005-.009.04-.03.082-.017l1.141.356-.745 2.84.28.533a6.954 6.954 0 01.416 5.58l-.232.665a3.706 3.706 0 00-2.154.044zm.55 16.59h.616v-1.613h-.616c-1.42 0-2.696.79-3.33 2.06l1.442.72a2.099 2.099 0 011.888-1.167zm-6.543-1.613h1.041l.237-.236a4.67 4.67 0 013.324-1.377h.944v-1.613h-.944a6.27 6.27 0 00-4.216 1.613h-.386a5.057 5.057 0 00-4.914 3.837l1.565.39a3.447 3.447 0 013.35-2.614zm15.65 0h-.1c-.12-.113-.25-.213-.373-.322.083-.165.162-.33.24-.499l4.14-1.656-.6-1.498-2.766 1.107c.162-.54.291-1.09.393-1.645l2.972-1.19-.6-1.497-2.033.814 3.971-6.95-4.864 1.215-4.864-1.216 4.02 7.034-.022.265-1.79-1.79-1.14 1.14 2.612 2.612c-.06.25-.126.499-.2.746l-1.27-1.272-1.141 1.14 1.795 1.795c-.052.116-.102.233-.157.348a11.737 11.737 0 00-6.437-1.907h-.277v1.613h.277c2.726 0 5.29 1.062 7.217 2.99l.237.236h.76a5 5 0 013.694 1.613H4.116a5.674 5.674 0 013.949-1.613h.333l.76-.759a2.963 2.963 0 013.364-.546l.827.414.722-1.443-.827-.413a4.568 4.568 0 00-1.004-.36 7.29 7.29 0 014.695-1.732h.807v-1.612h-.807c-.39 0-.779.033-1.162.084a6.512 6.512 0 013.136-3.395l-.722-1.443a8.172 8.172 0 00-1.913 1.34l-.367-.367A9.12 9.12 0 009.46 33.87H7.677l.353-2.018a2.365 2.365 0 00-.526-1.93 2.515 2.515 0 00-1.934-.89H5.4c-1.07 0-2.019.659-2.362 1.642l-.327.937-.995.317C.69 32.255 0 33.179 0 34.226c0 1.116.78 2.08 1.897 2.347l.875.208a9.157 9.157 0 00.145 9.165l.53.884c-.44.361-.842.772-1.189 1.235L.806 50h48.08l-.584-1.167a6.607 6.607 0 00-5.94-3.672zm.38-10.459l1.588-.397-1.588 2.779-1.588-2.78zm-41.13-.476c0-.343.239-.648.593-.76l1.764-.562.592-1.697c.117-.337.454-.562.839-.562h.17c.276 0 .53.115.7.315.086.104.222.32.17.617l-.422 2.421-2.1 1.4-1.647-.393c-.388-.093-.658-.413-.658-.78zM4.3 45.116a7.536 7.536 0 01.192-8.062l.122-.183 2.082-1.387h2.765a7.507 7.507 0 015.306 2.198l.438.437a8.208 8.208 0 00-1.268 2.731 8.898 8.898 0 00-4 2.903 4.485 4.485 0 00-1.92 1.121l-.294.295a7.27 7.27 0 00-2.923.779z'
+                    }
+
+            /// 1. SETUP SVG AND LAYERS   
+                // a. Setup SVG canvas
+                const vis = d3.select(`#${settings.svgID}`)
+                    .attr('viewBox', `0 0 ${settings.dims.width} ${settings.dims.height}`)
+                    .attr('preserveAspectRatio', 'xMidYMid meet')
+                const defs = vis.append('defs')
+
+                // b. Create layering groups to render to (bottom layer first)
+                const linkLayer = vis.append('g').classed('links-group', true)
+
+                const linkAnnotationLayer = vis.append('g').classed('link-annotation-group', true),
+                    linkDiversionLabel = linkAnnotationLayer.append('g').classed('link-diversion-label-group link-label-group', true)
+                    linkLandfillLabel = linkAnnotationLayer.append('g').classed('link-landfill-label-group  link-label-group', true)
+
+                const streamStartLayer = vis.append('g').classed('stream-start-group', true),        // Grouping of the labels/icons/data and the stream start points (left of screen)
+                    streamDonuts = streamStartLayer.append('g').classed('stream-donut-group', true)
+                        .attr('transform', `translate(${ settings.geometry.streamDonutGroup.x}, ${settings.geometry.streamDonutGroup.y})`),
+                    streamIcons = streamStartLayer.append('g').classed('stream-icon-group', true)
+                        .attr('transform', `translate(${ settings.geometry.streamIconGroup.x}, ${ settings.geometry.streamIconGroup.y})`),
+                    streamLabels = streamStartLayer.append('g').classed('stream-labels-group', true)
+                        .attr('transform', `translate(${ settings.geometry.streamLabelGroup.x}, ${ settings.geometry.streamLabelGroup.y})`),
+                    streamData = streamStartLayer.append('g').classed('stream-data-group start', true)
+                        .attr('transform', `translate(${ settings.geometry.streamDataLabelGroup.x}, ${ settings.geometry.streamDataLabelGroup.y})`)
+
+                const landfillEndLayer = vis.append('g').classed('landfill-end-group', true)         // Landfill graphic (bottom (right)
+                        .attr('transform', `translate(${ settings.geometry.landfillNodeGroup.x}, ${ settings.geometry.landfillNodeGroup.y})`)
+                const diversionVolumeLayer = vis.append('g').classed('diversion-vol-group', true)         // Diversion volumen label (right9)
+                        .attr('transform', `translate(${ settings.geometry.diversionVolumeGroup.x}, ${ settings.geometry.diversionVolumeGroup.y})`)
+
+                const totalsGenLayer = vis.append('g').classed('total-generation-group', true)
+                        .attr('transform', `translate(${ settings.geometry.generationTotalsGroup.x}, ${settings.geometry.generationTotalsGroup.y})` )
+                const titleAnnotation = vis.append('g').classed('title-annotation-group', true)
+
+                // c. Data wrangling for setting scale for flow width
+                const dataStructure = {
+                    noFlows:  (function(){
+                        let count = 0
+                        settings.streamOrder.forEach(streamName => count += Object.keys(dataset.byStream[streamName]).length ) 
+                        return count
+                    } ()),
+                    minFlowVol: d3.min([].concat.apply([], Object.values(data.byPeriod[settings.year].byStream).map(d => Object.values(d)))),
+                    maxFlowVol: d3.max([].concat.apply([], Object.values(data.byPeriod[settings.year].byStream).map(d => Object.values(d)))),    
+                    diversionFlows:  Object.values(data.byPeriod[settings.year].byStream).map(d => Object.values(d)).map(d => d[0]).slice(0, settings.streamOrder.length),            
+                    landfillFlows:  Object.values(data.byPeriod[settings.year].byStream).map(d => Object.values(d)).map(d => d[1]).slice(0, settings.streamOrder.length),            
+                }    
+                dataStructure.diversionRate = d3.sum(dataStructure.diversionFlows) / (d3.sum(dataStructure.diversionFlows) + d3.sum(dataStructure.landfillFlows) )
+
+                // d. Set flow width Scale
+                settings.scales.flows = d3.scaleLinear()
+                    .domain([ dataStructure.minFlowVol, dataStructure.maxFlowVol]) 
+                    .range([ settings.geometry.minFlowWidth, settings.geometry.maxFlowWidth])
+
+
+            /// 2. RENDER THE FLOWS FOR EACH WASTE STREAM 
+                let landfillPathLowerY = settings.dims.height - settings.dims.margin.bottom,        // For tracking the y position of the flows along the bottom of the page
+                    diversionPathLowerY = landfillPathLowerY                                        // For tracking the y position of the flows along the bottom of the page
+                        - d3.sum(dataStructure.landfillFlows.map(d => settings.scales.flows(d))) - settings.streamOrder.length *  settings.geometry.flowSpacing ,      // This offsetting accounts for the width/height of the landfill flows and spacing
+                    pathRightX = settings.dims.width - settings.dims.margin.right,                   // For tracking the x position of the flows along the bottom of the page
+                    diversionCrestY = settings.dims.margin.top
+
+                // Iterate over each waste stream...
+                settings.streamOrder.forEach((streamName, i) => {
+                    // a. Determine data and geometry (positioning) by waste stream and destination
+                    const diversionVolume = dataset.byStream[streamName].Diverted,
+                        landfillVolume = dataset.byStream[streamName].Landfilled, 
+                        slugStreamName = helpers.slugify(streamName),
+                        offsetX = settings.geometry.streamNodeSpacing * (i - 1),
+                        arcFlowSpacing = settings.geometry.flowSpacing * (i + 1),
+                        diversionWidth =  settings.scales.flows(diversionVolume),
+                        landfillWidth = settings.scales.flows(landfillVolume),
+                        landfillStartX =  settings.geometry.streamNodeGroup.x + offsetX + landfillWidth / 2,
+                        diversionStartX =  settings.geometry.streamNodeGroup.x + offsetX + landfillWidth +  settings.geometry.flowSpacing  + diversionWidth / 2 ,
+                        nodeStartY  =  settings.geometry.streamNodeGroup.y
+
+                    // b. Set up a gradient definition for each path (waste stream => destination)
+                    const linkGroup = linkLayer.append('g').classed('link-group', true),
+                        gradientDiv = linkGroup.append("linearGradient")
+                            .attr("id", `${helpers.slugify(streamName)}_link_diversion`)
+                            .attr("gradientUnits", "userSpaceOnUse")
+                            .attr("x1", diversionStartX)
+                            .attr("x2", settings.geometry.diversionCurveCentre.x),
+                        gradientLandfill = linkGroup.append("linearGradient")
+                            .attr("id", `${helpers.slugify(streamName)}_link_landfill`)
+                            .attr("gradientUnits", "userSpaceOnUse")
+                            .attr("x1", diversionStartX)
+                            .attr("x2", settings.geometry.diversionCurveCentre.x)
+
+                    gradientDiv.append("stop")                                  // Start colour
+                        .attr("offset", "0%")
+                        .attr("stop-color", settings.palette.collection);          // For collected waste => diversion
+                    gradientLandfill.append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", settings.palette.collection);           // For collected waste => landfill                    
+                    gradientDiv.append("stop")                                  // End colour
+                        .attr("offset", "100%")
+                        .attr("stop-color", settings.palette.diversionByStream[streamName]);      // For diversion
+                    gradientLandfill.append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", settings.palette.landfill);                    // Colour for landfill
+
+                    // c. Set up an arrow marker (as an SVG def) for flow
+                    defs.append('marker')
+                        .attr('id', `arrow-diversion-${slugStreamName}`)
+                        .attr('viewBox', [0, 0, 200, 200])
+                        .attr('refX', 10)
+                        .attr('refY', 10)
+                        .attr('markerWidth', 20)
+                        .attr('markerHeight', 10)
+                        .attr('orient', 'auto-start-reverse')
+                        .classed(`marker diversion-flow ${slugStreamName}` , true)
+                        .append('path')
+                            .attr('d', d3.line()([[10, 0], [10, 20], [25, 10]]))
+                            .style('fill', settings.palette.diversionByStream[streamName])
+
+                    defs.append('marker')
+                        .attr('id', `arrow-landfill-${slugStreamName}`)
+                        .attr('viewBox', [0, 0, 200, 200])
+                        .attr('refX', 0)
+                        .attr('refY', 10)
+                        .attr('markerWidth', 20)
+                        .attr('markerHeight', 10)
+                        .classed(`marker landfill-flow ${slugStreamName}` , true)
+                        .append('path')
+                            .attr('d', d3.line()([[0, 0], [0, 20], [20, 10]]))
+                            .style('fill', settings.palette.landfill)
+
+                    // d. Append the landfill and diversion paths, with gradient and marker!             
+                    linkGroup.append('path').classed(`flow landfill-flow ${slugStreamName}`, true)
+                        .attr('d', landfillPath(landfillWidth, landfillStartX, nodeStartY, landfillPathLowerY))
+                        .attr('stroke-width', landfillWidth)
+                        .attr('stroke', `url(#${helpers.slugify(streamName)}_link_landfill)`)
+                        .attr('marker-end', `url(#arrow-landfill-${slugStreamName})`)
+
+                    linkGroup.append('path').classed(`flow diversion-flow ${slugStreamName}`, true)
+                        .attr('d', diversionPath(diversionWidth, diversionStartX, nodeStartY, diversionPathLowerY))
+                        .attr('stroke-width', diversionWidth)
+                        .attr('stroke', `url(#${helpers.slugify(streamName)}_link_diversion)`)
+                        .attr('marker-end', `url(#arrow-diversion-${slugStreamName})`)
+
+                    // x. Path generators for landfill and diversion paths
+                    function landfillPath(flowWidth, startX, startY){
+                        let radius = flowWidth
+                        landfillPathLowerY -= flowWidth/2 // Update pathLower for landfill
+                        // Build the SVG path string step by step                    
+                        let d = `M${startX} ${startY} `         // Starting point                                
+                        d +=  `L${startX} ${landfillPathLowerY}`                                 // Move down to pathLowerY minus half the width of the flow 
+                        d +=  `L${settings.geometry.landfillNodeGroup.x} ${landfillPathLowerY}`  // Move across to landfill node
+                        // Update pathLower for landfill
+                        landfillPathLowerY += - flowWidth/2 - settings.geometry.flowSpacing   
+                        return d // Return the completed path string
+                    };
+
+                    function diversionPath(flowWidth, startX, startY){
+                        let radius = (startY - diversionCrestY) /2
+                        diversionPathLowerY -= flowWidth/2  // Update pathLower position for half of this flow width
+                        diversionCrestY += flowWidth/2  // Update pathLower position for half of this flow width
+                        // Build the SVG path string step by step
+                        let d = `M${startX} ${startY} `                 // Starting point              
+                        d += `L${startX} ${diversionPathLowerY}`        // Move down to pathLowerY minus half the width of the flow
+                        d += `L${settings.geometry.diversionCurveCentre.x} ${diversionPathLowerY}`       // Move to central curve X pos 
+                        d += `A${radius}, ${radius}, 0, 1, 0, ${settings.geometry.diversionCurveCentre.x}, ${diversionCrestY}` 
+                        // Update pathLower and crest (bottom and top coordinates)
+                        diversionPathLowerY += - flowWidth/2 - settings.geometry.flowSpacing  
+                        diversionCrestY += flowWidth/2 + settings.geometry.flowSpacing
+                        return d // Return the completed path string
+                    };
+                })
+
+
+            // 3. ADD FLOW ANNOTATIONS
+                // ADD THE CURVED DIVERSION LABEL AND OVERALL DIVERSION PCT LABEL
+                defs.append('path').classed('diversion-label-path', true)
+                    .attr('id', 'diversion-label-path')
+                    .attr('d', diversionLabelPath)
+
+                const diversionAnnotation = linkAnnotationLayer.append('text')
+                    .classed('diversion-main-label text-on-path' , true)
+                    .append('textPath').attr("xlink:href", "#diversion-label-path")
+                    .text("Overall diversion from landfill")	
+
+                    function diversionLabelPath( startX, startY){
+                        let offset = 10,
+                            radius = (startY - diversionCrestY) /2 - offset
+                        // Build the SVG path string step by step
+                        let d = `M${settings.geometry.diversionCurveCentre.x - 60} ${diversionPathLowerY - offset} `     // Starting point              
+                        d += `L${settings.geometry.diversionCurveCentre.x} ${diversionPathLowerY - offset}`              // Move to central curve X pos 
+                        d += `A${radius}, ${radius}, 0, 1, 0, ${settings.geometry.diversionCurveCentre.x}, ${diversionCrestY + offset}` 
+                        return d // Return the completed path string
+                    };
+                
+                // Render the diversion proportion pct label
+                settings.geometry.diversionCurveCentre.y = d3.select('.links-group').node().getBBox().y + d3.select('.links-group').node().getBBox().height /2         // Reset centrepoint         
+                const diversionPctLabel = linkAnnotationLayer.append('text')
+                    .classed('diversion-pct-number', true)
+                    .attr('transform', `translate(${settings.geometry.diversionCurveCentre.x}, ${settings.geometry.diversionCurveCentre.y})`)                
+                    .text(helpers.numberFormatters.formatInteger(dataStructure.diversionRate * 100))
+
+                const diversionPctUnit = linkAnnotationLayer.append('text')
+                    .classed('diversion-pct-unit', true)
+                    .attr('transform', `translate(${settings.geometry.diversionCurveCentre.x + diversionPctLabel.node().getBBox().width /2 - 10}, ${settings.geometry.diversionCurveCentre.y - 60 })`)                
+                    .text('%')
+
+
+            // 4. ADD TOTAL GENERATION HEADLINE AND WASTE STREAM SECTION (top left)
+                // i. Headline generation group
+                totalsGenLayer.append('text').classed('generation-headline', true)
+                    .attr('transform', `translate(0, -75)`)
+                    .text("Victorian's generated")
+                const totalGenFigure = totalsGenLayer.append('text').classed('generation-headline-figure', true)
+                    .attr('id', 'headline-generation-figure')
+                    .text(helpers.numberFormatters.formatComma1dec(d3.sum(Object.values(dataset.byStream.Total))))
+
+                const totalGenFigureOffset = totalGenFigure.node().getBBox().width -10
+                totalGenFigure.attr('transform', `translate(${totalGenFigureOffset}, 0 )`)
+
+                const totalGenUnit = totalsGenLayer.append('text').classed('generation-unit', true)
+                    .attr('transform', `translate(${totalGenFigureOffset + 10}, -48)`)
+                    .text("million tonnes of waste")
+                    .attr('x', 0)
+                    .attr('y', 0)
+                    .attr('dy', 0)
+                    .call(helpers.wrap, 130, 1)
+
+                // ii. For each waste stream: 
+                settings.streamOrder.forEach((streamName, i) => {
+                    const dataStream = dataset.byStream[streamName], 
+                        slugStreamName = helpers.slugify(streamName),
+                        offsetX = settings.geometry.streamNodeSpacing * (i - 1),
+                        iconScale = [0.5, 1, 1.5],
+                        iconHeight = 50             // Icon canvas draw height
+
+                    // a. Add the waste stream icon graphic
+                    streamIcons.append('path').classed(`icon waste-stream ${slugStreamName}`, true)
+                        .attr('d', icons[streamName])
+                        .attr('transform', `translate(${offsetX}, ${- i*iconHeight/2 - iconHeight}) scale(${iconScale[i]})`)
+
+                    // b. Add the waste stream label
+                    streamLabels.append('text').classed(`label waste-stream ${slugStreamName}`, true)
+                        .attr('transform', `translate(${offsetX},0)`)
+                        .text(streamName)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)        
+                        .call(helpers.wrap, 100, 1.1)
+
+                    // c. Add the waste stream total collection volume lable
+                    streamData.append('text').classed(`data-label waste-stream ${slugStreamName}`, true)   
+                        .attr('transform', `translate(${offsetX}, ${0})`)
+                        .text(`${helpers.numberFormatters.formatComma1dec(d3.sum(Object.values(dataset.byStream[streamName])))} mil. tonnes` )
+
+                    // d. Add the diversion donut chart
+                    const group = streamDonuts.append('g').attr('transform', `translate(${offsetX},0)`)
+                    renderDonut(group, {x: 22.5, y: -22.5}, {r: 45  }, {pct: (dataStream.Diverted / (dataStream.Diverted + dataStream.Landfilled)), materialClass:  helpers.slugify(streamName)})
+                })
+
+
+            // 5. ADD THE LANDFILL SECTION: DATA LABEL AND ICON
+                // Render the landfill end point group
+                landfillEndLayer.append('path').classed('icon landfill', true)
+                    .attr('d',  icons['Landfill'])
+                    .attr('transform-origin', `0% 0%`)
+                    .attr('transform', `scale(1.25) translate(${20}, ${-20})`)
+
+                landfillEndLayer.append('rect').classed('landfill-label-bg', true)
+                    .attr('transform', `translate(${-180}, ${-10}) `)   
+                    .attr('width', 160)
+                    .attr('height', 70)
+
+                landfillEndLayer.append('text').classed('landfill-headline landfill', true)
+                    .attr('transform', `translate(${-175}, ${0}) `)
+                    .text(`${helpers.numberFormatters.formatComma1dec(dataset.byStream.Total.Landfilled)}`)
+
+                landfillEndLayer.append('text').classed('landfill-unit landfill', true)
+                    .attr('transform', `translate(${-90}, ${-6}) `)
+                    .text(`million tonnes to landfill`)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)
+                        .call(helpers.wrap, 100, 0.9)
+
+
+            // 6. ADD THE DIVERSION VOLUME LABEL
+                diversionVolumeLayer.append('text').classed('diversion-headline diversion', true)
+                    .attr('transform', `translate(${0}, ${0}) `)
+                    .text(`${helpers.numberFormatters.formatComma1dec(dataset.byStream.Total.Diverted)}`)
+
+                diversionVolumeLayer.append('text').classed('diversion-unit diversion', true)
+                    .attr('transform', `translate(${30}, ${0}) `)
+                    .text(`million tonnes diverted`)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)
+                        .call(helpers.wrap, 100, 0.9)
+
+
+            // 7. ADD MAIN TITLE 
+
+
+
+        };
+
+
+        async function renderLgaVis(){
+            const svg = d3.select('#streetscene-vis')
+
+            const annotationLayer = svg.append('g').classed('annotation-group', true)
+            const headlineOffsetY = 140
+
+            annotationLayer.append('text').classed('lga-label-title', true)
+                .text("A look at Local Government waste management in "+settings.year)
+                .attr('x', 50)
+                .attr('y', 60)
+
+            annotationLayer.append('text').classed('lga-label-small', true)
+                .text("Council's spent")
+                .attr('x', 50)
+                .attr('y', headlineOffsetY)
+
+            annotationLayer.append('text').classed('lga-label-headline', true)
+                .text("$556")
+                .attr('x', 50)
+                .attr('y', headlineOffsetY+60)
+            annotationLayer.append('text').classed('lga-label-headline', true)
+                .text("million")
+                .attr('x', 50)
+                .attr('y', headlineOffsetY+110)
+
+            annotationLayer.append('text').classed('lga-label-small', true)
+                .text("...and collected")
+                .attr('x', 310)
+                .attr('y', headlineOffsetY)
+
+            annotationLayer.append('text').classed('lga-label-headline', true)
+                .text("2.4 million tonnes")
+                .style('letter-spacing', -3)
+                .attr('x', 310)
+                .attr('y', headlineOffsetY+60)
+
+            annotationLayer.append('text').classed('lga-label-small', true)
+                .text("of garbage, recycling and organics from Victorian household's at at average of $235 per tonne")
+                .attr('x', 310)
+                .attr('y', headlineOffsetY +90)
+                .attr('dy', 0)
+                .call(helpers.wrap, 600, 1.1)
+
+            annotationLayer.append('text').classed('lga-label garbage', true)
+                .text("Garbage")
+                .attr('x', 323)
+                .attr('y', 350)
+
+            annotationLayer.append('text').classed('lga-annotation', true)
+                .text("On average, 457 kg of garbage was collected from each serviced property at a cost of $116, or $238 per tonne collected.")
+                .attr('x', 323)
+                .attr('y', 368)
+                .attr('dy', 0)
+                .call(helpers.wrap, 160, 1.1)
+
+            annotationLayer.append('text').classed('lga-label recyclables', true)
+                .text("Recyclables")
+                .attr('x', 608)
+                .attr('y', 350)
+
+            annotationLayer.append('text').classed('lga-annotation', true)
+                .text("On average, 214 kg of recyclables were collected from each serviced property at a cost of $55, or $257 per tonne collected.")
+                .attr('x', 608)
+                .attr('y', 368)
+                .attr('dy', 0)
+                .call(helpers.wrap, 160, 1.1)
+
+            annotationLayer.append('text').classed('lga-label organics', true)
+                .text("Organics")
+                .attr('x', 893)
+                .attr('y', 350)
+
+            annotationLayer.append('text').classed('lga-annotation', true)
+                .text("On average, 213 kg of organics were collected from each serviced property at a cost of $37, or $173 per tonne collected.")
+                .attr('x', 893)
+                .attr('y', 368)
+                .attr('dy', 0)
+                .call(helpers.wrap, 160, 1.1)
+
+        };
+
+        /////////////////////////////////////////////////
+        // C. RENDER THE LOVCAL GOVERNMENT GRAPHIC    ///
+        /////////////////////////////////////////////////
+
+
+
+        ////////////////////////////////////
+        /// X. HELPER FUNCTIONS |         ///
+        ////////////////////////////////////
+
+        function renderDonut(container, coords, dims, data ){
+            // Setup shape generator and data
+            const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
+                pie = d3.pie().padAngle(0.005)
+                    .sort(null)
+                    .value(d => d.value),
+                chartData = pie([
+                    {value: data.pct,    class: 'diversion '+data.materialClass},
+                    {value: 1- data.pct, class: 'landfill'}
+                ])
+
+            const donutGroup = container.append('g')
+            donutGroup.append('circle').classed('donut-chart-bg', true)
+                .attr('r', dims.r )
+                    .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
+            donutGroup.append('g').classed('arc-group', true)
+                .selectAll("path.donut-arc")
+                .data(chartData)
+                .join("path").attr('class', d => `${d.data.class} donut-arc`)            
+                    .attr("d", arc)
+                    .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
+            
+            donutGroup.append('text')
+                .attr('class', `${data.materialClass} donut-diversion-pct`)  
+                .text(helpers.numberFormatters.formatPct(data.pct))
+                .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
+        };
+
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            camelize: function(str) {
+                return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+                    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+                    return index === 0 ? match.toLowerCase() : match.toUpperCase();
+                });
+            }, 
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (var i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight, centerVertical = false) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                    if(centerVertical){
+                        text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                    }
+                })
+            }
+        }
+
+
+
+
+    </script>
+</html>
+
