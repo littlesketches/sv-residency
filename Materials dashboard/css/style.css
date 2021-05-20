@@ -1,0 +1,627 @@
+/****************************/
+/*** BASE COLOUR PALETTES ***/
+/****************************/
+
+:root {
+    /** OLD BRAND GUIDELINES **/
+    --svGreen:                            #9ACA3C;
+    --gippslandGreen:                     #CED99E;
+    --secondary_greatOceanBlue:           #0070BB;
+    --secondary_hepburnClay:              #9B0B32;
+    --secondary_meredithGold:             #E3BA5A;
+    --campaign_corrangamiteEggplant:      #550055;
+    --campaign_corrangamiteEggplantLight: #B273B2;
+    --campaign_gannarawwaPink:            #D00236;
+    --campaign_gannarawwaPinkLight:       #EE5F83;
+    --campaign_surfCoastTeal:             #00848F;
+    --campaign_surfCoastTealLight:        #47ABB4;
+    --campaign_queenscliffeMarine:        #0A3055;
+    --campaign_queenscliffeMarineLight:   #7991A9;
+    --campaign_milduraOrange:             #D3410B;
+    --campaign_milduraOrangeLight:        #F2855D;
+    --campaign_otwaysGreen:               #008848;
+    --campaign_otwaysGreenLight:          #8DBF87;
+    --monochrome_youYangsGranite:         #B2B2B2;
+    --monochrome_lakeMountainMorning:     #CCCCCC;
+    --monochrome_mtBullaMist:             #E5E5E5;
+    /** NEW BRAND GUIDELINES **/
+    --chartLightGreen:  #cbe197;
+    --chartGray:        #b1b1b0;
+    --chartTeal:        #52baba;
+    --chartEmerald:     #00502e;
+    --chartPowderBlue:  #9bddfa;
+    --chartGreen:       #77bf00;
+    --chartDarkGreen:   #009857;
+    --chartOrange:      #cea98d;
+    --chartBlue:        #00568f;
+    --chartPurple:      #816bb4;
+    --chartLightGrey:   #cfcfcf;
+    --chartYellow:      #ffd300;
+}
+
+/****************************/
+/*** IMPORTED FONTS       ***/
+/****************************/
+    @font-face {
+        font-family: 'DIN Next LT Pro';
+        src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+            url('../fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+            url('../fonts/DINNextLTPro-Bold.woff') format('woff'),
+            url('../fonts/DINNextLTPro-Bold.ttf') format('truetype');
+        font-weight: 700;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'DIN Next LT Pro';
+        src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+            url('../fonts/DINNextLTPro-Light.woff2') format('woff2'),
+            url('../fonts/DINNextLTPro-Light.woff') format('woff'),
+            url('../fonts/DINNextLTPro-Light.ttf') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'DIN Next LT Pro';
+        src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+            url('../DINNextLTPro-UltraLight.woff2') format('woff2'),
+            url('../DINNextLTPro-UltraLight.woff') format('woff'),
+            url('../DINNextLTPro-UltraLight.ttf') format('truetype');
+        font-weight: 200;
+        font-style: normal;
+    }
+
+
+/***************************/
+/*****  TYPOGRAPHY       ***/
+/***************************/
+
+    body{
+        font-family: 'DIN Next LT Pro';
+    }
+    /* Headers */
+    h1#material-title{
+        font-size: 5vw;
+        color: transparent;
+        text-stroke: 1px var(--chartEmerald);
+         -webkit-text-stroke: 1px var(--chartEmerald);
+        fill: url(#diagonalHatch-all);
+        margin-block-start: 0.0;
+        margin-block-end: 0.0;
+        opacity: 0;
+    }
+    h2.card-header{
+        font-size: 3vw;
+        color: var(--chartGray); 
+        color: #fff; 
+        text-stroke: 0.75px var(--chartEmerald);
+         -webkit-text-stroke: 0.75px var(--chartEmerald);
+        margin-block-start: 0.25em;
+        margin-block-end: 0.25em;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;        
+    }
+    h3.card-subheader{
+        font-size: 1.5vw;
+        color: var(--chartTeal); 
+        margin-block-end: 0.25;
+    }
+    h3.card-subheader.recycled{
+        margin-block-start: 0.25;
+    }
+    h3.card-subheader.destination-trend{  
+        margin-top: 2vw;
+        margin-block-end: 0.0;
+    }    
+    h4.subcard-header,
+    h4.destination-card-header,
+    h4.material-price-card-header{
+        font-size: 1.25vw;
+        margin-block-start: 0.0;
+        margin-block-end: 0.0;
+    }
+    h4.subcard-header,
+    h4.material-price-card-header{
+        color: var(--chartEmerald)
+    }
+    h4.material-price-card-header{
+        padding-bottom: 0.5rem;
+    }
+    h4.subcard-header.destination{
+        padding-top: 1rem;
+        padding-bottom: 0.5rem;
+    }
+
+    /* Labels nad table typogrpahy */
+    .align-right{
+        text-align: right
+    }
+    .label{
+        font-size: 1vw;
+        color: var(--chartTeal);
+    }
+    .price-label{
+        padding-bottom: 0.5rem;    
+    }
+    .price-performance-label,
+    .price-history-label{
+        padding-top: 0.5rem;      
+        padding-bottom: 0.25rem;      
+    }
+    .data-midsize,
+    .data-unit-midsize{
+        font-size: 1.75vw;
+    }
+    .text-minor{
+        font-size: 0.8vw;
+        color: var(--chartGray); 
+    }
+    .table-header-bold{
+        font-size: 0.8vw;
+        justify-self: end;
+    }
+    .table-header{
+        font-size: 0.8vw;
+        padding: 0.25rem 0;
+    }
+    .table-data, 
+    .chart-trend-label{
+        font-size: 0.8vw;
+        padding: 0.25rem 0;
+    }
+    .chart-trend-label{
+        color: var(--chartGray); 
+    }
+    .destination-label,
+    .data-destination-table {
+        font-size: 1vw;
+        font-weight: bold;
+    }
+
+    .material-volume-headline,
+    .material-price-headline{
+        grid-area: 1 / 1 / 2 / 2;
+        font-size: 3vw;
+        font-weight: bold;    
+        align-self: end;
+        justify-self: end;
+        margin-top: 1rem;
+        color: var(--chartEmerald);
+    }
+    .material-volume-unit,
+    .material-price-unit{
+        grid-area: 1 / 2 / 2 / 3;
+        font-size: 1vw;
+        align-self: end;
+        padding: 0 0 0.5rem 0.5rem;
+        color: var(--chartEmerald);
+    }
+
+
+/*****************************************************/
+/**** KERSIDE COLLECTION DESTINATION COLOUR PALETTE */
+/****************************************************/
+    .label.all,
+    .all{
+        color: var(--chartEmerald);
+    }
+    .all.stroke{
+        stroke: var(--chartEmerald);
+        fill: none;
+    }
+    .all.fill{
+        fill: var(--chartEmerald);
+        stroke: none;
+    }
+
+    .label.local-reprocessing,
+    .local-reprocessing{
+        color: var(--gippslandGreen);
+    }
+    .local-reprocessing.stroke{
+        stroke: var(--gippslandGreen);
+        fill: none;
+    }
+    .local-reprocessing.fill{
+        background-color: var(--gippslandGreen);
+        fill: var(--gippslandGreen);
+        stroke: none;
+    }
+    .label.export,
+    .export{
+        color: var(--chartDarkGreen);
+    }
+    .export.stroke{
+        stroke: var(--chartDarkGreen);
+        fill: none;
+    }
+    .export.fill{
+        background-color: var(--chartDarkGreen);
+        fill: var(--chartDarkGreen);
+        stroke: none;
+    }
+    .label.landfill,
+    .landfill{
+        color: var(--chartPurple);
+    }
+
+    .landfill.stroke{
+        color: var(--chartPurple);
+        fill: none;
+    }
+    .landfill.fill{
+        background-color: var(--chartPurple);
+        fill: var(--chartPurple);
+        stroke: none;
+    }
+
+
+/*****************************************************/
+/**** PAGE LAYOUT     *******/
+/****************************************************/
+
+    body{
+        padding: 1rem
+    }
+
+
+    /* Container layout */
+    main.main-container {
+        display: grid;
+        grid-template-columns: 1fr  1fr;
+        grid-template-rows: auto 1fr 1fr;
+        grid-column-gap: 5vw; 
+        grid-row-gap: 1vw; 
+    }
+    /* Top level grid tile layout */
+    .title-container{
+        grid-area: 1 / 1 / 2 / 3;
+    }
+    .material-flow-container{
+        grid-area: 2 / 1 / 3 / 2;
+    }
+    .material-price-container{
+        grid-area: 2 / 2 / 3 / 3;
+    }
+    .export-market-container{
+        grid-area: 3 / 1 / 4 / 2;
+        /* grid-area: 2 / 3 / 3 / 4; */
+    }
+    .sub-card{
+        opacity: 0
+    }
+
+    /** MATERIAL FLOW CARD **/
+        .material-collection-container{
+            display: grid;
+            grid-template-columns: 2fr  3fr;
+            grid-column-gap: 2vw;  
+        }
+            .recyclables-collected-container{
+                grid-area: 1 / 1 / 2 / 2;
+            }
+            .recyclables-destination-container{
+                grid-area: 1 / 1 / 2 / 2;
+            }
+            .card-header-container{
+                grid-area: 1 / 1 / 2 / 3;
+                border-bottom: 2px solid var(--chartGray);
+            }
+            .recyclables-collected-container{
+                grid-area: 3 / 1 / 4 / 2;
+                display: grid;
+                grid-template-columns: 1.5fr 2.5fr;   
+                grid-template-rows: auto auto auto;    
+            }
+                .collected-subheader{
+                    grid-area: 1 / 1 / 2 / 4;
+                }
+                .material-volume-headline-container{
+                    grid-area: 2 / 1 / 3 / 3;
+                }
+                .collected-total{
+                    grid-area: 2 / 1 / 3 / 4;   
+                }
+                .collected-vs-last-label{
+                    grid-area: 3 / 1 / 4 / 2;   
+                }
+                #collected-vs-last-change{
+                    grid-area: 3 / 2 / 4 / 3;   
+                    padding-left: 0.5rem;
+                }
+                #collected-vs-last-pct{
+                    grid-area: 4 / 2 / 5 / 3; 
+                    padding-left: 0.5rem;   
+                }
+
+            .recyclables-destination-container{
+                grid-area: 3 / 2 / 4 / 3;   
+            }
+            .recyclables-destination-container-rows{
+                display: grid;
+                grid-template-columns: 3fr 1fr 1fr;
+            }  
+                .recyclables-destination-container-rows.header{
+                    padding-bottom: 0.75rem
+                } 
+                .table-chart-bar{
+                    margin-bottom: 0.75rem; 
+                    height: 2px;
+                }
+                .destination-subheader{
+                    padding-bottom: 0.5rem;
+                }
+                .destination-label{
+                    grid-area: 1 / 1 / 2 / 2; 
+                }
+                .data-destination-table.tonnes{
+                    grid-area: 1 / 2 / 2 / 3; 
+                }
+                .data-destination-table.proportion{
+                    grid-area: 1 / 3 / 2 / 4; 
+                }
+                .destination-table-bar-container{
+                    grid-area: 2 / 1 / 3 / 2; 
+                }
+                #collection-trend-comparison-container{
+                    padding-top: 1rem;
+                }
+                 .material-destination-trends{
+                    grid-area: 3 / 1 / 4 / 2;
+                }
+            .material-destination-container{
+                display: grid;
+                grid-template-columns: 2fr  3fr;
+                grid-column-gap: 2vw;  
+                padding-top: 1vw;
+                padding-bottom: 2vw;
+            }
+
+            .destination-trend-chart-container{
+                grid-area: 1 / 1 / 2 / 2;     
+            }
+            .destination-trend-table-container{
+                grid-area: 1 / 2 / 2 / 3;     
+            }
+            .destination-trend-table-container-row{
+                display: grid;
+                grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            }  
+            .destination-trend-table-container-row.header{
+                padding-top: 0.25rem; 
+                border-bottom: 0.25px dotted var(--chartLightGrey);
+            }
+                .data-destination-table-label{
+                    grid-area: 1 / 1 / 2 / 2; 
+                }
+                .data-destination-table-3mth{
+                    grid-area: 1 / 2 / 2 / 3; 
+                }
+                .data-destination-table-1yr{
+                    grid-area: 1 / 3 / 2 / 4; 
+                }        
+                .data-destination-table-3yr{
+                    grid-area: 1 / 4 / 2 / 5; 
+                }   
+                .data-destination-table-5yr{
+                    grid-area: 1 / 5 / 2 / 6; 
+                }   
+
+
+    /** MATERIAL PRICE CARDS **/
+        .material-price-card-container{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-column-gap: 5vw;
+        }
+        .material-price-card{
+            padding-bottom: 2vw;
+        }
+        .material-price-performance-table-container,
+        .material-history-performance-table-container{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+        .material-price-performance-table-container.header,
+        .material-history-performance-table-container.header{
+            padding-top: 0.25rem; 
+            border-bottom: 0.25px dotted var(--chartLightGrey);
+        }
+            .material-price-trend-header,
+            .table-price-trend-chart-container{
+                grid-area: 1 / 1 / 3 / 2; 
+                align-self: center;
+            }
+            .material-price-comp-header{
+                grid-area: 1 / 2 / 2 / 5; 
+                text-align: right;
+            }
+            .material-price-table-trend,
+            .material-history-table-period{
+                grid-area: 1 / 1 / 2 / 2; 
+            }
+            .material-price-table-1mth,
+            .material-history-table-low{
+                grid-area: 1 / 2 / 2 / 3; 
+            }
+            .material-price-table-3mth,
+            .material-history-table-ave{
+                grid-area: 1 / 3 / 2 / 4; 
+            }
+            .material-price-table-12mth,
+            .material-history-table-high{
+                grid-area: 1 / 4 / 2 / 5; 
+            }
+            .material-price-lastMth-header{
+                grid-area: 2 / 2 / 3 / 3; 
+            }
+            .material-price-3mth-header{
+                grid-area: 2 / 3 / 3 / 4; 
+            }
+            .material-price-12mth-header{
+                grid-area: 2 / 4 / 3 / 5; 
+            }
+
+
+    /** EXPORT MARKET CARDS **/
+        #export-market-subheader{
+            padding-bottom: 1rem;
+        }
+        .export-market-table-rows{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 2.5vw 1fr 1fr 1fr 1fr;
+            padding: 0.25rem 0.25rem;
+            border-bottom: 0.25px solid #efeeee;
+        }
+        .export-market-table-header-volumes{
+            grid-area: 1 / 3 / 2 / 5; 
+            text-align: center;
+        }
+        .export-market-table-header-vsHistorical{
+            grid-area: 1 / 6 / 2 / 10; 
+            text-align: center;
+        }
+        .export-market-table-country-header{
+            grid-area: 1 / 1 / 2 / 2;     
+        }
+        .export-market-table-trend-header{
+            grid-area: 1 / 2 / 2 / 3;     
+        }
+        .export-market-table-currentMonth-header{
+            grid-area: 1 / 3 / 2 / 4;     
+        }
+        .export-market-table-lastMonth-header{
+            grid-area: 1 / 4 / 2 / 5;     
+        }
+        .export-market-table-3mth-header{
+            grid-area: 1 / 6 / 2 / 7;     
+        }
+        .export-market-table-1yr-header{
+            grid-area: 1 / 7 / 2 / 8;     
+        }
+        .export-market-table-3yr-header{
+            grid-area: 1 / 8 / 2 / 9;     
+        }
+        .export-market-table-5yr-header{
+            grid-area: 1 / 9 / 2 / 10;     
+        }
+        .export-market-table-country-name{
+            grid-area: 1 / 1 / 3 / 2;     
+        }
+        .export-market-table-trend-chart{
+            grid-area: 1 / 2 / 3 / 3;     
+        }
+        .export-market-table-currentMonth{
+            grid-area: 1 / 3 / 2 / 4;     
+        }
+        .export-market-table-currentMonth-comp{
+            grid-area: 2 / 3 / 3 / 4;     
+        }
+        .export-market-table-lastMonth{
+            grid-area: 1 / 4 / 2 / 5;     
+        }
+        .export-market-table-lastMonth-comp{
+            grid-area: 2 / 4 / 3 / 5;     
+        }
+        .export-market-table-3mth{
+            grid-area: 1 / 6 / 2 / 7;     
+        }
+        .export-market-table-3mth-comp{
+            grid-area: 2 / 6 / 3 / 7;     
+        }
+        .export-market-table-1yr{
+            grid-area: 1 / 7 / 2 / 8;     
+        }
+        .export-market-table-1yr-comp{
+            grid-area: 2 / 7 / 3 / 8;     
+        }
+        .export-market-table-3yr{
+            grid-area: 1 / 8 / 2 / 9;     
+        }
+        .export-market-table-3yr-comp{
+            grid-area: 2 / 8 / 3 / 9;     
+        }
+        .export-market-table-5yr{
+            grid-area: 1 / 9 / 2 / 10;     
+        }
+        .export-market-table-5yr-comp{
+            grid-area: 2 / 9 / 3 / 10;     
+        }
+
+
+/* CHART STYLING */
+    path.sparkline{
+        fill: none;
+        stroke:   var(--chartEmerald);
+        stroke-width: 3px;
+    }
+    circle.sparkline-start-point{
+        fill:  var(--chartEmerald);
+        r: 5px;
+    }
+    circle.sparkline-end-point{
+        fill: var(--chartTeal);
+        r: 8px;
+    }
+
+    path.sparkarea{
+        stroke: none;
+    }
+
+path.sparkarea.local-reprocessing{
+
+}
+
+
+/*** SETTGINS CONTROSL ***/
+    #settings-container{
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 20vw;
+        padding: 1rem 1rem 0rem;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6);
+
+    }
+    .dropdown-container{
+        padding: 0.25rem 0;
+    }
+    .dropdown-container label{
+        font-weight: bold;
+        font-size: 1vw;
+    }
+    select#materials-selector,
+    select#date-selector {
+        color: #fff;  
+        font-family: 'DIN Next LT Pro';
+        font-size: 1vw;
+        background-color: transparent;
+        border: none;
+    }
+    .settings-header{
+        font-weight: bold;
+        font-size: 1.25vw;
+        padding: 0.25rem 0;
+    }
+
+/********** */
+/** Neumorphic fun styling
+/********** */
+
+    .neumorphic h1#material-title{
+        text-stroke: none;
+        -webkit-text-stroke: none;
+        font-size: 8vw; 
+        color: #fff;
+        text-shadow: 5px 5px 10px #c9c9c9
+    }
+
+    /* .neumorphic  */
+    .card{
+        margin: 0.75rem 0 ;
+        padding: 0.75rem 1.5rem 0;
+        border-radius: 6px;
+        background: #ffffff;
+        box-shadow:  8px 8px 16px #c9c9c9, 
+                -8px -8px 16px #ffffff;	
+    }
