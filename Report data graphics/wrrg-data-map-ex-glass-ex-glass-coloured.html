@@ -219,7 +219,7 @@
             font-size: 10px;
             text-anchor: end;
         }
-  </style>
+    </style>
 </head>
 
 <body>
@@ -313,12 +313,13 @@
 
         }
         const data = {
-            list: {
-                collection: ['Garbage', 'Recyclables', 'Organics'],
-                chain:      ['collected', 'processed']
+            schema: {
+                list: {
+                    collection: ['Garbage', 'Recyclables', 'Organics'],
+                    chain:      ['collected', 'processed']
+                }
             },
-            byWRRG: {},
-            inputData: ''
+            byWRRG: {}
         }
 
 
@@ -340,7 +341,7 @@
                 });
             },
             simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExportDestination'  ]   // Specifies which Google sheets to bring in (and in what order)
+            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
         });
 
 
@@ -352,27 +353,24 @@
             // Parse WRRG Data
             wrrgData.forEach(d => {
                 Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/,/g, ''))) && key !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/,/g, ''))
+                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
                     } 
                 })
             })
 
-            // Store data (for reference only)
-            data.inputData = wrrgData
-
             // Extract lists 
-            data.list.wrrg = [...new Set(wrrgData.map(d => d.WRRG))]
-            data.list.year = [...new Set(wrrgData.map(d => d.year))]
+            data.schema.list.wrrg = [...new Set(wrrgData.map(d => d.WRRG))]
+            data.schema.list.year = [...new Set(wrrgData.map(d => d.year))]
 
             // Group data by WRRG
             wrrgData.filter(d => d.year === settings.year).forEach(d => {
-                data.list.wrrg.forEach( wrrg => {
+                data.schema.list.wrrg.forEach( wrrg => {
                     if(d.WRRG === wrrg){
                         data.byWRRG[wrrg] = {}
-                        data.list.collection.forEach( collection => {
+                        data.schema.list.collection.forEach( collection => {
                             data.byWRRG[wrrg][collection] = {}
-                            data.list.chain.forEach(chainType => {
+                            data.schema.list.chain.forEach(chainType => {
                                 if(typeof(d[`${collection} ${chainType}`]) !== 'undefined'){
                                     data.byWRRG[wrrg][collection][chainType] = d[`${collection} ${chainType}`]
                                 }
@@ -472,7 +470,7 @@
 
         // 6.  ADD INFO PANES BY WRRG
 
-            data.list.wrrg.forEach( wrrg => {
+            data.schema.list.wrrg.forEach( wrrg => {
                 let headerLines
                 const garbageOffset = 90,
                     recyclablesOffset = 145,

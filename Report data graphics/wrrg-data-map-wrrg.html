@@ -45,9 +45,9 @@
             --chartYellow:      #ffd300;
         }
 
-        /****************************/
-        /*** IMPORTED FONTS       ***/
-        /****************************/
+        /***********************/
+        /*** IMPORTED FONTS  ***/
+        /***********************/
             @font-face {
                 font-family: 'DIN Next LT Pro';
                 src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
@@ -77,68 +77,43 @@
             }
 
 
-
-            /***************************/
-            /*****  TYPOGRAPHY       ***/
-            /***************************/
+        /********************************/
+        /*****  WRRG MAP TYPOGRAPHY   ***/
+        /********************************/
 
             body{
                 font-family: 'DIN Next LT Pro';
             }
-
-            /***************************/
-            /*****  GENERAL STYLING  ***/
-            /***************************/
+            .align-middle{
+                text-anchor: middle;
+            }
+            .main-title,
+            .main-subtitle{
+                fill: var(--chartEmerald);
+                dominant-baseline: 'hanging';
+                mix-blend-mode: multiply;
+            }
             .main-title{
                 font-size: 30px;
                 font-weight: bold;
-                fill: var(--chartEmerald);
-                dominant-baseline: 'hanging';
-                mix-blend-mode: multiply;
             }
             .main-subtitle{
                 font-size: 14px;
-                fill: var(--chartEmerald);
-                dominant-baseline: 'hanging';
-                mix-blend-mode: multiply;
             }
-            .lga-base{
-                fill: none;
-                stroke-width: 0.25px;
-                cursor: pointer;
-            }
-            .lga-base.showStroke{
-                stroke: #fff;
-            }
-            .wrrg-infoPane-background{
-                mix-blend-mode: color-dodge;
-                fill: var(--monochrome_youYangsGranite);
-            }
-            .wrrg-infoPane-divider{
-                stroke:#000;
-                stroke-width: 0.5px
-            }
-            .donut-arc{
-                stroke: #fff;
-                stroke-width: 0.5px;
-                fill: var(--chartLightGrey);
-            }
-            .donut-arc.diversion{
-                fill: var(--chartLightGreen);       
-            }
+            .wrrg-infoPane-label,
+            .wrrg-infoPane-data, 
             .donut-diversion-pct{
                 font-size: 10px;
+            }
+            .donut-diversion-pct{
                 font-weight: bold;
                 text-anchor: middle;
                 dominant-baseline: middle;
             }
-            .wrrg-infoPane-background{
-                opacity: 0.3
-            }
             .lga-label{
+                font-size: 8px; 
                 text-anchor: middle;
                 dominant-baseline: middle;
-                font-size: 8px; 
                 pointer-events: none;
                 fill: #000;
                 mix-blend-mode: luminosity;
@@ -157,15 +132,40 @@
                 text-anchor: middle;
             }
             .wrrg-infoPane-label{
-                font-size: 10px;
                 font-weight: bold;
             }
-            .align-middle{
-                text-anchor: middle;
-            }
             .wrrg-infoPane-data{
-                font-size: 10px;
                 text-anchor: end;
+            }
+
+        /************************************/
+        /*****  WRRG MAP GENERAL STYLING  ***/
+        /************************************/
+
+            .lga-base{
+                fill: none;
+                stroke-width: 0.25px;
+                cursor: pointer;
+            }
+            .lga-base.showStroke{
+                stroke: #fff;
+            }
+            .wrrg-infoPane-background{
+                mix-blend-mode: color-dodge;
+                opacity: 0.3;
+                fill: var(--monochrome_youYangsGranite);
+            }
+            .wrrg-infoPane-divider{
+                stroke:#000;
+                stroke-width: 0.5px;
+            }
+            .donut-arc{
+                stroke: #fff;
+                stroke-width: 0.5px;
+                fill: var(--chartLightGrey);
+            }
+            .donut-arc.diversion{
+                fill: var(--chartLightGreen);       
             }
     </style>
 </head>
@@ -180,7 +180,12 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+
     <script>
+        /////////////////////////////////////////////////
+        ///// VISUALISATION SETTINS AND DATA OBJECTS  ///
+        /////////////////////////////////////////////////
+
         const settings = { 
             svgID:                  'map',
             year:                   '2019/20',
@@ -261,12 +266,13 @@
 
         }
         const data = {
-            list: {
-                collection: ['Garbage', 'Recyclables', 'Organics', 'Glass'],
-                chain:      ['collected', 'processed']
+            schema: {
+                list: {
+                    collection: ['Garbage', 'Recyclables', 'Organics', 'Glass'],
+                    chain:      ['collected', 'processed']
+                }
             },
             byWRRG: {},
-            inputData: ''
         }
 
 
@@ -274,7 +280,7 @@
         ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
         /////////////////////////////////////////////////////////////////////////////////
 
-        Tabletop.init({
+        Tabletop.init({         // Use the Tabletop onload function to access the data
             key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/',
             callback: async(loadedData) => {
                 // 1. Parse WRRG Data
@@ -284,11 +290,11 @@
                     d3.json('data/victorianLGAs.geojson'),			// 0. LGA map shape data
                     d3.tsv("data/victorianLGAs.txt")			    // 1. LGA map meta data, including the mapping of LGAs to WRRGs
                 ]).then( mapData => {
-                    renderMap(settings, mapData[0], mapData[1])	
+                    renderWRRGMap(settings, mapData[0], mapData[1])	    // Render the WRRG map
                 });
             },
             simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExportDestination'  ]   // Specifies which Google sheets to bring in (and in what order)
+            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
         });
 
 
@@ -300,27 +306,24 @@
             // Parse WRRG Data
             wrrgData.forEach(d => {
                 Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/,/g, ''))) && key !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/,/g, ''))
+                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
                     } 
                 })
             })
 
-            // Store data (for reference only)
-            data.inputData = wrrgData
-
             // Extract lists 
-            data.list.wrrg = [...new Set(wrrgData.map(d => d.WRRG))]
-            data.list.year = [...new Set(wrrgData.map(d => d.year))]
+            data.schema.list.wrrg = [...new Set(wrrgData.map(d => d.WRRG))]
+            data.schema.list.year = [...new Set(wrrgData.map(d => d.year))]
 
             // Group data by WRRG
             wrrgData.filter(d => d.year === settings.year).forEach(d => {
-                data.list.wrrg.forEach( wrrg => {
+                data.schema.list.wrrg.forEach( wrrg => {
                     if(d.WRRG === wrrg){
                         data.byWRRG[wrrg] = {}
-                        data.list.collection.forEach( collection => {
+                        data.schema.list.collection.forEach( collection => {
                             data.byWRRG[wrrg][collection] = {}
-                            data.list.chain.forEach(chainType => {
+                            data.schema.list.chain.forEach(chainType => {
                                 if(typeof(d[`${collection} ${chainType}`]) !== 'undefined'){
                                     data.byWRRG[wrrg][collection][chainType] = d[`${collection} ${chainType}`]
                                 }
@@ -336,7 +339,7 @@
         ///// MAP VIS RENDERING FUNCTION  ///
         /////////////////////////////////////
 
-        function renderMap(settings, mapShapeData, mapMetaData){
+        function renderWRRGMap(settings, mapShapeData, mapMetaData){
         // 0. WRANGLE DATA
             // a. Setup a mapping object of of LGA to WRRG
             const lgaNameWrrgMap = {}
@@ -373,7 +376,7 @@
 
         // 3. COLOUR SCALE
             const diversionRate = {}
-            data.list.wrrg.forEach( wrrg => diversionRate[wrrg] = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)) )
+            data.schema.list.wrrg.forEach( wrrg => diversionRate[wrrg] = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)) )
             const wrrgColor = d3.scaleLinear()
                 .domain(d3.extent(Object.values(diversionRate)) )
                 .range(['#cbe197', '#00502e'])
@@ -429,7 +432,7 @@
             }
 
         // 6.  ADD INFO PANES BY WRRG
-            data.list.wrrg.forEach( wrrg => {
+            data.schema.list.wrrg.forEach( wrrg => {
                 let headerLines
                 const garbageOffset = 90,
                     recyclablesOffset = 145,

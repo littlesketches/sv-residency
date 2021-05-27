@@ -244,9 +244,11 @@
 
         }
         const data = {
-            list: {},
+            schema: {
+                list: {},
+            },
             byExportCountry: {},
-            inputData: ''
+            inputData: {}
         }
 
 
@@ -259,8 +261,8 @@
         Tabletop.init({
             key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
             callback: async(loadedData) => {
-                // 1. Parse export data
-                await parseData(loadedData.byMaterialExportDestination)
+                // 1. Parse data used in visualisation
+                await parseData(loadedData.byMaterialExport)
                 // 2. Load map data and call render map function
                 Promise.all([		                               // Use Promise.all to load multiple data files
                     d3.json('data/world-110m.json'),			   // 0. World map
@@ -270,32 +272,33 @@
                 });
             },
             simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExportDestination'  ]   // Specifies which Google sheets to bring in (and in what order)
+            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
         });
 
 
 
 
     ////////////////////////////////////////////
-    ///// DATA PARSIGN AND SHAPING FUNCTION  ///
+    ///// DATA PARSING AND SHAPING FUNCTION  ///
     ////////////////////////////////////////////
 
         async function parseData(loadedExportData){
             const exportData = loadedExportData.elements
-            // a. Parse export data ('numbers as numbers')
+            // 1. Parse numeric data types to number
             exportData.forEach(d => {
                 Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/,/g, ''))) && key !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/,/g, ''))
+                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
                     } 
                 })
             })
-            // b. Extract lists 
-            data.list.country = [...new Set(exportData.sort((a, b) => (a.Total < b.Total) ? 1 : -1).map(d => d.Destination).filter(d => d !== 'Others'))]            // Sort ensures list is ranked by total
-            data.list.country.push('Others')               // 'Others' back  to end of array'                                                 
-            data.list.materials = loadedExportData.columnNames.filter(d => d !== "year" && d !== "Destination" && d !== 'Total' && d !== 'exPathOffsetX' && d !== 'exPathOffsetY')      // Materials are in order of how they are in the raw data (i.e. change column order in data to re-order in vis)
-            // c. Shape data by export country
-            data.list.country.forEach(country => {
+
+            // 2. Extract lists 
+            data.schema.list.country = [...new Set(exportData.sort((a, b) => (a.Total < b.Total) ? 1 : -1).map(d => d.Destination).filter(d => d !== 'Others'))]            // Sort ensures list is ranked by total
+            data.schema.list.country.push('Others')               // 'Others' back  to end of array'                                                 
+            data.schema.list.materials = loadedExportData.columnNames.filter(d => d !== "year" && d !== "Destination" && d !== 'Total' && d !== 'exPathOffsetX' && d !== 'exPathOffsetY')      // Materials are in order of how they are in the raw data (i.e. change column order in data to re-order in vis)
+            // 3. Shape data by export country
+            data.schema.list.country.forEach(country => {
                 exportData.forEach(d => {
                     if(d.Destination === country){
                         data.byExportCountry[country] = d
@@ -303,7 +306,7 @@
                 })
             })
             // d. Store data for referencing in render 
-            data.inputData = exportData
+            data.inputData.export = exportData
         }; // end parseData()
 
 
@@ -346,25 +349,25 @@
             
             // 4. COLOR EXPORT COUNTRIES *(BY TOTAL) AND ADD COUNTY LABELS
             const colourScale = d3.scaleLinear()
-                .domain(d3.extent(data.inputData.map(d => d.Total)))
+                .domain(d3.extent(data.inputData.export.map(d => d.Total)))
                 .range(['#9bddfa', '#52baba'])
 
             const exportPathScale = d3.scaleLinear()
-                .domain(d3.extent(data.inputData.map(d => d.Total)))
+                .domain(d3.extent(data.inputData.export.map(d => d.Total)))
                 .range([0.25, 3])
 
-            const totalExports = d3.sum(data.inputData.map(d => d.Total)),
-                totalPaper =    d3.sum(data.inputData.map(d => d.Paper)),
-                totalGlass =    d3.sum(data.inputData.map(d => d.Glass)),
-                totalMetals =   d3.sum(data.inputData.map(d => d.Metals)),
-                totalPlastics = d3.sum(data.inputData.map(d => d.Plastic)),
-                totalOther =    d3.sum(data.inputData.map(d => d.Other))
+            const totalExports = d3.sum(data.inputData.export.map(d => d.Total)),
+                totalPaper =    d3.sum(data.inputData.export.map(d => d.Paper)),
+                totalGlass =    d3.sum(data.inputData.export.map(d => d.Glass)),
+                totalMetals =   d3.sum(data.inputData.export.map(d => d.Metals)),
+                totalPlastics = d3.sum(data.inputData.export.map(d => d.Plastic)),
+                totalOther =    d3.sum(data.inputData.export.map(d => d.Other))
 
             const vicBBox = document.getElementById('victoria').getBBox(),
                 vic_cx =  vicBBox.x + vicBBox.width/2,
                 vic_cy =  vicBBox.y + vicBBox.height/2
 
-            data.list.country.filter(d => d !== 'Others').forEach( country => {
+            data.schema.list.country.filter(d => d !== 'Others').forEach( country => {
                 const countryBBox = d3.select(`#${helpers.slugify(country)}`).node().getBBox(),
                     country_cx = countryBBox.x + countryBBox.width /2,
                     country_cy = countryBBox.y + countryBBox.height/2,
@@ -428,7 +431,7 @@
 
             // d. Each country (groups)
             const countyGroupWidth = infoPaneWidth - infoPaneMargin.left - infoPaneMargin.right,
-                countryTotalMax =  d3.max(data.inputData.map(d => d.Total)),
+                countryTotalMax =  d3.max(data.inputData.export.map(d => d.Total)),
                 countryBarScale = d3.scaleLinear()
                     .domain([0, countryTotalMax])
                     .range([0, countyGroupWidth]),
@@ -440,7 +443,7 @@
 
             let countryGroupYpos = infoPaneMargin.top + infoPaneHeader.node().getBBox().height + 30       
 
-            data.list.country.forEach((country, i) => {
+            data.schema.list.country.forEach((country, i) => {
                 const countryGroup = infoPane.append('g')
                     .attr('transform', `translate(${infoPaneMargin.left}, ${countryGroupYpos})`)
                 countryGroup.append('text').classed('country-list-name', true)
@@ -458,8 +461,8 @@
 
                 // Add materials
                 let materialsCounter = 0                
-                data.list.materials.forEach((material, i) => {
-                    const materialMax =  d3.max(data.inputData.map(d => d[material]))
+                data.schema.list.materials.forEach((material, i) => {
+                    const materialMax =  d3.max(data.inputData.export.map(d => d[material]))
                         countryMateriaVol = data.byExportCountry[country][material],
                         materialYSpace = 10
                     if(countryMateriaVol > 0){      // Only add a material if its non-zero to save some space
@@ -514,8 +517,8 @@
                 .text(`volumes by exported material`)
 
             // Add materials             
-            data.list.materials.forEach((material, i) => {
-                const  materiaVol = d3.sum(data.inputData.map(d => d[material])),
+            data.schema.list.materials.forEach((material, i) => {
+                const  materiaVol = d3.sum(data.inputData.export.map(d => d[material])),
                     materialYSpace = 20
                 totalGroup.append('text').classed('total-material-name', true)
                     .attr('x', 0)

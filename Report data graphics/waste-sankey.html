@@ -43,6 +43,8 @@
             --chartPurple:      #816bb4;
             --chartLightGrey:   #cfcfcf;
             --chartYellow:      #ffd300;
+            --test:     #e1c97e;
+
         }
             @font-face {
                 font-family: 'DIN Next LT Pro';
@@ -252,7 +254,7 @@
                 product:            {}
             },
             list: {},
-            inputData: ''
+            inputData: {}
         }
 
 
@@ -267,17 +269,17 @@
                 await renderVis()
             },
             simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExportDestination'  ]   // Specifies which Google sheets to bring in (and in what order)
+            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
         });
 
 
         // I. PARSE DATA
         async function parseData(materialData) {
-            // 1. Parse material data (text to numbers)
+            // 1. Parse numeric data types to number
             materialData.forEach(d => {
                 Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/,/g, ''))) && key !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/,/g, ''))
+                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
                     } 
                 })
             })
@@ -329,7 +331,7 @@
                     )
             })
             // 4. Store material data
-            data.inputData = materialData
+            data.inputData.material = materialData
         };
 
         // II. RENDER FLOW VISUALISATION
@@ -516,14 +518,14 @@
 
             // 3. ADD FLOWS 
             // a. Filter flow data
-            const materialData = data.inputData.filter(d => d.year === settings.year)       
+            const materialData = data.inputData.material.filter(d => d.year === settings.year)       
             // b. Link shape generator
             const link = d3.linkHorizontal()        // Bezier link generator
                 .source(d => d.source)              // Accepting object {source: [x,y],
                 .target(d => d.target)              // and               target [x,y] }
             // c. Scale for flow width
             const flowScale = d3.scaleLinear()
-                    .domain(d3.extent(data.inputData.map(d => d.value)))
+                    .domain(d3.extent(data.inputData.material.map(d => d.value)))
                     .range([1, 20])
             // d. Adjust node positions: starting offset 
             const offsets = {}
