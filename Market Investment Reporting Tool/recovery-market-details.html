@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <style>
+        /* COLOUR PALETTES */
+        :root {
+            /** OLD BRAND GUIDELINES **/
+            --svGreen:                            #9ACA3C;
+            --gippslandGreen:                     #CED99E;
+            --secondary_greatOceanBlue:           #0070BB;
+            --secondary_hepburnClay:              #9B0B32;
+            --secondary_meredithGold:             #E3BA5A;
+            --campaign_corrangamiteEggplant:      #550055;
+            --campaign_corrangamiteEggplantLight: #B273B2;
+            --campaign_gannarawwaPink:            #D00236;
+            --campaign_gannarawwaPinkLight:       #EE5F83;
+            --campaign_surfCoastTeal:             #00848F;
+            --campaign_surfCoastTealLight:        #47ABB4;
+            --campaign_queenscliffeMarine:        #0A3055;
+            --campaign_queenscliffeMarineLight:   #7991A9;
+            --campaign_milduraOrange:             #D3410B;
+            --campaign_milduraOrangeLight:        #F2855D;
+            --campaign_otwaysGreen:               #008848;
+            --campaign_otwaysGreenLight:          #8DBF87;
+            --monochrome_youYangsGranite:         #B2B2B2;
+            --monochrome_lakeMountainMorning:     #CCCCCC;
+            --monochrome_mtBullaMist:             #E5E5E5;
+            /** NEW BRAND GUIDELINES **/
+            --chartLightGreen:  #080a02;
+            --chartGray:        #b1b1b0;
+            --chartTeal:        #52baba;
+            --chartEmerald:     #00502e;
+            --chartPowderBlue:  #9bddfa;
+            --chartGreen:       #77bf00;
+            --chartDarkGreen:   #009857;
+            --chartOrange:      #cea98d;
+            --chartBlue:        #00568f;
+            --chartPurple:      #816bb4;
+            --chartLightGrey:   #cfcfcf;
+            --chartYellow:      #ffd300;
+            --test:     #e1c97e;
+
+        }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Bold.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
+                font-weight: 700;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 200;
+                font-style: light;
+            }
+        text { 
+            font-family: 'DIN Next LT Pro';
+        }
+        .title-divider{
+            fill: none;
+            stroke: var(--chartGray);
+            stroke-width: 0.5px;
+        }
+        .main-title{
+            font-size: 26px;
+            font-weight: bold;
+
+            dominant-baseline: hanging;
+            text-anchor: end;
+        }
+        .main-subtitle{
+            font-size: 12px;
+            dominant-baseline: hanging;
+            text-anchor: end;
+            font-weight: bold;
+        }
+        .material-icon, 
+        .material-label{
+            fill: #fff
+        }
+
+        rect.destination,
+        rect.product{
+            fill: none;
+            fill: #fff;
+        }
+
+        .arc{
+            /* filter: drop-shadow(rgb(241, 239, 239) -0.5px -0.5px 2px); */
+        }
+        .arc.extraction{
+            fill: #E5E5E5;
+        }
+        .arc.reuse{
+            fill: #E5E5E5;
+        }
+        .arc.remanufacture{
+            fill: #E5E5E5;
+        }
+        .arc.disposal{
+            fill: #E5E5E5;
+        }
+
+        .chain-label{
+            dominant-baseline: middle;
+            text-anchor: middle;
+            font-weight: bold;
+            font-size: 14px;
+            fill:   #fff;
+            mix-blend-mode:  luminosity;
+            text-shadow: #000 0.5px 0.5px 2px;
+        }
+        .chain-group-label{
+            dominant-baseline: middle;
+            text-anchor: middle;
+            font-size: 20px;
+            fill: var(--chartGray)
+        }
+        .narrative-header,
+        .content-header,
+        .material-chain-header{
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .narrative-text, 
+        .content-text{
+            font-size: 10px;
+        }
+        .narrative-header,
+        .narrative-text{
+            dominant-baseline: hanging;
+        }
+
+        .material-chain-header{
+            font-size: 12px;
+            /* fill: var(--chartGray) */
+        }
+        .content-header,
+        .content-text{
+            fill: var(--chartGray)
+        }
+
+        .content-header{
+            /* text-shadow: #000 0.5px 0.5px 0px; */
+            text-transform: uppercase;
+        }
+
+        .guideline{
+            fill: none;
+            stroke: #000;
+            stroke: none;
+            stroke-width: 0.1px;
+        }
+        .ui-options-container{
+            font-family: 'DIN Next LT Pro';
+            position: fixed;
+            top: 0;
+            right: 0;
+            min-width: 21vw;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 1rem;
+            font-size: 0.8rem;
+        }
+        #material-selector{
+            font-family: 'DIN Next LT Pro';
+            font-size: 0.8rem;
+            color: #fff;
+            background: transparent;
+            padding: 0.25rem;
+            border: none;
+        }
+        @media print {
+            #material-selector{
+                display: none;
+            }    
+        }
+    </style>
+</head>
+
+<body>
+    <div id = "vis-container">
+        <svg id ="mirt-vis"></svg>
+    </div>
+    <nav> 
+        <div class = "ui-options-container">
+            Selected material: <select id = "material-selector">  </select>
+        </div>
+    </nav>
+
+  <!-- JavaScript Libraries -->
+    <!-- <script src="https://d3js.org/d3.v6.min.js"></script> -->
+    <script src="js/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+    <script>
+        const settings = { 
+            svgID:                  'mirt-vis',
+            dims: {
+                width:              1080,
+                height:             720,
+                margin: {
+                    top:            20,
+                    bottom:         50,
+                    left:           40,
+                    right:          40
+                }
+            },
+            geometry: {   
+                circle:       {
+                    radius:         230,
+                    x:              760,
+                    y :             337.5 + 50
+                },
+                chainCircleGroup: [      // Layout data for adding circular labels: LabelPos is the % around the circle to attache the group label
+                    {name: 'Make',               labelPos: 0.125,  baseline: 'middle'},   
+                    {name: 'Use',                labelPos: 0.375, baseline: 'middle'},
+                    {name: 'Recover and manage', labelPos: 0.585, baseline: 'middle'},         // Split label
+                    // {name: 'manage',              labelPos: 0.705, baseline: 'middle'},
+                    {name: 'Recycle',            labelPos: 0.875, baseline: 'hanging'}
+                ],
+                chainCircle: [          // Layout data for the chain segment. Segments are in clockwise order and values are used to layout the donut-like chart(s). Type indicates which donut hte segment appears on 
+                    {name: 'Design',        group: 'Produce',   type: 'outer',  value: 0.125},
+                    {name: 'Manufacture',   group: 'Produce',   type: 'outer',  value: 0.125},
+                    {name: 'Consume',       group: 'Use',       type: 'outer',  value: 0.25},
+                    {name: 'Collection',    group: 'Recover and manage',  type: 'outer', value: 0.125},
+                    {name: 'Sorting',       group: 'Recover and manage',  type: 'inner', value: 0.125},
+                    {name: 'Reprocessing',  group: 'Recycle',   type: 'inner',  value: 0.125},
+                    {name: 'End markets',    group: 'Recycle',   type: 'inner',  value: 0.125}
+                ]
+            },
+            inputSettings:          {},      // Object to store  
+            scales:                 {}
+        }
+        const state = {
+            edition: '',
+            material: 'Aggregates, masonry and soils',
+        }
+
+        const data = {
+            list:          {},
+            content:        {}      // Loaded content stored by edition date and 
+        }
+
+
+      /////////////////////////////////////////////////////////////////////////////////
+      ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
+      /////////////////////////////////////////////////////////////////////////////////
+
+        Tabletop.init({
+            key: 	'https://docs.google.com/spreadsheets/d/1DslhA-iSFOvInyqV0EGZ19A6ZRDFk-YPBmGbYXVKie4/',
+            callback: async(loadedData) => {
+                await parseData(loadedData.settings.elements, loadedData.tables.elements, loadedData.content.elements)
+                await renderVis(settings, state)
+                await addUI()
+            },
+            simpleSheet: false,
+            wanted: [ 'settings', 'tables', 'content']   // Specifies which Google sheets to bring in (and in what order)
+        });
+
+
+        // I. PARSE DATA
+        async function parseData(inputSettings, tableData, content) {
+            console.log('Parsing loaded data')
+            console.log(inputSettings)
+
+            // 1. Record each input settings item to settings object
+            inputSettings.forEach( obj =>   settings.inputSettings[obj.item] = obj.value) 
+
+            // 2. Use settings to update vis settings object 
+            state.edition = settings.inputSettings.currentEdition                   // Set chosen edition
+            settings.scales.chainHealth = d3.scaleOrdinal()                      // Create the colour scale for chain segments
+                .domain(inputSettings.filter(d =>  d.item.slice(0,4) === 'col_').map(d => d.item.slice(4)) )
+                .range(inputSettings.filter(d =>  d.item.slice(0,4) === 'col_').map(d => d.value) )
+
+            // 3. Extract lists and mapping objects
+            data.list.editions = tableData.filter(d => d.editionList !== "").map( d => d.editionList)
+            data.list.supplyChain = tableData.filter(d => d.supplyChainName !== "").map( d => d.supplyChainName)
+            data.list.materials = tableData.filter(d => d.materials !== "").map( d => d.materials)
+            data.list.healthRatings = tableData.filter(d => d.healthRatings !== "").map( d => d.healthRatings)
+            data.list.supplyChainGroup = [...new Set(tableData.filter(d => d.supplyChainGroupMapped !== "").map( d => d.supplyChainGroupMapped))]
+
+            data.list.supplyChainMap = {}
+            tableData.filter(d => d.supplyChainName !== "").map( d => data.list.supplyChainMap[d.supplyChainName] =  d.supplyChainGroupMapped )
+            data.list.supplyChainHealth = {}
+
+            // 4. Store content data for referecing in render function
+            data.content = content
+
+        };
+
+        // II. RENDER FLOW VISUALISATION
+        async function renderVis(settings, state){
+
+            //////////////////////////////////////////////
+            /// 1. SETUP CANVAS AND GEOMETRY FROM DATA ///
+            //////////////////////////////////////////////
+
+                const visWidth = settings.dims.width - settings.dims.margin.left - settings.dims.margin.right,
+                    visHeight = settings.dims.height - settings.dims.margin.top - settings.dims.margin.bottom
+
+                // a. Setup SVG
+                const svg = d3.select(`#${settings.svgID}`).attr('viewBox', `0 0 ${settings.dims.width} ${settings.dims.height}`),
+                    defs = svg.append('defs'),
+                    guides = svg.append('g').classed('guide-layer', true),
+                    vis = svg.append('g').classed('vis-layer', true),
+                    annotation = svg.append('g').classed('annotation-layer', true)
+
+                // b. Setup rendering helpers
+                const circleRad0 = settings.geometry.circle.radius,
+                    circleRad1 = settings.geometry.circle.radius * 0.93,
+                    circleRad2 = settings.geometry.circle.radius * 0.86
+
+                // Shape generators       
+                const arc = d3.arc()                        // General d3.arc generator for custom arcs (e.g. reuse, remanufacture etc.)
+                const outerArc = d3.arc()                   // Main circular segment group arcs (shared radius)
+                    .innerRadius(circleRad2)
+                    .outerRadius(circleRad0);
+                const innerArc = d3.arc()                    // Main circular segment group arcs (shared radius)
+                    .innerRadius(circleRad2)
+                    .outerRadius(circleRad1);
+                const pie = d3.pie()                        // Use the d3 pie chart layout to more easily calc start/end angles
+                    .padAngle(0.005)
+                    .sort(null)
+                    .value(d => d.value)
+
+                // b. Reference and re-shape data to pie/donut layout for plotting
+                const contentData = data.content.filter(d => d.Date === state.edition && d.Material === state.material),
+                    circleChainData = settings.geometry.chainCircle 
+                circleChainData.forEach(obj => {        // Add the content data for plotting (health rating) and referencing if plot is ever made interactive
+                    chainData = contentData.filter(d => d['Supply Chain'] === obj.name)[0]
+                    obj.health = typeof(chainData) !== 'undefined' ? chainData.Rating : 'Unknown'
+                    obj['Action required'] = typeof(chainData) !== 'undefined' ? chainData['Action required'] :  null
+                    obj['Market trends'] = typeof(chainData) !== 'undefined' ? chainData['Market trends'] :  null
+                    obj['RV program'] = typeof(chainData) !== 'undefined' ? chainData['RV program'] :  null
+                    obj['Risk'] = typeof(chainData) !== 'undefined' ? chainData['Risk'] :  null
+                })
+                const circleArcs = pie(circleChainData);  
+
+
+            /////////////////////////////////////////////////
+            /// 2. RENDER VISUAL COMPONENTS - ARC LAYOUTS ///
+            /////////////////////////////////////////////////
+
+                // a. Circular vis group
+                const circleVis =  vis.append('g').classed('circle-vis', true)   
+                    .attr('transform', `translate(${settings.geometry.circle.x}, ${settings.geometry.circle.y})`)
+
+                // b. Add an energy recovery arc
+                const energyArc =  circleVis.append('g')
+                    .attr('transform', `translate(${-settings.geometry.circle.radius * 0} , ${settings.geometry.circle.radius * 0.01})`)
+                energyArc.append('path')
+                    .datum(contentData.filter(d => d["Supply Chain"] === "Raw materials and energy")[0])
+                    .classed('arc energy-recovery', true)
+                    .attr("d", arc({
+                            startAngle:  Math.PI * 1.38,
+                            endAngle:    Math.PI * 1.825,
+                            innerRadius: circleRad1 * 1.24,
+                            outerRadius: circleRad1 * 1.26,
+                        })
+                    )
+                    .style('fill', d =>  settings.scales.chainHealth(d.Rating) )
+
+                // c. Add extraction input (top left rect) : added as bas layer with dims set after disposal arc is rendered
+                const extractionArc = circleVis.append('rect').attr('id', 'arc-extraction')
+                    .datum(contentData.filter(d => d["Supply Chain"] === "Raw materials and energy")[0])
+                    .classed('arc extraction', true)
+                    .attr('height', settings.geometry.circle.radius * 0.07)
+                    .style('fill', d =>  settings.scales.chainHealth(d.Rating) )
+
+                // d. Add reuse and remanufacture inner arcs (positioning set by eye)
+                circleVis.append('path').attr('id', 'arc-reuse')
+                    .datum(contentData.filter(d => d["Supply Chain"] === "Reuse and repair")[0])
+                    .classed('arc reuse', true)
+                    .attr('transform', `translate(${settings.geometry.circle.radius - settings.geometry.circle.radius * 0.07}, ${settings.geometry.circle.radius - settings.geometry.circle.radius * 0.07})`)
+                    .attr('d', arc({
+                        innerRadius: settings.geometry.circle.radius * 0.85, 
+                        outerRadius: settings.geometry.circle.radius * 0.92,
+                        startAngle: - Math.PI / 2,
+                        endAngle: 0
+                    }))
+
+                circleVis.append('path').attr('id', 'arc-remanufacture')
+                    .classed('arc remanufacture', true)
+                    .attr('transform', `translate(${settings.geometry.circle.radius*0.75}, ${settings.geometry.circle.radius *0.75})`)
+                    .attr('d', arc({
+                        innerRadius: settings.geometry.circle.radius * 1.29, 
+                        outerRadius: settings.geometry.circle.radius * 1.36,
+                        startAngle: - Math.PI / 2,
+                        endAngle: 0
+                    }))
+                    .style('fill', 'transparent')       // Turned off
+
+                // e. Add the 'full width' arcs for parts earlier in the chain
+                circleVis.selectAll("path.outer")
+                    .data(circleArcs)
+                    .join("path").classed('arc outer', true)
+                    .style('fill', d => d.data.type === 'outer' ? settings.scales.chainHealth(d.data.health) : 'transparent')
+                        .attr("d", outerArc)
+
+                // f. Add the 'narrower width' arcs for parts later in the chain that need more room to accommodate the disposal / recycle phases
+                circleVis.selectAll("path.inner")
+                    .data(circleArcs)
+                    .join("path").classed('arc inner', true)
+                    .style('fill', d => d.data.type === 'inner' ?  settings.scales.chainHealth(d.data.health)  : 'transparent')
+                        .attr("d", innerArc)
+
+                // g. Add a disposal arc out of the circle
+                const disposalArcOffset =  settings.geometry.circle.radius * 1.315, // Set by 'eye'
+                    disposalArc = circleVis.append('g').attr('transform', `translate(${-disposalArcOffset}, ${disposalArcOffset})`)
+
+                disposalArc.append('path')
+                    .datum(contentData.filter(d => d["Supply Chain"] === "Disposal")[0])
+                    .classed('arc disposal', true)
+                    .attr("d", arc({
+                        startAngle: 0,
+                        endAngle:    Math.PI / 4,
+                        innerRadius: circleRad2,
+                        outerRadius: circleRad1,
+                    }))
+                    .style('fill', d => settings.scales.chainHealth(d.Rating) )
+
+                // h. Set the extraction segment width and position from disposal arc offset
+                extractionArc.attr('transform', `translate(${-disposalArcOffset }, ${-settings.geometry.circle.radius})`)
+                    .attr('width',  disposalArcOffset )
+
+
+            /////////////////////////////////////////////////
+            /// 3. VISUALISATION LABELLING  - ARC LAYOUTS ///
+            /////////////////////////////////////////////////
+
+             // I. Add chain segment labels (mainly curved for outer arcs)
+                // a. Add the extraction label
+                annotation.append('text').classed(`chain-label extract` , true)
+                    .attr('transform', `translate(${settings.geometry.circle.x - disposalArcOffset * 2 / 3 }, ${settings.geometry.circle.y - settings.geometry.circle.radius + settings.geometry.circle.radius * 0.035})`)
+                    .text('Raw materials and energy')	
+
+                // b. Setup paths defs for text on path 
+                const labelRadiusInner  = settings.geometry.circle.radius * 0.89,
+                    labelRadiusMiddle   = settings.geometry.circle.radius * 0.93,
+                    labelRadiusOuter    = settings.geometry.circle.radius * 1.05, 
+                    labelRadiusEnergy   = settings.geometry.circle.radius * 1.17, 
+                    startPosMiddle      = { x: settings.geometry.circle.x , y: settings.geometry.circle.y - labelRadiusMiddle }, 
+                    startPosInner       = { x: settings.geometry.circle.x , y: settings.geometry.circle.y - labelRadiusInner }, 
+                    startPosOuter       = { x: settings.geometry.circle.x , y: settings.geometry.circle.y - labelRadiusOuter}, 
+                    startPosEnergy      = { x: settings.geometry.circle.x , y: settings.geometry.circle.y - labelRadiusEnergy}, 
+                    labelPathMiddle     = `M${startPosMiddle.x} ${startPosMiddle.y}  A${labelRadiusMiddle}, ${labelRadiusMiddle}, 0, 0, 1, ${startPosMiddle.x }, ${startPosMiddle.y + labelRadiusMiddle * 2} A${labelRadiusMiddle}, ${labelRadiusMiddle}, 0, 0, 1, ${startPosMiddle.x }, ${startPosMiddle.y}`,
+                    labelPathInner      = `M${startPosInner.x} ${startPosInner.y}  A${labelRadiusInner}, ${labelRadiusInner}, 0, 0, 1, ${startPosInner.x }, ${startPosInner.y + labelRadiusInner * 2} A${labelRadiusInner}, ${labelRadiusInner}, 0, 0, 1, ${startPosInner.x }, ${startPosInner.y}`,
+                    labelPathOuter      = `M${startPosOuter.x} ${startPosOuter.y}  A${labelRadiusMiddle}, ${labelRadiusMiddle}, 0, 0, 1, ${startPosOuter.x }, ${startPosOuter.y + labelRadiusOuter * 2} A${labelRadiusOuter}, ${labelRadiusOuter}, 0, 0, 1, ${startPosOuter.x }, ${startPosOuter.y}`,
+                    labelPathEnergy     = `M${startPosEnergy.x} ${startPosEnergy.y}  A${labelRadiusEnergy}, ${labelRadiusEnergy}, 0, 0, 1, ${startPosEnergy.x }, ${startPosEnergy.y + labelRadiusEnergy * 2} A${labelRadiusEnergy}, ${labelRadiusEnergy}, 0, 0, 1, ${startPosEnergy.x }, ${startPosEnergy.y}`
+
+                const labelRadiusDisposal  = d3.mean([circleRad1, circleRad2]),
+                    startPosDisposal  = { x: settings.geometry.circle.x - disposalArcOffset ,  y: settings.geometry.circle.y + settings.geometry.circle.radius * 0.425}, 
+                    labelPathDisposal  = `M${startPosDisposal.x} ${startPosDisposal.y}  A${labelRadiusDisposal}, ${labelRadiusDisposal}, 0, 0, 1, ${startPosDisposal.x }, ${startPosDisposal.y + labelRadiusDisposal * 2} A${labelRadiusDisposal}, ${labelRadiusDisposal}, 0, 0, 1, ${startPosDisposal.x }, ${startPosDisposal.y}`
+
+                defs.append('path').attr('id', `label-path-clockwise-middle`)
+                    .attr('d', labelPathMiddle) 
+                defs.append('path').attr('id', `label-path-clockwise-inner`)
+                    .attr('d', labelPathInner) 
+                defs.append('path') .attr('id', `label-path-clockwise-outer`)
+                    .attr('d', labelPathOuter) 
+                defs.append('path').attr('id', `label-path-clockwise-disposal`)
+                    .attr('d', labelPathDisposal)      
+                defs.append('path').attr('id', `label-path-clockwise-energy-recovery`)
+                    .attr('d', labelPathEnergy)      
+
+                // c. Add curved labels for chain segments
+                circleArcs.forEach(obj => {
+                    const angle = (obj.endAngle - (obj.endAngle - obj.startAngle) / 2) * 180 / Math.PI /360,
+                        pathID = obj.data.type === 'outer' ? 'label-path-clockwise-middle' : 'label-path-clockwise-inner'
+                    annotation.append('text').classed(`chain-label text-on-path` , true)
+                        .append('textPath').attr("xlink:href", `#${pathID}`)
+                            .attr('startOffset', helpers.numberFormatters.formatPct1dec(angle))
+                            .text(obj.data.name)	
+                })
+
+                // d. Add curved labels for 'Disposal' and 'Energy recovery' chain segments
+                annotation.append('text').classed(`chain-label text-on-path ` , true)
+                    .append('textPath').attr("xlink:href", `#label-path-clockwise-disposal`)
+                        .attr('startOffset', '6.25%')
+                        .text('Disposal')	
+                annotation.append('text').classed(`chain-label text-on-path ` , true)
+                    .append('textPath').attr("xlink:href", `#label-path-clockwise-energy-recovery`)
+                        .attr('startOffset', '75%')
+                        .text('Energy recovery')	
+
+
+            // II. Add the 'chain group' (phase) curved labels for inner arcs 
+                // i. Add curved labels for chain groups (i.e. outer circularity 'phases') 
+                settings.geometry.chainCircleGroup.forEach( groupObj => {
+                    annotation.append('text').classed(`chain-group-label text-on-path`, true)
+                        .style('dominant-baseline', groupObj.baseline)
+                        .append('textPath').attr("xlink:href", `#label-path-clockwise-outer`)
+                            .attr('startOffset', helpers.numberFormatters.formatPct1dec(groupObj.labelPos))
+                            .text(groupObj.name)	
+                })
+        
+                //  ii. Add curved labels for inner arcs 
+                    // a. Setup paths defs for text on path 
+                    const labelRadiusReuse  = settings.geometry.circle.radius * 0.97,
+                        labelRadiusRemanufacture   = settings.geometry.circle.radius *  1.41,
+                        startPosReuse  = { x: settings.geometry.circle.x + settings.geometry.circle.radius - settings.geometry.circle.radius * 0.07,  y: settings.geometry.circle.y - labelRadiusReuse + settings.geometry.circle.radius - settings.geometry.circle.radius * 0.07}, 
+                        startPosRemanufacture   = { x: settings.geometry.circle.x + settings.geometry.circle.radius*0.75,  y: settings.geometry.circle.y - labelRadiusRemanufacture + settings.geometry.circle.radius*0.75}, 
+                        labelPathReuse = `M${startPosReuse.x} ${startPosReuse.y}  A${labelRadiusReuse}, ${labelRadiusReuse}, 0, 0, 1, ${startPosReuse.x }, ${startPosReuse.y + labelRadiusReuse * 2} A${labelRadiusReuse}, ${labelRadiusReuse}, 0, 0, 1, ${startPosReuse.x }, ${startPosReuse.y}`,
+                        labelPathRemanufacture  = `M${startPosRemanufacture.x} ${startPosRemanufacture.y}  A${labelRadiusRemanufacture}, ${labelRadiusRemanufacture}, 0, 0, 1, ${startPosRemanufacture.x }, ${startPosRemanufacture.y + labelRadiusRemanufacture * 2} A${labelRadiusRemanufacture}, ${labelRadiusRemanufacture}, 0, 0, 1, ${startPosRemanufacture.x }, ${startPosRemanufacture.y}`
+                    // b. Add curved labels for chain segments
+                    defs.append('path').attr('id', `label-path-clockwise-reuse`)
+                        .attr('d', labelPathReuse) 
+                    defs.append('path').attr('id', `label-path-clockwise-remanufacture`)
+                        .attr('d', labelPathRemanufacture) 
+
+                    annotation.append('text').classed(`chain-group-label text-on-path ` , true)
+                        .append('textPath').attr("xlink:href", `#label-path-clockwise-reuse`)
+                            .attr('startOffset', '87.5%')
+                            .text('Reuse and repair')	
+                    annotation.append('text').classed(`chain-group-label text-on-path ` , true)
+                        .append('textPath').attr("xlink:href", `#label-path-clockwise-remanufacture`)
+                            .attr('startOffset', '87.5%')
+                            .text('Remanufacture')	
+                            .style('fill', 'transparent')
+
+
+            ////////////////////////////////////////
+            /// 4. TITLE AND OVERVIEW ANNOTATION ///
+            ////////////////////////////////////////
+
+                // a. Main title section with overall risks and actions
+                    // i. Main title with divider to overall risk and action content
+                    settings.geometry.title = { 
+                        divider: { 
+                            leftX: settings.dims.width / 4, 
+                            rightX: settings.dims.width * 1/ 2, 
+                            y0: settings.dims.margin.top,
+                            titleGap: 20
+                        }
+                    }
+
+                    const title = annotation.append('text').classed('main-title', true)
+                        .attr('x', settings.geometry.title.divider.leftX - settings.geometry.title.divider.titleGap)
+                        .attr('y', settings.geometry.title.divider.y0 + 24)
+                        .attr('dy', 0)
+                        .text(state.material)
+                        .call(helpers.wrap, settings.geometry.title.divider.leftX - settings.dims.margin.left - settings.geometry.title.divider.titleGap, 1.1)
+
+                    const subtitle = annotation.append('text').classed('main-subtitle', true)
+                        .attr('x', settings.geometry.title.divider.leftX - settings.geometry.title.divider.titleGap)
+                        .attr('y', settings.geometry.title.divider.y0 )
+                        .text(`Market status for ${state.edition}`)
+
+                // b. Overall risks and actions
+                    const overallNarrative = annotation.append('g').classed('overall-narrative-group', true)
+                        .attr('transform', `translate(${settings.geometry.title.divider.leftX + settings.geometry.title.divider.titleGap},  ${settings.geometry.title.divider.y0})`)
+            
+                    const overallRisks = overallNarrative.append('g').classed('overall-risks-group', true)
+                    overallRisks.append('text').classed('overall-risk-header narrative-header', true)
+                        .text('Market risks')
+                    const overallRiskText = overallRisks.append('text').classed('overall-risk-text narrative-text', true)
+                        .attr('x', 0).attr('y', 14).attr('dy', 0)
+                        .text(contentData.filter(d => d['Supply Chain'] === 'Overall health')[0]['Risk'])
+                        .call(helpers.wrap, settings.geometry.title.divider.leftX - settings.dims.margin.left - settings.geometry.title.divider.titleGap * 0, 1.1)
+
+                    const overallActions = overallNarrative.append('g').classed('overall-actions-group', true)
+                        .attr('transform', `translate(${settings.geometry.title.divider.leftX},  0)`)
+                    overallActions.append('text').classed('overall-actions-header narrative-header', true)
+                        .text('Action required')
+                    const overallActionsText =  overallActions.append('text').classed('overall-actions-text narrative-text', true)
+                        .attr('x', 0).attr('y', 14).attr('dy', 0)
+                        .text(contentData.filter(d => d['Supply Chain'] === 'Overall health')[0]['Action required'])
+                        .call(helpers.wrap, settings.geometry.title.divider.leftX - settings.dims.margin.left - settings.geometry.title.divider.titleGap * 0, 1.1)
+
+                // c. Append the divider with height adjusted
+                    // Find the height of divider
+                    const titleBlockY = subtitle.node().getBBox().y + subtitle.node().getBBox().height,
+                        overallRiskY = overallRiskText.node().getBBox().y + overallRiskText.node().getBBox().height + settings.geometry.title.divider.y0
+                        overallActionY = overallActionsText.node().getBBox().y + overallActionsText.node().getBBox().height + settings.geometry.title.divider.y0
+                    settings.geometry.title.divider.y1 = d3.max([titleBlockY, overallRiskY, overallActionY])        
+                    // Append two title dividers
+                    annotation.append('path').classed('title-divider', true)
+                        .attr('d', `M${settings.geometry.title.divider.leftX} ${settings.geometry.title.divider.y0}, V${settings.geometry.title.divider.y1}`)
+                    annotation.append('path').classed('title-divider', true)
+                        .attr('d', `M${settings.geometry.title.divider.rightX} ${settings.geometry.title.divider.y0}, V${settings.geometry.title.divider.y1}`)
+
+       
+        ///////////////////////////////
+        /// 5. NARRATIVE ANNOTATION ///
+        ///////////////////////////////
+
+            let narrativeYOffset = 20
+            const detailedNarrativeOrder = ['End markets', 'Reprocessing', 'Sorting', 'Collection'],
+                detailedNarrativeWidth =  settings.geometry.circle.x - settings.geometry.circle.radius * 1.75 - settings.dims.margin.left
+                detailedNarrative = annotation.append('g')
+                    .attr('transform', `translate(${settings.dims.margin.left}, ${settings.geometry.circle.y - circleRad1} )`)
+
+            detailedNarrative.append('text').classed('material-chain-header', true)
+                    .text(`${state.material} sub-market status`)
+
+            detailedNarrativeOrder.forEach(stage => {
+                let localGroupOffset = 0
+                const contentObj = contentData.filter(d => d['Supply Chain'] === stage)[0]
+                    stageGroup = detailedNarrative.append('g')
+                        .attr('transform', `translate(${0} , ${narrativeYOffset})`)
+
+                const statusCircle = stageGroup.append('circle')
+                    .attr('r', 5)
+                    .attr('cx', 5)
+                    .attr('cy', -4)
+                    .style('fill', settings.scales.chainHealth(contentObj.Rating))
+                const header = stageGroup.append('text')
+                    .classed('content-header', true)
+                    .attr('x', 15)
+                    .text(stage)
+                    .style('fill', settings.scales.chainHealth(contentObj.Rating))
+                    localGroupOffset += 14
+                    const trendsText =  stageGroup.append('text')
+                        .attr('transform', `translate(${0} , ${localGroupOffset})`)
+                        .classed('content-text', true)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)
+                        .html(`&#9679; Market trends: ${contentData.filter(d => d['Supply Chain'] === stage)[0]['Market trends']}` )      
+                        .call(helpers.wrap, detailedNarrativeWidth, 1)     
+
+                localGroupOffset += trendsText.node().getBBox().height + 2
+
+                const riskText =  stageGroup.append('text')
+                        .attr('transform', `translate(${0} , ${localGroupOffset})`)
+                        .classed('content-text', true)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)
+                        .html(`&#9679; Risk: ${contentData.filter(d => d['Supply Chain'] === stage)[0].Risk}` )      
+                        .call(helpers.wrap, detailedNarrativeWidth, 1)     
+
+                localGroupOffset += riskText.node().getBBox().height + 2
+
+                const consequenceText =  stageGroup.append('text')
+                        .attr('transform', `translate(${0} , ${localGroupOffset})`)
+                        .classed('content-text', true)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)
+                        .html(`&#9679; Consequence: ${contentData.filter(d => d['Supply Chain'] === stage)[0]['Consequence']}` )      
+                        .call(helpers.wrap, detailedNarrativeWidth, 1)     
+
+                localGroupOffset += consequenceText.node().getBBox().height + 2
+
+                const programsText =  stageGroup.append('text')
+                        .attr('transform', `translate(${0} , ${localGroupOffset})`)
+                        .classed('content-text', true)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)
+                        .html(`&#9679; RV programs: ${contentData.filter(d => d['Supply Chain'] === stage)[0]['RV programs']}` )      
+                        .call(helpers.wrap, detailedNarrativeWidth, 1)     
+
+                localGroupOffset += programsText.node().getBBox().height + 2
+
+                    const actionText =  stageGroup.append('text')
+                        .attr('transform', `translate(${0} , ${localGroupOffset})`)
+                        .classed('content-text', true)
+                        .attr('x', 0).attr('y', 0).attr('dy', 0)
+                        .html(`&#9654; Action: ${contentData.filter(d => d['Supply Chain'] === stage)[0]['Action required']}` )      
+                        .call(helpers.wrap, detailedNarrativeWidth, 1)     
+
+                localGroupOffset += actionText.node().getBBox().height + 2
+
+                narrativeYOffset += localGroupOffset + 10 
+            })
+        }; // end renderVis()
+
+        // III. ADD A UI FOR SWITCHING BETWEEN MATERIALS
+        async function addUI(){
+            const materialsSelector = d3.select('#material-selector').on('change', updateMaterial)
+            data.list.materials.sort().forEach( material => {
+                materialsSelector.append('option')
+                    .attr('value', material)
+                    .html(material)
+            })
+
+            function updateMaterial(){
+                const duration = 500
+                d3.select(`#${settings.svgID}`).transition().duration(duration/2)
+                    .style('opacity', 0)
+                state.material = this.value
+                setTimeout(() => {
+                    d3.selectAll(`#${settings.svgID} *`).remove()
+                    renderVis(settings, state)
+                    d3.select(`#${settings.svgID}`).transition().duration(duration/2)
+                        .style('opacity', null)
+                }, duration/2);
+            }       
+        }
+
+
+
+    /////////////////////////////
+    /// X HELPER FUNCTIONS    ///
+    /////////////////////////////
+
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (let i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                })
+            }
+        }
+
+  </script>
+</body>
+
+</html>
