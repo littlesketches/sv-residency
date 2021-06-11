@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <style>
+            /* COLOUR PALETTES */
+            :root {
+                /** OLD BRAND GUIDELINES **/
+                --svGreen:                            #9ACA3C;
+                --gippslandGreen:                     #CED99E;
+                --secondary_greatOceanBlue:           #0070BB;
+                --secondary_hepburnClay:              #9B0B32;
+                --secondary_meredithGold:             #E3BA5A;
+                --campaign_corrangamiteEggplant:      #550055;
+                --campaign_corrangamiteEggplantLight: #B273B2;
+                --campaign_gannarawwaPink:            #D00236;
+                --campaign_gannarawwaPinkLight:       #EE5F83;
+                --campaign_surfCoastTeal:             #00848F;
+                --campaign_surfCoastTealLight:        #47ABB4;
+                --campaign_queenscliffeMarine:        #0A3055;
+                --campaign_queenscliffeMarineLight:   #7991A9;
+                --campaign_milduraOrange:             #D3410B;
+                --campaign_milduraOrangeLight:        #F2855D;
+                --campaign_otwaysGreen:               #008848;
+                --campaign_otwaysGreenLight:          #8DBF87;
+                --monochrome_youYangsGranite:         #B2B2B2;
+                --monochrome_lakeMountainMorning:     #CCCCCC;
+                --monochrome_mtBullaMist:             #E5E5E5;
+                /** NEW BRAND GUIDELINES **/
+                --chartLightGreen:  #cbe197;
+                --chartGray:        #b1b1b0;
+                --chartTeal:        #52baba;
+                --chartEmerald:     #00502e;
+                --chartPowderBlue:  #9bddfa;
+                --chartGreen:       #77bf00;
+                --chartDarkGreen:   #009857;
+                --chartOrange:      #cea98d;
+                --chartBlue:        #00568f;
+                --chartPurple:      #816bb4;
+                --chartLightGrey:   #cfcfcf;
+                --chartYellow:      #ffd300;
+            }
+
+        /****************************/
+        /*** IMPORTED FONTS       ***/
+        /****************************/
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Bold.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
+                font-weight: 700;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 200;
+                font-style: light;
+            }
+
+            body{
+                font-family: 'DIN Next LT Pro';
+            }
+
+        /*********************/
+        /**** BIN GRAPHIC  ***/
+        /*********************/
+
+            .contaminants{
+                fill: var(--campaign_gannarawwaPinkLight);
+            }
+            .recycling-breakdown-label{
+                font-weight: bold;
+                font-size: 16px;
+                dominant-baseline: middle;
+            }
+            .recycling-breakdown-material-label{
+                font-size: 14px;
+                dominant-baseline: middle;
+                text-anchor: end;
+            }
+            .paper{
+                fill: var(--chartTeal );
+            }
+            .plastic{
+                fill: var(--campaign_queenscliffeMarine);
+            }
+            .metal{
+                fill: var(--chartPowderBlue);
+            }
+            .glass{
+                fill: var(--chartPurple)
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class = "svg-container">
+            <svg id = "bin-vis" viewBox ="0 0 540 720 " xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs>
+                    <g id="garbage-bin-flat">
+                        <path fill="#252d2f" d="M2.513-2.08A.652 2.045 0 011.86-.033a.652 2.045 0 01-.652-2.045.652 2.045 0 01.652-2.046.652 2.045 0 01.652 2.046"/>
+                        <path fill="#4c5e57" d="M.936-14.095l9.702.035-.044 13.7-7.802.055c-.422.052-.624-.192-.651-.683z"/>
+                        <path fill="#3f4c4a" d="M10.514-13.97l1.063-.502-.096 12.325c-.031.34.173.919-.113 1.119l-.775.645z"/>
+                        <path fill="#252d2f" d="M11.54-2.045A.697 2.045 0 0110.844 0a.697 2.045 0 01-.697-2.045.697 2.045 0 01.697-2.046.697 2.045 0 01.698 2.046"/>
+                        <g class="garbage-bin-lid">
+                            <path fill="var(--campaign_gannarawwaPinkLight)"" d="M0-15.53c.024.095.048 1.472.048 1.472l10.616.067 1.13-.501.07-1.461-.404-.694c-.308-.781-1.378-1.435-1.868-.484l-6.19-.03c-.873-.78-2.207-.156-2.242.386l-.415.3-.074.654z"/>
+                            <g fill="#000" opacity=".15" >
+                                <path d="M1.037-16.348l9.137.13c1.252-.407 1.974-.36.102.39l-9.267-.05z" />
+                                <path d="M11.047-16.926l-.753.25c-.411-.49-.351-.61-.023-.691.33-.083.51.164.776.44z" />
+                                <path d="M3.173-17.075c-.597-.076-1.296.047-1.582.393.123-.495.328-.575.64-.646.137-.031.726.006.942.253z" />
+                                <path d="M.667-15.164l9.638.058c.198.006 1.198-.211 1.198-.211.158.683-.546.41-1.27 1.021l-9.566-.029z"/>
+                            </g>
+                        </g>
+                    </g>
+                </defs>
+            </svg>
+        </div>
+    </body>
+
+    <script>
+
+        ////////////////////////////////////////////////////////////////////////////////
+        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP  ///
+        ////////////////////////////////////////////////////////////////////////////////
+
+        Tabletop.init({
+            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
+            callback: async(loadedData) => {
+                // 1. Parse data
+                await parseData(loadedData.kerbsideData.elements, loadedData.kerbsideComposition.elements)
+                // 2. Render visualisation(s)
+                await renderBinVis(loadedData.kerbsideData.elements, loadedData.kerbsideComposition.elements, settings)
+            },
+            simpleSheet: false,
+            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
+        });
+
+
+        //////////////////////////////////
+        // 0. SETUP DATA AND SETTINGS  ///
+        //////////////////////////////////
+
+        const settings = {
+            svgID:          'bin-vis',
+            year:           '2019/20', 
+            dims: {
+                height:     720, 
+                width:      540,
+                margin: {
+                    top: 100, right: 50, bottom: 50, left: 100
+                }
+            },
+            variables: {
+                peoplePerHousehold:     2.5
+            }
+        }
+
+        const data = {          // Initiate data object that populated by the parseData() function, 
+            byPeriod:   {},
+            byType:   {
+                material: {}
+            },
+            schema: {
+                list:  {}
+            }
+        }
+
+
+        ////////////////////////////////////
+        // A. PARSE AND WRANGLE DATA     ///
+        ////////////////////////////////////
+
+        async function parseData(kerbsideData, recycleBinData) {      
+            // 1. Parse numeric data types to number
+            kerbsideData.forEach(d => {
+                Object.entries(d).forEach( ([key, value]) => {
+                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
+                    } 
+                })
+            })
+            recycleBinData.forEach(d => {
+                Object.entries(d).forEach( ([key, value]) => {
+                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
+                    } 
+                })
+            })
+
+            // 2. Extract lists
+            data.schema.list.year =   [...new Set(kerbsideData.map( d => d.year))]
+            data.schema.list.kerbsideRecycleMaterials =   [...new Set(recycleBinData.map( d => d.material))]
+            data.schema.list.kerbsideRecycleMaterialGroups =   [...new Set(recycleBinData.map( d => d.group))]
+
+        };
+
+
+        /////////////////////////////////
+        // C. RENDER THE BIN GRAPHIC  ///
+        /////////////////////////////////
+
+        async function renderBinVis(collectionData, compositionData, settings){
+            // 0. Data
+                const yearData = collectionData.filter(d => d.year === settings.year)[0],
+                    recycleBinData =  compositionData.filter(d => d.year === settings.year),
+                    totalCouncilCost = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'cost').map( d => yearData[d])),
+                    totalCollection = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'volume').map( d => yearData[d])),
+                    garbagePerPropertyTonnes = yearData.Garbage_volume / yearData.Population * settings.variables.peoplePerHousehold,
+                    garbagePerPropertyCost = yearData.Garbage_cost / yearData.Population * settings.variables.peoplePerHousehold,
+                    garbagePerTonneCost = yearData.Garbage_cost / yearData.Garbage_volume
+                    recyclingPerPropertyTonnes = yearData.Recycling_volume / yearData.Population * settings.variables.peoplePerHousehold,
+                    recyclingPerPropertyCost = yearData.Recycling_cost / yearData.Population * settings.variables.peoplePerHousehold,
+                    recyclingPerTonneCost = yearData.Recycling_cost / yearData.Recycling_volume,
+                    organicsPerPropertyTonnes = yearData.Organics_volume / yearData.Population * settings.variables.peoplePerHousehold,
+                    organicsPerPropertyCost = yearData.Organics_cost / yearData.Population * settings.variables.peoplePerHousehold,
+                    organicsPerTonneCost = yearData.Organics_cost / yearData.Organics_volume
+
+                const icons = {
+                    bin:        "M16.444-2.62a.889.864 0 01-.888.864.889.864 0 01-.89-.864.889.864 0 01.89-.865.889.864 0 01.888.865M15.4-6.07l.582-12.974H1.796l.8 17.776c.028.693.615 1.24 1.328 1.24h9.29A3.386 3.386 0 0112.2-3.77c.482-1.33 1.75-2.242 3.199-2.3zm4.156-15.567h-1.334v.865h1.334a.438.438 0 00.444-.432.438.438 0 00-.444-.433zM15.809-5.2h-.005a2.348 2.348 0 00-.248-.013c-1.456-.008-2.652 1.116-2.694 2.531-.042 1.415 1.085 2.604 2.539 2.678 1.453.075 2.702-.993 2.813-2.404.111-1.412-.957-2.651-2.405-2.792zm-.253 4.308c-.982 0-1.778-.773-1.778-1.728s.796-1.729 1.778-1.729c.981 0 1.777.774 1.777 1.729 0 .458-.187.898-.52 1.222a1.803 1.803 0 01-1.257.506zm1.333-19.015a.439.439 0 00.444-.432v-.432H.444A.438.438 0 000-20.34c0 .239.199.432.444.432zm.444-2.16c0-.24-.199-.433-.444-.433H2.667c-.565 0-1.069.347-1.258.864h15.924z",
+                    binBody:    "M15.4-6.069l.582-12.974H1.796l.8 17.776c.028.693.615 1.24 1.328 1.24h9.29A3.386 3.386 0 0112.2-3.77c.482-1.33 1.75-2.242 3.199-2.3z",
+                    binWheel:   "M16.444-2.62a.877.877 0 01-.888.864.877.877 0 01-.89-.864c0-.478.399-.865.89-.865.49 0 .888.387.888.865M15.81-5.2h-.005a2.348 2.348 0 00-.248-.013c-1.456-.008-2.652 1.116-2.694 2.531-.042 1.415 1.085 2.604 2.539 2.678 1.453.075 2.702-.993 2.813-2.404.111-1.412-.957-2.651-2.405-2.792zm-.253 4.308c-.982 0-1.778-.773-1.778-1.728s.796-1.729 1.778-1.729c.981 0 1.777.774 1.777 1.729 0 .458-.187.898-.52 1.222a1.803 1.803 0 01-1.257.506z",
+                    binLid:     "M19.556-21.636h-1.334v.865h1.334a.438.438 0 00.444-.432.438.438 0 00-.444-.433zm-2.667 1.729a.439.439 0 00.444-.432v-.432H.444A.438.438 0 000-20.34c0 .239.199.432.444.432zm.444-2.16c0-.24-.199-.433-.444-.433H2.667c-.565 0-1.069.347-1.258.864h15.924z",
+                }
+
+                // b. Setup SVG Canvas and layers
+                const svg = d3.select('#bin-vis').attr('viewBox', `0 0  ${settings.dims.width} ${settings.dims.height} `),
+                    defs = d3.select('defs')
+
+                const recyclingInsert = {x: settings.dims.width * 0.35, y: settings.dims.height * 0.5},
+                    iconWidth = 20,  iconHeight = 22.5, iconBinHeight = 19.3, iconScale = 1.15, binColour = '#252d2f'
+
+            // 1.  Recycling breakdown "Bin breakdown graphic"
+                const recycleBinScale = 15, chartBgRadius = 90,
+                    recyclingBreakdownChart = svg.append('g').classed('icon-chart', true).attr('id', 'recycling-breakdown-icon-chart')
+                        .attr('transform', `translate(${recyclingInsert.x}, ${recyclingInsert.y})`)
+
+                let cumulativeProp = -iconBinHeight
+                // b. Breakdown chart label
+                    // const breakdownLabelOffset = 10,
+                    //     breakdownLabelPath = `M${0} ${0}  A${chartBgRadius + breakdownLabelOffset}, ${chartBgRadius + breakdownLabelOffset}, 0, 0, 1, ${0}, ${(chartBgRadius+ breakdownLabelOffset) * 2}
+                    //             A${chartBgRadius+ breakdownLabelOffset}, ${chartBgRadius+ breakdownLabelOffset}, 0, 0, 1, ${0}, ${0}`
+                    // defs.append('path').attr('id', 'breakdown-chart-label-path')
+                    //     .attr('d',breakdownLabelPath )
+                    // recyclingBreakdownChart.append('text').classed('recycling-breakdown-label', true)
+                    //     .attr('transform', `translate(${(chartBgRadius + breakdownLabelOffset) *0.25}, ${-(chartBgRadius) * 1.5 - breakdownLabelOffset })`)
+                    //         .append('textPath').attr("xlink:href", `#breakdown-chart-label-path`)
+                    //         .attr("startOffset", '100%')
+                    //         .style("text-anchor", 'end')
+                    //         .text(`What's in our mixed recyclables?`)	
+                    // recyclingBreakdownChart.append('path').classed('recycling-breakdown-outer', true)
+                    //     .attr('d', icons.binBody)
+                    //     .attr('transform', `scale(${recycleBinScale})`)
+
+                // c. Render Breakdown chart 
+                    // Create chart data
+                    const recycleBinChartData = []
+                    data.schema.list.kerbsideRecycleMaterialGroups.forEach (group => {
+                        recycleBinChartData.push({ group,  volume: d3.sum(recycleBinData.filter(d => d.group === group).map(d => d.volume)) })
+                    })
+                    // Add each material group
+                    recycleBinChartData.forEach((d, i) => {
+                        const material = d.group,
+                            materialSlug = helpers.slugify(d.group),
+                            materialProp = d.volume / d3.sum(recycleBinData.map(d => d.volume)),
+                            clipHeight =  materialProp * iconBinHeight
+                        
+                        // Add part of an icon with a clipath                
+                        defs.append('clipPath').attr('id', `recycle-bin-${materialSlug}`)
+                            .append('rect')
+                            .attr('x', 0)                            
+                            .attr('y', cumulativeProp)
+                            .attr('height', clipHeight)
+                            .attr('width', iconWidth)
+                        recyclingBreakdownChart.append('path')
+                            .classed(`recycling-breakdown ${materialSlug}`, true)
+                            .attr('d', icons.binBody)
+                            .attr('clip-path', `url(#recycle-bin-${materialSlug})`)
+                            .attr('transform', `translate(${0} , ${0}) scale(${recycleBinScale})`)
+                        // Add label    
+                        recyclingBreakdownChart.append('text')
+                            .classed(`recycling-breakdown-material-label ${materialSlug}`, true) 
+                            .attr('transform',  `translate(${0} , ${(cumulativeProp + clipHeight /2) * recycleBinScale})` )
+                            .text(`${material}: ${helpers.numberFormatters.formatPct1dec(materialProp)}`) 
+                            .style('font-weight', 'bold' )
+
+                        cumulativeProp +=clipHeight     // Update cumulative position for label
+                    })
+                    // Add Bin wheel and lid
+                    recyclingBreakdownChart.append('path')
+                        .attr('d', icons.binWheel)
+                        .attr('transform', `translate(${0} , ${0})  scale(${recycleBinScale})`)
+                    recyclingBreakdownChart.append('path')
+                        .attr('d', icons.binLid)
+                        .attr('transform', `translate(${0} , ${0})  scale(${recycleBinScale})`)
+
+        };
+
+
+        ////////////////////////////////////
+        /// X. HELPER FUNCTIONS |        ///
+        ////////////////////////////////////
+
+            const helpers= {
+                numberFormatters: {
+                    formatComma:           	d3.format(",.0f"),
+                    formatComma1dec:       	d3.format(",.1f"),
+                    formatComma2dec:       	d3.format(",.2f"),
+                    formatInteger:         	d3.format(".0f"),   
+                    formatCostInteger:     	d3.format("$,.0f"),  
+                    formatCost1dec:        	d3.format("$,.1f"),  
+                    formatPct:          	d3.format(".0%"), 
+                    formatPct1dec:          d3.format(".1%")  
+                },
+                numberParsers: {
+                    parseDateSlash: d3.timeParse("%d/%m/%Y")
+                },
+                slugify: function (str) {
+                    str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                    const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                        to   = "aaaaeeeeiiiioooouuuunc------"
+                    for (var i=0, l=from.length ; i<l ; i++) {
+                        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                    }
+                    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                        .replace(/-+/g, '-'); // collapse dashes
+                    return str;
+                }, 
+                wrap: function(text, width, lineHeight, centerVertical = false) {
+                    text.each(function() {
+                        let text = d3.select(this),
+                            words = text.text().split(/\s+/).reverse(),
+                            word,
+                            line = [],
+                            lineNumber = 0,
+                            y = text.attr("y"),
+                            x = text.attr("x"),
+                            fontSize = parseFloat(text.style("font-size")),
+                            dy = parseFloat(text.attr("dy")),
+                            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                        while (word = words.pop()) {
+                            line.push(word);
+                            tspan.text(line.join(" "));
+
+                            if (tspan.node().getComputedTextLength() > width) {
+                                line.pop();
+                                tspan.text(line.join(" "));
+                                line = [word];
+                                tspan = text.append("tspan")
+                                    .attr("x", x)
+                                    .attr("y",  y)
+                                    .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                            }                    
+                        }            
+                        if(centerVertical){
+                            text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                        }
+                    })
+                }
+            }
+
+    </script>
+</html>
+

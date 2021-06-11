@@ -46,33 +46,33 @@
             --test:     #e1c97e;
 
         }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Bold.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
-                font-weight: 700;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 200;
-                font-style: light;
-            }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                url('fonts/DINNextLTPro-Bold.woff') format('woff'),
+                url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                url('fonts/DINNextLTPro-Light.woff') format('woff'),
+                url('fonts/DINNextLTPro-Light.ttf') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+            font-weight: 200;
+            font-style: light;
+        }
         text { 
             font-family: 'DIN Next LT Pro';
         }
@@ -212,6 +212,7 @@
             text-anchor: middle;
             dominant-baseline: middle;
         }
+
     </style>
 </head>
 
@@ -512,7 +513,6 @@
 
                 const labelBBox = document.getElementById(`product-group-${helpers.slugify(product)}`).getBBox()
                 label.style('transform', `translate(${0}px, ${settings.geometry.container.height /2 - labelBBox.height/2}px)`)
-
             })
 
 
@@ -533,8 +533,8 @@
             data.list.destination.forEach( d => offsets[d] = 0)
             materialData.forEach(obj => {
                 const sourceTotal = d3.sum(materialData.filter(e => e.source === obj.source).map(d => d.value)),
-                        noTargets = materialData.filter(e => e.source === obj.source).length,
-                        sourceWidth = flowScale(sourceTotal)
+                    noTargets = materialData.filter(e => e.source === obj.source).length,
+                    sourceWidth = flowScale(sourceTotal)
                 offsets[obj.source] = - flowScale(sourceTotal) / 2
             })
             materialData.forEach(obj => {
@@ -558,13 +558,13 @@
 
             // 3. ADD ANNOTATIONS
             annotationGroup.append('text').classed('main-title', true)
-                .text('Victorian kerbside collected waste flow')
+                .text('Key waste flows in Victoria')
                 .attr('transform', `translate(${30}, ${50})`)
             annotationGroup.append('text').classed('main-subtitle', true)
-                .text('Volumes of collected waste to destination and recycled products in '+settings.year)
+                .text('Tonnes of collected waste to destination and recycled products in '+settings.year)
                 .attr('transform', `translate(${30}, ${70})`)
 
-            // Function to render diverrsion donut chart
+            // Function to render diversion donut chart
             function renderDonut(container, coords, dims, data ){
                 // Setup shape generator and data
                 const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),

@@ -81,130 +81,45 @@
         /***************************/
         /*****  GENERAL STYLING  ***/
         /***************************/
-            body, 
-            text{
+            body{
                 font-family: 'DIN Next LT Pro';
             }
-
             .hidden{ 
                 display: none;
             }
-            .donut-chart-bg,
             .bg-rect{
-                fill: rgb(40, 40, 40);
-            }
-            .donut-chart-bg{
-                mix-blend-mode: darken;
+                fill: none;
             }
 
         /*****************************************/
         /*****  TYPOGRAPHY AND ELEMENT COLOUR  ***/
         /*****************************************/
-        .main-title{
-            font-size: 30px;
-            font-weight: bold;
-            fill: var(--chartGreen);
-            dominant-baseline: 'hanging'
-        }
-        .main-subtitle{
-            font-size: 14px;
-            fill: var(--chartGreen);
-            dominant-baseline: 'hanging'
-        }
-        .title-label{
-            font-size: 30px;
-            font-weight: bold;
-            fill:  #fff;
-        }
+
+        .title-label,
         .waste-stream-headline,
         .label.waste-stream,
         .data-label.waste-stream,
-        .icon.waste-stream{
-            fill: #fff;
-        }
-        .label.waste-stream,
-        .data-label.waste-stream{
-            text-anchor: middle;
-        }
-        .generation-headline-figure{
-            font-size: 80px;
-            font-weight: bold;
-            text-anchor: end;
-            letter-spacing: -2px;
-        }
+        .icon.waste-stream,
         .generation-headline,
         .waste-stream-headline,
-        .generation-unit{
-            font-size: 18px;
-            fill:  #fff;
-        }
-        .generation-headline{
-            text-transform: uppercase;    
-            font-size: 40px;   
-            font-weight: bold;         
-        }
-        .generation-unit{
-            font-weight: bold;
-        }
+        .generation-unit,
         .landfill-label-bg{
-            fill: #fff;
-            opacity: 0.9;
-            display: none;
-        }
-        .recovery.icon,
-        .recovery-headline,
-        .recovery-unit{
-            fill:var(--svGreen);
-            font-weight: bold;
-            dominant-baseline: hanging;
-        }
-        .recovery-unit,
-        .landfill-unit{
-            font-size: 18px;
-        }
-        .recovery-headline{
-            font-size: 100px;
-            letter-spacing: -8px;
+            fill: rgb(40, 40, 40);
         }
         .landfill.icon,
         .landfill-headline,
-        .landfill-unit{
+        .landfill-unit, 
+        .arrow-landfill{
             fill: var(--campaign_gannarawwaPink);
-            font-weight: bold;
-            dominant-baseline: hanging;
-            mix-blend-mode: exclusion;
         }
-        .landfill-headline{
-            font-size: 60px;
-            letter-spacing: -4px;
-        }
+        .main-title,
+        .main-subtitle,
+        .recovery.icon,
+        .recovery-headline,
+        .recovery-unit,
         .diversion-headline,
         .diversion-unit, 
-        .diversion-unit-large{
-            fill:  var(--svGreen);
-            text-anchor: end;
-        }
-        .diversion-headline{
-            font-size: 60px;
-            letter-spacing: -2px;
-            font-weight: bold;
-        }
-        .diversion-unit{
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .diversion-unit-large{
-            font-size: 36px;
-            font-weight: bold;
-        }
-        .label.waste-stream,
-        .data-label.waste-stream{
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .label.waste-stream{
-            font-weight: bold;
-        }
+        .diversion-unit-large,
         .recycled-icon,
         .donut-arc.diversion,
         .donut-diversion-pct,
@@ -212,38 +127,129 @@
         .diversion-main-label{
             fill: var(--svGreen);
         }
-        .diversion-main-label{
+        .diversion-main-label, 
+        .diversion-pct-number,
+        .diversion-pct-unit{
             stroke: var(--svGreen);
-            stroke-width: 1.75px;
-            fill: transparent;
+            fill: none;
+        }
+        .donut-chart-bg{
+            fill: #fff;
+        }
+        .arrow-diversion{
+            fill: #98AD73;      /* Manually picked from gradient */
+        }
+        .main-title, 
+        .title-label{
+            font-size: 30px;
+        }
+        .main-subtitle,
+        .label.waste-stream,
+        .data-label.waste-stream{
+            font-size: 14px;
+        }
+
+        .label.waste-stream,
+        .data-label.waste-stream,
+        .diversion-label, 
+        .diversion-pct-number{
+            text-anchor: middle;
+        }
+        .diversion-headline,
+        .diversion-unit, 
+        .diversion-unit-large{
+            text-anchor: end;
+        }
+        .generation-headline-figure{
+            font-size: 80px;
+            text-anchor: end;
+            letter-spacing: -2px;
+        }
+        .generation-headline,
+        .waste-stream-headline,
+        .generation-unit,
+        .recovery-unit,
+        .landfill-unit{
+            font-size: 18px;
+        }
+        .generation-headline{
+            text-transform: uppercase;    
+            font-size: 40px;        
+        }
+        .recovery-headline{
+            font-size: 100px;
+            letter-spacing: -8px;
+        }
+        .landfill-label-bg{
+            opacity: 0.9;
+            display: none;
+        }
+        .main-title,
+        .main-subtitle,
+        .diversion-pct-unit,
+        .recovery.icon,
+        .recovery-headline,
+        .recovery-unit,
+        .landfill.icon,
+        .landfill-headline,
+        .landfill-unit{
+            dominant-baseline: hanging;
+        }
+        .landfill.icon,
+        .landfill-headline,
+        .landfill-unit{
+            mix-blend-mode: exclusion;
+        }
+        .main-title,
+        .title-label,
+        .recovery.icon,
+        .recovery-headline,
+        .recovery-unit,
+        .landfill.icon,
+        .landfill-headline,
+        .landfill-unit,
+        .diversion-headline,
+        .diversion-unit,
+        .diversion-label,
+        .diversion-pct-number,
+        .diversion-pct-unit,
+        .diversion-main-label,
+        .label.waste-stream,
+        .generation-headline-figure,
+        .generation-unit, 
+        .generation-headline{
+            font-weight: bold;
+        }
+        .landfill-headline,
+        .diversion-headline{
+            font-size: 60px;
+        }
+        .landfill-headline{
+            letter-spacing: -4px;
+        }
+        .diversion-headline{
+            letter-spacing: -2px;
+        }
+        .diversion-unit{
+            font-size: 20px;
+        }
+        .diversion-unit-large{
+            font-size: 36px;
         }
         .diversion-label{
             font-size: 10px;
-            font-weight: bold; 
-            text-anchor: middle;
-        }
-        .diversion-main-label{
-            font-size: 44px;
-            font-weight: bold;
-            letter-spacing: 1px
-        }
-        .diversion-pct-number,
-        .diversion-pct-unit{
-            font-weight: bold;
-            stroke:  var(--svGreen);
-            fill: none;
         }
         .diversion-pct-number{
             font-size: 150px;
             stroke-width: 4px;
             letter-spacing: -6px;
             dominant-baseline: middle;
-            text-anchor: middle;
         }
+        .diversion-main-label,
         .diversion-pct-unit{
             font-size: 44px;
-            stroke-width: 2px;
-            dominant-baseline: hanging;
+            letter-spacing: 1px;
+            stroke-width: 1.75px;
         }
 
         /*** VISUALS ELEMENTS ****/
@@ -270,15 +276,62 @@
             dominant-baseline: middle;
         }
         .vic-outline{
-            fill: #fff;
+            fill: #000;
             opacity: 0.1;
+        }
+
+        /**** DARK MODE ELEMENTS ******/
+        .dark .bg-rect,
+        .dark .donut-chart-bg{
+            fill: rgb(40, 40, 40);
+            mix-blend-mode: darken;
+        }
+    
+        .dark .vic-outline,
+        .dark .title-label,
+        .dark .waste-stream-headline,
+        .dark .label.waste-stream,
+        .dark .data-label.waste-stream,
+        .dark .icon.waste-stream,
+        .dark .generation-headline,
+        .dark .waste-stream-headline,
+        .dark .generation-unit,
+        .dark .landfill-label-bg, 
+        .dark .arrow-diversion{
+            fill: #fff;
+        }
+        .dark .landfill.icon,
+        .dark .landfill-headline,
+        .dark .landfill-unit{
+            fill: var(--campaign_gannarawwaPink);
+        }
+        .dark .main-title,
+        .dark .main-subtitle,
+        .dark .recovery.icon,
+        .dark .recovery-headline,
+        .dark .recovery-unit,
+        .dark .diversion-headline,
+        .dark .diversion-unit, 
+        .dark .diversion-unit-large,
+        .dark .recycled-icon,
+        .dark .donut-arc.diversion,
+        .dark .donut-diversion-pct,
+        .dark .diversion-label, 
+        .dark .diversion-main-label{
+            fill: var(--svGreen);
+        }
+        .dark .diversion-main-label, 
+        .dark .diversion-pct-number,
+        .dark .diversion-pct-unit{
+            stroke: var(--svGreen);
+            fill: none;
         }
 
         </style>
     </head>
 
     <body>
-        <div id = class = "svg-container">
+        <div class = "svg-container">
             <svg id = "summary-vis">
             </svg>
         </div>
@@ -333,13 +386,17 @@
             scales:                 {}, /// Object to hold flow width scales globally (noteL scales defined from parsed data in the renderVis() function )
             targets:                ['Local processing', 'Storage', 'Export', 'Landfill'],
             palette: {
-                collection:                         '#fff',
+                collection:                         'rgb(150, 150, 150)',
                 landfill:                           'var(--campaign_gannarawwaPink)',
                 diversionByStream: {
                     "Municipal solid waste":        'var(--svGreen)',
                     "Commercial and industrial":    'var(--svGreen)',
                     "Construction and demolition":  'var(--svGreen)'
                 },
+                gradients:      {
+                    diversion:      {},
+                    landfill:       {}                  
+                }
             },
 
             geometry: {         // Specified below relative to dims
@@ -522,37 +579,39 @@
                         nodeStartY  =  settings.geometry.streamNodeGroup.y
 
                     // b. Set up a gradient definition for each path (waste stream => destination)
-                    const linkGroup = linkLayer.append('g').classed('link-group', true),
-                        gradientDiv = linkGroup.append("linearGradient")
+                    const linkGroup = linkLayer.append('g').classed('link-group', true)
+
+                    settings.palette.gradients.diversion[streamName] = linkGroup.append("linearGradient")
                             .attr("id", `${helpers.slugify(streamName)}_link_diversion`)
                             .attr("gradientUnits", "userSpaceOnUse")
                             .attr("x1", diversionStartX)
-                            .attr("x2", settings.geometry.diversionCurveCentre.x),
-                        gradientLandfill = linkGroup.append("linearGradient")
+                            .attr("x2", settings.geometry.diversionCurveCentre.x)
+                    settings.palette.gradients.landfill[streamName] = linkGroup.append("linearGradient")
                             .attr("id", `${helpers.slugify(streamName)}_link_landfill`)
                             .attr("gradientUnits", "userSpaceOnUse")
                             .attr("x1", diversionStartX)
                             .attr("x2", settings.geometry.diversionCurveCentre.x)
 
-                    gradientDiv.append("stop")                                  // Start colour
+                    settings.palette.gradients.diversion[streamName].append("stop")                                  // Start colour
                         .attr("offset", "0%")
                         .attr("stop-color", settings.palette.collection);       // For collected waste => diversion
-                    gradientDiv.append("stop")                                  // Start colour
-                        .attr("offset", "40%")
+                    settings.palette.gradients.diversion[streamName].append("stop")                                  // Start colour
+                        .attr("offset", "10%")
                         .attr("stop-color", settings.palette.collection);       // For collected waste => diversion
-                    gradientLandfill.append("stop")
+                    settings.palette.gradients.landfill[streamName].append("stop")
                         .attr("offset", "0%")
                         .attr("stop-color", settings.palette.collection);       // For collected waste => landfill                    
-                    gradientDiv.append("stop")                                  // End colour
+                    settings.palette.gradients.diversion[streamName].append("stop")                                  // End colour
                         .attr("offset", "100%")
                         .attr("stop-color", settings.palette.diversionByStream[streamName]);      // For diversion
-                    gradientLandfill.append("stop")
+                    settings.palette.gradients.landfill[streamName].append("stop")
                         .attr("offset", "100%")
                         .attr("stop-color", settings.palette.landfill);                    // Colour for landfill
 
                     // c. Set up an arrow marker (as an SVG def) for flow
                     defs.append('marker')
                         .attr('id', `arrow-diversion-${slugStreamName}`)
+                        .classed('arrow-diversion', true)
                         .attr('viewBox', [0, 0, 200, 200])
                         .attr('refX', 10)
                         .attr('refY', 10)
@@ -562,10 +621,10 @@
                         .classed(`marker diversion-flow ${slugStreamName}` , true)
                         .append('path')
                             .attr('d', d3.line()([[10, 0], [10, 20], [25, 10]]))
-                            .style('fill', '#fff')
 
                     defs.append('marker')
                         .attr('id', `arrow-landfill-${slugStreamName}`)
+                        .classed('arrow-landfill', true)
                         .attr('viewBox', [0, 0, 200, 200])
                         .attr('refX', 0)
                         .attr('refY', 10)
@@ -574,7 +633,6 @@
                         .classed(`marker landfill-flow ${slugStreamName}` , true)
                         .append('path')
                             .attr('d', d3.line()([[0, 0], [0, 20], [20, 10]]))
-                            .style('fill', settings.palette.landfill)
 
                     // d. Append the landfill and diversion paths, with gradient and marker!             
                     linkGroup.append('path').attr('id', `flow-landfill-${slugStreamName}` )
@@ -675,9 +733,9 @@
             // 5. ADD TOTAL GENERATION HEADLINE AND WASTE STREAM SECTION (top left)
                 // i. Headline generation group
                 const totalGenUnit = totalsGenLayer.append('text').classed('generation-unit', true)
-                    .text(`Victorian's generated ${helpers.numberFormatters.formatComma1dec(d3.sum([dataset.byStream.Total.Diverted, dataset.byStream.Total.Landfilled])/1000)} million tonnes of waste across three waste streams`)
+                    .text(`Victorians generated ${helpers.numberFormatters.formatComma1dec(d3.sum([dataset.byStream.Total.Diverted, dataset.byStream.Total.Landfilled])/1000)} million tonnes of waste across three waste streams`)
                     .attr('x', 0).attr('y', 0).attr('dy', 0)
-                    .call(helpers.wrap, 320, 1)
+                    .call(helpers.wrap, 325, 1)
 
                 // ii. For each waste stream: 
                 settings.streamOrder.forEach((streamName, i) => {
@@ -755,6 +813,44 @@
                     .attr('x', 50)
                     .attr('y', 60)
         };
+
+
+        // Toggle dark theme with spacebar
+        document.body.onkeyup = function(e){
+            if(e.keyCode == 32){
+                d3.selectAll(`.svg-container`).classed("dark", !d3.selectAll('.svg-container').classed("dark"))
+
+                // Update flow gradients
+                const collectionColor = d3.selectAll(`.svg-container`).classed("dark") ? '#fff' : settings.palette.collection
+
+                settings.streamOrder.forEach((streamName, i) => {
+                    // Remove then re-specify gradient stops
+                    settings.palette.gradients.diversion[streamName].selectAll('stop').remove()
+                    settings.palette.gradients.landfill[streamName].selectAll('stop').remove()
+                    
+                    settings.palette.gradients.diversion[streamName].append("stop")                                  // Start colour
+                        .attr("offset", "0%")
+                        .attr("stop-color", collectionColor);       // For collected waste => diversion
+                    settings.palette.gradients.diversion[streamName].select('stop')
+                        .append("stop")                                  // Start colour
+                        .attr("offset", "10%")
+                        .attr("stop-color", collectionColor);       // For collected waste => diversion
+                    settings.palette.gradients.landfill[streamName].append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", collectionColor);       // For collected waste => landfill                    
+                    settings.palette.gradients.diversion[streamName].append("stop")                                  // End colour
+                        .attr("offset", "100%")
+                        .attr("stop-color", settings.palette.diversionByStream[streamName]);      // For diversion
+                    settings.palette.gradients.landfill[streamName].append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", settings.palette.landfill);                    // Colour for landfill
+                })
+
+            }
+        }
+
+
+
 
 
 
