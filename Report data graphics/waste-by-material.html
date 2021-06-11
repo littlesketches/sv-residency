@@ -317,7 +317,7 @@
 
         async function renderMaterialVis(data, settings){
             // 0. Re-shape chartData (for better clarity when defining data binding accessors) and setup geometry
-                const chartData = []
+                let chartData = []
                 Object.entries(data).sort().forEach(([material, d]) => {
                     chartData.push({
                         material,
@@ -328,7 +328,9 @@
                         total:          d.diverted + d.landfill,
                     })
                 })
-
+console.log(chartData)
+chartData = chartData.sort((a,b) => b.total - a.total )
+console.log(chartData)
                 // Setup geometry
                 settingsRadial.geometry.circlePos = {
                     x: settingsRadial.dims.width * 0.70, 
@@ -450,7 +452,7 @@
 
                 annotationLayer.append('text').classed('main-title', true)
                     .attr('transform', `translate(${settings.dims.margin.left} , ${settings.dims.margin.top})`)
-                    .text(`What materials did Victorian's recycle in ${settings.year}?`)
+                    .text(`What materials did Victorian's recover in ${settings.year}?`)
 
             // 5. Add a curved labels for diversion radial chart 
                 chartData.forEach((d, i) => {
@@ -506,7 +508,7 @@
                     .classed('radialBar-subtitle-label text-on-path' , true)
                     .append('textPath').attr("xlink:href", "#radialBar-label-path")
                         .attr('startOffset', '50%')
-                        .text(`- comparing recycling rates for Victorian waste materials in ${settings.year}`)	
+                        .text(`- comparing recovery rates for Victorian waste materials in ${settings.year}`)	
         };
 
         // Toggle dark theme with spacebar
@@ -520,8 +522,6 @@
         ////////////////////////////////////
         /// X. HELPER FUNCTIONS |        ///
         ////////////////////////////////////
-
-
 
 
             // ANIMATION HELPERS: FOR PLAY/TESTING ONLY
