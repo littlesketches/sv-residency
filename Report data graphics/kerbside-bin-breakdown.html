@@ -98,6 +98,9 @@
                 dominant-baseline: middle;
                 text-anchor: end;
             }
+            .recycling{
+                fill: var(--chartYellow );
+            }
             .paper{
                 fill: var(--chartTeal );
             }
@@ -109,6 +112,11 @@
             }
             .glass{
                 fill: var(--chartPurple)
+            }
+            .bin-outline{
+                stroke: #000;
+                stroke-width: 0.5px;
+                stroke-linejoin: round;
             }
         </style>
     </head>
@@ -277,6 +285,12 @@
                     data.schema.list.kerbsideRecycleMaterialGroups.forEach (group => {
                         recycleBinChartData.push({ group,  volume: d3.sum(recycleBinData.filter(d => d.group === group).map(d => d.volume)) })
                     })
+                    // Add Background bin body
+                    recyclingBreakdownChart.append('path')
+                        .attr('d', icons.binBody)
+                        .attr('transform', `translate(${0} , ${0})  scale(${recycleBinScale})`)
+                        .classed('bin-outline', true)
+
                     // Add each material group
                     recycleBinChartData.forEach((d, i) => {
                         const material = d.group,
@@ -312,6 +326,7 @@
                     recyclingBreakdownChart.append('path')
                         .attr('d', icons.binLid)
                         .attr('transform', `translate(${0} , ${0})  scale(${recycleBinScale})`)
+                        .classed('recycling', true)
 
         };
 
