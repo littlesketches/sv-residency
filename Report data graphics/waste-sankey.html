@@ -7,6 +7,103 @@
     <meta name="description" content="">
 
     <style>
+        /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
+            :root {
+                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+                --svGreen:                       #9ACA3C;
+                /** SECONDARY PALLETTE **/
+                --secondaryGreenLight:           #D5E0A1;
+                --secondaryBottleGreen:          #174F37;
+                --secondaryBottleGreenLight:     #79B5AA;
+                --secondaryGrey:                 #B1B1B0;
+                --secondaryGreyLight:            #CFCFCF;
+                --secondaryGreyLightest:         #ECECEC;
+                /** TERTIARY PALETTE **/
+                --tertiaryPurple:       #51284F;
+                --tertiaryPurpleLight:  #8276B3;
+                --tertiaryRed:          #E04F39;
+                --tertiaryRedLight:     #F78684;
+                --tertiaryYellow:       #EFC041;
+                --tertiaryYellowLight:  #F5E065;
+                --tertiaryCard:         #B39981;
+                --tertiaryCardLight:    #DCBFA6;
+                --tertiaryEmerald:      #009E71;
+                --tertiaryEmeraldLight: #93CCB9;
+                --tertiaryBlue:         #005E88;
+                --tertiaryBlueLight:    #A0D6E9;
+            }
+
+        /***************************************/
+        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+        /***************************************/
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 100;
+                font-style: ultraLight;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: light;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-weight: 400;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                font-weight: 500;
+                font-style: medium;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                font-weight: 800;
+                font-style: heavy;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            body{
+                font-family: 'DIN Next LT Pro';
+                margin: 0;
+            }
+
         /* COLOUR PALETTES */
         :root {
             /** OLD BRAND GUIDELINES **/
@@ -76,22 +173,23 @@
         text { 
             font-family: 'DIN Next LT Pro';
         }
+
         .main-title{
             font-size: 30px;
-            font-weight: bold;
-            fill: var(--chartEmerald);
+            font-weight: 600;
+            fill: var(--secondaryBottleGreen);
             dominant-baseline: 'hanging'
         }
         .main-subtitle{
             font-size: 14px;
-            fill: var(--chartEmerald);
-            dominant-baseline: 'hanging'
+            fill: var(--secondaryBottleGreen);
+            dominant-baseline: 'hanging';
+            font-weight: 400;
         }
         .material-icon, 
         .material-label{
             fill: #fff
         }
-
         rect.destination,
         rect.product{
             fill: none;
@@ -101,78 +199,78 @@
         path.paper-and-paperboard.landfill-icon,
         path.paper-and-paperboard.donut-arc.diversion,
         text.paper-and-paperboard.donut-diversion-pct{
-            fill: var(--campaign_otwaysGreenLight);
+            fill: var(--tertiaryYellow);
         }
         rect.paper-and-paperboard,
         path.flow-link.paper-and-paperboard{
-            stroke: var(--campaign_otwaysGreenLight );
+            stroke: var(--tertiaryYellow );
         }
         rect.plastic-packaging.material,
         path.plastic-packaging.landfill-icon,
         path.plastic-packaging.donut-arc.diversion,
         text.plastic-packaging.donut-diversion-pct{
-            fill: var(--campaign_gannarawwaPinkLight);
+            fill: var(--tertiaryRedLight);
         }
         rect.plastic-packaging,
         path.flow-link.plastic-packaging{
-            stroke: var(--campaign_gannarawwaPinkLight);
+            stroke: var(--tertiaryRedLight);
         }
         rect.metal-packaging.material,
         path.metal-packaging.landfill-icon,
         path.metal-packaging.donut-arc.diversion,
         text.metal-packaging.donut-diversion-pct{
-            fill: var(--campaign_queenscliffeMarineLight);
+            fill: var(--tertiaryBlueLight);
         }
         rect.metal-packaging,
         path.flow-link.metal-packaging{
-            stroke: var(--campaign_queenscliffeMarineLight);
+            stroke: var(--tertiaryBlueLight);
         }
         rect.glass-packaging.material,
         path.glass-packaging.landfill-icon,
         path.glass-packaging.donut-arc.diversion,
         text.glass-packaging.donut-diversion-pct{
-            fill: var(--chartPurple)
+            fill: var(--tertiaryPurpleLight)
         }
         rect.glass-packaging,
         path.flow-link.glass-packaging{
-            stroke: var(--chartPurple)
+            stroke: var(--tertiaryPurpleLight)
         }
         rect.organics.material,
         path.organics.landfill-icon,
         path.organics.donut-arc.diversion,
         text.organics.donut-diversion-pct{
-            fill: var(--chartOrange);
+            fill: var(--tertiaryEmeraldLight);
         }
         rect.organics,
         path.flow-link.organics{
-            stroke: var(--chartOrange);
+            stroke: var(--tertiaryEmeraldLight);
         }
         rect.aggregates-masonry-soil.material,
         path.aggregates-masonry-soil.landfill-icon,
         path.aggregates-masonry-soil.donut-arc.diversion,
         text.aggregates-masonry-soil.donut-diversion-pct{
-            fill: var(--secondary_meredithGold);
+            fill: var(--tertiaryCard);
         }
         rect.aggregates-masonry-soil,
         path.flow-link.aggregates-masonry-soil{
-            stroke: var(--secondary_meredithGold);
+            stroke: var(--tertiaryCard);
         }
         rect.rubber.material,
         path.rubber.landfill-icon,
         path.rubber.donut-arc.diversion,
         text.rubber.donut-diversion-pct{
-            fill: var(--chartTeal);
+            fill: var(--secondaryGrey);
         }
         rect.rubber,
         path.flow-link.rubber{
-            stroke: var(--chartTeal);
+            stroke: var(--secondaryGrey);
         }
 
         .product-label,
         .destination-label,
         .material-label{
             font-size: 10px;
-                font-weight: bold;
+            font-weight: 500;
             dominant-baseline: hanging;
         }
         .product-label,
@@ -186,7 +284,7 @@
             font-size: 12px;
         }
         .material-data.data-label{
-            font-weight: bold;
+            font-weight: 500;
             fill: #fff;
         }
         .data-label{
@@ -199,12 +297,11 @@
         }
         .flow-link{
             fill:   none;
-            stroke: rgba(0, 0, 0, 0.5);
         }
         .donut-arc{
             stroke: #fff;
             stroke-width: 0.5px;
-            fill: #cfcfcf;
+                fill: var(--secondaryGreyLightest);
         }
         .donut-diversion-pct{
             font-size: 10px;
@@ -284,6 +381,7 @@
                     } 
                 })
             })
+
             // 2. Extract lists 
             data.list.material = [...new Set(materialData.filter(d => d.level ===1).map(d => d.source))]
             data.list.destination = [...new Set(materialData.filter(d => d.level ===1).map(d => d.target))]
@@ -321,6 +419,7 @@
                         } 
                     )
             })
+
             // 3c. Shape data by type: End products
             data.list.product.forEach( product => {                             // For each unique (end) product...
                 materialData
@@ -331,6 +430,7 @@
                         }
                     )
             })
+
             // 4. Store material data
             data.inputData.material = materialData
         };

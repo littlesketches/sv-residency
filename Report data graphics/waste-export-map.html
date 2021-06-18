@@ -7,58 +7,43 @@
     <meta name="description" content="">
 
     <style>
-        /* COLOUR PALETTES */
-        :root {
-            /** OLD BRAND GUIDELINES **/
-            --svGreen:                            #9ACA3C;
-            --gippslandGreen:                     #CED99E;
-            --secondary_greatOceanBlue:           #0070BB;
-            --secondary_hepburnClay:              #9B0B32;
-            --secondary_meredithGold:             #E3BA5A;
-            --campaign_corrangamiteEggplant:      #550055;
-            --campaign_corrangamiteEggplantLight: #B273B2;
-            --campaign_gannarawwaPink:            #D00236;
-            --campaign_gannarawwaPinkLight:       #EE5F83;
-            --campaign_surfCoastTeal:             #00848F;
-            --campaign_surfCoastTealLight:        #47ABB4;
-            --campaign_queenscliffeMarine:        #0A3055;
-            --campaign_queenscliffeMarineLight:   #7991A9;
-            --campaign_milduraOrange:             #D3410B;
-            --campaign_milduraOrangeLight:        #F2855D;
-            --campaign_otwaysGreen:               #008848;
-            --campaign_otwaysGreenLight:          #8DBF87;
-            --monochrome_youYangsGranite:         #B2B2B2;
-            --monochrome_lakeMountainMorning:     #CCCCCC;
-            --monochrome_mtBullaMist:             #E5E5E5;
-            /** NEW BRAND GUIDELINES **/
-            --chartLightGreen:  #cbe197;
-            --chartGray:        #b1b1b0;
-            --chartTeal:        #52baba;
-            --chartEmerald:     #00502e;
-            --chartPowderBlue:  #9bddfa;
-            --chartGreen:       #77bf00;
-            --chartDarkGreen:   #009857;
-            --chartOrange:      #cea98d;
-            --chartBlue:        #00568f;
-            --chartPurple:      #816bb4;
-            --chartLightGrey:   #cfcfcf;
-            --chartYellow:      #ffd300;
-        }
-        body{
-            margin: 0;
-        }
+        /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
+            :root {
+                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+                --svGreen:                       #9ACA3C;
+                /** SECONDARY PALLETTE **/
+                --secondaryGreenLight:           #D5E0A1;
+                --secondaryBottleGreen:          #174F37;
+                --secondaryBottleGreenLight:     #79B5AA;
+                --secondaryGrey:                 #B1B1B0;
+                --secondaryGreyLight:            #CFCFCF;
+                --secondaryGreyLightest:         #ECECEC;
+                /** TERTIARY PALETTE **/
+                --tertiaryPurple:       #51284F;
+                --tertiaryPurpleLight:  #8276B3;
+                --tertiaryRed:          #E04F39;
+                --tertiaryRedLight:     #F78684;
+                --tertiaryYellow:       #EFC041;
+                --tertiaryYellowLight:  #F5E065;
+                --tertiaryCard:         #B39981;
+                --tertiaryCardLight:    #DCBFA6;
+                --tertiaryEmerald:      #009E71;
+                --tertiaryEmeraldLight: #93CCB9;
+                --tertiaryBlue:         #005E88;
+                --tertiaryBlueLight:    #A0D6E9;
+            }
 
-        /****************************/
-        /*** IMPORTED FONTS       ***/
-        /****************************/
+        /***************************************/
+        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+        /***************************************/
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Bold.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
-                font-weight: 700;
-                font-style: normal;
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 100;
+                font-style: ultraLight;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
@@ -67,63 +52,107 @@
                     url('fonts/DINNextLTPro-Light.woff') format('woff'),
                     url('fonts/DINNextLTPro-Light.ttf') format('truetype');
                 font-weight: 300;
+                font-style: light;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-weight: 400;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 200;
-                font-style: light;
+                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                font-weight: 500;
+                font-style: medium;
             }
-
-
-            /***************************/
-            /*****  TYPOGRAPHY       ***/
-            /***************************/
-
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                font-weight: 800;
+                font-style: heavy;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
             body{
                 font-family: 'DIN Next LT Pro';
+                margin: 0;
             }
 
-            /***************************/
-            /*****  GENERAL STYLING  ***/
-            /***************************/
+        /******************************/
+        /*** VISUALISATION STYLING  ***/
+        /******************************/
+        .main-title,
+        .main-subtitle,
+        .total-exports-label,
+        .total-exports-vol,
+        .total-material-name,
+        .total-exports-chart-label,
+        .total-material-vol, 
+        .total-exports-total,
+        .state.victoria, 
+        .country-label,
+        .country-label-pct, 
+        .infopane-group text,
+        .infopane-group .total-bar,
+        .infopane-group .material-bar, 
+        .total-bar.all-exports,
+        .total-material-bar{
+            fill: var(--secondaryBottleGreen);
+        }
         .main-title{
-            font-size: 30px;
-            font-weight: bold;
-            fill: var(--chartEmerald);
-            dominant-baseline: 'hanging';
-            mix-blend-mode: multiply;
+            font-size: 40px;
+            font-weight: 600;
+            dominant-baseline: hanging;
+            mix-blend-mode: darken;
         }
         .main-subtitle{
-            font-size: 14px;
-            fill: var(--chartEmerald);
-            dominant-baseline: 'hanging';
-            mix-blend-mode: multiply;
+            font-size: 16px;
+            font-weight: 500;
+            dominant-baseline: hanging;
+            mix-blend-mode: darken;
         }
         .total-exports-label{
             font-size: 16px;
-            font-weight: bold;
-            fill: var(--chartEmerald);
+            font-weight: 600;
         }
         .total-exports-vol{
             font-size: 16px;
             font-weight: bold;  
             text-anchor: end;
-            fill: var(--chartEmerald);
         }
         .total-material-name{
             font-size: 12px;
-            font-weight: bold;
-            fill: var(--chartEmerald);
+            font-weight: 500;
         }
         .total-exports-chart-label,
         .total-material-vol{
             font-size: 10px;
-            fill: var(--chartEmerald);
         }
         .total-material-vol{
             text-anchor: end;
@@ -131,28 +160,23 @@
         .total-exports-total{
             font-size: 30px;
             font-weight: bold;
-            /* stroke: var(--chartEmerald); */
             stroke-width: 0.75px;
-            fill: transparent; 
-            fill: var(--chartTeal)  
+            fill: rgba(255, 255, 255, 0.8); 
+            stroke: var(--secondaryBottleGreen);
        }
         .state,
         .country{
-            fill: var(--monochrome_mtBullaMist);
+            fill: var(--secondaryGreyLightest);
             stroke: #fff;
             stroke-width: 0.5px;
         }
         .country.export-country{
-            fill: var(--chartTeal)
-        }
-        .state.victoria{
-            fill: var(--chartEmerald);
+            fill: var(--secondaryBottleGreenLight)
         }
         .country-label,
         .country-label-pct{
-            fill: var(--chartEmerald);
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 500;
             text-anchor: middle;
             dominant-baseline: middle;
             text-shadow: 2px 2px 5px #fff;
@@ -162,21 +186,13 @@
         }
         .export-connector{
             stroke-width: 1;
-            stroke: var(--chartEmerald);
-            stroke: var(--chartTeal);
+            stroke: var(--secondaryBottleGreenLight);
             mix-blend-mode: multiply;
             fill: none;
         }
         .info-page-bg{
-            fill: var(--chartEmerald);
-            fill: var(--chartTeal);
+            fill: var(--secondaryBottleGreenLight);
             opacity: 0.15;
-        }
-        .infopane-group text,
-        .infopane-group .total-bar,
-        .infopane-group .material-bar{
-            fill: #fff;
-            fill: var(--chartEmerald);
         }
         .info-page-header{
             font-size: 18px;
@@ -186,7 +202,7 @@
             font-size: 8px;
         }
         .country-total-vol{
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
         }
         .country-total-vol,
@@ -195,17 +211,14 @@
             text-anchor: end
         }
         .country-list-name{
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
         }
         .country-material-vol,
         .country-material-name{
-            font-size: 9px;
+            font-size: 6.5px;
         }
-        .total-bar.all-exports,
-        .total-material-bar{
-            fill: var(--chartEmerald);
-        }
+
   </style>
 </head>
 
@@ -488,13 +501,12 @@
                             }
                         })
                     }
-
                     // Update start y pos for next country group
                     countryGroupYpos += countryGroup.node().getBBox().height + 10
                 })
 
             // 6. ADD ANNOTATION
-            const titleMargin = {left: 30, top: 40}
+            const titleMargin = {left: 30, top: 30}
             // a. Main title
             titles.append('text').classed('main-title', true)
                 .attr('x', titleMargin.left)
@@ -503,7 +515,7 @@
                 .text(`Victorian recycled material exports`)
             titles.append('text').classed('main-subtitle', true)
                 .attr('x', titleMargin.left)
-                .attr('y', titleMargin.top + 20)
+                .attr('y', titleMargin.top + 35)
                 .attr('dy', 0)
                 .text(`a breakdown by export country and materials in ${settings.year}`)
 

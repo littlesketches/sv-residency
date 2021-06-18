@@ -7,7 +7,7 @@
     <meta name="description" content="">
 
     <style>
-            /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
+        /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
                 /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
                 --svGreen:                       #9ACA3C;
@@ -109,39 +109,89 @@
             .main-title{
                 font-size: 30px;
                 font-weight: bold;
-                fill: var(--secondaryBottleGreen);
+                fill: var(--chartEmerald);
                 dominant-baseline: 'hanging';
                 mix-blend-mode: multiply;
             }
             .main-subtitle{
                 font-size: 14px;
-                fill: var(--secondaryBottleGreen);
+                fill: var(--chartEmerald);
                 dominant-baseline: 'hanging';
                 mix-blend-mode: multiply;
             }
             .lga-base{
                 fill: none;
+                stroke: #FFF;
                 stroke-width: 0.25px;
                 cursor: pointer;
             }
-            .lga-base.showStroke{
-                stroke: #fff;
-            }
             .wrrg-infoPane-background{
-                mix-blend-mode: color-dodge;
-                fill: var(--secondaryGreyLight);
+                mix-blend-mode: multiply
             }
             .wrrg-infoPane-divider{
                 stroke:#000;
                 stroke-width: 0.5px
             }
+            .wrrg-infoPane-background.barwon-south-west-waste-and-resource-recovery-group,
+            .diversion.barwon-south-west-waste-and-resource-recovery-group,
+            .lga-base.barwon-south-west-waste-and-resource-recovery-group{
+                fill: var(--secondaryGreenLight);
+            }
+            .lga-base.barwon-south-west-waste-and-resource-recovery-group{
+                stroke: var(--secondaryGreenLight);
+            }
+            .wrrg-infoPane-background.gippsland-waste-and-resource-recovery-group,
+            .diversion.gippsland-waste-and-resource-recovery-group,
+            .lga-base.gippsland-waste-and-resource-recovery-group{
+                fill: var(--tertiaryRedLight);
+            }
+            .lga-base.gippsland-waste-and-resource-recovery-group{
+                stroke: var(--tertiaryRedLight);
+            }
+            .wrrg-infoPane-background.goulburn-valley-waste-and-resource-recovery-group,
+            .diversion.goulburn-valley-waste-and-resource-recovery-group,
+            .lga-base.goulburn-valley-waste-and-resource-recovery-group{
+                fill: var(--tertiaryCard);
+            }
+            .lga-base.goulburn-valley-waste-and-resource-recovery-group{
+                stroke: var(--tertiaryCard);
+            }
+            .wrrg-infoPane-background.grampians-central-west-waste-and-resource-recovery-group,
+            .diversion.grampians-central-west-waste-and-resource-recovery-group,
+            .lga-base.grampians-central-west-waste-and-resource-recovery-group{
+                fill: var(--tertiaryYellow);
+            }
+            .lga-base.grampians-central-west-waste-and-resource-recovery-group{
+                stroke: var(--tertiaryYellow);
+            }
+            .wrrg-infoPane-background.loddon-mallee-waste-and-resource-recovery-group,
+            .diversion.loddon-mallee-waste-and-resource-recovery-group,
+            .lga-base.loddon-mallee-waste-and-resource-recovery-group{
+                fill: var(--tertiaryBlueLight);
+            }
+            .lga-base.loddon-mallee-waste-and-resource-recovery-group{
+                stroke: var(--tertiaryBlueLight);
+            }
+            .wrrg-infoPane-background.metropolitan-waste-and-resource-recovery-group,
+            .diversion.metropolitan-waste-and-resource-recovery-group,
+            .lga-base.metropolitan-waste-and-resource-recovery-group{
+                fill: var(--tertiaryPurpleLight);
+            }
+            .lga-base.metropolitan-waste-and-resource-recovery-group{
+                stroke: var(--tertiaryPurpleLight);
+            }
+            .wrrg-infoPane-background.north-east-waste-and-resource-recovery-group,        
+            .lga-base.north-east-waste-and-resource-recovery-group,
+            .diversion.north-east-waste-and-resource-recovery-group{
+                fill: var(--tertiaryEmeraldLight);
+            }
+            .lga-base.north-east-waste-and-resource-recovery-group{
+                stroke: var(--tertiaryEmeraldLight);
+            }
             .donut-arc{
                 stroke: #fff;
-                stroke-width: 0.5px;
-                fill: var(--secondaryGrey);
-            }
-            .donut-arc.diversion{
-                fill: var(--svGreen );       
+                stroke-width: 1px;
+                fill: var(--secondaryGreyLight);
             }
             .donut-diversion-pct{
                 font-size: 10px;
@@ -158,7 +208,6 @@
                 font-size: 8px; 
                 pointer-events: none;
                 fill: #000;
-                mix-blend-mode: luminosity;
             }
             .donut-diversion-pct,
             .wrrg-icon,
@@ -280,7 +329,7 @@
         const data = {
             schema: {
                 list: {
-                    collection: ['Garbage', 'Recyclables', 'Organics', 'Glass'],
+                    collection: ['Garbage', 'Recyclables', 'Organics'],
                     chain:      ['collected', 'processed']
                 }
             },
@@ -293,7 +342,7 @@
         /////////////////////////////////////////////////////////////////////////////////
 
         Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/',
+            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
             callback: async(loadedData) => {
                 // 1. Parse WRRG Data
                 await parseData(loadedData.byWRRG.elements)
@@ -377,6 +426,7 @@
                 'Garbage':                      'M3.718-24.992a65.18 65.18 0 00-1.614.052c-4.29.192-8.35.864-10.276 1.701-2.309 1.005-5.126 1.734-7.707 4.375a.694.694 0 00-.174.66c-.042.15-.07.303-.07.468v3.61c0 .33.082.633.261.903.18.27.502.52.92.52h1.91v25.136a6.693 6.693 0 00-3.472 5.867c0 3.697 3.01 6.7 6.7 6.7a6.703 6.703 0 005.295-2.604H7.416c2.207 0 3.953-1.643 4.08-3.68l1.943-31.418h1.945c.417 0 .758-.25.937-.521.179-.27.26-.574.26-.903v-3.61c0-.33-.081-.632-.26-.903-.18-.27-.52-.52-.937-.52h-1.007l-.295-2.882c-.028-.275-.078-.536-.226-.799-.1-.177-.312-.357-.555-.468-1.882-1.175-4.822-1.62-7.985-1.684-.528-.011-1.06-.01-1.597 0zm.018 1.406c3.65-.027 7.173.421 8.835 1.458a.694.694 0 00.087.035c.015.043.042.091.052.19l.278 2.743h-26.35c1.869-1.354 3.823-1.976 5.745-2.812 1.477-.642 5.616-1.393 9.79-1.58.522-.023 1.041-.03 1.563-.034zm10.38 5.815h1.059c.005.019.017.013.017.035v3.61c0 .022-.015.018-.017.035h-29.909v-3.593h28.485a.694.694 0 00.364-.087zm-25.76 5.069H12.05l-1.944 31.331c-.081 1.307-1.152 2.379-2.69 2.379H-3.678a6.64 6.64 0 00.573-2.708v-.018a6.662 6.662 0 00-.52-2.586v-.017a6.679 6.679 0 00-1.007-1.632c0-.005.005-.014 0-.017a6.8 6.8 0 00-.92-.903 6.691 6.691 0 00-4.253-1.545c-.162 0-.33.021-.486.035-.066.006-.126.01-.191.017-.04.006-.082.013-.122.017-.07.01-.137.022-.208.035a6.75 6.75 0 00-.833.173v-24.562zm1.84 25.673c.184 0 .36.017.538.034.358.036.709.106 1.042.209.832.257 1.57.72 2.17 1.319.064.064.13.123.19.19.053.06.106.114.157.174.005.006-.006.014 0 .018.212.259.411.536.572.833v.017c.16.297.298.61.4.937v.018c.1.328.172.671.208 1.024v.017c.017.174.034.343.034.52V18.334c0 .173-.017.336-.034.504-.01.09-.02.188-.035.278v.017a5.504 5.504 0 01-.07.347v.034c-.028.125-.066.244-.104.365v.017c-.032.105-.082.21-.121.313-.009.021-.01.047-.017.069-.014.033-.022.071-.035.104-.037.087-.08.16-.122.243-.034.072-.066.139-.104.209-.026.047-.06.092-.087.138a5.345 5.345 0 01-.208.33.694.694 0 00-.035.07.694.694 0 00-.035.052 5.292 5.292 0 01-4.304 2.204 5.314 5.314 0 01-5.312-5.329 5.326 5.326 0 012.916-4.756h.017a.694.694 0 00.14-.052 5.604 5.604 0 011.075-.382 5.083 5.083 0 011.163-.139zm0 1.44a3.902 3.902 0 00-3.888 3.889 3.902 3.902 0 003.888 3.888A3.902 3.902 0 00-5.916 18.3a3.902 3.902 0 00-3.888-3.888zm0 1.39c1.385 0 2.5 1.111 2.5 2.499 0 1.388-1.115 2.5-2.5 2.5a2.492 2.492 0 01-2.5-2.5c0-1.388 1.115-2.5 2.5-2.5z',
             }
 
+
         // 2. SPECIFY MAP PROJECTION AND MAP PROJECTION PATH GENERATOR
             const projection = settings.geometry.projection,				   // Specify map projection type
                 path = d3.geoPath().projection(projection)                     // Path generator function
@@ -384,13 +434,6 @@
                 .translate([settings.dims.width * settings.geometry.translationPctX,  settings.dims.height * settings.geometry.translationPctY])
                 .scale(settings.geometry.projectionScale)
                 .center([settings.geometry.centerLong, settings.geometry.centerLat]);
-
-        // 3. COLOUR SCALE
-            const diversionRate = {}
-            data.schema.list.wrrg.forEach( wrrg => diversionRate[wrrg] = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)) )
-            const wrrgColor = d3.scaleLinear()
-                .domain(d3.extent(Object.values(diversionRate)) )
-                .range(['#D5E0A1', '#174F37'])
 
         // 3. ADD VICTORIAN LGA MAP SHAPE: this is a base layer with no fill but with an outline
             lgas.selectAll('path')
@@ -403,8 +446,6 @@
                         className +=  typeof(lgaNameWrrgMap[d.properties.vic_lga__3]) !== 'undefined' ? helpers.slugify(lgaNameWrrgMap[d.properties.vic_lga__3]) : '' 
                         return className
                     })
-                    .style('fill',  d => wrrgColor(diversionRate[lgaNameWrrgMap[d.properties.vic_lga__3]]) )
-                    .style('stroke', d =>  wrrgColor(diversionRate[lgaNameWrrgMap[d.properties.vic_lga__3]]) )
                     .on('mouseover', onWrrgMouseover)
                     .on('mouseout', onWrrgMouseout)
 
@@ -429,20 +470,20 @@
                     .text(d => d.vic_lga__3)
                     .style('opacity', 0)        // Set as invisible
 
+
         // 5. EVENT LISTENERS
             function onWrrgMouseover(){
                 const wrrgClass  = this.classList[2]  
                 d3.selectAll(`.lga-label.${wrrgClass}`).style('opacity', null)            // Show label           
                 d3.selectAll(`.lga-base:not(.${wrrgClass})`).style('opacity', 0.2)        // Focus on the LGA (lower opacity of other LGA shapes)
-                    .classed('showStroke', true)  
             }
             function onWrrgMouseout(){
                 d3.selectAll(`.lga-label`).style('opacity', 0)          // Hide labels
                 d3.selectAll(`.lga-base`).style('opacity', null)        // Return LGA shapes to full opacity
-                    .classed('showStroke', false)  
             }
 
         // 6.  ADD INFO PANES BY WRRG
+
             data.schema.list.wrrg.forEach( wrrg => {
                 let headerLines
                 const garbageOffset = 90,
@@ -497,9 +538,11 @@
                     .attr('x', 0).attr('y', 0).attr('dy', 0)
                     .call(helpers.wrap, 200, 1.1)
 
-                // d. Diversion rate donut chart and labels group
-                const labelGroup = wrrgPane.append('g').attr('transform', `translate(${10} , ${0})`)
-                renderDonut(labelGroup, {x: 20, y: 50}, {r: 20  }, {pct: diversionRate[wrrg], materialClass:  helpers.slugify(wrrg)} )
+                const diversionRate = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)),
+                    labelGroup = wrrgPane.append('g')
+                        .attr('transform', `translate(${10} , ${0})`)
+ 
+                renderDonut(labelGroup, {x: 20, y: 50}, {r: 20  }, {pct: diversionRate, materialClass:  helpers.slugify(wrrg)} )
                 labelGroup.append('text').classed('wrrg-infoPane-label ', true)
                     .attr('transform', `translate(${0} , ${80})`)
                     .text('Diversion')
@@ -510,7 +553,6 @@
                     .attr('transform', `translate(${0} , ${125})`)
                     .text('Processed')
 
-                // e. Garbage group
                 const garbageGroup = wrrgPane.append('g')
                         .attr('transform', `translate(${garbageOffset} , ${0})`)
                 garbageGroup.append('path').classed('wrrg-icon garbage', true)
@@ -523,7 +565,6 @@
                     .attr('transform', `translate(${20} , ${110})`)
                     .text(`${helpers.numberFormatters.formatComma(data.byWRRG[wrrg]['Garbage'].collected)} t`)
 
-                // f. Recyclables group
                 const recyclablesGroup = wrrgPane.append('g')
                     .attr('transform', `translate(${recyclablesOffset} , ${0})`)
                 recyclablesGroup.append('path').classed('wrrg-icon garbage', true)
@@ -539,7 +580,6 @@
                     .attr('transform', `translate(${20} , ${125})`)
                     .text(`${helpers.numberFormatters.formatComma(data.byWRRG[wrrg]['Recyclables'].processed)} t`)
 
-                // g. Organics group
                 const organicsGroup = wrrgPane.append('g')
                     .attr('transform', `translate(${organicsOffset} , ${0})`)
                 organicsGroup.append('path').classed('wrrg-icon garbage', true)
@@ -556,13 +596,14 @@
                     .text(`${helpers.numberFormatters.formatComma(data.byWRRG[wrrg]['Organics'].processed)} t`)
             })
 
+
         // 7. ADD TITLE ANNOTATION
             annotation.append('text').classed('main-title', true)
                 .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top})`)
                 .text('Victorian waste collection data')
             annotation.append('text').classed('main-subtitle', true)
                 .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top + 25})`)
-                .text(`by Waste Resource and Recovery Group in ${settings.year}`)
+                .text(`by Waste Recovery and Resource Group in ${settings.year}`)
 
       }; // end renderMap()
 
@@ -577,13 +618,16 @@
                 {value: data.pct,    class: 'diversion '+data.materialClass},
                 {value: 1- data.pct, class: 'landfill'}
             ])
+
         const donutGroup = container.append('g')
+
         donutGroup.append('g').classed('arc-group', true)
             .selectAll("path.donut-arc")
             .data(chartData)
             .join("path").attr('class', d => `${d.data.class} donut-arc`)            
                 .attr("d", arc)
                 .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
+        
         donutGroup.append('text')
             .attr('class', `${data.materialClass} donut-diversion-pct`)  
             .text(helpers.numberFormatters.formatPct(data.pct))
@@ -613,7 +657,7 @@
             str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
             const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
                 to   = "aaaaeeeeiiiioooouuuunc------"
-            for (let i=0, l=from.length ; i<l ; i++) {
+            for (var i=0, l=from.length ; i<l ; i++) {
                 str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
             }
             str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars

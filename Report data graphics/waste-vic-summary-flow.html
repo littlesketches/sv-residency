@@ -8,55 +8,43 @@
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
         <style>
-            /* COLOUR PALETTES */
+            /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
-                /** OLD BRAND GUIDELINES **/
-                --svGreen:                            #9ACA3C;
-                --gippslandGreen:                     #CED99E;
-                --secondary_greatOceanBlue:           #0070BB;
-                --secondary_hepburnClay:              #9B0B32;
-                --secondary_meredithGold:             #E3BA5A;
-                --campaign_corrangamiteEggplant:      #550055;
-                --campaign_corrangamiteEggplantLight: #B273B2;
-                --campaign_gannarawwaPink:            #D00236;
-                --campaign_gannarawwaPinkLight:       #EE5F83;
-                --campaign_surfCoastTeal:             #00848F;
-                --campaign_surfCoastTealLight:        #47ABB4;
-                --campaign_queenscliffeMarine:        #0A3055;
-                --campaign_queenscliffeMarineLight:   #7991A9;
-                --campaign_milduraOrange:             #D3410B;
-                --campaign_milduraOrangeLight:        #F2855D;
-                --campaign_otwaysGreen:               #008848;
-                --campaign_otwaysGreenLight:          #8DBF87;
-                --monochrome_youYangsGranite:         #B2B2B2;
-                --monochrome_lakeMountainMorning:     #CCCCCC;
-                --monochrome_mtBullaMist:             #E5E5E5;
-                /** NEW BRAND GUIDELINES **/
-                --chartLightGreen:  #cbe197;
-                --chartGray:        #b1b1b0;
-                --chartTeal:        #52baba;
-                --chartEmerald:     #00502e;
-                --chartPowderBlue:  #9bddfa;
-                --chartGreen:       #77bf00;
-                --chartDarkGreen:   #009857;
-                --chartOrange:      #cea98d;
-                --chartBlue:        #00568f;
-                --chartPurple:      #816bb4;
-                --chartLightGrey:   #cfcfcf;
-                --chartYellow:      #ffd300;
+                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+                --svGreen:                       #9ACA3C;
+                /** SECONDARY PALLETTE **/
+                --secondaryGreenLight:           #D5E0A1;
+                --secondaryBottleGreen:          #174F37;
+                --secondaryBottleGreenLight:     #79B5AA;
+                --secondaryGrey:                 #B1B1B0;
+                --secondaryGreyLight:            #CFCFCF;
+                --secondaryGreyLightest:         #ECECEC;
+                /** TERTIARY PALETTE **/
+                --tertiaryPurple:       #51284F;
+                --tertiaryPurpleLight:  #8276B3;
+                --tertiaryRed:          #E04F39;
+                --tertiaryRedLight:     #F78684;
+                --tertiaryYellow:       #EFC041;
+                --tertiaryYellowLight:  #F5E065;
+                --tertiaryCard:         #B39981;
+                --tertiaryCardLight:    #DCBFA6;
+                --tertiaryEmerald:      #009E71;
+                --tertiaryEmeraldLight: #93CCB9;
+                --tertiaryBlue:         #005E88;
+                --tertiaryBlueLight:    #A0D6E9;
             }
 
-        /****************************/
-        /*** IMPORTED FONTS       ***/
-        /****************************/
+        /***************************************/
+        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+        /***************************************/
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Bold.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
-                font-weight: 700;
-                font-style: normal;
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 100;
+                font-style: ultraLight;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
@@ -65,25 +53,61 @@
                     url('fonts/DINNextLTPro-Light.woff') format('woff'),
                     url('fonts/DINNextLTPro-Light.ttf') format('truetype');
                 font-weight: 300;
+                font-style: light;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-weight: 400;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 200;
-                font-style: light;
+                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                font-weight: 500;
+                font-style: medium;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                font-weight: 800;
+                font-style: heavy;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            body{
+                font-family: 'DIN Next LT Pro';
             }
 
 
         /***************************/
         /*****  GENERAL STYLING  ***/
         /***************************/
-            body{
-                font-family: 'DIN Next LT Pro';
-            }
             .hidden{ 
                 display: none;
             }
@@ -95,7 +119,6 @@
         /*****  TYPOGRAPHY AND ELEMENT COLOUR  ***/
         /*****************************************/
 
-        .title-label,
         .waste-stream-headline,
         .label.waste-stream,
         .data-label.waste-stream,
@@ -106,11 +129,14 @@
         .landfill-label-bg{
             fill: rgb(40, 40, 40);
         }
+        .title-label{
+            fill: var(--secondaryBottleGreen);
+        }
         .landfill.icon,
         .landfill-headline,
         .landfill-unit, 
         .arrow-landfill{
-            fill: var(--campaign_gannarawwaPink);
+            fill: var(--tertiaryRed);
         }
         .main-title,
         .main-subtitle,
@@ -303,7 +329,7 @@
         .dark .landfill.icon,
         .dark .landfill-headline,
         .dark .landfill-unit{
-            fill: var(--campaign_gannarawwaPink);
+            fill: var(--tertiaryRed);
         }
         .dark .main-title,
         .dark .main-subtitle,
@@ -387,7 +413,7 @@
             targets:                ['Local processing', 'Storage', 'Export', 'Landfill'],
             palette: {
                 collection:                         'rgb(150, 150, 150)',
-                landfill:                           'var(--campaign_gannarawwaPink)',
+                landfill:                           'var(--tertiaryRed)',
                 diversionByStream: {
                     "Municipal solid waste":        'var(--svGreen)',
                     "Commercial and industrial":    'var(--svGreen)',
@@ -848,10 +874,6 @@
 
             }
         }
-
-
-
-
 
 
         ////////////////////////////////////

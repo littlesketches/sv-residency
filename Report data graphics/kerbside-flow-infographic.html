@@ -10,53 +10,41 @@
         <style>
             /* COLOUR PALETTES */
             :root {
-                /** OLD BRAND GUIDELINES **/
-                --svGreen:                            #9ACA3C;
-                --gippslandGreen:                     #CED99E;
-                --secondary_greatOceanBlue:           #0070BB;
-                --secondary_hepburnClay:              #9B0B32;
-                --secondary_meredithGold:             #E3BA5A;
-                --campaign_corrangamiteEggplant:      #550055;
-                --campaign_corrangamiteEggplantLight: #B273B2;
-                --campaign_gannarawwaPink:            #D00236;
-                --campaign_gannarawwaPinkLight:       #EE5F83;
-                --campaign_surfCoastTeal:             #00848F;
-                --campaign_surfCoastTealLight:        #47ABB4;
-                --campaign_queenscliffeMarine:        #0A3055;
-                --campaign_queenscliffeMarineLight:   #7991A9;
-                --campaign_milduraOrange:             #D3410B;
-                --campaign_milduraOrangeLight:        #F2855D;
-                --campaign_otwaysGreen:               #008848;
-                --campaign_otwaysGreenLight:          #8DBF87;
-                --monochrome_youYangsGranite:         #B2B2B2;
-                --monochrome_lakeMountainMorning:     #CCCCCC;
-                --monochrome_mtBullaMist:             #E5E5E5;
-                /** NEW BRAND GUIDELINES **/
-                --chartLightGreen:  #cbe197;
-                --chartGray:        #b1b1b0;
-                --chartTeal:        #52baba;
-                --chartEmerald:     #00502e;
-                --chartPowderBlue:  #9bddfa;
-                --chartGreen:       #77bf00;
-                --chartDarkGreen:   #009857;
-                --chartOrange:      #cea98d;
-                --chartBlue:        #00568f;
-                --chartPurple:      #816bb4;
-                --chartLightGrey:   #cfcfcf;
-                --chartYellow:      #ffd300;
+                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+                --svGreen:                       #9ACA3C;
+                /** SECONDARY PALLETTE **/
+                --secondaryGreenLight:           #D5E0A1;
+                --secondaryBottleGreen:          #174F37;
+                --secondaryBottleGreenLight:     #79B5AA;
+                --secondaryGrey:                 #B1B1B0;
+                --secondaryGreyLight:            #CFCFCF;
+                --secondaryGreyLightest:         #ECECEC;
+                /** TERTIARY PALETTE **/
+                --tertiaryPurple:       #51284F;
+                --tertiaryPurpleLight:  #8276B3;
+                --tertiaryRed:          #E04F39;
+                --tertiaryRedLight:     #F78684;
+                --tertiaryYellow:       #EFC041;
+                --tertiaryYellowLight:  #F5E065;
+                --tertiaryCard:         #B39981;
+                --tertiaryCardLight:    #DCBFA6;
+                --tertiaryEmerald:      #009E71;
+                --tertiaryEmeraldLight: #93CCB9;
+                --tertiaryBlue:         #005E88;
+                --tertiaryBlueLight:    #A0D6E9;
             }
 
-            /****************************/
-            /*** IMPORTED FONTS       ***/
-            /****************************/
+        /***************************************/
+        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+        /***************************************/
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Bold.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
-                font-weight: 700;
-                font-style: normal;
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 100;
+                font-style: ultraLight;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
@@ -65,25 +53,61 @@
                     url('fonts/DINNextLTPro-Light.woff') format('woff'),
                     url('fonts/DINNextLTPro-Light.ttf') format('truetype');
                 font-weight: 300;
+                font-style: light;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-weight: 400;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 200;
-                font-style: light;
+                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                font-weight: 500;
+                font-style: medium;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                font-weight: 800;
+                font-style: heavy;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            body{
+                font-family: 'DIN Next LT Pro';
             }
 
             /***************************/
             /*****  TYPOGRAPHY       ***/
             /***************************/
 
-            body{
-                font-family: 'DIN Next LT Pro';
-            }
             .recycling-rate-main{
                 font-size: 60px;
                 letter-spacing: -3px;
@@ -136,7 +160,7 @@
                 dominant-baseline: middle;
             }
             .lga-label-title{
-                fill:  var(--chartDarkGreen);
+                fill:  var(--secondaryBottleGreen);
             }
             .lga-label-small{
                 fill: rgba(0, 0, 0, 0.7);
@@ -149,17 +173,20 @@
 
             .garbage, 
             .contaminants{
-                fill: var(--campaign_gannarawwaPinkLight);
+                fill: var(--tertiaryRed);
             }
             .recycling {
-                fill: var(--chartYellow);
+                fill: var(--tertiaryYellow);
             }
             .organics {
-                fill: var(--chartGreen);
+                fill: var(--tertiaryEmerald);
             }
             .waste-destination-title,
             .lga-stream-title{   
                 fill: #fff;
+                stroke: #000;
+                stroke-width: 0.75px;
+                font-weight: 900;
             }
             .lga-data-label.large{
                 mix-blend-mode: multiply;
@@ -175,16 +202,16 @@
                 stroke-width: 0.5px;
             } 
             .recycling-breakdown.paper{
-                fill: var(--chartTeal );
+                fill: var(--secondaryBottleGreenLight );
             }
             .recycling-breakdown.plastic{
-                fill: var(--campaign_queenscliffeMarine);
+                fill: var(--tertiaryBlue);
             }
             .recycling-breakdown.metal{
-                fill: var(--chartPowderBlue);
+                fill: var(--tertiaryBlueLight);
             }
             .recycling-breakdown.glass{
-                fill: var(--chartPurple)
+                fill: var(--tertiaryPurpleLight)
             }
             .flowPath{
                 stroke-linejoin: round;
@@ -193,13 +220,13 @@
                 mix-blend-mode: multiply;
             }
             .flowPath.recycling{
-                stroke: var(--chartYellow);
+                stroke: var(--tertiaryYellowLight);
             }
             .flowPath.garbage{
-                stroke: var(--campaign_gannarawwaPinkLight);
+                stroke: var(--tertiaryRed);
             }
             .flowPath.organics{
-                stroke: var(--chartGreen);
+                stroke: var(--tertiaryEmerald);
             }
         </style>
     </head>
@@ -224,7 +251,7 @@
                             <path fill="#3f4c4a" d="M11.74-13.97l2.912-1.13-.24 12.747c-.032.34.055.509-.23.709l-2.364 1.26z"/>
                             <path fill="#252d2f" d="M13.678-2.045A1.153 2.045 0 0112.525 0a1.153 2.045 0 01-1.154-2.045 1.153 2.045 0 011.154-2.046 1.153 2.045 0 011.153 2.046"/>
                             <g class="garbage-bin-lid">
-                                <path fill="var(--campaign_gannarawwaPinkLight)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
+                                <path fill="var(--tertiaryRed)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
                                 <g fill="#000" opacity=".15" >
                                     <path d="M2.262-16.462l8.794.028c3.646-.395 2.787-.363 0 .555H2.234z"/>
                                     <path d="M12.827-17.276l-1.43.341c-.181-.711-.32-1.27.872-1.497.81-.04.64.616.558 1.156z"/>
@@ -240,7 +267,7 @@
                             <path fill="#3f4c4a" d="M11.74-13.97l2.912-1.13-.24 12.747c-.032.34.055.509-.23.709l-2.364 1.26z"/>
                             <path fill="#252d2f" d="M13.678-2.045A1.153 2.045 0 0112.525 0a1.153 2.045 0 01-1.154-2.045 1.153 2.045 0 011.154-2.046 1.153 2.045 0 011.153 2.046"/>
                             <g class="garbage-bin-lid">
-                                <path fill="#ffd300" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
+                                <path fill="var(--tertiaryYellow)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
                                 <g fill="#000" opacity=".15" >
                                     <path d="M2.262-16.462l8.794.028c3.646-.395 2.787-.363 0 .555H2.234z"/>
                                     <path d="M12.827-17.276l-1.43.341c-.181-.711-.32-1.27.872-1.497.81-.04.64.616.558 1.156z"/>
@@ -256,7 +283,7 @@
                             <path fill="#3f4c4a" d="M11.74-13.97l2.912-1.13-.24 12.747c-.032.34.055.509-.23.709l-2.364 1.26z"/>
                             <path fill="#252d2f" d="M13.678-2.045A1.153 2.045 0 0112.525 0a1.153 2.045 0 01-1.154-2.045 1.153 2.045 0 011.154-2.046 1.153 2.045 0 011.153 2.046"/>
                             <g class="garbage-bin-lid">
-                                <path fill="var(--chartGreen)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
+                                <path fill="var(--svGreen)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
                                 <g fill="#000" opacity=".15" >
                                     <path d="M2.262-16.462l8.794.028c3.646-.395 2.787-.363 0 .555H2.234z"/>
                                     <path d="M12.827-17.276l-1.43.341c-.181-.711-.32-1.27.872-1.497.81-.04.64.616.558 1.156z"/>
@@ -272,7 +299,7 @@
                             <path fill="#3f4c4a" d="M10.514-13.97l1.063-.502-.096 12.325c-.031.34.173.919-.113 1.119l-.775.645z"/>
                             <path fill="#252d2f" d="M11.54-2.045A.697 2.045 0 0110.844 0a.697 2.045 0 01-.697-2.045.697 2.045 0 01.697-2.046.697 2.045 0 01.698 2.046"/>
                             <g class="garbage-bin-lid">
-                                <path fill="var(--campaign_gannarawwaPinkLight)"" d="M0-15.53c.024.095.048 1.472.048 1.472l10.616.067 1.13-.501.07-1.461-.404-.694c-.308-.781-1.378-1.435-1.868-.484l-6.19-.03c-.873-.78-2.207-.156-2.242.386l-.415.3-.074.654z"/>
+                                <path fill="var(--tertiaryRed)"" d="M0-15.53c.024.095.048 1.472.048 1.472l10.616.067 1.13-.501.07-1.461-.404-.694c-.308-.781-1.378-1.435-1.868-.484l-6.19-.03c-.873-.78-2.207-.156-2.242.386l-.415.3-.074.654z"/>
                                 <g fill="#000" opacity=".15" >
                                     <path d="M1.037-16.348l9.137.13c1.252-.407 1.974-.36.102.39l-9.267-.05z" />
                                     <path d="M11.047-16.926l-.753.25c-.411-.49-.351-.61-.023-.691.33-.083.51.164.776.44z" />
@@ -284,7 +311,7 @@
                     </defs>
 
                     <g id="background-layer">
-                        <rect class="sky"  fill="#d7f4ee"  fill="#E5E5E5"   width="800" height="191.519" x="-43.048" y="0"/>
+                        <rect class="sky"  fill="#d7f4ee"   width="800" height="191.519" x="-43.048" y="0"/>
                         <g id="city-skyline-1" transform="matrix(-1.09149 0 0 1.09149 284.57 -.793)">
                             <path id="city-sklyine-back-1" fill="#c9d9cf" fill="#B2B2B2"  d="M137.054 160.073v-7.938h12.7v-21.96h10.319v7.938h4.762v10.054h5.557v-26.459h6.879v29.105h15.102l-.02-23.813h6.084v23.813h6.615v-9.26h5.292v-7.674h6.085v11.642h3.704v-15.875h3.44v19.579h4.498v-30.163h8.372l.095 30.163h2.91v-7.938h5.292v7.673h4.498v-12.7h7.408v12.7h2.646v-10.054h5.291v21.167z"/>
                             <path id="city-skyline-front-1" fill="#b4ccc6" fill="#cfcfcf"  d="M141.567 160.442v-3.826h4.905v-7.849h7.75v8.045h2.846v-10.595h6.279v4.905h5.984v-4.71h2.649v7.555h4.317v-18.934h15.01v9.712h8.633v-21.093h6.475v22.368h9.671v-5.906h9.23v10.752h15.794v-12.37h5.139v14.464h7.707v-4.092h5.994v5.9h4.633v6.184z" />
@@ -293,7 +320,7 @@
                             <path id="city-sklyine-back-2"  fill="#c9d9cf" fill="#B2B2B2"  d="M137.054 160.073v-7.938h12.7v-21.96h10.319v7.938h4.762v10.054h5.557v-26.459h6.879v29.105h15.102l-.02-23.813h6.084v23.813h6.615v-9.26h5.292v-7.674h6.085v11.642h3.704v-15.875h3.44v19.579h4.498v-30.163h8.372l.095 30.163h2.91v-7.938h5.292v7.673h4.498v-12.7h7.408v12.7h2.646v-10.054h5.291v21.167z"/>
                             <path id="city-skyline-front-2"  fill="#b4ccc6"  fill="#cfcfcf" d="M141.567 160.442v-3.826h4.905v-7.849h7.75v8.045h2.846v-10.595h6.279v4.905h5.984v-4.71h2.649v7.555h4.317v-18.934h15.01v9.712h8.633v-21.093h6.475v22.368h9.671v-5.906h9.23v10.752h15.794v-12.37h5.139v14.464h7.707v-4.092h5.994v5.9h4.633v6.184z" />
                         </g>
-                        <path id="grass-background" fill="#00502e" fill="#00502e" d="M377.23 170.213C263.445 159.893 86.36 160.091-3.758 171.3l-.176 5.792 381.34-1.086z"/>
+                        <path id="grass-background" fill="#00502e" d="M377.23 170.213C263.445 159.893 86.36 160.091-3.758 171.3l-.176 5.792 381.34-1.086z"/>
                         <g id="home-1"  transform="translate(-278.84 1.616)">
                             <rect fill="#6b87a4" stroke-width=".332" width="51.053" height="2.749" x="237.574" y="145.217" ry="1"/>
                             <path fill="#efe2bb" stroke-width=".522" d="M241.396 147.966h45.126l40.244-3.376v22.138l-85.37 3.905z"/>
@@ -405,17 +432,16 @@
                 <g id = "destination-scene" transform="translate(500, 920) scale(0.7)">
                     <defs>
                         <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                        <path fill="#ff0" stroke-width=".265" d="M120.873 138.9a.128.128 0 00-.128.129v3.888l-13.881.05a.108.108 0 00-.109.107v20.91c0 .06.049.107.109.107 20.582-.111 63.248.059 63.248.059s.128-18.903.128-25.071a.128.128 0 00-.128-.128z"/>
+                            <path fill="#ff0" stroke-width=".265" d="M120.873 138.9a.128.128 0 00-.128.129v3.888l-13.881.05a.108.108 0 00-.109.107v20.91c0 .06.049.107.109.107 20.582-.111 63.248.059 63.248.059s.128-18.903.128-25.071a.128.128 0 00-.128-.128z"/>
                         </clipPath>
                         <clipPath id="b" clipPathUnits="userSpaceOnUse">
-                        <path fill="#5d7a5a" d="M169.207 124.721c-.996.006-1.846.51-2.022 1.928H136.98c-2.216 0-4.053 1.784-4 4 .069 2.386-.046 8.585-.06 9.357l-4.032.054s-1.176-5.292-3.37-6.134c-1.05-.402-3.522-.726-4.583-.018-2.016 1.346-1.619 5.32-1.706 10.245v10.655c0 2.216 1.784 4 4 4h11.394c.692 1.024 1.653 2.245 2.357 2.53h34.165c4.432 0 8-3.569 8-8v-18.689a7.98 7.98 0 00-7.9-7.997c-.174-1.423-1.03-1.93-2.03-1.93h-.008z"/>
+                            <path fill="#5d7a5a" d="M169.207 124.721c-.996.006-1.846.51-2.022 1.928H136.98c-2.216 0-4.053 1.784-4 4 .069 2.386-.046 8.585-.06 9.357l-4.032.054s-1.176-5.292-3.37-6.134c-1.05-.402-3.522-.726-4.583-.018-2.016 1.346-1.619 5.32-1.706 10.245v10.655c0 2.216 1.784 4 4 4h11.394c.692 1.024 1.653 2.245 2.357 2.53h34.165c4.432 0 8-3.569 8-8v-18.689a7.98 7.98 0 00-7.9-7.997c-.174-1.423-1.03-1.93-2.03-1.93h-.008z"/>
                         </clipPath>
                     </defs>
                     <path class = "sky" fill="#d7f4ee" d="M-388.285 204C298.443-82.731 945.97-65.578 1595.258 204v375.633H-388.285z"/>
                     <path class = "ground" fill="#CED99E" d="M458.211 513.585h416.948v60.923H458.211z"/>
                     <path class = "foreground-grass" fill="#CED99E" d="M-388.776 579.613c277.38-170.866 617.885-172.25 854.673-154.826-.601 27.529 14.06 149.008 14.06 149.008z"/>
                     <path class = "foreground-grass" fill="#CED99E" d="M1591.542 598.231c-257.8-114.563-325.884-189.535-877.28-173.444.6 27.529-16.28 129.386-14.06 149.008 299.705 4.497 591.637 19.829 891.34 24.436z"/>
-
                     <path fill="#668000" d="M147.66 433.268c45.087 20.51 45.773 66.02 171.067 12.547 111.378-33.595-2.914-29.678-171.067-12.547z"/>
                     <g>
                         <path class = "road" fill="#7991A9" d="M159.247 444.127c-216.63 55.61-321.793 120.665-113.632 127.82l655.655-8.99c145.413 1.444 341.293-1.026 516.892 9.83 133.563-10.114-81-106.958-166.028-129.528l55.3-2.07c152.067 21.515 373.91 142.08 118.475 139.453l-1245.321 4.154c-3.003-.622-369.142 6.358-369.142 6.358l.26-5.525s227.095-12.048 331.27-3.861c-211.381-32.989-115.417-54.64 159.778-139.375z"/>
@@ -647,7 +673,7 @@
                             <path fill="#3f4c4a" d="M11.74-13.97l2.912-1.13-.24 12.747c-.032.34.055.509-.23.709l-2.364 1.26z"/>
                             <path fill="#252d2f" d="M13.678-2.045A1.153 2.045 0 0112.525 0a1.153 2.045 0 01-1.154-2.045 1.153 2.045 0 011.154-2.046 1.153 2.045 0 011.153 2.046"/>
                             <g class="garbage-bin-lid">
-                                <path fill="var(--campaign_gannarawwaPinkLight)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
+                                <path fill="var(--tertiaryRed)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
                                 <g fill="#000" opacity=".15" >
                                     <path d="M2.262-16.462l8.794.028c3.646-.395 2.787-.363 0 .555H2.234z"/>
                                     <path d="M12.827-17.276l-1.43.341c-.181-.711-.32-1.27.872-1.497.81-.04.64.616.558 1.156z"/>
@@ -664,7 +690,7 @@
                             <path fill="#3f4c4a" d="M11.74-13.97l2.912-1.13-.24 12.747c-.032.34.055.509-.23.709l-2.364 1.26z"/>
                             <path fill="#252d2f" d="M13.678-2.045A1.153 2.045 0 0112.525 0a1.153 2.045 0 01-1.154-2.045 1.153 2.045 0 011.154-2.046 1.153 2.045 0 011.153 2.046"/>
                             <g class="garbage-bin-lid">
-                                <path fill="var(--chartYellow)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
+                                <path fill="var(--tertiaryYellowLight)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
                                 <g fill="#000" opacity=".15" >
                                     <path d="M2.262-16.462l8.794.028c3.646-.395 2.787-.363 0 .555H2.234z"/>
                                     <path d="M12.827-17.276l-1.43.341c-.181-.711-.32-1.27.872-1.497.81-.04.64.616.558 1.156z"/>
@@ -680,7 +706,7 @@
                             <path fill="#3f4c4a" d="M11.74-13.97l2.912-1.13-.24 12.747c-.032.34.055.509-.23.709l-2.364 1.26z"/>
                             <path fill="#252d2f" d="M13.678-2.045A1.153 2.045 0 0112.525 0a1.153 2.045 0 01-1.154-2.045 1.153 2.045 0 011.154-2.046 1.153 2.045 0 011.153 2.046"/>
                             <g class="garbage-bin-lid">
-                                <path fill="var(--chartGreen)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
+                                <path fill="var(--svGreen)" d="M0-15.56c.024.096.048 1.472.048 1.472l11.842.097 3.6-1.339.003-1.454-1.613-.068c-.192-1.773-.938-3.476-4.055-1.942l-3.505.145c-3.178-1.334-2.265.836-3.263 1.378l-1.233.096.073 1.354z"/>
                                 <g fill="#000" opacity=".15" >
                                     <path d="M2.262-16.462l8.794.028c3.646-.395 2.787-.363 0 .555H2.234z"/>
                                     <path d="M12.827-17.276l-1.43.341c-.181-.711-.32-1.27.872-1.497.81-.04.64.616.558 1.156z"/>
@@ -1044,7 +1070,7 @@
                 .attr('y', facilityLabelY)
                 .attr('dy', 0)
                 .text('Organics reprocessing')
-                .call(helpers.wrap, 300, 1)
+                .call(helpers.wrap, 280, 1)
 
             // 3. Recycling Info group: 
                 const recyclingGroup = infographicLayer.append('g').classed('recycling-group', true)
@@ -1184,7 +1210,7 @@
                 // c.  Flow paths
                     const organicsPath = `M${-xMargin - settings.dims.width * 2/ 3 + settings.dims.width -xMargin} ${(rowNo + 1) * rowSpace + 40} V${facilityY - flowRadius}  q 0, ${flowRadius}  ${-flowRadius}, ${flowRadius}  H${organicsFacilityX}`,
                         organicsContaminationPath = `M${organicsFacilityXOut} ${facilityY}   H${-(settings.dims.width * 2 / 3 + xMargin) + settings.dims.width / 2  + flowScale(yearData.Garbage_volume)/2 + contaminationRadius + 5}  q ${-contaminationRadius},0  ${-contaminationRadius}, ${contaminationRadius} `,
-                        organicsContaminationRate = 0.1
+                        organicsContaminationRate = 0
                     organicsGroup.append('path').classed('flowPath organics', true)
                         .attr('d', organicsPath)
                         .style('stroke-width', flowScale(yearData.Organics_volume))
@@ -1313,10 +1339,6 @@
                 .attr('y', headlineOffsetY + 50)
 
             // 10. Council spend data 
-            // annotationLayer.append('text').classed('lga-label-small', true)
-            //     .text("Councils spent")
-            //     .attr('x', councilSpendLabel.x)
-            //     .attr('y', councilSpendLabel.y)
             annotationLayer.append('text').classed('lga-label-headline', true)
                 .text(`${helpers.numberFormatters.formatCostInteger(totalCouncilCost/1000000)} million`)
                 .attr('x', councilSpendLabel.x)
