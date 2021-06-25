@@ -8,14 +8,13 @@
         <script src="https://d3js.org/d3.v6.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
         <script src="js/main.js"></script>    
-
     </head>
 
 
     <body>
         <main class = "main-container"> 
             <div class = 'title-container'>
-                <h1 id ='material-title'>Paper and paperboard </h1>
+                <h1 id ='material-title'></h1>
             </div>
 
             <div id = "material-flow-container" class = 'material-flow-container card'>
@@ -24,7 +23,7 @@
                 </div>
                 <!-- Destination of kerbside waste -->
                 <div class = "material-collection-destination sub-card">
-                    <h3 id = "recyclables-collected-subheader" class = 'card-subheader'> Destinations of kerbside collection in XXX  </h3>
+                    <h3 id = "recyclables-collected-subheader" class = 'card-subheader'>Destinations of kerbside collection in XXX  </h3>
                     <div class = 'material-collection-container'>
                         <!-- Recyclables collected header and subcard -->
                         <div class = "recyclables-collected-container subcard-container">
@@ -71,11 +70,12 @@
                     </div>
                 </div>
 
-                <!-- All materiails destination trends-->
+                <!-- All materials destination trends-->
                 <div class = "material-destination-trends sub-card">
                     <!-- Collection trend indicators subcard -->
                     <div id ="collection-trend-comparison-container" class = 'material-destination-container'>
                         <div class = "destination-trend-chart-container subcard-container">
+                            <h4  class = 'destination-card-header destination all'>All kerbside recyclables</h4>
                             <div id = "destination-trend-chart-header" class = "text-minor">12 mth trend to XXX</div>
                             <div id ="destination-trend-vis-container" class = "chart-container">
                                 <svg id="destination-trend-chart"  width="100%"></svg>

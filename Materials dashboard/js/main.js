@@ -1,15 +1,20 @@
-///////////////////////////////////////////////////////////////
-////  SV MARKET BULLETIN - MATERIALS DASHBOARD  COMPONENTS //// 
-////  ---------------------------------------------------  ////
-//// Charts and data elements for updating each separate   //// 
-//// component (card) available in the HTML/SVG version    ////
-//// of the market bulletin dashboard                      ////
-////                                                       ////  
-//// This script will be adapted for use in producing      ////
-//// individual component layouts in (e.g. single 'cards') ////
-//// for use in various sections and arrangements in the   ////
-//// digital version of the market bulletin.               ////
-///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////                                                        //// 
+////  SV MARKET BULLETIN - MATERIALS DASHBOARD  COMPONENTS  //// 
+////  ----------------------------------------------------  ////
+//// Charts and data elements for updating each separate    //// 
+//// component (card) available in the HTML/SVG version     ////
+//// of the market bulletin dashboard                       ////
+////                                                        ////  
+//// This script will be adapted for use in producing       ////
+//// individual component layouts in (e.g. single 'cards')  ////
+//// for use in various sections and arrangements in the    ////
+//// digital version of the market bulletin.                ////
+////                                                        ////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////
 //// INIT FUNCTION (CALLED ON LOAD   //// 
@@ -17,6 +22,7 @@
 
 
     const settings  = {
+        queryParameters:       {},        // Usef to store URL query string items
         containerIDs: {
             volumeContainer:        'material-title',
             flowContainer:          'material-flow-container',
@@ -47,21 +53,28 @@
     }
 
     const state = {
-        material:    "Paper and paperboard",        // This is the 'display' title for the edition and is used for general labelling
-        date:  {}                              // Date (month) of data for each section
+        material:    "Paper and paperboard",    // This is the 'display' title for the edition and is used for general labelling
+        date:  {}                               // Date (month) of data for each section
     }
     const charts = {                  // Stores the chart methods for rendering and update
         methods:        {}
     }
 
 /////////////////////////////////////////
-//// INIT FUNCTION (CALLED ON LOAD   //// 
+//// INIT FUNCTION (CALLED ON LOAD)   //// 
 /////////////////////////////////////////
 
+
         init()
-        // 1. ON PAGE LOAD FUNCTION: GET AND PARSE DATA BEFORE BUILDING DASHBOARD
+        // 1. ON PAGE LOAD FUNCTION: PARSE URL QUERY STRING FOR SETTING; THEN GET AND PARSE DATA BEFORE BUILDING DASHBOARD
         function init(){
 
+            // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
+            settings.queryParameters = new URLSearchParams(window.location.search)
+            if (settings.queryParameters.has('material')) { state.material = settings.queryParameters.get('material')  }
+
+            
+            // ii. Load and parse data from GSheet tables; call buildDashboard on completion
             Tabletop.init({
                 key: 	'https://docs.google.com/spreadsheets/d/1rg66KhwEbN_FhpD0hhdd6SMIb9ApKlxh_93N4y9Qx_s/',
                 callback: async(loadedData) => {	
@@ -92,9 +105,9 @@
                         data.schema.lists.materials = [...new Set(Object.keys(data.tables.volume [0]).map(d => d.slice(d.indexOf('_') + 1)).filter(d => d !== 'date' & d !== 'All collected materials') )].sort()
                         // Extract dashboard section list
                         data.schema.lists.sections = Object.keys(settings.sectionToTable)
-                        // Set latest available date as default
+                        // Set latest available date as default UNLESS a date is specified in the 
                         data.schema.lists.sections.forEach(section => {
-                            state.date[section] = data.tables[section][data.tables[section].length - 1].date.toString()
+                            state.date[section] = settings.queryParameters.has('date') ? helpers.numberParsers.parseDateSlash(settings.queryParameters.get('date')).toString() : data.tables[section][data.tables[section].length - 1].date.toString()
                         })
 
                         // Shape data grouped by materials
@@ -178,12 +191,17 @@
                             .slice(0, indexOfFirstVirginPrices)
                             .forEach(date => {      
                                 dateSelector.append('option').classed('materials-option', true)
-                                    .attr('value', date)        // Date timestampt as a string
+                                    .attr('value', date)        // Date timestamp as a string
                                     .html(helpers.timeFormat.toMonthYear(date))
                             })
+                        // Set the dropdown to match the settings and passed in query string
+                        document.getElementById('materials-selector').value = state.material 
+                        document.getElementById('date-selector').value = state.date.volume 
+                        // Set a slug material class on the main container for specific layout changes
+                        d3.select('main.main-container').classed(helpers.slugify(state.material), true)
+
                     // d. Build report
                     await buildDashboard()   
-
                 },
                 simpleSheet: false,
                 wanted: [ 'data_mrfOutput' , 'data_materialsVicExport', 'data_commodityValues', 'data_materialFlows'  ]   // Specifies which Google sheets to bring in (and in what order)
@@ -202,7 +220,7 @@
                 .attr('height', 4)
                 .append('path')
                     .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                    .attr('stroke', 'var(--chartEmerald)')
+                    .attr('stroke', 'var(--secondaryBottleGreen)')
                     .attr('stroke-width', 0.25)
                     .attr("opacity", 1);
 
@@ -213,7 +231,7 @@
                 .attr('height', 4)
                 .append('path')
                     .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                    .attr('stroke', 'var(--gippslandGreen)')
+                    .attr('stroke', 'var(--tertiaryEmeraldLight)')
                     .attr('stroke-width', 0.75)
                     .attr("opacity", 1);
 
@@ -224,7 +242,7 @@
                 .attr('height', 4)
                 .append('path')
                     .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                    .attr('stroke', 'var(--chartDarkGreen)')
+                    .attr('stroke', 'var(--tertiaryBlue)')
                     .attr('stroke-width', 0.75)
                     .attr("opacity", 1);
 
@@ -235,7 +253,7 @@
                 .attr('height', 4)
                 .append('path')
                     .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                    .attr('stroke', 'var(--chartPurple)')
+                    .attr('stroke', 'var(--tertiaryPurple)')
                     .attr('stroke-width', 0.75)
                     .attr("opacity", 1);
 
@@ -247,9 +265,9 @@
        };
 
 
-/////////////////////////////////////////////
-//// COMPONENT BUILD FUNCITONS  //////// 
-/////////////////////////////////////////////
+////////////////////////////////////
+//// COMPONENT BUILD FUNCTIONS  //// 
+////////////////////////////////////
 
         // Populate materials card in static HTML template
         async function buildMaterialsCard(material = state.material, date = state.date.volume){
@@ -411,7 +429,7 @@
                     .style('width', pct)
             })
 
-            // Add sparkline area charts: Settings object with "y0: true" is passed in to show sparline area charts starting from zero tonnes on the y-axis
+            // Add sparkline area charts: Settings object with "y0: true" is passed in to show sparkline area charts starting from zero tonnes on the y-axis
             const collection12mthData =  materialData1yr.map(d => d['Local reprocessing'] + d['Export'] + d['Landfill'])
                 localReprocessing12mthData = materialData1yr.map(d => d['Local reprocessing']),
                 export12mthData = materialData1yr.map(d => d['Export']),
@@ -440,7 +458,7 @@
             materialPriceMRFList.forEach(type => buildPriceCard(mrfOutputContainer, type, 'MRF output', material, date))
             
         };
-            // Supporting funciton to build individual price sub-card
+            // Supporting function to build individual price sub-card
             async function buildPriceCard(container, type, valueChain, material = state.material, date = state.date.price){
                 // Get data for material type (set in the state object)
                 const slugType = helpers.slugify(type,)
@@ -636,7 +654,7 @@
                 countryRow.append('div').classed('export-market-table-1yr table-data align-right', true).html(helpers.numberFormatters.formatComma(exportCountryData1yrAve))
                 countryRow.append('div').classed('export-market-table-3yr table-data align-right', true).html(helpers.numberFormatters.formatComma(exportCountryData3yrAve))
                 countryRow.append('div').classed('export-market-table-5yr table-data align-right', true).html(helpers.numberFormatters.formatComma(exportCountryData5yrAve))
-                countryRow.append('div').classed('export-market-table-currentMonth-comp table-data align-right', true).html('Comparison &#8594;')
+                countryRow.append('div').classed('export-market-table-currentMonth-comp table-data align-right', true).html('Compared &#8594;')
                 countryRow.append('div').classed('export-market-table-lastMonth-comp table-data align-right', true).html(lastMonthCountryData === 0 ? 'na' : exportCountryDataLastMthComp > 0 ? `+${helpers.numberFormatters.formatPct1dec(exportCountryDataLastMthComp)}` : helpers.numberFormatters.formatPct1dec(exportCountryDataLastMthComp) )
                 countryRow.append('div').classed('export-market-table-3mth-comp table-data align-right', true).html(exportCountryData3mthAve === 0 ? 'na' : exportCountryData3mthComp > 0 ? `+${helpers.numberFormatters.formatPct1dec(exportCountryData3mthComp)}` : helpers.numberFormatters.formatPct1dec(exportCountryData3mthComp) )
                 countryRow.append('div').classed('export-market-table-1yr-comp table-data align-right', true).html(exportCountryData1yrAve === 0 ? 'na' : exportCountryData1yrComp > 0 ? `+${helpers.numberFormatters.formatPct1dec(exportCountryData1yrComp)}` : helpers.numberFormatters.formatPct1dec(exportCountryData1yrComp) )
@@ -648,11 +666,12 @@
             })
         };
 
-        // Fade in animiation 
+        // Fade in animation 
         async function revealDashboard(){
             // Transition to reveal cards
             d3.select('#material-title').html(state.material)
             d3.selectAll('#material-title, .sub-card').transition().duration(800).delay((d,i) => i * 100).style('opacity', 1)
+            // Set the 
         };   
 
         // Update the dashboard data for material and/or date selection
@@ -663,6 +682,7 @@
             state.date.volume = date
             state.date.price = date
             state.date.export = date
+             d3.select('.main-container').attr('class', `main-container ${helpers.slugify(state.material)}`)
 
             await buildDashboard()
         };
@@ -750,10 +770,6 @@
                 chart.append('path').classed(`sparkarea`, true)                                 // Append an SVG path for the sparkline
                     .datum(data)                                                          // ..using the supplied data array
                     .attr('d', area)                                                           // ..and line generator
-                    .style('fill', `url(#diagonalHatch-${settings.areaClass})`)
-                // chart.append('circle').classed('sparkline-end-point', true)                    // Append circle marker at the end of the line
-                //     .attr('cx', xScale(data.length - 1))
-                //     .attr('cy', yScale(data[data.length - 1]))
             }
         }; // end renderSparkarea
 
