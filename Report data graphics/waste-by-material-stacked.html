@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <style>
+            /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
+            :root {
+                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+                --svGreen:                       #9ACA3C;
+                /** SECONDARY PALLETTE **/
+                --secondaryGreenLight:           #f8faf0;
+                --secondaryBottleGreen:          #174F37;
+                --secondaryBottleGreenLight:     #79B5AA;
+                --secondaryGrey:                 #B1B1B0;
+                --secondaryGreyLight:            #CFCFCF;
+                --secondaryGreyLightest:         #ECECEC;
+                /** TERTIARY PALETTE **/
+                --tertiaryPurple:       #51284F;
+                --tertiaryPurpleLight:  #8276B3;
+                --tertiaryRed:          #E04F39;
+                --tertiaryRedLight:     #F78684;
+                --tertiaryYellow:       #EFC041;
+                --tertiaryYellowLight:  #F5E065;
+                --tertiaryCard:         #B39981;
+                --tertiaryCardLight:    #DCBFA6;
+                --tertiaryEmerald:      #009E71;
+                --tertiaryEmeraldLight: #93CCB9;
+                --tertiaryBlue:         #005E88;
+                --tertiaryBlueLight:    #A0D6E9;
+            }
+
+        /***************************************/
+        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+        /***************************************/
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 100;
+                font-style: ultraLight;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: light;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-weight: 400;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                font-weight: 500;
+                font-style: medium;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                font-weight: 800;
+                font-style: heavy;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            body{
+                font-family: 'DIN Next LT Pro';
+            }
+
+        /**********************************************************/
+        /**** RADIAL TABLE & BAR CHART FOR MATERIALS BREAKDOWN ****/
+        /**********************************************************/
+
+            #radial-bar-vis .main-title{
+                fill: var(--secondaryBottleGreen);
+                font-size: 30px;
+                font-weight: 600;
+            }
+            #radial-bar-vis .bg-rect{
+                fill: none
+            }
+            .radialBar-title-label,
+            .table-header,
+            .radialBar-subtitle-label{    
+                fill: rgb(40, 40, 40);
+            }
+            .radialBar-pct-label,
+            .radialBar-material-label{
+                fill: #fff;
+            }
+            .material-data-table,
+            .radialBar-pct-label,
+            .radialBar-material-label,
+            .table-header{
+                font-size: 14px;
+            }
+            .table-header,
+            .material-data-table, 
+            .radialBar-title-label,
+            .radialBar-pct-label, 
+            .diversion-rate.material-data-table{
+                text-anchor: end;
+            }
+            .table-header{
+                font-weight: 500;
+            }
+            .table-header.material,
+            .arc-label.material{
+                text-anchor: start;
+            }
+            .material-data-table{
+                dominant-baseline: hanging; 
+            }
+            .radialBar-title-label{
+                font-weight: bold;
+            }
+            .radialBar-pct-label,
+            .radialBar-material-label{
+                mix-blend-mode: hard-light;
+            }
+            .diversion-rate.material-data-table{
+                font-weight: bold;
+                mix-blend-mode: screen;
+            }
+            .arc.paper-and-paperboard,
+            .material-data-table.paper-and-paperboard{
+                fill: var(--tertiaryYellow);
+            }
+            .arc.plastic-packaging,
+            .material-data-table.plastic-packaging{
+                fill: var(--tertiaryRedLight);
+            }
+            .arc.metal-packaging,
+            .material-data-table.metal-packaging{
+                fill: var(--tertiaryBlueLight);
+            }
+            .arc.glass-packaging,
+            .material-data-table.glass-packaging{
+                fill: var(--tertiaryPurpleLight)
+            }
+            .arc.organics,
+            .material-data-table.organics{
+                fill: var(--tertiaryEmeraldLight );
+            }
+            .arc.aggregates-masonry-soil,
+            .material-data-table.aggregates-masonry-soil{
+                fill: var(--tertiaryCard);
+            }
+            .arc.rubber,
+            .material-data-table.rubber{
+                fill: var(--secondaryGrey);
+            }
+
+        /********************************/
+        /********   DARK MODE ***********/
+        /********************************/
+
+            .dark #radial-bar-vis .bg-rect,
+            .dark .radialBar-pct-label,
+            .dark .radialBar-material-label{
+                fill: rgb(40, 40, 40);
+            }
+            .dark #radial-bar-vis .main-title,
+            .dark .table-header,
+            .dark .radialBar-title-label,
+            .dark .table-header,
+            .dark .radialBar-subtitle-label{
+                fill: #fff;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class = "svg-container">
+            <svg id = "radial-bar-vis">
+            </svg>
+        </div>
+    </body>
+
+    <script>
+
+        /////////////////////////////////////////////////////////////////////////////////
+        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
+        /////////////////////////////////////////////////////////////////////////////////
+
+        Tabletop.init({
+            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
+            callback: async(loadedData) => {
+                // 1. Parse data used in visualisation
+                await parseData(loadedData.byStream.elements, loadedData.byMaterial.elements)
+                await renderMaterialVis(data.byType.material, settingsRadial)
+            },
+            simpleSheet: false,
+            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
+        });
+
+
+
+        //////////////////////////////////
+        // 0. SETUP DATA AND SETTINGS  ///
+        //////////////////////////////////
+
+        const data = {          // Initiate data object that populated by the parseData() function, 
+            byPeriod:   {},
+            byType:   {
+                material: {}
+            },
+            schema: {
+                list:  { }
+            }
+        }
+
+        const settingsRadial = {
+            svgID:        'radial-bar-vis',
+            year:         '2019/20', 
+            dims: {
+                height:     1080, 
+                width:      720,
+                margin: {
+                    top: 50, right: 50, bottom: 50, left: 50
+                },
+            },    
+            geometry: {
+                arcPadding:     2,
+                arcMinRadius:   150,
+                chartRadius:    200
+            }       
+        }
+
+        const state = {
+            visual: {
+                mode:   'dark'
+            }
+        }
+
+        ////////////////////////////////////
+        // A. PARSE AND WRANGLE DATA     ///
+        ////////////////////////////////////
+
+        async function parseData(wasteStreamData, materialData) {      
+            // 1. Parse numeric data types to number
+            wasteStreamData.forEach(d => {
+                Object.entries(d).forEach( ([key, value]) => {
+                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
+                    } 
+                })
+            })
+
+            // Extract lists
+            data.schema.list.stream =  [...new Set(wasteStreamData.map( d => d.stream))]
+            data.schema.list.year  =   [...new Set(wasteStreamData.map( d => d.year))]
+            data.schema.list.year.forEach( year =>  {
+                data.byPeriod[year]  = {}
+                data.schema.list.stream.forEach( stream => {
+                    if(typeof data.byPeriod[year].byStream === 'undefined'){
+                        data.byPeriod[year].byStream =  {}
+                    } 
+                    data.byPeriod[year].byStream[stream] = {        // Note conversion to Mt for graphic is done in the rendering functions
+                        Diverted:                   wasteStreamData.filter( d => d.year === year && d.stream === stream)[0]['Recovered (kt)'],
+                        Landfilled:                 wasteStreamData.filter( d => d.year === year && d.stream === stream)[0]['Landfilled (kt)'],
+                        "Locally reprocessed":      wasteStreamData.filter( d => d.year === year && d.stream === stream)[0]['Reprocessed in Victoria (kt)']
+                    }
+                })
+            })
+
+            // 1. Parse material data (text to numbers)
+            materialData.forEach(d => {
+                Object.entries(d).forEach( ([key, value]) => {
+                    if(!isNaN(parseFloat(value.replace(/,/g, ''))) && key !== 'year'){ 
+                        d[key] = parseFloat(value.replace(/,/g, ''))
+                    } 
+                })
+            })
+
+            // 2. Extract lists 
+            data.schema.list.material = [...new Set(materialData.filter(d => d.level ===1).map(d => d.source))]
+
+            // 3a. Shape data by type:  Material > destination > end products
+            data.schema.list.material.forEach( material => {                    // For each unique material...
+                data.byType.material[material] = {value: 0}
+                materialData
+                    .filter(d => d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
+                    .forEach( d => {
+                        data.byType.material[material].value += d.value         // Sum the value of output flows
+                        data.byType.material[material].class = `${helpers.slugify(d.materialClass)} material`         // Assign the specified (material) class
+                    })
+                // Add the diversion rates per material
+                materialData
+                    .filter(d => d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
+                    .forEach( d => {
+                        if(d.targetClass === 'recovered'){
+                            data.byType.material[material].diversion = d.value  / data.byType.material[material].value      
+                            data.byType.material[material].diverted = d.value 
+                        } else if(d.targetClass === 'landfill'){
+                            data.byType.material[material].landfill = d.value 
+                        }
+                    })
+            })
+        };
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // A.  RENDER THE TABLE AND CIRCULAR BAR VIS FOR MATERIALS BREAKDOWN ///
+        ////////////////////////////////////////////////////////////////////////
+
+        async function renderMaterialVis(data, settings){
+            // 0. Re-shape chartData (for better clarity when defining data binding accessors) and setup geometry
+                let chartData = []
+                Object.entries(data).sort().forEach(([material, d]) => {
+                    chartData.push({
+                        material,
+                        class:          d.class,
+                        diversionRate:  d.diversion,
+                        diverted:       d.diverted,
+                        landfill:       d.landfill,
+                        total:          d.diverted + d.landfill,
+                    })
+                })
+                    
+                chartData = chartData.sort((a,b) => b.total - a.total )
+
+                // Setup geometry
+                settingsRadial.geometry.circlePos = {
+                    x: settingsRadial.dims.width * 0.50, 
+                    y: settingsRadial.dims.height * 0.35 + settingsRadial.dims.margin.top
+                }
+
+                settingsRadial.geometry.chartRadius = (settingsRadial.dims.height -settingsRadial.dims.margin.top) *0.35 - settingsRadial.dims.margin.top
+                settingsRadial.geometry.arcMinRadius = settingsRadial.geometry.chartRadius * 0.5
+
+                settingsRadial.geometry.tableOffset = {
+                    label:              -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 70,  
+                    total:              -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 330, 
+                    landfill:           -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 430, 
+                    diversion:          -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 530,  
+                    diversionRate:      -10,
+                    labelVertical:      5
+                }
+
+
+            // 1. Setup scales and helper functions for shape and layout of radial 
+                const arcScale = d3.scaleLinear()
+                    // .domain([0, d3.max(chartData, d => d.diversionRate)]) 
+                    .domain([0, 1])                         // Set to "1" for 100% instead of implying from data domain 
+                    .range([0, 2 * Math.PI])
+
+                const arc = d3.arc()                        // Arc shape generation
+                    .innerRadius((d, i) => getInnerRadius(i))
+                    .outerRadius((d, i) => getOuterRadius(i))
+                    .startAngle(0)
+                    .endAngle((d, i) => arcScale(d))
+
+                const arcWidth = (settings.geometry.chartRadius - settings.geometry.arcMinRadius - chartData.length * settings.geometry.arcPadding) / chartData.length,
+                    arcTween = (d, i) =>  t => arc(d3.interpolate(0, d.diversionRate)(t), i)
+                    rad2deg = (angle) => angle * 180 / PI
+                    getOuterRadius = (index) => getInnerRadius(index) + arcWidth;
+                    getInnerRadius = (index) => settings.geometry.arcMinRadius + (chartData.length - (index + 1)) * (arcWidth + settings.geometry.arcPadding) 
+        
+            // 2. Setup SVG
+                const svg= d3.select(`#${settings.svgID}`).attr("viewBox", `0 0 ${settings.dims.width} ${settings.dims.height}`)
+
+                const defs = svg.append('defs'),
+                    backgroundLayer = svg.append('g').classed('bg-group', true),                // Background layer
+                    canvas = svg.append('g').classed('vis-group', true)                         // Centered rendering layer
+                        .attr("height", settings.dims.height - settings.dims.margin.top - settings.dims.margin.bottom)
+                        .attr("width", settings.dims.width - settings.dims.margin.left - settings.dims.margin.right)
+                        .attr('transform', `translate(${settingsRadial.geometry.circlePos.x}, ${settingsRadial.geometry.circlePos.y})`),
+                    annotationLayer = svg.append('g').classed('annotation-group', true)        // Annotation layer
+                
+            // 3. Add the chart arcs
+                const arcs = canvas.append('g')
+                    .attr('class', 'arc-group')
+                    .selectAll('path')
+                    .data(chartData)
+                        .join('path')
+                        .attr('class', d => `${d.class} arc`)
+
+                    arcs.transition()            // Random fun on load
+                        .delay((d, i) => i * 500)
+                        .duration(1500)
+                        .attrTween('d', arcTween)
+
+            // 3. Add body color background rect under the table for clarity of highly circular bars
+                // canvas.append('rect').classed('table-bg', true)
+                //     .attr('width', settings.dims.width/2)
+                //     .attr('height', (arcWidth + settings.geometry.arcPadding) * chartData.length )
+                //     .attr('transform', `translate(${-settings.dims.width/2}, ${-settings.geometry.chartRadius })`)
+
+            // 4. Add table/axis group
+                const tableYoffset = settings.dims.height * 0.65,
+                    tableHeaders = canvas.append('g').classed('table-headers', true),
+                    tableAxis = canvas.append('g').classed('r axis table', true)
+                        .selectAll('g')
+                            .data(chartData)
+                            .join('g')
+
+                // a. Tables headers (added directly to canvas group)
+                canvas.append('text').attr("class", `material-data-table table-header material`)
+                    .attr('x', settings.geometry.tableOffset.label)
+                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset)
+                    .text('Collected waste material')
+                canvas.append('text').attr("class", `material-data-table table-header total`)
+                    .attr('x', settings.geometry.tableOffset.total)
+                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset )
+                    .text('Total')
+                canvas.append('text').attr("class", `material-data-table table-header landfill`)
+                    .attr('x', settings.geometry.tableOffset.landfill)
+                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset)
+                    .text('Landfill')
+                canvas.append('text').attr("class", `material-data-table table-header diversion`)
+                    .attr('x', settings.geometry.tableOffset.diversion)
+                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset )
+                    .text('Recycled')
+
+                // b. Table and axis group
+                tableAxis.append('text')
+                    .attr("class", d => `${d.class} arc-label material-data-table`)
+                    .attr('x', settings.geometry.tableOffset.label)
+                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
+                    .text(d => d.material)
+                tableAxis.append('text')
+                    .attr("class", d => `${d.class} total-volume material-data-table`)
+                    .attr('x', settings.geometry.tableOffset.total)
+                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
+                    .text(d => `${helpers.numberFormatters.formatComma(d.total /1000)} kt`)
+                tableAxis.append('text')
+                    .attr("class", d => `${d.class} diversion-volume material-data-table`)
+                    .attr('x', settings.geometry.tableOffset.landfill)
+                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
+                    .text(d => `${helpers.numberFormatters.formatComma(d.landfill /1000)} kt`)
+                tableAxis.append('text')
+                    .attr("class", d => `${d.class} landfill-volume material-data-table`)
+                    .attr('x', settings.geometry.tableOffset.diversion)
+                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
+                    .text(d => `${helpers.numberFormatters.formatComma(d.diverted /1000)} kt`)
+
+            // 4. Add background layer and annotation
+                backgroundLayer.append('rect').classed('bg-rect', true)
+                    .attr('width', settings.dims.width)
+                    .attr('height', settings.dims.height)
+
+                annotationLayer.append('text').classed('main-title', true)
+                    .attr('transform', `translate(${settings.dims.margin.left} , ${settings.dims.margin.top})`)
+                    .text(`What materials did Victorian's recover in ${settings.year}?`)
+
+            // 5. Add a curved labels for diversion radial chart 
+                chartData.forEach((d, i) => {
+                    const slugMaterialName =  helpers.slugify(d.material)
+                        labelOffset = 4, 
+                        labelRadius = getInnerRadius(i) + labelOffset,
+                        startPos = {
+                            x: settingsRadial.geometry.circlePos.x ,
+                            y: settingsRadial.geometry.circlePos.y - labelRadius,
+                        }, 
+                        labelPath = `M${startPos.x} ${startPos.y}  A${labelRadius}, ${labelRadius}, 0, 0, 1, ${startPos.x }, ${startPos.y + labelRadius * 2}
+                            A${labelRadius}, ${labelRadius}, 0, 0, 1, ${startPos.x }, ${startPos.y}`
+
+                    defs.append('path')
+                        .attr('id', `label-path-${slugMaterialName}`)
+                        .attr('d', labelPath)         
+
+                    // Material label
+                    annotationLayer.append('text')
+                        .classed(`radialBar-material-label text-on-path ${slugMaterialName}` , true)
+                        .append('textPath').attr("xlink:href", `#label-path-${slugMaterialName}`)
+                            .attr('startOffset', '3px')
+                            .text(d.material)	
+
+                    // Data label
+                    annotationLayer.append('text')
+                        .classed(`radialBar-pct-label text-on-path ${slugMaterialName}` , true)
+                        .append('textPath').attr("xlink:href", `#label-path-${slugMaterialName}`)
+                            .attr('startOffset', helpers.numberFormatters.formatPct1dec(d.diversionRate - 0.005))
+                            .text(helpers.numberFormatters.formatPct1dec(d.diversionRate))
+                })
+
+                // Title labels
+                const titleOffset = 10, 
+                    titleLabelRadius = settingsRadial.geometry.chartRadius + titleOffset
+                    titleStartPos = {
+                        x: settingsRadial.geometry.circlePos.x - titleLabelRadius,
+                        y: settingsRadial.geometry.circlePos.y,
+                    }, 
+                    titleLabelPath = `M${titleStartPos.x} ${titleStartPos.y} A${titleLabelRadius}, ${titleLabelRadius}, 0, 0, 1, ${settingsRadial.geometry.circlePos.x + titleLabelRadius}, ${titleStartPos.y }`
+
+                defs.append('path')
+                    .attr('id', 'radialBar-label-path')
+                    .attr('d', titleLabelPath)
+
+                annotationLayer.append('text')
+                    .classed('radialBar-title-label text-on-path' , true)
+                    .append('textPath').attr("xlink:href", "#radialBar-label-path")
+                        .attr('startOffset', '49%')
+                        .text(`Closing the gaps`)
+
+                annotationLayer.append('text')
+                    .classed('radialBar-subtitle-label text-on-path' , true)
+                    .append('textPath').attr("xlink:href", "#radialBar-label-path")
+                        .attr('startOffset', '49.5%')
+                        .text(`- comparing recovery rates for Victorian waste materials in ${settings.year}`)	
+        };
+
+        // Toggle dark theme with spacebar
+        document.body.onkeyup = function(e){
+            if(e.keyCode == 32){
+                d3.selectAll(`.svg-container`).classed("dark", !d3.selectAll('.svg-container').classed("dark"))
+            }
+        }
+
+
+        ////////////////////////////////////
+        /// X. HELPER FUNCTIONS |        ///
+        ////////////////////////////////////
+
+
+            // ANIMATION HELPERS: FOR PLAY/TESTING ONLY
+            function animatePath(pathID, duration = 3000, delay = 3000){
+                const pathLength = document.getElementById(pathID).getTotalLength()
+                d3.select(`#${pathID}`)
+                    .style('stroke-dasharray',  `${pathLength} ${pathLength}`)
+                    .style('stroke-dashoffset',  pathLength)
+                    .transition().duration(duration).delay(delay)
+                    .style('stroke-dashoffset', 0)
+            };
+
+            function animateAllPaths(){
+                const arr = []
+                data.schema.lists.forEach(stream => {
+                    const slugStreamName = helpers.slugify(stream)
+                    arr.push(`flow-diversion-${slugStreamName}`)
+                    arr.push(`flow-landfill-${slugStreamName}`)
+                })
+                arr.forEach( (id, i) => animatePath(id, 3000, i%2 *3000) )
+            };
+
+            function renderDonut(container, coords, dims, data ){
+                // Setup shape generator and data
+                const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
+                    pie = d3.pie().padAngle(0.005)
+                        .sort(null)
+                        .value(d => d.value),
+                    chartData = pie([
+                        {value: data.pct,    class: 'diversion '+data.materialClass},
+                        {value: 1- data.pct, class: 'landfill'}
+                    ])
+
+                const donutGroup = container.append('g')
+                donutGroup.append('circle').classed('donut-chart-bg', true)
+                    .attr('r', dims.r )
+                        .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
+                donutGroup.append('g').classed('arc-group', true)
+                    .selectAll("path.donut-arc")
+                    .data(chartData)
+                    .join("path").attr('class', d => `${d.data.class} donut-arc`)            
+                        .attr("d", arc)
+                        .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
+                
+                donutGroup.append('text')
+                    .attr('class', `${data.materialClass} donut-diversion-pct`)  
+                    .text(helpers.numberFormatters.formatPct(data.pct))
+                    .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
+            };
+
+            const helpers= {
+                numberFormatters: {
+                    formatComma:           	d3.format(",.0f"),
+                    formatComma1dec:       	d3.format(",.1f"),
+                    formatComma2dec:       	d3.format(",.2f"),
+                    formatInteger:         	d3.format(".0f"),   
+                    formatCostInteger:     	d3.format("$,.0f"),  
+                    formatCost1dec:        	d3.format("$,.1f"),  
+                    formatPct:          	d3.format(".0%"), 
+                    formatPct1dec:          d3.format(".1%")  
+                },
+                numberParsers: {
+                    parseDateSlash: d3.timeParse("%d/%m/%Y")
+                },
+                slugify: function (str) {
+                    str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                    const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                        to   = "aaaaeeeeiiiioooouuuunc------"
+                    for (var i=0, l=from.length ; i<l ; i++) {
+                        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                    }
+                    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                        .replace(/-+/g, '-'); // collapse dashes
+                    return str;
+                }, 
+                wrap: function(text, width, lineHeight, centerVertical = false) {
+                    text.each(function() {
+                        let text = d3.select(this),
+                            words = text.text().split(/\s+/).reverse(),
+                            word,
+                            line = [],
+                            lineNumber = 0,
+                            y = text.attr("y"),
+                            x = text.attr("x"),
+                            fontSize = parseFloat(text.style("font-size")),
+                            dy = parseFloat(text.attr("dy")),
+                            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                        while (word = words.pop()) {
+                            line.push(word);
+                            tspan.text(line.join(" "));
+
+                            if (tspan.node().getComputedTextLength() > width) {
+                                line.pop();
+                                tspan.text(line.join(" "));
+                                line = [word];
+                                tspan = text.append("tspan")
+                                    .attr("x", x)
+                                    .attr("y",  y)
+                                    .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                            }                    
+                        }            
+                        if(centerVertical){
+                            text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                        }
+                    })
+                }
+            }
+
+    </script>
+</html>
+
