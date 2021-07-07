@@ -786,7 +786,7 @@
                     // c. Add the waste stream total collection volume label
                     streamData.append('text').classed(`data-label waste-stream ${slugStreamName}`, true)   
                         .attr('transform', `translate(${offsetX}, ${0})`)
-                        .text(`${helpers.numberFormatters.formatComma1dec(d3.sum([dataStream.Diverted, dataStream.Landfill])/ 1000 )} mil. tonnes` )
+                        .text(`${helpers.numberFormatters.formatComma1dec(d3.sum([dataStream.Diverted, dataStream.Landfill])/ 1000 )} Mt` )
 
                     // d. Add the diversion donut chart and label
                     const group = streamDonuts.append('g').attr('transform', `translate(${offsetX}, 0)`)
