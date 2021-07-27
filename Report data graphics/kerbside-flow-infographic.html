@@ -102,6 +102,7 @@
             }
             body{
                 font-family: 'DIN Next LT Pro';
+                margin: 0;
             }
 
             /***************************/
@@ -120,6 +121,10 @@
             .lga-stream-title{
                 font-size: 30px;
             }
+            .lga-label-title{
+                font-size: 36px;
+                font-weight: 500;
+            }
             .lga-label-small,
             .lga-label,
             .lga-data-label.large, 
@@ -130,13 +135,12 @@
             }
             .table-content, 
             .lga-annotation{
-                font-size: 12px;
+                font-size: 14px;
             }
             .recycling-breakdown-material-label{
                 font-size: 10px;
                 text-anchor: end;
             }
-            .lga-label-title,
             .lga-label,
             .lga-label-headline,
             .waste-destination-title,
@@ -161,6 +165,7 @@
             }
             .lga-label-title{
                 fill:  var(--secondaryBottleGreen);
+                text-transform: uppercase;
             }
             .lga-label-small{
                 fill: rgba(0, 0, 0, 0.7);
@@ -665,7 +670,7 @@
                     </g>
                 </g>
 
-                <g id = "council-scene" transform= "translate(445, 1330) scale(2.5)">
+                <g id = "council-scene" transform= "translate(445, 1295) scale(2.5)">
                     <defs>
                         <g id="garbage-bin-council"">
                             <path fill="#252d2f" d="M4.427-2.15A1.153 2.045 0 013.274-.107 1.153 2.045 0 012.121-2.15a1.153 2.045 0 011.153-2.045 1.153 2.045 0 011.153 2.045"/>
@@ -900,6 +905,7 @@
                 </g>
             </svg>
         </div>
+        
     </body>
 
     <script>
@@ -1024,8 +1030,8 @@
                     streamLabelY = settings.dims.height * 0.32,
                     collectionGroupY = settings.dims.height * 0.335,
                     facilityLabelY  = settings.dims.height * 0.70,
-                    councilSpendLabel  = {x: 50, y: settings.dims.height * 0.785},
-                    councilSpendTable  = {x: 50 + settings.dims.height * 0.325, y: settings.dims.height * 0.89},
+                    councilSpendLabel  = {x: 50, y: settings.dims.height * 0.765},
+                    councilSpendTable  = {x: 50 + settings.dims.width * 0.44, y: settings.dims.height * 0.865},
                     recyclingInsert = {x: settings.dims.width * 0.25, y: settings.dims.height * 0.5},
                     diversionInsert = {x: settings.dims.width * 0.75, y: settings.dims.height * 0.5}
 
@@ -1357,7 +1363,7 @@
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y + 64)
 
-            const garbageOffsetX = 260,           recyclingOffsetX = 360,           organicsOffsetX = 460,
+            const garbageOffsetX = 280,           recyclingOffsetX = 380,           organicsOffsetX = 480,
                 costPerTonneRowOffsetY = 24,      costPerPropertyRowOffsetY = 44,   amountPerPropertyRowOffsetY = 64
 
             const councilTable = annotationLayer.append('g')
@@ -1492,7 +1498,31 @@
                         text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
                     }
                 })
+            },
+            exportPNG: function(settings){
+                d3.select('body').append('canvas')
+                    .attr('id', `${settings.svgID}-canvas`)
+                    .attr('width', settings.dims.width)
+                    .attr('height', settings.dims.height)
+                d3.select('body').append('div')
+                    .attr('id', `png-container`)
+
+                var svgString = new XMLSerializer().serializeToString(document.querySelector(`#${settings.svgID}`));
+                var canvas = document.getElementById(`${settings.svgID}-canvas`);
+                var ctx = canvas.getContext("2d");
+                var DOMURL = self.URL || self.webkitURL || self;
+                var img = new Image();
+                var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+                var url = DOMURL.createObjectURL(svg);
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                    var png = canvas.toDataURL("image/png");
+                    document.querySelector('#png-container').innerHTML = '<img src="'+png+'"/>';
+                    DOMURL.revokeObjectURL(png);
+                };
+                img.src = url;
             }
+
         }
 
     </script>

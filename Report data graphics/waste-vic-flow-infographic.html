@@ -1655,7 +1655,7 @@
                 annotationLayer.append('text').classed('vis-title', true)
                     .text("Victorian waste flows in "+settings.year)
                     .attr('x', 50)
-                    .attr('y', 120)
+                    .attr('y', 140)
 
                 // b. Generation totals
                 annotationLayer.append('text').classed('destination-title destination', true)
@@ -1687,7 +1687,7 @@
                     .attr('x', settings.dims.width * 0.5)
                     .attr('y', settings.dims.height * 0.5)
                     .attr('dy', 0)
-                    .text(`${helpers.numberFormatters.formatComma1dec(totalMRF/1000000)} Mt of waste was locally reprocessed`)
+                    .text(`${helpers.numberFormatters.formatComma1dec(totalMRF/1000000)} Mt of waste was reprocessed in Victoria`)
                     .call(helpers.wrap,  400, 1,1)
 
                 // c. Lower scene
