@@ -1520,8 +1520,8 @@
                         value = d3.sum(materialGeneration.filter(d => d.source === material).map(d => d.value) )
 
                     // i. Add generation material node circle
-                    const nodeX = settings.geometry.generationPos.x + Math.cos(- Math.PI  + Math.PI / (data.list.material.length - 1) * i) * settings.geometry.generationOuterRadius,
-                        nodeY = settings.geometry.generationPos.y + Math.sin(- Math.PI  + Math.PI / (data.list.material.length - 1) * i) * settings.geometry.generationOuterRadius
+                    const nodeX = settings.geometry.generationPos.x + Math.cos(- Math.PI + Math.PI * 0.075 + Math.PI * 0.85 / (data.list.material.length - 1) * i) * settings.geometry.generationOuterRadius,
+                          nodeY = settings.geometry.generationPos.y + Math.sin(- Math.PI + Math.PI * 0.075 +  Math.PI * 0.85 / (data.list.material.length - 1) * i) * settings.geometry.generationOuterRadius
 
                     const node = generationNodes.append('circle').classed(`${className} node`, true)
                         .attr('r', settings.geometry.generationMaterialRadius)
