@@ -129,7 +129,6 @@
             .total-sub-label,
             .total-unit-label{
                 fill: var(--nightSky);
-                /* opacity: 0.8 */
             }
             .generation-icon{
                 fill: var(--nightSky);
@@ -150,7 +149,6 @@
                 fill: #fff;
                 text-shadow: 2px 2px 0px var(--nightSky);
             }
-
             .paper-and-paperboard.node{
                 fill: var(--tertiaryYellow);
             }
@@ -1276,7 +1274,7 @@
                 generationMaterialRadius:       100,
                 generationTotalRadius:          300,
                 generationOuterRadius:          650,
-                linkSpacing:                    5,
+                linkSpacing:                    7,
                 generationPos:      {},
                 materialPos:        {},
                 landfillStartPos:   {},
@@ -1706,27 +1704,27 @@
                 annotationLayer.append('text').classed('product-text news-stand paper-and-paperboard product', true)
                     .text(`Reprocessed paper and cardboard is used products like newspapers, paper-based packaging and cardboard.`)
                     .attr('x', settings.dims.width * 0.2)
-                    .attr('y', settings.dims.height * 0.8)
+                    .attr('y', settings.dims.height * 0.825)
                     .attr('dy', 0)
                     .call(helpers.wrap,  400, 1,1)
 
                 annotationLayer.append('text').classed('product-text news-stand paper-and-paperboard product', true)
                     .text(`Reprocessed plastics, metals and glass are made into packaging for containers and goods, as well many kinds of durable goods and products like toys, appliances, and even railways sleepers!`)
-                    .attr('x', settings.dims.width * 0.375)
-                    .attr('y', settings.dims.height * 0.8)
+                    .attr('x', settings.dims.width * 0.39)
+                    .attr('y', settings.dims.height * 0.85)
                     .attr('dy', 0)
                     .call(helpers.wrap,  600, 1,1)
 
                 annotationLayer.append('text').classed('product-text servo rubber product', true)
                     .text(`Reprocessed crumb rubber can be remanufactured into tyres and is also used as a road base material.`)
-                    .attr('x', settings.dims.width * 0.625)
-                    .attr('y', settings.dims.height * 0.8)
+                    .attr('x', settings.dims.width * 0.65)
+                    .attr('y', settings.dims.height * 0.825)
                     .attr('dy', 0)
                     .call(helpers.wrap,  400, 1,1)
 
                 annotationLayer.append('text').classed('product-text news-stand paper-and-paperboard product', true)
                     .text(`Organic waste is turned into products for composting and soil conditioning, as well as mulch.`)
-                    .attr('x', settings.dims.width * 0.8)
+                    .attr('x', settings.dims.width * 0.825)
                     .attr('y', settings.dims.height * 0.8)
                     .attr('dy', 0)
                     .call(helpers.wrap,  400, 1,1)

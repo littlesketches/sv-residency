@@ -198,7 +198,7 @@
                 fill: #000;
             }
             .recycling-breakdown-chart-bg{
-                fill:   rgb(255, 253, 219);
+                fill:   var(--secondaryGreyLightest);
                 stroke: rgba(0,0,0, 0.7);
                 stroke-width: 2px
             }
@@ -670,7 +670,7 @@
                     </g>
                 </g>
 
-                <g id = "council-scene" transform= "translate(445, 1295) scale(2.5)">
+                <g id = "council-scene" transform= "translate(445, 1285) scale(2.75)">
                     <defs>
                         <g id="garbage-bin-council"">
                             <path fill="#252d2f" d="M4.427-2.15A1.153 2.045 0 013.274-.107 1.153 2.045 0 012.121-2.15a1.153 2.045 0 011.153-2.045 1.153 2.045 0 011.153 2.045"/>
@@ -728,7 +728,7 @@
                         <rect id = "council-grass"  width="800" height="30" x="-30.096" y="170.365" fill="#ced8a1" />
                         <path id = "council-road" fill="#7a92a8" d="M-30.096 190.536l503.398-1.32-.22-3.077c-7.154-.11-263.976-.495-283.139-1.718-15.011-.957-34.662-14.582-43.561-14.44-2.057.033-15.66-.72-15.1.364 1.712 3.319 23.28 15.742 5.038 16.046-57.588.958-110.235-.278-167.295 1.067z"/>
                     </g>
-                    <g id = "council-building-group">
+                    <g id = "council-building-group")">
                         <g id = "council-building-A"> 
                             <path fill="#cea98d" d="M73.727 133.792h33.863v43.687H73.727z"/>
                             <path fill="#fff" d="M94.5 168.125l-2.714.055-.03 2.398 13.17-.032-.17-2.304-2.49-.117v-6.778c0-5.495-7.835-5.488-7.835.045z" opacity=".5"/>
@@ -898,9 +898,9 @@
                         </g>
                     </g>
 
-                    <use id="garbage-bin-2"     xlink:href="#garbage-bin-council"       transform = "translate(305, 196) scale(-1.5 1.5)"/>
-                    <use id="recycling-bin-2"   xlink:href="#recycling-bin-council"     transform = "translate(345, 196) scale(-1.5 1.5)"/>
-                    <use id="organics-bin-2"    xlink:href="#organics-bin-council"      transform = "translate(385, 196) scale(-1.5 1.5)"/>
+                    <use id="garbage-bin-2"     xlink:href="#garbage-bin-council"       transform = "translate(265, 196) scale(-1.5 1.5)"/>
+                    <use id="recycling-bin-2"   xlink:href="#recycling-bin-council"     transform = "translate(305, 196) scale(-1.5 1.5)"/>
+                    <use id="organics-bin-2"    xlink:href="#organics-bin-council"      transform = "translate(345, 196) scale(-1.5 1.5)"/>
 
                 </g>
             </svg>
@@ -1017,7 +1017,7 @@
                 // a. Flow scale
                 const flowScale = d3.scaleLinear()
                         .domain([0, d3.max([yearData.Recycling_volume, yearData.Garbage_volume, yearData.Organics_volume])])
-                        .range([0, 30])
+                        .range([1, 30])
 
                 // b. Setup SVG Canvas ans layers
                 const xTransform = 370, yTransform = 300,
@@ -1030,8 +1030,8 @@
                     streamLabelY = settings.dims.height * 0.32,
                     collectionGroupY = settings.dims.height * 0.335,
                     facilityLabelY  = settings.dims.height * 0.70,
-                    councilSpendLabel  = {x: 50, y: settings.dims.height * 0.765},
-                    councilSpendTable  = {x: 50 + settings.dims.width * 0.44, y: settings.dims.height * 0.865},
+                    councilSpendLabel  = {x: 50 + settings.dims.width * 0, y: settings.dims.height * 0.765},
+                    councilSpendTable  = {x: 50 + settings.dims.width * 0.375, y: settings.dims.height * 0.865},
                     recyclingInsert = {x: settings.dims.width * 0.25, y: settings.dims.height * 0.5},
                     diversionInsert = {x: settings.dims.width * 0.75, y: settings.dims.height * 0.5}
 
@@ -1363,7 +1363,7 @@
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y + 64)
 
-            const garbageOffsetX = 280,           recyclingOffsetX = 380,           organicsOffsetX = 480,
+            const garbageOffsetX = 305,           recyclingOffsetX = 420,           organicsOffsetX = 535,
                 costPerTonneRowOffsetY = 24,      costPerPropertyRowOffsetY = 44,   amountPerPropertyRowOffsetY = 64
 
             const councilTable = annotationLayer.append('g')
@@ -1422,18 +1422,6 @@
             amountPerPropertyRow.append('text').classed('table-content middle', true)
                 .attr('transform', `translate(${organicsOffsetX}, ${0})`)
                 .text(`${helpers.numberFormatters.formatComma(organicsPerPropertyTonnes * 1000)} kg`)
-
-
-                    // garbagePerPropertyTonnes = yearData.Garbage_volume / yearData.Population * settings.variables.peoplePerHousehold,
-                    // garbagePerPropertyCost = yearData.Garbage_cost / yearData.Population * settings.variables.peoplePerHousehold,
-                    // garbagePerTonneCost = yearData.Garbage_cost / yearData.Garbage_volume
-                    // recyclingPerPropertyTonnes = yearData.Recycling_volume / yearData.Population * settings.variables.peoplePerHousehold,
-                    // recyclingPerPropertyCost = yearData.Recycling_cost / yearData.Population * settings.variables.peoplePerHousehold,
-                    // recyclingPerTonneCost = yearData.Recycling_cost / yearData.Recycling_volume,
-                    // organicsPerPropertyTonnes = yearData.Organics_volume / yearData.Population * settings.variables.peoplePerHousehold,
-                    // organicsPerPropertyCost = yearData.Organics_cost / yearData.Population * settings.variables.peoplePerHousehold,
-                    // organicsPerTonneCost = yearData.Organics_cost / yearData.Organics_volume
-
         };
 
 
