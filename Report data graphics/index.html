@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <style>
+            /* COLOUR PALETTES */
+            :root {
+                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+                --svGreen:                       #9ACA3C;
+                /** SECONDARY PALLETTE **/
+                --secondaryGreenLight:           #D5E0A1;
+                --secondaryBottleGreen:          #174F37;
+                --secondaryBottleGreenLight:     #79B5AA;
+                --secondaryGrey:                 #B1B1B0;
+                --secondaryGreyLight:            #CFCFCF;
+                --secondaryGreyLightest:         #ECECEC;
+                /** TERTIARY PALETTE **/
+                --tertiaryPurple:       #51284F;
+                --tertiaryPurpleLight:  #8276B3;
+                --tertiaryRed:          #E04F39;
+                --tertiaryRedLight:     #F78684;
+                --tertiaryYellow:       #EFC041;
+                --tertiaryYellowLight:  #F5E065;
+                --tertiaryCard:         #B39981;
+                --tertiaryCardLight:    #DCBFA6;
+                --tertiaryEmerald:      #009E71;
+                --tertiaryEmeraldLight: #93CCB9;
+                --tertiaryBlue:         #005E88;
+                --tertiaryBlueLight:    #A0D6E9;
+            }
+
+        /***************************************/
+        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+        /***************************************/
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 100;
+                font-style: ultraLight;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: light;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-weight: 400;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                font-weight: 500;
+                font-style: medium;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                font-weight: 800;
+                font-style: heavy;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            body{
+                font-family: 'DIN Next LT Pro';
+                margin: 10vw;
+            }
+            h1{
+                font-size: 2.5rem;
+                text-transform: uppercase;
+                color: var(--secondaryBottleGreenLight);
+            }
+            p{
+                color: rgb(40, 40, 40)
+            }
+            .vis-list-type{
+                font-weight: 500;
+                font-size: 1.25rem;
+                margin-top: 2rem;
+                text-transform: uppercase;
+                color: var(--secondaryBottleGreenLight);
+            }
+            
+        </style>
+    </head>
+
+    <body>
+        <h1>SV Annual report graphics index</h1>
+        <div>
+            <p>This page contains links to SVG based data visualisation being drafted for the upcoming 2019/20 <a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/waste-annual-reports-and-data' target="_blank">Victorian Local Government Annual Waste Services Report</a>
+                and <a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/waste-annual-reports-and-data/2018-to-2019' target="_blank">Victorian Recycling Industry Annual report</a>.
+            </p>
+            <p>
+               All graphics are in draft and have initially been desigend for embedded in the print reports. However all graphics are 'programmed' and digital-first, meaning that are connected to data and be easily extended for web-based rendering and use.
+            </p>
+            <p>The linked dataset supporting these visualisations can be found and updated <a href="https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit#gid=0" target="_blank">here</a>. 
+                The GitHub repository (i.e. code) for these visualisations and apps can be found <a href = "https://github.com/littlesketches/sv-stuff" target = "_blank"> here</a> (note: this will be moved to a SV data team repo shortly). 
+                The aim for each of these visualisation is that they can be reused with updated datasets and supporting more interactive and animated features in the future. This is the rationale for rendering these visualisation directly from data and in the browser.
+            </p>
+            <p>Most graphics are made in SVG, with a handful using HTML elements. 
+                Accordingly, the suggested method for exporting is to use the web browsers print/save to PDF function to export a high quality vector graphic. 
+                Chrome is recommended (and tested), with settings for minimum or no margins or headers/footers. 
+                Some (HTML-based) graphics may require the 'background graphics' option to be checked to render as displayed on screen (i.e. where background CSS is used)
+            </p>
+        </div>
+        <div>
+            <div class ="vis-list-type">Data graphics</div> 
+            <ul>
+                <li><a href ="waste-vic-flow-infographic.html">Victorian waste flows graphic (full page)</a></li>
+                <li><a href ="kerbside-flow-infographic.html">Victorian kerbside waste flows graphic (full page)</a></li>
+                <li><a href ="waste-vic-summary-flow.html">Victorian waste flows summary graphic (half page) | Press 'space bar' to toggle 'dark mode'</a></li>
+                <li><a href ="kerbside-summary-infographic.html">Victorian kerbside waste flows graphic summary (half page)</a></li>
+                <li><a href ="kerbside-bin-breakdown.html">Kerbside bin composition call out graphic</a></li>
+            </ul>    
+
+            <div  class ="vis-list-type">Data visualisations</div> 
+            <ul>
+                <li><a href ="waste-sankey.html">Victorian waste flows (sankey)</a></li>
+                <li><a href ="waste-by-material-stacked.html">Waste by materialradial chart stacked | Press 'space bar' to toggle 'dark mode'</a></li>
+                <li><a href ="waste-by-material.html">Waste by material radial chart | Press 'space bar' to toggle 'dark mode'</a></li>
+            </ul>    
+
+            <div class ="vis-list-type">Map based data graphics</div> 
+            <ul>
+                <li><a href ="waste-export-map.html">Recovered resources exports map</a></li>
+                <li><a href ="waste-export-map-full-top-ten.html">Recovered resources exports map with 'full' top ten data</a></li>
+                <li><a href ="wrrg-data-map-wrrg.html">Recovered resources WRRG map</a></li>
+                <li><a href ="wrrg-data-map-multi-coloured.html">Recovered resources WRRG map with colour coded WRRGs</a></li>
+                <li><a href ="wrrg-data-map-wrrg-ex-glass.html">Recovered resources WRRG map (excl. glass)</a></li>
+                <li><a href ="wrrg-data-map-ex-glass-coloured.html">Recovered resources WRRG map (excl. glass) with colour-coded WRRGs</a></li>
+            </ul>   
+
+            <div  class ="vis-list-type">Experiments that are mostly incomplete ideas and use static data)</div> 
+            <ul>
+                <li><a href ="waste-breakdown-experiment-circle-packing.html">Interactive circle packing</a></li>
+                <li><a href ="waste-breakdown-experiment-bin-shaped-voronoi.html">Bin shaped voronoi</a></li>
+                <li><a href ="waste-breakdown-experiment-circular-voronoi.html">Circular voronoi</a></li>
+                <li><a href ="waste-breakdown-experiment-radial-donut.html"> Radial donut chart</a></li>
+            </ul>   
+
+        </div>
+
+    </body>
+
+</html>
