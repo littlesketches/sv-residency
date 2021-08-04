@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="SV Resource recovery market bulletin">
-        <meta name="author" content="Little Sketches ">
+        <meta name="description" content="Kerbside waste flow infographic">
+        <meta name="author" content="Sustainability Victoria">
         <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES */
             :root {
@@ -112,14 +112,15 @@
             .recycling-rate-main{
                 font-size: 60px;
                 letter-spacing: -3px;
+                font-weight: 400;
             }
             .lga-label-title,
-            .lga-label-headline, 
-            .waste-destination-title,
-            .lga-stream-title, 
+            .lga-label-headline{
+                font-size: 30px;
+            }
             .waste-destination-title,
             .lga-stream-title{
-                font-size: 30px;
+                font-size: 24px;
             }
             .lga-label-title{
                 font-size: 36px;
@@ -135,7 +136,7 @@
             }
             .table-content, 
             .lga-annotation{
-                font-size: 14px;
+                font-size: 16px;
             }
             .recycling-breakdown-material-label{
                 font-size: 10px;
@@ -146,10 +147,12 @@
             .waste-destination-title,
             .lga-stream-title,
             .recycling-breakdown-label,
-            .recycling-rate-main,
             .recycling-rate-label,
             .bold{
-                font-weight: bold;
+                font-weight: 500;
+            }
+            .recycling-rate-main{
+                font-weight: 600;
             }
             .waste-destination-title,
             .lga-stream-title, 
@@ -164,14 +167,16 @@
                 dominant-baseline: middle;
             }
             .lga-label-title{
-                fill:  var(--secondaryBottleGreen);
+                fill:  #000;
                 text-transform: uppercase;
             }
             .lga-label-small{
-                fill: rgba(0, 0, 0, 0.7);
+                /* fill: rgba(0, 0, 0, 0.7); */
                 mix-blend-mode: darken;
             }
-
+            .shadow.recycling{
+                fill: #A9871C;
+            }
             /************************************/
             /**** STREET SCENE WASTE GRAPHIC  ***/
             /************************************/
@@ -188,10 +193,12 @@
             }
             .waste-destination-title,
             .lga-stream-title{   
-                fill: #fff;
-                stroke: #000;
-                stroke-width: 0.75px;
-                font-weight: 900;
+                fill: var(--secondaryBottleGreen);
+                fill: #000;
+                /* stroke: #000; */
+                /* stroke-width: 0.75px; */
+                font-weight: 500;
+                text-transform: uppercase;
             }
             .lga-data-label.large{
                 mix-blend-mode: multiply;
@@ -207,7 +214,7 @@
                 stroke-width: 0.5px;
             } 
             .recycling-breakdown.paper{
-                fill: var(--secondaryBottleGreenLight );
+                fill: var(--secondaryBottleGreenLight);
             }
             .recycling-breakdown.plastic{
                 fill: var(--tertiaryBlue);
@@ -224,8 +231,25 @@
                 stroke-dasharray: 1.5 5;
                 mix-blend-mode: multiply;
             }
-            .flowPath.recycling{
-                stroke: var(--tertiaryYellowLight);
+            .flowPath.recycling.paper{
+                stroke-dasharray: 1.5 20;
+                stroke-dashoffset: 0;
+                stroke: var(--secondaryBottleGreenLight);
+            }
+            .flowPath.recycling.plastic{
+                stroke-dasharray: 1.5 20;
+                stroke-dashoffset: 5;
+                stroke: var(--tertiaryBlue);
+            }
+            .flowPath.recycling.glass{
+                stroke-dasharray: 1.5 20;
+                stroke-dashoffset: 10;
+                stroke: var(--tertiaryPurpleLight)
+            }
+            .flowPath.recycling.metal{
+                stroke-dasharray: 1.5 20;
+                stroke-dashoffset: 15;
+                stroke: var(--tertiaryBlueLight);
             }
             .flowPath.garbage{
                 stroke: var(--tertiaryRed);
@@ -910,30 +934,13 @@
 
     <script>
 
+        /////////////////////////////////////////////////////////////////////////////////
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
         ////////////////////////////////////////////////////////////////////////////////
-        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP  ///
-        ////////////////////////////////////////////////////////////////////////////////
-
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                // 1. Parse data
-                await parseData(loadedData.kerbsideData.elements, loadedData.kerbsideComposition.elements)
-                // 2. Render visualisation(s)
-                await renderLgaVis(loadedData.kerbsideData.elements, loadedData.kerbsideComposition.elements, settings)
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
-
-
-        //////////////////////////////////
-        // 0. SETUP DATA AND SETTINGS  ///
-        //////////////////////////////////
 
         const settings = {
             svgID:          'streetscene-vis',
-            year:           '2019/20', 
+            year:           '2019-20', 
             dims: {
                 height:     1530, 
                 width:      1080,
@@ -947,7 +954,8 @@
         }
 
         const data = {          // Initiate data object that populated by the parseData() function, 
-            byPeriod:   {},
+            table:        {},
+            byPeriod:       {},
             byType:   {
                 material: {}
             },
@@ -956,9 +964,42 @@
             }
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
+
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
+
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                            await parseData(data.table.kerbsideData   , data.table.kerbsideComposition)                 // 1. Parse data
+                            await renderVis(data.table.kerbsideData, data.table.kerbsideComposition, settings)          // 2. Render visualisation(s)
+                        }
+                    }
+                })
+            }                       
+        };
+
 
         ////////////////////////////////////
-        // A. PARSE AND WRANGLE DATA     ///
+        // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
 
         async function parseData(kerbsideData, recycleBinData) {      
@@ -985,10 +1026,10 @@
 
 
         //////////////////////////////////////////////
-        // C. RENDER THE LOCAL GOVERNMENT GRAPHIC  ///
+        // 2. RENDER THE LOCAL GOVERNMENT GRAPHIC  ///
         //////////////////////////////////////////////
 
-        async function renderLgaVis(collectionData, compositionData, settings){
+        async function renderVis(collectionData, compositionData, settings){
             // 0. Data
                 const yearData = collectionData.filter(d => d.year === settings.year)[0],
                     recycleBinData =  compositionData.filter(d => d.year === settings.year),
@@ -1031,7 +1072,7 @@
                     collectionGroupY = settings.dims.height * 0.335,
                     facilityLabelY  = settings.dims.height * 0.70,
                     councilSpendLabel  = {x: 50 + settings.dims.width * 0, y: settings.dims.height * 0.765},
-                    councilSpendTable  = {x: 50 + settings.dims.width * 0.375, y: settings.dims.height * 0.865},
+                    councilSpendTable  = {x: 50 + settings.dims.width * 0.41, y: settings.dims.height * 0.865},
                     recyclingInsert = {x: settings.dims.width * 0.25, y: settings.dims.height * 0.5},
                     diversionInsert = {x: settings.dims.width * 0.75, y: settings.dims.height * 0.5}
 
@@ -1067,7 +1108,7 @@
                 .call(helpers.wrap, 300, 1)
             annotationLayer.append('text').classed('waste-destination-title garbage', true)
                 .attr('x', settings.dims.width / 2)
-                .attr('y', facilityLabelY)
+                .attr('y', facilityLabelY + 10)
                 .attr('dy', 0)
                 .text('Landfill')
                 .call(helpers.wrap, 300, 1)
@@ -1085,7 +1126,7 @@
                     recyclingGroup.append('text').classed('lga-data-label large recycling', true)
                         .html(`A total of <tspan class = "bold">${helpers.numberFormatters.formatComma2dec(yearData.Recycling_volume/1000000)} million tonnes</tspan> were `)
                     recyclingGroup.append('text').classed('lga-data-label large recycling', true)
-                        .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Recycling_properties/1000000)} million properties`)
+                        .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Recycling_properties/1000000)} million households`)
                         .attr('y', 20)
                 // b. Recycling iconograph 
                     const noWholeRecycleBins = Math.floor(yearData.Recycling_volume/100000),
@@ -1122,9 +1163,23 @@
                     const recyclingPath = `M${flowScale(yearData.Recycling_volume)/2} ${(rowNo + 1) * rowSpace + 40}  V${facilityY - flowRadius}  q 0, ${flowRadius}  ${flowRadius}, ${flowRadius}  H${mrfX}`,
                         recyclingContaminationPath = `M${mrfXOut} ${facilityY}   H${settings.dims.width/2 - flowScale(yearData.Garbage_volume)/2 - xMargin - contaminationRadius - 5}   q ${contaminationRadius},0  ${contaminationRadius}, ${contaminationRadius} `,
                         recycleContaminationRate = recycleBinData.filter(d => d.group ==='Contaminants')[0].volume / d3.sum(Object.values(recycleBinData).map(d => d.volume))
-                    recyclingGroup.append('path').classed('flowPath recycling', true)
+                    recyclingGroup.append('path').classed('flowPath recycling paper', true)
                         .attr('d', recyclingPath)
                         .style('stroke-width', flowScale(yearData.Recycling_volume))
+
+                    recyclingGroup.append('path').classed('flowPath recycling plastic', true)
+                        .attr('d', recyclingPath)
+                        .style('stroke-width', flowScale(yearData.Recycling_volume))
+
+                    recyclingGroup.append('path').classed('flowPath recycling glass', true)
+                        .attr('d', recyclingPath)
+                        .style('stroke-width', flowScale(yearData.Recycling_volume))
+
+                    recyclingGroup.append('path').classed('flowPath recycling metal', true)
+                        .attr('d', recyclingPath)
+                        .style('stroke-width', flowScale(yearData.Recycling_volume))
+
+
                     recyclingGroup.append('path').classed('flowPath garbage', true)
                         .attr('d', recyclingContaminationPath)
                         .style('stroke-width', flowScale(yearData.Recycling_volume * recycleContaminationRate))
@@ -1136,7 +1191,7 @@
                 garbageGroup.append('text').classed('lga-data-label large garbage', true)
                     .html(`A total of <tspan class = "bold">${helpers.numberFormatters.formatComma2dec(yearData.Garbage_volume/1000000)} million tonnes</tspan> were`)
                 garbageGroup.append('text').classed('lga-data-label large garbage', true)
-                    .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Garbage_properties/1000000)} million properties`)
+                    .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Garbage_properties/1000000)} million households`)
                     .attr('transform', `translate(${0}, ${20})`)
 
                 // b. Garbage iconograph 
@@ -1179,9 +1234,9 @@
                 .attr('transform', `translate(${settings.dims.width * 2 / 3 + xMargin} , ${collectionGroupY})`)
                 // a. Volume label
                     organicsGroup.append('text').classed('lga-data-label large organics', true)
-                        .html(`A total of <tspan class ="bold">${helpers.numberFormatters.formatComma2dec(yearData.Organics_volume/1000000)} millions tonnes</tspan> were`)
+                        .html(`A total of <tspan class ="bold">${helpers.numberFormatters.formatComma2dec(yearData.Organics_volume/1000000)} million tonnes</tspan> were`)
                     organicsGroup.append('text').classed('lga-data-label large organics', true)
-                        .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Organics_properties/1000000)} million properties`)
+                        .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Organics_properties/1000000)} million households`)
                         .attr('transform', `translate(${0}, ${20})`)
                 // b. Iconograph 
                     const noWholeOrganicsBins = Math.floor(yearData.Organics_volume/100000),
@@ -1296,39 +1351,39 @@
                         .attr('transform', `translate(${0} , ${0})  scale(${recycleBinScale})`)
 
             // 8. Diversion 
-                const diversionCallout =  annotationLayer.append('g')
-                    .attr('transform', `translate(${diversionInsert.x}, ${diversionInsert.y})`)
-                // a. Diversion callout background circle
-                diversionCallout.append('circle')
-                    .classed('recycling-breakdown-chart-bg', true)
-                    .attr('r', chartBgRadius)
-                    .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
+            const diversionCallout =  annotationLayer.append('g')
+                .attr('transform', `translate(${diversionInsert.x}, ${diversionInsert.y})`)
+            // a. Diversion callout background circle
+            diversionCallout.append('circle')
+                .classed('recycling-breakdown-chart-bg', true)
+                .attr('r', chartBgRadius)
+                .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
 
-                const diversionLabelPath = `M${0} ${0}  A${chartBgRadius + breakdownLabelOffset}, ${chartBgRadius + breakdownLabelOffset}, 0, 0, 1, ${0}, ${(chartBgRadius+ breakdownLabelOffset) * 2}
-                    A${chartBgRadius+ breakdownLabelOffset}, ${chartBgRadius+ breakdownLabelOffset}, 0, 0, 1, ${0}, ${0}`
-                defs.append('path').attr('id', 'diversion-callout-label-path')
-                    .attr('d',diversionLabelPath )
+            const diversionLabelPath = `M${0} ${0}  A${chartBgRadius + breakdownLabelOffset}, ${chartBgRadius + breakdownLabelOffset}, 0, 0, 1, ${0}, ${(chartBgRadius+ breakdownLabelOffset) * 2}
+                A${chartBgRadius+ breakdownLabelOffset}, ${chartBgRadius+ breakdownLabelOffset}, 0, 0, 1, ${0}, ${0}`
+            defs.append('path').attr('id', 'diversion-callout-label-path')
+                .attr('d',diversionLabelPath )
 
-                diversionCallout.append('text').classed('recycling-breakdown-label', true)
-                    .attr('transform', `translate(${-(chartBgRadius + breakdownLabelOffset) *0.25}, ${-(chartBgRadius) * 1.5 - breakdownLabelOffset })`)
-                        .append('textPath').attr("xlink:href", `#diversion-callout-label-path`)
-                        .text(`How much kerbside waste was recovered?`)	
-                diversionCallout.append('text').classed('recycling-rate-label', true)
-                    .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
-                    .attr('x', 0).attr('y', -82).attr('dy', 0)
-                    .text(`Diversion rate of`)	
-                diversionCallout.append('text').classed('recycling-rate-main', true)
-                    .text(`${helpers.numberFormatters.formatPct1dec(1 - ((yearData.Garbage_volume + yearData.Recycling_volume * recycleContaminationRate + yearData.Organics_volume * organicsContaminationRate) / totalCollection))}`)	
-                    .attr('x', 0).attr('y', 0).attr('dy', 0)
-                    .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
-                diversionCallout.append('text').classed('recycling-rate-label', true)
-                    .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
-                    .attr('x', 0).attr('y', -12).attr('dy', 0)
-                    .text(`after contamination`)	
+            diversionCallout.append('text').classed('recycling-breakdown-label', true)
+                .attr('transform', `translate(${-(chartBgRadius + breakdownLabelOffset) *0.25}, ${-(chartBgRadius) * 1.5 - breakdownLabelOffset })`)
+                    .append('textPath').attr("xlink:href", `#diversion-callout-label-path`)
+                    .text(`How much kerbside waste was recovered?`)	
+            diversionCallout.append('text').classed('recycling-rate-label', true)
+                .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
+                .attr('x', 0).attr('y', -82).attr('dy', 0)
+                .text(`Diversion rate of`)	
+            diversionCallout.append('text').classed('recycling-rate-main', true)
+                .text(`${helpers.numberFormatters.formatPct1dec(1 - ((yearData.Garbage_volume + yearData.Recycling_volume * recycleContaminationRate + yearData.Organics_volume * organicsContaminationRate) / totalCollection))}`)	
+                .attr('x', 0).attr('y', 0).attr('dy', 0)
+                .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
+            diversionCallout.append('text').classed('recycling-rate-label', true)
+                .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
+                .attr('x', 0).attr('y', -12).attr('dy', 0)
+                .text(`after contamination`)	
 
             // 9. Add annotations and main title
             annotationLayer.append('text').classed('lga-label-title', true)
-                .text(`Victorian kerbside waste in ${settings.year}`)
+                .text(`Household collections at a glance, ${settings.year}`)
                 .attr('x', 50)
                 .attr('y', 60)
             annotationLayer.append('text').classed('lga-label-small', true)
@@ -1340,7 +1395,7 @@
                 .attr('x', xMargin)
                 .attr('y', headlineOffsetY + 30)
             annotationLayer.append('text').classed('lga-label-small', true)
-                .html(`of waste from Victorian properties`)
+                .html(`of waste from Victorian households`)
                 .attr('x', xMargin)
                 .attr('y', headlineOffsetY + 50)
 
@@ -1355,7 +1410,7 @@
                 .attr('y', councilSpendLabel.y + 24)
 
             annotationLayer.append('text').classed('lga-label-small', true)
-                .html(`<tspan class='bold'>${helpers.numberFormatters.formatComma1dec(totalCollection/1000000)} million tonnes</tspan> of <tspan class='garbage bold'>garbage</tspan>, <tspan class ="recycling bold">recyclables</tspan> and <tspan class ="organics bold">organics</tspan>`)
+                .html(`<tspan class='bold'>${helpers.numberFormatters.formatComma1dec(totalCollection/1000000)} million tonnes</tspan> of <tspan class='garbage bold shadow'>garbage</tspan>, <tspan class ="recycling bold shadow">recyclables</tspan> and <tspan class ="organics bold shadow">organics</tspan>`)
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y + 44)
             annotationLayer.append('text').classed('lga-label-small', true)
@@ -1363,7 +1418,7 @@
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y + 64)
 
-            const garbageOffsetX = 305,           recyclingOffsetX = 420,           organicsOffsetX = 535,
+            const garbageOffsetX = 275,           recyclingOffsetX = 385,           organicsOffsetX = 495,
                 costPerTonneRowOffsetY = 24,      costPerPropertyRowOffsetY = 44,   amountPerPropertyRowOffsetY = 64
 
             const councilTable = annotationLayer.append('g')
@@ -1371,14 +1426,27 @@
 
 
             const councilTableHeaderRow = councilTable.append('g')
-            councilTableHeaderRow.append('text').classed('table-header garbage bold middle', true)
-                .attr('transform', `translate(${garbageOffsetX}, ${0})`)
+            councilTableHeaderRow.append('rect').classed('table-header garbage rect', true)
+                .attr('transform', `translate(${garbageOffsetX - 30}, ${0})`)
+                .attr('height', 5)
+                .attr('width', 60)
+            councilTableHeaderRow.append('rect').classed('table-header recycling rect', true)
+                .attr('transform', `translate(${recyclingOffsetX - 30}, ${0})`)
+                .attr('height', 5)
+                .attr('width', 60)
+            councilTableHeaderRow.append('rect').classed('table-header organics rect', true)
+                .attr('transform', `translate(${organicsOffsetX - 30}, ${0})`)
+                .attr('height', 5)
+                .attr('width', 60)
+
+            councilTableHeaderRow.append('text').classed('table-header middle', true)
+                .attr('transform', `translate(${garbageOffsetX}, ${-10})`)
                 .text('Garbage')
-            councilTableHeaderRow.append('text').classed('table-header recycling bold middle', true)
-                .attr('transform', `translate(${recyclingOffsetX}, ${0})`)
+            councilTableHeaderRow.append('text').classed('table-header middle', true)
+                .attr('transform', `translate(${recyclingOffsetX}, ${-10})`)
                 .text('Recyclables')
-            councilTableHeaderRow.append('text').classed('table-header organics bold middle', true)
-                .attr('transform', `translate(${organicsOffsetX}, ${0})`)
+            councilTableHeaderRow.append('text').classed('table-header  middle', true)
+                .attr('transform', `translate(${organicsOffsetX}, ${-10})`)
                 .text('Organics')
 
             const costPerTonneRow = councilTable.append('g')
@@ -1412,7 +1480,7 @@
             const amountPerPropertyRow = councilTable.append('g')
                 .attr('transform', `translate(${0}, ${amountPerPropertyRowOffsetY})`)
             amountPerPropertyRow.append('text').classed('table-content', true)
-                .text('Amount collected per property serviced')
+                .text('Amount collected per property')
             amountPerPropertyRow.append('text').classed('table-content middle', true)
                 .attr('transform', `translate(${garbageOffsetX}, ${0})`)
                 .text(`${helpers.numberFormatters.formatComma(garbagePerPropertyTonnes * 1000)} kg`)

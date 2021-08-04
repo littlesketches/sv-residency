@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -6,7 +6,7 @@
         <meta name="description" content="SV Resource recovery market bulletin">
         <meta name="author" content="Little Sketches ">
         <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -410,29 +410,12 @@
 
     <script>
 
-        /////////////////////////////////////////////////////////////////////////////////
-        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
-        /////////////////////////////////////////////////////////////////////////////////
-
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                // 1. Parse data
-                await parseData(loadedData.byStream.elements, loadedData.byMaterial.elements, loadedData.byWRRG.elements, loadedData.byMaterialExport.elements)
-                // 2. Render visualisation(s)
-                await renderVicWasteSummaryVis(data, settings)
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
-
-
-
-        //////////////////////////////////
-        // 0. SETUP DATA AND SETTINGS  ///
-        //////////////////////////////////
-
+        ////////////////////////////////////////////////////////////////////////////////
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
+        ////////////////////////////////////////////////////////////////////////////////
+    
         const data = {          // Initiate data object that populated by the parseData() function, 
+            table:      {},
             byPeriod:   {},
             byType:   {
                 material: {}
@@ -491,8 +474,42 @@
             }
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
+
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
+
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                            await parseData(data.table.byStream, data.table.byMaterial )    // 1. Parse data
+                            await renderVis(data, settings)                                 // 2. Render visualisation(s)
+                        }
+                    }
+                })
+            }                       
+        };
+
+
         ////////////////////////////////////
-        // A. PARSE AND WRANGLE DATA     ///
+        // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
 
         async function parseData(wasteStreamData, materialData) {      
@@ -531,10 +548,10 @@
 
 
         /////////////////////////////////////////////////
-        // B. RENDER THE WASTE FLOW SUMMARY GRAPHIC   ///
+        // 2. RENDER THE WASTE FLOW SUMMARY GRAPHIC   ///
         /////////////////////////////////////////////////
 
-        async function renderVicWasteSummaryVis(data, settings){
+        async function renderVis(data, settings){
             // 0. REFERENCES FOR DATA AND SVG PATH OBJECTS AND GEOMETRY SETUP
                 const dataset = data.byPeriod[settings.year],
                     byStreamData = dataset.byStream,
@@ -886,6 +903,10 @@
         };
 
 
+        ////////////////////////////////////
+        /// X. HELPER FUNCTIONS |         ///
+        ////////////////////////////////////
+
         // Toggle dark theme with spacebar
         document.body.onkeyup = function(e){
             if(e.keyCode == 32){
@@ -920,10 +941,6 @@
             }
         }
 
-
-        ////////////////////////////////////
-        /// X. HELPER FUNCTIONS |         ///
-        ////////////////////////////////////
 
             // ANIMATION HELPERS: FOR PLAY/TESTING ONLY
             function animatePath(pathID, duration = 3000, delay = 3000){

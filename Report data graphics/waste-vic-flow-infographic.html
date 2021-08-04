@@ -6,7 +6,7 @@
         <meta name="description" content="SV Resource recovery market bulletin">
         <meta name="author" content="Little Sketches ">
         <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -732,7 +732,7 @@
                         <path fill="#84dbff" d="M313 410.2l1.9 1.1c.6.3 1.3.7 2.2 1 .2.1.4.2.7.3.2.1.5.1.7.2.2.1.5.1.7.2.3 0 .5.1.8.1 1.1.2 2.2.1 3.4 0 1.2-.1 2.5-.5 3.8-1 2.6-.9 5.3-2.3 8.1-3.7 2.8-1.4 5.8-2.8 8.9-3.5 1.6-.4 3.1-.6 4.6-.5.7 0 1.5.1 2.2.2.7.2 1.4.3 2 .6.6.2 1.2.4 1.7.8.3.1.5.3.7.4.2.2.4.3.6.5.9.6 1.4 1.2 1.9 1.7s.8 1 1 1.3c.2.3.3.5.3.5l-1.9-1.1c-.6-.3-1.3-.7-2.2-1-.2-.1-.4-.2-.7-.3-.2-.1-.5-.1-.7-.2-.2-.1-.5-.1-.7-.2-.3 0-.5-.1-.8-.1-1.1-.2-2.2-.1-3.4 0-1.2.1-2.5.5-3.8 1-2.6.9-5.3 2.3-8.1 3.7-2.8 1.4-5.8 2.8-8.9 3.5-1.6.4-3.1.6-4.6.5-1.5 0-2.9-.3-4.1-.8-.6-.2-1.2-.4-1.7-.8-.3-.1-.5-.3-.7-.4-.2-.2-.4-.3-.6-.5-.8-.6-1.5-1.2-2-1.7s-.8-1-1-1.3c-.2-.4-.3-.5-.3-.5z" transform="translate(469.27 228.55) scale(4.16667)"/>
                     </g>
                     <path id="beach-destination-scene" fill="#5b5d4b" d="M2480.89 2266.88h-521.55v42.28h521.55zm-449.15 87.41h-184.02v-255.3h63.42z"/>
-                    <path id="ground-destination-scene" fill="#2c262f" d="M1947.2 2309.18h533.7v246.76l-2483.77-3.23v-433.09h61.1l72.98 118.03h294l129.49-181.58h1277.28z"/>
+                    <path id="ground-destination-scene" fill="#2c262f" d="M1947.2 2312h533.7v246.76l-2483.77-3.23v-433.09h61.1l72.98 118.03h294l129.49-181.58h1277.28z"/>
                     <path id="road-destination-scene" fill="#545f6b" d="M778.95 2272.88c-17.43 7 137.24.75 376.33-1.8 22.9-17.9 176.9-77.02 82.45-98.17-147.08-33.12-242.51-76.73-143.8-94.63l103.34 3.06c-80.13 24.31-20.95 35 85.14 84.55 71.61 29.22-51.85 109.03-48 108.99 183.04-1.97 469.48-2.64 469.48-2.64 133.56.15 148.9-114.06 68.48-133.6-12.07-2.93-56.87-13.13-72.36-18.01l1.83-.07c26.2-1 81.18-4.05 95.63-1.52 107.46 18.82 67.36 165.67-78.6 165.67-35.91 0-288.94-4.67-478.71-1.73-163.93 2.54-869.09 12.68-895.99 23-288.97 110.89-295.78 196.57-43.33 205.25l449.09-3.09c18.52-33.31 56.7-62.1 132-82.31l109.53 4.42c-169.24 37.15-163.77 61.17-185.62 79.23 0 0 648.57-9.21 842.64-10.32-49.53-26.69-129.22-39.82-217.16-68.24 44.22 1.15 93.14-4.73 106.33-4.43 31.64 27.09 82.28 32.57 174.42 70.4 260.74 1.06 77-1.43 267.15 1.71 58.34.2 196.6 8.48 214.65-19.23 27.66-42.5-157.54-62.46-276.19-93.96l99.99-3.1c-.46.17 166.19 45.13 198.82 42.2 107.46-9.68 199.97-77.99 251.29-77.95 27.05.02 29.71 3.89-11.52 15.37-37.39 10.42-224.23 51.65-208.59 128.94 7.5 37.14-101.71 29.58-253.5 28.01L233 2526.48c-4.76-.99-233 4.01-233 4.01l.41-8.76s126.45-3.7 172.93-.05c-335.32-52.34-128.44-95.73 128.53-227.94 37.24-19.16 294.1-14.36 434.04-18.4-88.72-58.8-115.93-120.9-70.23-158.66l101.91 3.95c-114.42 46.73-53.96 99.4 11.36 152.25z"/>
                     </g>
                     <g id="generation-flows-layer"></g>
@@ -1197,7 +1197,7 @@
                             <path id="mrf-metails-pile-light-3" fill="#e8e9ed" d="M765.06 2429.9l-13.29 10.15 13.33-20.76z"/>
                         </g>
                     </g>
-                    <g id="ship-group">
+                    <g id="ship-group" transform="matrix(-1,0,0,1,4380,0)">
                         <path id="export-container-9-plastic-packaging" fill="#f78684" d="M2034.54 2082.5h51.52v25.9h-51.52z"/>
                         <path id="export-container-shadow-9" fill-opacity=".2" d="M2041.49 2086.03h-2.66v18.67h2.66zm6.67 0h-2.66v18.67h2.66zm6.76 0h-2.66v18.67h2.66zm6.77 0h-2.67v18.67h2.67zm6.76 0h-2.67v18.67h2.67zm6.76 0h-2.67v18.67h2.67zm6.67 0h-2.67v18.67h2.67z"/>
                         <path id="export-container-8-paper-and-paperboard" fill="#efc041" d="M2189.31 2082.5h51.53v25.9h-51.53z"/>
@@ -1231,29 +1231,12 @@
     <script>
 
         ////////////////////////////////////////////////////////////////////////////////
-        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP  ///
-        ////////////////////////////////////////////////////////////////////////////////
-
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                // 1. Parse data
-                await parseData(loadedData.byMaterial.elements)
-                // 2. Render visualisation(s)
-                await renderVis(loadedData.byMaterial.elements, settings)
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
-
-
-        //////////////////////////////////
-        // 0. SETUP DATA AND SETTINGS  ///
-        //////////////////////////////////
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
+        ////////////////////////////////////////////////////////////////////////////////s
 
         const settings = {
             svgID:          'scene-vis',
-            year:           '2019/20', 
+            year:           '2019-20', 
             dims: {
                 height:     3508, 
                 width:      2481,
@@ -1264,7 +1247,7 @@
             geometry: {
                 materialOrder: [    // Material order used to arrange paths
                     'Aggregates, masonry, soil',
-                    'Paper and card',
+                    'Paper and cardboard',
                     'Metals',
                     'Plastics',
                     'Glass',
@@ -1318,13 +1301,12 @@
                         y: document.getElementById('mrf-organics-roof').getBBox().y,
                         yOffset: 50,
                     }
-
                 },
             },
         }
 
-
         const data = {
+            table:      {},
             byType: {
                 material:           {},     
                 destination:        {},
@@ -1334,12 +1316,44 @@
             inputData: {}
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
+
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
+
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                            await parseData(data.table.byMaterial)                 // 1. Parse data
+                            await renderVis(data.table.byMaterial, settings)       // 2. Render visualisation(s)
+                        }
+                    }
+                })
+            }                       
+        };
+
 
         ////////////////////////////////////
         // A. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
 
-        // I. PARSE DATA
         async function parseData(materialData) {
             // 1. Parse numeric data types to number
             materialData.forEach(d => {
@@ -1404,9 +1418,9 @@
         };
 
 
-        //////////////////////////////////////////////
-        // C. RENDER THE LOCAL GOVERNMENT GRAPHIC  ///
-        //////////////////////////////////////////////
+        /////////////////////////////////////////////////
+        // C. RENDER THE VICTORIAN WASTE FLOW GRAPHIC ///
+        ////////////////////////////////////////////////
 
         async function renderVis(materialData, settings){
 
@@ -1561,7 +1575,7 @@
                             .attr('startOffset',  	'25%') 
                             .style('text-anchor',  'middle')    // place the text halfway on the arc
                             .style('letter-spacing', 2.5)         
-                            .text(`${helpers.numberFormatters.formatComma2dec(value/1000000)} Mt`)
+                            .text(`${helpers.numberFormatters.formatComma1dec(value/1000000)} Mt`)
 
 
                     // c. Add Landfill links
@@ -1573,7 +1587,7 @@
                         const landfillPathStart = `M${landfillLinkStartX} ${settings.geometry.landfillStartPos.y },  v${settings.geometry.generationTotalRadius * 0.75 + (landfillOffsetY) }`, 
                             landfillPathCurve = link({
                                 source: [landfillLinkStartX, settings.geometry.landfillStartPos.y + settings.geometry.generationTotalRadius * 0.75  + landfillOffsetY ],
-                                target: [landfillLinkStartX - 700, settings.geometry.landfillStartPos.y + settings.geometry.generationTotalRadius * 0.75  + landfillOffsetY + 600]
+                                target: [landfillLinkStartX - 750, settings.geometry.landfillStartPos.y + settings.geometry.generationTotalRadius * 0.75  + landfillOffsetY + 600]
                             }), 
                             landfillPathEnd = `v ${400 - landfillOffsetY}`,
                             landfillPath = `${landfillPathStart}, ${landfillPathCurve}, ${landfillPathEnd}`
@@ -1613,7 +1627,7 @@
 
                         // Append MRF data label
                         annotationLayer.append('text').classed(`${className}  mrf-data-label` , true)
-                            .text(`${mrfValue/1000000} Mt of ${material.toLowerCase()}`)
+                            .text(`${helpers.numberFormatters.formatComma2dec(mrfValue/1000000)} Mt of ${material.toLowerCase()}`)
                             .attr('x', settings.geometry.mrfEndPos[className].x)
                             .attr('y', settings.geometry.mrfEndPos[className].y + 170)
                             .attr('dy', 0)
@@ -1630,7 +1644,7 @@
                         const exportPathStart = `M${exportLinkStartX} ${settings.geometry.landfillStartPos.y },  v${settings.geometry.generationTotalRadius * 0.75 - (exportOffsetY) }`, 
                             exportPathCurve = link({
                                 source: [exportLinkStartX, settings.geometry.exportStartPos.y + settings.geometry.generationTotalRadius * 0.75  - exportOffsetY ],
-                                target: [exportLinkStartX + 650, settings.geometry.exportStartPos.y + settings.geometry.generationTotalRadius * 0.75  - exportOffsetY + 600]
+                                target: [exportLinkStartX + 720, settings.geometry.exportStartPos.y + settings.geometry.generationTotalRadius * 0.75  - exportOffsetY + 600]
                             }), 
                             exportPathEnd = `v ${300 + exportOffsetY}`,
                             exportPath = `${exportPathStart}, ${exportPathCurve}, ${exportPathEnd}`
@@ -1651,7 +1665,7 @@
             // GENERAL ANNOTATION
                 // a. Main title
                 annotationLayer.append('text').classed('vis-title', true)
-                    .text("Victorian waste flows in "+settings.year)
+                    .text("Victorian material flow at a glance, "+settings.year)
                     .attr('x', 50)
                     .attr('y', 140)
 
@@ -1663,19 +1677,22 @@
 
                 // c. Destination annotation 
                 annotationLayer.append('text').classed('destination-title destination', true)
-                    .text("Where waste went")
+                    .text("How materials were managed")
                     .attr('x', 50)
-                    .attr('y', settings.dims.height * 0.42)
+                    .attr('y', settings.dims.height * 0.41)
+                    .attr('dy', 0)
+                    .call(helpers.wrap, 500, 1, 1)
+
 
                 annotationLayer.append('text').classed('destination-label ', true)
-                    .attr('x', settings.dims.width * 0.125)
+                    .attr('x', settings.dims.width * 0.10)
                     .attr('y', settings.dims.height * 0.535)
                     .attr('dy', 0)
                     .text(`${helpers.numberFormatters.formatComma1dec(totalLandfill/1000000)} Mt of waste was sent to landfill`)
                     .call(helpers.wrap,  350, 1,1)
 
                 annotationLayer.append('text').classed('destination-label ', true)
-                    .attr('x', settings.dims.width * 0.875)
+                    .attr('x', settings.dims.width * 0.90)
                     .attr('y', settings.dims.height * 0.535)
                     .attr('dy', 0)
                     .text(`${helpers.numberFormatters.formatComma1dec(totalExport/1000000)} Mt of waste was exported for reprocessing`)
@@ -1685,8 +1702,8 @@
                     .attr('x', settings.dims.width * 0.5)
                     .attr('y', settings.dims.height * 0.5)
                     .attr('dy', 0)
-                    .text(`${helpers.numberFormatters.formatComma1dec(totalMRF/1000000)} Mt of waste was reprocessed in Victoria`)
-                    .call(helpers.wrap,  400, 1,1)
+                    .text(`${helpers.numberFormatters.formatComma1dec(totalMRF/1000000)} Mt of waste was recovered for reprocessing in Victoria`)
+                    .call(helpers.wrap,  450, 1,1)
 
                 // c. Lower scene
                 annotationLayer.append('text').classed('product-title product', true)
@@ -1695,35 +1712,35 @@
                     .attr('y', settings.dims.height * 0.755)
 
                 annotationLayer.append('text').classed('product-text construction aggregates-soils-sand product', true)
-                    .text(`Reprocessed aggregates, masonry and soils are recovered and used as building and construction product`)
+                    .text(`RAggregates, masonry and soils are reprocessed and used as building and construction product`)
                     .attr('x', 50 + settings.dims.width * 0)
                     .attr('y', settings.dims.height * 0.8)
                     .attr('dy', 0)
                     .call(helpers.wrap,  400, 1,1)
 
                 annotationLayer.append('text').classed('product-text news-stand paper-and-paperboard product', true)
-                    .text(`Reprocessed paper and cardboard is used products like newspapers, paper-based packaging and cardboard.`)
+                    .text(`Paper and cardboard is reprocessed and used in products like newspapers, paper-based packaging and cardboard.`)
                     .attr('x', settings.dims.width * 0.2)
                     .attr('y', settings.dims.height * 0.825)
                     .attr('dy', 0)
                     .call(helpers.wrap,  400, 1,1)
 
                 annotationLayer.append('text').classed('product-text news-stand paper-and-paperboard product', true)
-                    .text(`Reprocessed plastics, metals and glass are made into packaging for containers and goods, as well many kinds of durable goods and products like toys, appliances, and even railways sleepers!`)
+                    .text(`Plastics, metals and glass are reprocessed and made into food packaging, as well many kinds of durable products like toys, appliances, and even railways sleepers!`)
                     .attr('x', settings.dims.width * 0.39)
                     .attr('y', settings.dims.height * 0.85)
                     .attr('dy', 0)
                     .call(helpers.wrap,  600, 1,1)
 
                 annotationLayer.append('text').classed('product-text servo rubber product', true)
-                    .text(`Reprocessed crumb rubber can be remanufactured into tyres and is also used as a road base material.`)
+                    .text(`Some tyres are reprocessed into crumb rubber and used as a construction material. Other tyres are re-treaded and made into new tyres.`)
                     .attr('x', settings.dims.width * 0.65)
                     .attr('y', settings.dims.height * 0.825)
                     .attr('dy', 0)
                     .call(helpers.wrap,  400, 1,1)
 
                 annotationLayer.append('text').classed('product-text news-stand paper-and-paperboard product', true)
-                    .text(`Organic waste is turned into products for composting and soil conditioning, as well as mulch.`)
+                    .text(`Organic waste is composted or mulched and used on farms, gardens and landscaping.`)
                     .attr('x', settings.dims.width * 0.825)
                     .attr('y', settings.dims.height * 0.8)
                     .attr('dy', 0)
@@ -1732,68 +1749,68 @@
 
 
         ////////////////////////////////////
-        /// X. HELPER FUNCTIONS |         ///
+        /// X. HELPER FUNCTIONS |        ///
         ////////////////////////////////////
 
-            const helpers= {
-                numberFormatters: {
-                    formatComma:           	d3.format(",.0f"),
-                    formatComma1dec:       	d3.format(",.1f"),
-                    formatComma2dec:       	d3.format(",.2f"),
-                    formatInteger:         	d3.format(".0f"),   
-                    formatCostInteger:     	d3.format("$,.0f"),  
-                    formatCost1dec:        	d3.format("$,.1f"),  
-                    formatPct:          	d3.format(".0%"), 
-                    formatPct1dec:          d3.format(".1%")  
-                },
-                numberParsers: {
-                    parseDateSlash: d3.timeParse("%d/%m/%Y")
-                },
-                slugify: function (str) {
-                    str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
-                    const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
-                        to   = "aaaaeeeeiiiioooouuuunc------"
-                    for (var i=0, l=from.length ; i<l ; i++) {
-                        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-                    }
-                    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-                        .replace(/\s+/g, '-') // collapse whitespace and replace by -
-                        .replace(/-+/g, '-'); // collapse dashes
-                    return str;
-                }, 
-                wrap: function(text, width, lineHeight, centerVertical = false) {
-                    text.each(function() {
-                        let text = d3.select(this),
-                            words = text.text().split(/\s+/).reverse(),
-                            word,
-                            line = [],
-                            lineNumber = 0,
-                            y = text.attr("y"),
-                            x = text.attr("x"),
-                            fontSize = parseFloat(text.style("font-size")),
-                            dy = parseFloat(text.attr("dy")),
-                            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-                        while (word = words.pop()) {
-                            line.push(word);
-                            tspan.text(line.join(" "));
-
-                            if (tspan.node().getComputedTextLength() > width) {
-                                line.pop();
-                                tspan.text(line.join(" "));
-                                line = [word];
-                                tspan = text.append("tspan")
-                                    .attr("x", x)
-                                    .attr("y",  y)
-                                    .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                            }                    
-                        }            
-                        if(centerVertical){
-                            text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
-                        }
-                    })
+        const helpers = {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (var i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
                 }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight, centerVertical = false) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                    if(centerVertical){
+                        text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                    }
+                })
             }
+        }
 
     </script>
 </html>

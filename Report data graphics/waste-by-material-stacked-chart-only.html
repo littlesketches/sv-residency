@@ -111,9 +111,10 @@
 
             #radial-bar-vis .main-title{
                 fill: #000;
-                font-size: 30px;
+                font-size: 24px;
                 font-weight: 500;
                 text-transform: uppercase;
+                text-anchor: middle;
             }
             #radial-bar-vis .bg-rect{
                 fill: none
@@ -213,8 +214,7 @@
 
     <body>
         <div class = "svg-container">
-            <svg id = "radial-bar-vis">
-            </svg>
+            <svg id = "radial-bar-vis"></svg>
         </div>
     </body>
 
@@ -237,10 +237,10 @@
 
         const settings = {
             svgID:        'radial-bar-vis',
-            year:         '2019/20', 
+            year:         '2019-20', 
             dims: {
-                height:     720, 
-                width:      1080,
+                height:     1080, 
+                width:      720,
                 margin: {
                     top: 50, right: 50, bottom: 50, left: 50
                 },
@@ -248,7 +248,7 @@
             geometry: {
                 arcPadding:     2,
                 arcMinRadius:   150,
-                chartRadius:    300
+                chartRadius:    200
             }       
         }
 
@@ -285,7 +285,7 @@
                         if(noLoadedTables === tablesToLoad.length){
                             await parseData(data.table.byStream, data.table.byMaterial)                 // 1. Parse data
                             await renderVis(data.byType.material, settings)             // 2. Render visualisation(s)
-                            }
+                        }
                     }
                 })
             }                       
@@ -296,7 +296,7 @@
         // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
 
-        async function parseData(wasteStreamData, materialData) {      
+        async function parseData(wasteStreamData, materialData) { 
             // 1. Parse numeric data types to number
             wasteStreamData.forEach(d => {
                 Object.entries(d).forEach( ([key, value]) => {
@@ -377,22 +377,22 @@
                     })
                 })
                     
-                chartData = chartData.sort((a,b) => b.total - a.total )
+                chartData = chartData.sort((a,b) => b.diversionRate - a.diversionRate )
 
                 // Setup geometry
                 settings.geometry.circlePos = {
-                    x: settings.dims.width * 0.70, 
-                    y: settings.dims.height / 2 + settings.dims.margin.top
+                    x: settings.dims.width * 0.50, 
+                    y: settings.dims.height * 0.35 + settings.dims.margin.top
                 }
 
-                settings.geometry.chartRadius = (settings.dims.height -settings.dims.margin.top) / 2 - settings.dims.margin.top
-                settings.geometry.arcMinRadius = settings.geometry.chartRadius / 2
+                settings.geometry.chartRadius = (settings.dims.height -settings.dims.margin.top) *0.35 - settings.dims.margin.top
+                settings.geometry.arcMinRadius = settings.geometry.chartRadius * 0.5
 
                 settings.geometry.tableOffset = {
-                    label:              -settings.geometry.circlePos.x + settings.dims.margin.left,  
-                    total:              -settings.geometry.circlePos.x + settings.dims.margin.left + 230, 
-                    landfill:           -settings.geometry.circlePos.x + settings.dims.margin.left + 300, 
-                    diversion:          -settings.geometry.circlePos.x + settings.dims.margin.left + 370,  
+                    label:              -settings.geometry.circlePos.x + settings.dims.margin.left + 70,  
+                    total:              -settings.geometry.circlePos.x + settings.dims.margin.left + 330, 
+                    landfill:           -settings.geometry.circlePos.x + settings.dims.margin.left + 430, 
+                    diversion:          -settings.geometry.circlePos.x + settings.dims.margin.left + 530,  
                     diversionRate:      -10,
                     labelVertical:      5
                 }
@@ -440,66 +440,13 @@
                         .duration(1500)
                         .attrTween('d', arcTween)
 
-            // 3. Add body color background rect under the table for clarity of highly circular bars
-                // canvas.append('rect').classed('table-bg', true)
-                //     .attr('width', settings.dims.width/2)
-                //     .attr('height', (arcWidth + settings.geometry.arcPadding) * chartData.length )
-                //     .attr('transform', `translate(${-settings.dims.width/2}, ${-settings.geometry.chartRadius })`)
-
-            // 4. Add table/axis group
-                const tableHeaders = canvas.append('g').classed('table-headers', true),
-                    tableAxis = canvas.append('g').classed('r axis table', true)
-                        .selectAll('g')
-                            .data(chartData)
-                            .join('g')
-
-                // a. Tables headers (added directly to canvas group)
-                canvas.append('text').attr("class", `material-data-table table-header material`)
-                    .attr('x', settings.geometry.tableOffset.label)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 )
-                    .text('Collected waste material')
-                canvas.append('text').attr("class", `material-data-table table-header total`)
-                    .attr('x', settings.geometry.tableOffset.total)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 )
-                    .text('Total')
-                canvas.append('text').attr("class", `material-data-table table-header landfill`)
-                    .attr('x', settings.geometry.tableOffset.landfill)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 )
-                    .text('Landfill')
-                canvas.append('text').attr("class", `material-data-table table-header diversion`)
-                    .attr('x', settings.geometry.tableOffset.diversion)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 )
-                    .text('Recycled')
-
-                // b. Table and axis group
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} arc-label material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.label)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical)
-                    .text(d => d.material)
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} total-volume material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.total)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical)
-                    .text(d => `${helpers.numberFormatters.formatComma(d.total /1000)} kt`)
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} diversion-volume material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.landfill)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical)
-                    .text(d => `${helpers.numberFormatters.formatComma(d.landfill /1000)} kt`)
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} landfill-volume material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.diversion)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical)
-                    .text(d => `${helpers.numberFormatters.formatComma(d.diverted /1000)} kt`)
-
             // 4. Add background layer and annotation
                 backgroundLayer.append('rect').classed('bg-rect', true)
                     .attr('width', settings.dims.width)
                     .attr('height', settings.dims.height)
 
                 annotationLayer.append('text').classed('main-title', true)
-                    .attr('transform', `translate(${settings.dims.margin.left} , ${settings.dims.margin.top})`)
+                    .attr('transform', `translate(${settings.dims.width/2} , ${settings.dims.margin.top})`)
                     .text(`What materials did Victorians recover in ${settings.year}?`)
 
             // 5. Add a curved labels for diversion radial chart 
@@ -556,7 +503,7 @@
                     .classed('radialBar-subtitle-label text-on-path' , true)
                     .append('textPath').attr("xlink:href", "#radialBar-label-path")
                         .attr('startOffset', '49.5%')
-                        .text(`- comparing recovery rates for Victorian waste materials in ${settings.year}`)	
+                        .text(`- comparing diversion rates for Victorian waste materials in ${settings.year}`)	
         };
 
 
@@ -564,12 +511,13 @@
         /// X. HELPER FUNCTIONS |        ///
         ////////////////////////////////////
 
-        // Toggle dark theme with spacebar
+        // Toggle dark theme with shift key
         document.body.onkeyup = function(e){
-            if(e.keyCode == 32){
+            if(e.keyCode == 16){
                 d3.selectAll(`.svg-container`).classed("dark", !d3.selectAll('.svg-container').classed("dark"))
             }
         }
+
 
         const helpers= {
             numberFormatters: {

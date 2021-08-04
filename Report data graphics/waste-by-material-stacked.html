@@ -6,7 +6,7 @@
         <meta name="description" content="SV Resource recovery market bulletin">
         <meta name="author" content="Little Sketches ">
         <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -110,9 +110,11 @@
         /**********************************************************/
 
             #radial-bar-vis .main-title{
-                fill: var(--secondaryBottleGreen);
-                font-size: 30px;
-                font-weight: 600;
+                fill: #000;
+                font-size: 24px;
+                font-weight: 500;
+                text-transform: uppercase;
+                text-anchor: middle;
             }
             #radial-bar-vis .bg-rect{
                 fill: none
@@ -125,6 +127,7 @@
             .radialBar-pct-label,
             .radialBar-material-label{
                 fill: #fff;
+                font-weight: 500;
             }
             .material-data-table,
             .radialBar-pct-label,
@@ -211,35 +214,18 @@
 
     <body>
         <div class = "svg-container">
-            <svg id = "radial-bar-vis">
-            </svg>
+            <svg id = "radial-bar-vis"></svg>
         </div>
     </body>
 
     <script>
 
         /////////////////////////////////////////////////////////////////////////////////
-        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
-        /////////////////////////////////////////////////////////////////////////////////
-
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                // 1. Parse data used in visualisation
-                await parseData(loadedData.byStream.elements, loadedData.byMaterial.elements)
-                await renderMaterialVis(data.byType.material, settingsRadial)
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
-
-
-
-        //////////////////////////////////
-        // 0. SETUP DATA AND SETTINGS  ///
-        //////////////////////////////////
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
+        ////////////////////////////////////////////////////////////////////////////////
 
         const data = {          // Initiate data object that populated by the parseData() function, 
+            table:      {},
             byPeriod:   {},
             byType:   {
                 material: {}
@@ -249,9 +235,9 @@
             }
         }
 
-        const settingsRadial = {
+        const settings = {
             svgID:        'radial-bar-vis',
-            year:         '2019/20', 
+            year:         '2019-20', 
             dims: {
                 height:     1080, 
                 width:      720,
@@ -272,11 +258,45 @@
             }
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
+
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
+
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                            await parseData(data.table.byStream, data.table.byMaterial)                 // 1. Parse data
+                            await renderVis(data.byType.material, settings)             // 2. Render visualisation(s)
+                        }
+                    }
+                })
+            }                       
+        };
+
+
         ////////////////////////////////////
-        // A. PARSE AND WRANGLE DATA     ///
+        // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
 
-        async function parseData(wasteStreamData, materialData) {      
+        async function parseData(wasteStreamData, materialData) { 
             // 1. Parse numeric data types to number
             wasteStreamData.forEach(d => {
                 Object.entries(d).forEach( ([key, value]) => {
@@ -340,10 +360,10 @@
 
 
         ////////////////////////////////////////////////////////////////////////
-        // A.  RENDER THE TABLE AND CIRCULAR BAR VIS FOR MATERIALS BREAKDOWN ///
+        // 2.  RENDER THE TABLE AND CIRCULAR BAR VIS FOR MATERIALS BREAKDOWN ///
         ////////////////////////////////////////////////////////////////////////
 
-        async function renderMaterialVis(data, settings){
+        async function renderVis(data, settings){
             // 0. Re-shape chartData (for better clarity when defining data binding accessors) and setup geometry
                 let chartData = []
                 Object.entries(data).sort().forEach(([material, d]) => {
@@ -357,22 +377,22 @@
                     })
                 })
                     
-                chartData = chartData.sort((a,b) => b.total - a.total )
+                chartData = chartData.sort((a,b) => b.diversionRate - a.diversionRate )
 
                 // Setup geometry
-                settingsRadial.geometry.circlePos = {
-                    x: settingsRadial.dims.width * 0.50, 
-                    y: settingsRadial.dims.height * 0.35 + settingsRadial.dims.margin.top
+                settings.geometry.circlePos = {
+                    x: settings.dims.width * 0.50, 
+                    y: settings.dims.height * 0.35 + settings.dims.margin.top
                 }
 
-                settingsRadial.geometry.chartRadius = (settingsRadial.dims.height -settingsRadial.dims.margin.top) *0.35 - settingsRadial.dims.margin.top
-                settingsRadial.geometry.arcMinRadius = settingsRadial.geometry.chartRadius * 0.5
+                settings.geometry.chartRadius = (settings.dims.height -settings.dims.margin.top) *0.35 - settings.dims.margin.top
+                settings.geometry.arcMinRadius = settings.geometry.chartRadius * 0.5
 
-                settingsRadial.geometry.tableOffset = {
-                    label:              -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 70,  
-                    total:              -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 330, 
-                    landfill:           -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 430, 
-                    diversion:          -settingsRadial.geometry.circlePos.x + settingsRadial.dims.margin.left + 530,  
+                settings.geometry.tableOffset = {
+                    label:              -settings.geometry.circlePos.x + settings.dims.margin.left + 70,  
+                    total:              -settings.geometry.circlePos.x + settings.dims.margin.left + 330, 
+                    landfill:           -settings.geometry.circlePos.x + settings.dims.margin.left + 430, 
+                    diversion:          -settings.geometry.circlePos.x + settings.dims.margin.left + 530,  
                     diversionRate:      -10,
                     labelVertical:      5
                 }
@@ -404,7 +424,7 @@
                     canvas = svg.append('g').classed('vis-group', true)                         // Centered rendering layer
                         .attr("height", settings.dims.height - settings.dims.margin.top - settings.dims.margin.bottom)
                         .attr("width", settings.dims.width - settings.dims.margin.left - settings.dims.margin.right)
-                        .attr('transform', `translate(${settingsRadial.geometry.circlePos.x}, ${settingsRadial.geometry.circlePos.y})`),
+                        .attr('transform', `translate(${settings.geometry.circlePos.x}, ${settings.geometry.circlePos.y})`),
                     annotationLayer = svg.append('g').classed('annotation-group', true)        // Annotation layer
                 
             // 3. Add the chart arcs
@@ -480,7 +500,7 @@
                     .attr('height', settings.dims.height)
 
                 annotationLayer.append('text').classed('main-title', true)
-                    .attr('transform', `translate(${settings.dims.margin.left} , ${settings.dims.margin.top})`)
+                    .attr('transform', `translate(${settings.dims.width/2} , ${settings.dims.margin.top})`)
                     .text(`What materials did Victorians recover in ${settings.year}?`)
 
             // 5. Add a curved labels for diversion radial chart 
@@ -489,8 +509,8 @@
                         labelOffset = 4, 
                         labelRadius = getInnerRadius(i) + labelOffset,
                         startPos = {
-                            x: settingsRadial.geometry.circlePos.x ,
-                            y: settingsRadial.geometry.circlePos.y - labelRadius,
+                            x: settings.geometry.circlePos.x ,
+                            y: settings.geometry.circlePos.y - labelRadius,
                         }, 
                         labelPath = `M${startPos.x} ${startPos.y}  A${labelRadius}, ${labelRadius}, 0, 0, 1, ${startPos.x }, ${startPos.y + labelRadius * 2}
                             A${labelRadius}, ${labelRadius}, 0, 0, 1, ${startPos.x }, ${startPos.y}`
@@ -516,12 +536,12 @@
 
                 // Title labels
                 const titleOffset = 10, 
-                    titleLabelRadius = settingsRadial.geometry.chartRadius + titleOffset
+                    titleLabelRadius = settings.geometry.chartRadius + titleOffset
                     titleStartPos = {
-                        x: settingsRadial.geometry.circlePos.x - titleLabelRadius,
-                        y: settingsRadial.geometry.circlePos.y,
+                        x: settings.geometry.circlePos.x - titleLabelRadius,
+                        y: settings.geometry.circlePos.y,
                     }, 
-                    titleLabelPath = `M${titleStartPos.x} ${titleStartPos.y} A${titleLabelRadius}, ${titleLabelRadius}, 0, 0, 1, ${settingsRadial.geometry.circlePos.x + titleLabelRadius}, ${titleStartPos.y }`
+                    titleLabelPath = `M${titleStartPos.x} ${titleStartPos.y} A${titleLabelRadius}, ${titleLabelRadius}, 0, 0, 1, ${settings.geometry.circlePos.x + titleLabelRadius}, ${titleStartPos.y }`
 
                 defs.append('path')
                     .attr('id', 'radialBar-label-path')
@@ -537,129 +557,81 @@
                     .classed('radialBar-subtitle-label text-on-path' , true)
                     .append('textPath').attr("xlink:href", "#radialBar-label-path")
                         .attr('startOffset', '49.5%')
-                        .text(`- comparing recovery rates for Victorian waste materials in ${settings.year}`)	
+                        .text(`- comparing diversion rates for Victorian waste materials in ${settings.year}`)	
         };
-
-        // Toggle dark theme with spacebar
-        document.body.onkeyup = function(e){
-            if(e.keyCode == 32){
-                d3.selectAll(`.svg-container`).classed("dark", !d3.selectAll('.svg-container').classed("dark"))
-            }
-        }
 
 
         ////////////////////////////////////
         /// X. HELPER FUNCTIONS |        ///
         ////////////////////////////////////
 
-
-            // ANIMATION HELPERS: FOR PLAY/TESTING ONLY
-            function animatePath(pathID, duration = 3000, delay = 3000){
-                const pathLength = document.getElementById(pathID).getTotalLength()
-                d3.select(`#${pathID}`)
-                    .style('stroke-dasharray',  `${pathLength} ${pathLength}`)
-                    .style('stroke-dashoffset',  pathLength)
-                    .transition().duration(duration).delay(delay)
-                    .style('stroke-dashoffset', 0)
-            };
-
-            function animateAllPaths(){
-                const arr = []
-                data.schema.lists.forEach(stream => {
-                    const slugStreamName = helpers.slugify(stream)
-                    arr.push(`flow-diversion-${slugStreamName}`)
-                    arr.push(`flow-landfill-${slugStreamName}`)
-                })
-                arr.forEach( (id, i) => animatePath(id, 3000, i%2 *3000) )
-            };
-
-            function renderDonut(container, coords, dims, data ){
-                // Setup shape generator and data
-                const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
-                    pie = d3.pie().padAngle(0.005)
-                        .sort(null)
-                        .value(d => d.value),
-                    chartData = pie([
-                        {value: data.pct,    class: 'diversion '+data.materialClass},
-                        {value: 1- data.pct, class: 'landfill'}
-                    ])
-
-                const donutGroup = container.append('g')
-                donutGroup.append('circle').classed('donut-chart-bg', true)
-                    .attr('r', dims.r )
-                        .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
-                donutGroup.append('g').classed('arc-group', true)
-                    .selectAll("path.donut-arc")
-                    .data(chartData)
-                    .join("path").attr('class', d => `${d.data.class} donut-arc`)            
-                        .attr("d", arc)
-                        .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
-                
-                donutGroup.append('text')
-                    .attr('class', `${data.materialClass} donut-diversion-pct`)  
-                    .text(helpers.numberFormatters.formatPct(data.pct))
-                    .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
-            };
-
-            const helpers= {
-                numberFormatters: {
-                    formatComma:           	d3.format(",.0f"),
-                    formatComma1dec:       	d3.format(",.1f"),
-                    formatComma2dec:       	d3.format(",.2f"),
-                    formatInteger:         	d3.format(".0f"),   
-                    formatCostInteger:     	d3.format("$,.0f"),  
-                    formatCost1dec:        	d3.format("$,.1f"),  
-                    formatPct:          	d3.format(".0%"), 
-                    formatPct1dec:          d3.format(".1%")  
-                },
-                numberParsers: {
-                    parseDateSlash: d3.timeParse("%d/%m/%Y")
-                },
-                slugify: function (str) {
-                    str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
-                    const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
-                        to   = "aaaaeeeeiiiioooouuuunc------"
-                    for (var i=0, l=from.length ; i<l ; i++) {
-                        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-                    }
-                    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-                        .replace(/\s+/g, '-') // collapse whitespace and replace by -
-                        .replace(/-+/g, '-'); // collapse dashes
-                    return str;
-                }, 
-                wrap: function(text, width, lineHeight, centerVertical = false) {
-                    text.each(function() {
-                        let text = d3.select(this),
-                            words = text.text().split(/\s+/).reverse(),
-                            word,
-                            line = [],
-                            lineNumber = 0,
-                            y = text.attr("y"),
-                            x = text.attr("x"),
-                            fontSize = parseFloat(text.style("font-size")),
-                            dy = parseFloat(text.attr("dy")),
-                            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-                        while (word = words.pop()) {
-                            line.push(word);
-                            tspan.text(line.join(" "));
-
-                            if (tspan.node().getComputedTextLength() > width) {
-                                line.pop();
-                                tspan.text(line.join(" "));
-                                line = [word];
-                                tspan = text.append("tspan")
-                                    .attr("x", x)
-                                    .attr("y",  y)
-                                    .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                            }                    
-                        }            
-                        if(centerVertical){
-                            text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
-                        }
-                    })
-                }
+        // Toggle dark theme with shift key
+        document.body.onkeyup = function(e){
+            if(e.keyCode == 16){
+                d3.selectAll(`.svg-container`).classed("dark", !d3.selectAll('.svg-container').classed("dark"))
             }
+        }
+
+
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (var i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight, centerVertical = false) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                    if(centerVertical){
+                        text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                    }
+                })
+            }
+        }
 
     </script>
 </html>

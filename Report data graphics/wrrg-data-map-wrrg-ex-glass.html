@@ -1,207 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://d3js.org/topojson.v2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <style>
-            /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
-            :root {
-                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                       #9ACA3C;
-                /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:           #D5E0A1;
-                --secondaryBottleGreen:          #174F37;
-                --secondaryBottleGreenLight:     #79B5AA;
-                --secondaryGrey:                 #B1B1B0;
-                --secondaryGreyLight:            #CFCFCF;
-                --secondaryGreyLightest:         #ECECEC;
-                /** TERTIARY PALETTE **/
-                --tertiaryPurple:       #51284F;
-                --tertiaryPurpleLight:  #8276B3;
-                --tertiaryRed:          #E04F39;
-                --tertiaryRedLight:     #F78684;
-                --tertiaryYellow:       #EFC041;
-                --tertiaryYellowLight:  #F5E065;
-                --tertiaryCard:         #B39981;
-                --tertiaryCardLight:    #DCBFA6;
-                --tertiaryEmerald:      #009E71;
-                --tertiaryEmeraldLight: #93CCB9;
-                --tertiaryBlue:         #005E88;
-                --tertiaryBlueLight:    #A0D6E9;
-            }
+        <style>
+                /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
+                :root {
+                    /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+                    --svGreen:                       #9ACA3C;
+                    /** SECONDARY PALLETTE **/
+                    --secondaryGreenLight:           #D5E0A1;
+                    --secondaryBottleGreen:          #174F37;
+                    --secondaryBottleGreenLight:     #79B5AA;
+                    --secondaryGrey:                 #B1B1B0;
+                    --secondaryGreyLight:            #CFCFCF;
+                    --secondaryGreyLightest:         #ECECEC;
+                    /** TERTIARY PALETTE **/
+                    --tertiaryPurple:       #51284F;
+                    --tertiaryPurpleLight:  #8276B3;
+                    --tertiaryRed:          #E04F39;
+                    --tertiaryRedLight:     #F78684;
+                    --tertiaryYellow:       #EFC041;
+                    --tertiaryYellowLight:  #F5E065;
+                    --tertiaryCard:         #B39981;
+                    --tertiaryCardLight:    #DCBFA6;
+                    --tertiaryEmerald:      #009E71;
+                    --tertiaryEmeraldLight: #93CCB9;
+                    --tertiaryBlue:         #005E88;
+                    --tertiaryBlueLight:    #A0D6E9;
+                }
 
-        /***************************************/
-        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-        /***************************************/
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: light;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                font-weight: 400;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                font-weight: 500;
-                font-style: medium;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
-            body{
-                font-family: 'DIN Next LT Pro';
-                margin: 0;
-            }
+            /***************************************/
+            /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+            /***************************************/
+                @font-face {
+                    font-family: 'DIN Next LT Pro';
+                    src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                        url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                        url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                        url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                    font-weight: 100;
+                    font-style: ultraLight;
+                }
+                @font-face {
+                    font-family: 'DIN Next LT Pro';
+                    src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                        url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                        url('fonts/DINNextLTPro-Light.woff') format('woff'),
+                        url('fonts/DINNextLTPro-Light.ttf') format('truetype');
+                    font-weight: 300;
+                    font-style: light;
+                }
+                @font-face {
+                    font-family: 'DIN Next LT Pro';
+                    src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                        url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                        url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                        url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                    font-weight: 400;
+                    font-style: normal;
+                }
+                @font-face {
+                    font-family: 'DIN Next LT Pro';
+                    src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                        url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                        url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                        url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                    font-weight: 500;
+                    font-style: medium;
+                }
+                @font-face {
+                    font-family: 'DIN Next LT Pro';
+                    src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                        url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                        url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                        url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                    font-weight: 800;
+                    font-style: heavy;
+                }
+                @font-face {
+                    font-family: 'DIN Next LT Pro';
+                    src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                        url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                        url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                        url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                    font-weight: 900;
+                    font-style: normal;
+                }
+                @font-face {
+                    font-family: 'DIN Next LT Pro';
+                    src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                        url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                        url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                        url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                    font-weight: 900;
+                    font-style: normal;
+                }
+                body{
+                    font-family: 'DIN Next LT Pro';
+                    margin: 0;
+                }
 
-            /***************************/
-            /*****  GENERAL STYLING  ***/
-            /***************************/
-            .main-title{
-                font-size: 30px;
-                font-weight: bold;
-                fill: var(--secondaryBottleGreen);
-                dominant-baseline: 'hanging';
-                mix-blend-mode: multiply;
-            }
-            .main-subtitle{
-                font-size: 14px;
-                fill: var(--secondaryBottleGreen);
-                dominant-baseline: 'hanging';
-                mix-blend-mode: multiply;
-            }
-            .lga-base{
-                fill: none;
-                stroke-width: 0.25px;
-                cursor: pointer;
-            }
-            .lga-base.showStroke{
-                stroke: #fff;
-            }
-            .wrrg-infoPane-background{
-                mix-blend-mode: color-dodge;
-                fill: var(--secondaryGreyLight);
-            }
-            .wrrg-infoPane-divider{
-                stroke:#000;
-                stroke-width: 0.5px
-            }
-            .donut-arc{
-                stroke: #fff;
-                stroke-width: 0.5px;
-                fill: var(--secondaryGrey);
-            }
-            .donut-arc.diversion{
-                fill: var(--svGreen );       
-            }
-            .donut-diversion-pct{
-                font-size: 10px;
-                font-weight: bold;
-                text-anchor: middle;
-                dominant-baseline: middle;
-            }
-            .wrrg-infoPane-background{
-                opacity: 0.3
-            }
-            .lga-label{
-                text-anchor: middle;
-                dominant-baseline: middle;
-                font-size: 8px; 
-                pointer-events: none;
-                fill: #000;
-                mix-blend-mode: luminosity;
-            }
-            .donut-diversion-pct,
-            .wrrg-icon,
-            .wrrg-infoPane-header,
-            .wrrg-infoPane-label,
-            .wrrg-infoPane-data{
-                fill: rgba(100, 100, 100, 1);   
-                background-blend-mode: multiply;
-            }
-            .wrrg-infoPane-header{
-                font-size: 14px;
-                font-weight: bold;
-                text-anchor: middle;
-            }
-            .wrrg-infoPane-label{
-                font-size: 10px;
-                font-weight: bold;
-            }
-            .align-middle{
-                text-anchor: middle;
-            }
-            .wrrg-infoPane-data{
-                font-size: 10px;
-                text-anchor: end;
-            }
-    </style>
-</head>
+                /***************************/
+                /*****  GENERAL STYLING  ***/
+                /***************************/
+                .main-title{
+                    font-size: 30px;
+                    font-weight: 500;
+                    fill: #000;
+                    dominant-baseline: 'hanging';
+                    mix-blend-mode: multiply;
+                    text-transform: uppercase;
+                }
+                .main-subtitle{
+                    font-size: 16px;
+                    fill: #000;
+                    dominant-baseline: 'hanging';
+                    mix-blend-mode: multiply;
+                }
+                .lga-base{
+                    fill: none;
+                    stroke-width: 0.25px;
+                    cursor: pointer;
+                }
+                .lga-base.showStroke{
+                    stroke: #fff;
+                }
+                .wrrg-infoPane-background{
+                    mix-blend-mode: color-dodge;
+                    fill: var(--secondaryGreyLight);
+                }
+                .wrrg-infoPane-divider{
+                    stroke:#000;
+                    stroke-width: 0.5px
+                }
+                .donut-arc{
+                    stroke: #fff;
+                    stroke-width: 0.5px;
+                    fill: var(--secondaryGrey);
+                }
+                .donut-arc.diversion{
+                    fill: var(--svGreen );       
+                }
+                .donut-diversion-pct{
+                    font-size: 10px;
+                    font-weight: 600;
+                    text-anchor: middle;
+                    dominant-baseline: middle;
+                }
+                .wrrg-infoPane-background{
+                    opacity: 0.3
+                }
+                .lga-label{
+                    text-anchor: middle;
+                    dominant-baseline: middle;
+                    font-size: 8px; 
+                    pointer-events: none;
+                    fill: #000;
+                    mix-blend-mode: luminosity;
+                }
+                .donut-diversion-pct,
+                .wrrg-icon,
+                .wrrg-infoPane-header,
+                .wrrg-infoPane-label,
+                .wrrg-infoPane-data{
+                    fill: rgba(100, 100, 100, 1);   
+                    background-blend-mode: multiply;
+                }
+                .wrrg-infoPane-header{
+                    font-size: 14px;
+                    font-weight: 500;
+                    text-anchor: middle;
+                }
+                .wrrg-infoPane-label{
+                    font-size: 10px;
+                    font-weight: 500;
+                }
+                .align-middle{
+                    text-anchor: middle;
+                }
+                .wrrg-infoPane-data{
+                    font-size: 10px;
+                    text-anchor: end;
+                }
+        </style>
+    </head>
 
-<body>
+    <body>
 
-  <div id = "map-container">
-      <svg id ="map"></svg>
-  </div>
+    <div id = "map-container">
+        <svg id ="map"></svg>
+    </div>
 
-  <!-- JavaScript Libraries -->
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://d3js.org/topojson.v2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
     <script>
         const settings = { 
             svgID:                  'map',
-            year:                   '2019/20',
+            year:                   '2019-20',
             dims: {
                 width:              1080,
                 height:             720,
@@ -278,7 +278,9 @@
             }
 
         }
+
         const data = {
+            table:      {},
             schema: {
                 list: {
                     collection: ['Garbage', 'Recyclables', 'Organics', 'Glass'],
@@ -288,32 +290,50 @@
             byWRRG: {}
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
 
-        /////////////////////////////////////////////////////////////////////////////////
-        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
-        /////////////////////////////////////////////////////////////////////////////////
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
 
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/',
-            callback: async(loadedData) => {
-                // 1. Parse WRRG Data
-                await parseData(loadedData.byWRRG.elements)
-                // 2. Load map data and render
-                Promise.all([		                                // Use Promise.all to load multiple data files
-                    d3.json('data/victorianLGAs.geojson'),			// 0. LGA map shape data
-                    d3.tsv("data/victorianLGAs.txt"),			    // 1. LGA map meta data, including the mapping of LGAs to WRRGs
-                ]).then( mapData => {
-                    renderMap(settings, mapData[0], mapData[1])	
-                });
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                        // 1. Parse WRRG Data
+                            await parseData(data.table.byWRRG)                 // 1. Parse data
+                            // 2. Load map data and render
+                            Promise.all([		                                // Use Promise.all to load multiple data files
+                                d3.json('data/victorianLGAs.geojson'),			// 0. LGA map shape data
+                                d3.tsv("data/victorianLGAs.txt"),			    // 1. LGA map meta data, including the mapping of LGAs to WRRGs
+                            ]).then( mapData => {
+                                renderMap(settings, mapData[0], mapData[1])	
+                            });
+                        }
+                    }
+                })
+            }                       
+        };
 
 
-        /////////////////////////////////
-        ///// DATA PARSING FUNCTION  ///
-        /////////////////////////////////
+        ///////////////////////////////////
+        /// 1. DATA PARSING FUNCTION    ///
+        ///////////////////////////////////
 
         async function parseData(wrrgData){
             // Parse WRRG Data
@@ -348,9 +368,9 @@
         };
 
 
-        /////////////////////////////////////
-        ///// MAP VIS RENDERING FUNCTION  ///
-        /////////////////////////////////////
+        //////////////////////////////////////
+        /// 2. MAP VIS RENDERING FUNCTION  ///
+        //////////////////////////////////////
 
         function renderMap(settings, mapShapeData, mapMetaData){
         // 0. WRANGLE DATA
@@ -565,96 +585,94 @@
                 .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top + 25})`)
                 .text(`by Waste Resource and Recovery Group in ${settings.year}`)
 
-      }; // end renderMap()
+    }; // end renderMap()
 
 
-    function renderDonut(container, coords, dims, data ){
-        // Setup shape generator and data
-        const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
-            pie = d3.pie().padAngle(0.005)
-                .sort(null)
-                .value(d => d.value),
-            chartData = pie([
-                {value: data.pct,    class: 'diversion '+data.materialClass},
-                {value: 1- data.pct, class: 'landfill'}
-            ])
-        const donutGroup = container.append('g')
-        donutGroup.append('g').classed('arc-group', true)
-            .selectAll("path.donut-arc")
-            .data(chartData)
-            .join("path").attr('class', d => `${d.data.class} donut-arc`)            
-                .attr("d", arc)
-                .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
-        donutGroup.append('text')
-            .attr('class', `${data.materialClass} donut-diversion-pct`)  
-            .text(helpers.numberFormatters.formatPct(data.pct))
-            .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
-    };
+        /////////////////////////////
+        /// X HELPER FUNCTIONS    ///
+        /////////////////////////////
 
+        function renderDonut(container, coords, dims, data ){
+            // Setup shape generator and data
+            const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
+                pie = d3.pie().padAngle(0.005)
+                    .sort(null)
+                    .value(d => d.value),
+                chartData = pie([
+                    {value: data.pct,    class: 'diversion '+data.materialClass},
+                    {value: 1- data.pct, class: 'landfill'}
+                ])
+            const donutGroup = container.append('g')
+            donutGroup.append('g').classed('arc-group', true)
+                .selectAll("path.donut-arc")
+                .data(chartData)
+                .join("path").attr('class', d => `${d.data.class} donut-arc`)            
+                    .attr("d", arc)
+                    .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
+            donutGroup.append('text')
+                .attr('class', `${data.materialClass} donut-diversion-pct`)  
+                .text(helpers.numberFormatters.formatPct(data.pct))
+                .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
+        };
 
-    /////////////////////////////
-    /// X HELPER FUNCTIONS    ///
-    /////////////////////////////
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (let i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
 
-    const helpers= {
-        numberFormatters: {
-            formatComma:           	d3.format(",.0f"),
-            formatComma1dec:       	d3.format(",.1f"),
-            formatComma2dec:       	d3.format(",.2f"),
-            formatInteger:         	d3.format(".0f"),   
-            formatCostInteger:     	d3.format("$,.0f"),  
-            formatCost1dec:        	d3.format("$,.1f"),  
-            formatPct:          	d3.format(".0%"), 
-            formatPct1dec:          d3.format(".1%")  
-        },
-        numberParsers: {
-            parseDateSlash: d3.timeParse("%d/%m/%Y")
-        },
-        slugify: function (str) {
-            str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
-            const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
-                to   = "aaaaeeeeiiiioooouuuunc------"
-            for (let i=0, l=from.length ; i<l ; i++) {
-                str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-            }
-            str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-                .replace(/\s+/g, '-') // collapse whitespace and replace by -
-                .replace(/-+/g, '-'); // collapse dashes
-            return str;
-        }, 
-        wrap: function(text, width, lineHeight) {
-            text.each(function() {
-                let text = d3.select(this),
-                    words = text.text().split(/\s+/).reverse(),
-                    word,
-                    line = [],
-                    lineNumber = 0,
-                    y = text.attr("y"),
-                    x = text.attr("x"),
-                    fontSize = parseFloat(text.style("font-size")),
-                    dy = parseFloat(text.attr("dy")),
-                    tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-                while (word = words.pop()) {
-                    line.push(word);
-                    tspan.text(line.join(" "));
-
-                    if (tspan.node().getComputedTextLength() > width) {
-                        line.pop();
+                    while (word = words.pop()) {
+                        line.push(word);
                         tspan.text(line.join(" "));
-                        line = [word];
-                        tspan = text.append("tspan")
-                            .attr("x", x)
-                            .attr("y",  y)
-                            .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                    }                    
-                }            
-            })
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                })
+            }
         }
-    }
 
-
-  </script>
-</body>
+    </script>
+    </body>
 
 </html>

@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="SV Resource recovery market bulletin">
-        <meta name="author" content="Little Sketches ">
-        <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+        <meta name="description" content="Waste annual report graphic">
+        <meta name="author" content="Sustainability Victoria">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -114,6 +114,7 @@
                 font-size: 30px;
                 font-weight: 500;
                 fill:  var(--secondaryBottleGreenLight);
+                fill:  #000;
             }
             .lga-label-small{
                 font-size: 24px;
@@ -122,14 +123,16 @@
             }
             .lga-label-headline{
                 font-size: 60px;
-                font-weight: bold;
+                font-weight: 700;
             }
             .lga-annotation{
-                font-size: 12px;
+                font-size: 13px;
             }
             .lga-label{
                 font-size: 16px;
-                font-weight: bold;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 1px;
             } 
             .garbage{
                 fill: var(--tertiaryRed);
@@ -352,29 +355,12 @@
     <script>
 
         ////////////////////////////////////////////////////////////////////////////////
-        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP  ///
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
         ////////////////////////////////////////////////////////////////////////////////
-
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                // 1. Parse data
-                await parseData(loadedData.kerbsideData.elements)
-                // 2. Render visualisation(s)
-                await renderLgaVis(loadedData.kerbsideData.elements, settings)
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
-
-
-        //////////////////////////////////
-        // 0. SETUP DATA AND SETTINGS  ///
-        //////////////////////////////////
 
         const settings = {
             svgID:          'streetscene-vis',
-            year:           '2019/20', 
+            year:           '2019-20', 
             dims: {
                 height:     720, 
                 width:      1080,
@@ -388,6 +374,7 @@
         }
 
         const data = {          // Initiate data object that populated by the parseData() function, 
+            table:      {},
             byPeriod:   {},
             byType:   {
                 material: {}
@@ -397,9 +384,42 @@
             }
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
+
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
+
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                            await parseData(data.table.kerbsideData)                 // 1. Parse data
+                            await renderVis(data.table.kerbsideData, settings)       // 2. Render visualisation(s)
+                        }
+                    }
+                })
+            }                       
+        };
+
 
         ////////////////////////////////////
-        // A. PARSE AND WRANGLE DATA     ///
+        // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
 
         async function parseData(kerbsideData) {      
@@ -417,10 +437,10 @@
 
 
         //////////////////////////////////////////////
-        // C. RENDER THE LOCAL GOVERNMENT GRAPHIC  ///
+        // 2. RENDER THE LOCAL GOVERNMENT GRAPHIC  ///
         //////////////////////////////////////////////
 
-        async function renderLgaVis(data, settings){
+        async function renderVis(data, settings){
             const yearData = data.filter(d => d.year === settings.year)[0],
                 totalCouncilCost = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'cost').map( d => yearData[d])),
                 totalCollection = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'volume').map( d => yearData[d])),
@@ -464,7 +484,6 @@
 
             annotationLayer.append('text').classed('lga-label-headline', true)
                 .text(`${helpers.numberFormatters.formatComma1dec(totalCollection/1000000)} million tonnes`)
-                .style('letter-spacing', -3)
                 .attr('x', 310)
                 .attr('y', headlineOffsetY+60)
 
@@ -474,7 +493,7 @@
                 .attr('y', headlineOffsetY +90)
 
             annotationLayer.append('text').classed('lga-label-small', true)
-                .html(`household's at at average of ${helpers.numberFormatters.formatCostInteger(totalCouncilCost/totalCollection)} per tonne`)
+                .html(`households at at average of ${helpers.numberFormatters.formatCostInteger(totalCouncilCost/totalCollection)} per tonne`)
                 .attr('x', 310)
                 .attr('y', headlineOffsetY +118)
 
@@ -517,116 +536,68 @@
 
 
         ////////////////////////////////////
-        /// X. HELPER FUNCTIONS |         ///
+        /// X. HELPER FUNCTIONS |        ///
         ////////////////////////////////////
 
-            // ANIMATION HELPERS: FOR PLAY/TESTING ONLY
-            function animatePath(pathID, duration = 3000, delay = 3000){
-                const pathLength = document.getElementById(pathID).getTotalLength()
-                d3.select(`#${pathID}`)
-                    .style('stroke-dasharray',  `${pathLength} ${pathLength}`)
-                    .style('stroke-dashoffset',  pathLength)
-                    .transition().duration(duration).delay(delay)
-                    .style('stroke-dashoffset', 0)
-            };
-
-            function animateAllPaths(){
-                const arr = []
-                data.schema.lists.forEach(stream => {
-                    const slugStreamName = helpers.slugify(stream)
-                    arr.push(`flow-diversion-${slugStreamName}`)
-                    arr.push(`flow-landfill-${slugStreamName}`)
-                })
-                arr.forEach( (id, i) => animatePath(id, 3000, i%2 *3000) )
-            };
-
-            function renderDonut(container, coords, dims, data ){
-                // Setup shape generator and data
-                const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
-                    pie = d3.pie().padAngle(0.005)
-                        .sort(null)
-                        .value(d => d.value),
-                    chartData = pie([
-                        {value: data.pct,    class: 'diversion '+data.materialClass},
-                        {value: 1- data.pct, class: 'landfill'}
-                    ])
-
-                const donutGroup = container.append('g')
-                donutGroup.append('circle').classed('donut-chart-bg', true)
-                    .attr('r', dims.r )
-                        .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
-                donutGroup.append('g').classed('arc-group', true)
-                    .selectAll("path.donut-arc")
-                    .data(chartData)
-                    .join("path").attr('class', d => `${d.data.class} donut-arc`)            
-                        .attr("d", arc)
-                        .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
-                
-                donutGroup.append('text')
-                    .attr('class', `${data.materialClass} donut-diversion-pct`)  
-                    .text(helpers.numberFormatters.formatPct(data.pct))
-                    .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
-            };
-
-            const helpers= {
-                numberFormatters: {
-                    formatComma:           	d3.format(",.0f"),
-                    formatComma1dec:       	d3.format(",.1f"),
-                    formatComma2dec:       	d3.format(",.2f"),
-                    formatInteger:         	d3.format(".0f"),   
-                    formatCostInteger:     	d3.format("$,.0f"),  
-                    formatCost1dec:        	d3.format("$,.1f"),  
-                    formatPct:          	d3.format(".0%"), 
-                    formatPct1dec:          d3.format(".1%")  
-                },
-                numberParsers: {
-                    parseDateSlash: d3.timeParse("%d/%m/%Y")
-                },
-                slugify: function (str) {
-                    str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
-                    const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
-                        to   = "aaaaeeeeiiiioooouuuunc------"
-                    for (var i=0, l=from.length ; i<l ; i++) {
-                        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-                    }
-                    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-                        .replace(/\s+/g, '-') // collapse whitespace and replace by -
-                        .replace(/-+/g, '-'); // collapse dashes
-                    return str;
-                }, 
-                wrap: function(text, width, lineHeight, centerVertical = false) {
-                    text.each(function() {
-                        let text = d3.select(this),
-                            words = text.text().split(/\s+/).reverse(),
-                            word,
-                            line = [],
-                            lineNumber = 0,
-                            y = text.attr("y"),
-                            x = text.attr("x"),
-                            fontSize = parseFloat(text.style("font-size")),
-                            dy = parseFloat(text.attr("dy")),
-                            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-                        while (word = words.pop()) {
-                            line.push(word);
-                            tspan.text(line.join(" "));
-
-                            if (tspan.node().getComputedTextLength() > width) {
-                                line.pop();
-                                tspan.text(line.join(" "));
-                                line = [word];
-                                tspan = text.append("tspan")
-                                    .attr("x", x)
-                                    .attr("y",  y)
-                                    .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                            }                    
-                        }            
-                        if(centerVertical){
-                            text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
-                        }
-                    })
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (var i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
                 }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight, centerVertical = false) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                    if(centerVertical){
+                        text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
+                    }
+                })
             }
+        }
 
     </script>
 </html>

@@ -1,61 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://d3js.org/topojson.v2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <style>
-        /* COLOUR PALETTES */
-        :root {
-            /** OLD BRAND GUIDELINES **/
-            --svGreen:                            #9ACA3C;
-            --gippslandGreen:                     #CED99E;
-            --secondary_greatOceanBlue:           #0070BB;
-            --secondary_hepburnClay:              #9B0B32;
-            --secondary_meredithGold:             #E3BA5A;
-            --campaign_corrangamiteEggplant:      #550055;
-            --campaign_corrangamiteEggplantLight: #B273B2;
-            --campaign_gannarawwaPink:            #D00236;
-            --campaign_gannarawwaPinkLight:       #EE5F83;
-            --campaign_surfCoastTeal:             #00848F;
-            --campaign_surfCoastTealLight:        #47ABB4;
-            --campaign_queenscliffeMarine:        #0A3055;
-            --campaign_queenscliffeMarineLight:   #7991A9;
-            --campaign_milduraOrange:             #D3410B;
-            --campaign_milduraOrangeLight:        #F2855D;
-            --campaign_otwaysGreen:               #008848;
-            --campaign_otwaysGreenLight:          #8DBF87;
-            --monochrome_youYangsGranite:         #B2B2B2;
-            --monochrome_lakeMountainMorning:     #CCCCCC;
-            --monochrome_mtBullaMist:             #E5E5E5;
-            /** NEW BRAND GUIDELINES **/
-            --chartLightGreen:  #cbe197;
-            --chartGray:        #b1b1b0;
-            --chartTeal:        #52baba;
-            --chartEmerald:     #00502e;
-            --chartPowderBlue:  #9bddfa;
-            --chartGreen:       #77bf00;
-            --chartDarkGreen:   #009857;
-            --chartOrange:      #cea98d;
-            --chartBlue:        #00568f;
-            --chartPurple:      #816bb4;
-            --chartLightGrey:   #cfcfcf;
-            --chartYellow:      #ffd300;
-        }
+        <style>
+            /* COLOUR PALETTES */
+            :root {
+                /** OLD BRAND GUIDELINES **/
+                --svGreen:                            #9ACA3C;
+                --gippslandGreen:                     #CED99E;
+                --secondary_greatOceanBlue:           #0070BB;
+                --secondary_hepburnClay:              #9B0B32;
+                --secondary_meredithGold:             #E3BA5A;
+                --campaign_corrangamiteEggplant:      #550055;
+                --campaign_corrangamiteEggplantLight: #B273B2;
+                --campaign_gannarawwaPink:            #D00236;
+                --campaign_gannarawwaPinkLight:       #EE5F83;
+                --campaign_surfCoastTeal:             #00848F;
+                --campaign_surfCoastTealLight:        #47ABB4;
+                --campaign_queenscliffeMarine:        #0A3055;
+                --campaign_queenscliffeMarineLight:   #7991A9;
+                --campaign_milduraOrange:             #D3410B;
+                --campaign_milduraOrangeLight:        #F2855D;
+                --campaign_otwaysGreen:               #008848;
+                --campaign_otwaysGreenLight:          #8DBF87;
+                --monochrome_youYangsGranite:         #B2B2B2;
+                --monochrome_lakeMountainMorning:     #CCCCCC;
+                --monochrome_mtBullaMist:             #E5E5E5;
+                /** NEW BRAND GUIDELINES **/
+                --chartLightGreen:  #cbe197;
+                --chartGray:        #b1b1b0;
+                --chartTeal:        #52baba;
+                --chartEmerald:     #00502e;
+                --chartPowderBlue:  #9bddfa;
+                --chartGreen:       #77bf00;
+                --chartDarkGreen:   #009857;
+                --chartOrange:      #cea98d;
+                --chartBlue:        #00568f;
+                --chartPurple:      #816bb4;
+                --chartLightGrey:   #cfcfcf;
+                --chartYellow:      #ffd300;
+            }
 
-        /****************************/
-        /*** IMPORTED FONTS       ***/
-        /****************************/
+            /****************************/
+            /*** IMPORTED FONTS       ***/
+            /****************************/
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Bold.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Bold.ttf') format('truetype');
-                font-weight: 700;
-                font-style: normal;
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 100;
+                font-style: ultraLight;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
@@ -64,16 +67,52 @@
                     url('fonts/DINNextLTPro-Light.woff') format('woff'),
                     url('fonts/DINNextLTPro-Light.ttf') format('truetype');
                 font-weight: 300;
+                font-style: light;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-weight: 400;
                 font-style: normal;
             }
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 200;
-                font-style: light;
+                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
+                font-weight: 500;
+                font-style: medium;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+                font-weight: 800;
+                font-style: heavy;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
+                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
+                font-weight: 900;
+                font-style: normal;
             }
 
 
@@ -90,265 +129,287 @@
             /***************************/
             /*****  GENERAL STYLING  ***/
             /***************************/
-        .main-title{
-            font-size: 30px;
-            font-weight: bold;
-            fill: var(--chartEmerald);
-            dominant-baseline: 'hanging';
-            mix-blend-mode: multiply;
-        }
-        .main-subtitle{
-            font-size: 14px;
-            fill: var(--chartEmerald);
-            dominant-baseline: 'hanging';
-            mix-blend-mode: multiply;
-        }
-        .lga-base{
-            fill: none;
-            stroke: #FFF;
-            stroke-width: 0.25px;
-            cursor: pointer;
-        }
-        .wrrg-infoPane-background{
-            mix-blend-mode: multiply
-        }
-        .wrrg-infoPane-divider{
-            stroke:#000;
-            stroke-width: 0.5px
-        }
-        .wrrg-infoPane-background.barwon-south-west-waste-and-resource-recovery-group,
-        .diversion.barwon-south-west-waste-and-resource-recovery-group,
-        .lga-base.barwon-south-west-waste-and-resource-recovery-group{
-            fill: var(--chartLightGreen);
-        }
-        .lga-base.barwon-south-west-waste-and-resource-recovery-group{
-            stroke: var(--chartLightGreen);
-        }
-        .wrrg-infoPane-background.gippsland-waste-and-resource-recovery-group,
-        .diversion.gippsland-waste-and-resource-recovery-group,
-        .lga-base.gippsland-waste-and-resource-recovery-group{
-            fill: var(--chartGray);
-        }
-        .lga-base.gippsland-waste-and-resource-recovery-group{
-            stroke: var(--chartGray);
-        }
-        .wrrg-infoPane-background.goulburn-valley-waste-and-resource-recovery-group,
-        .diversion.goulburn-valley-waste-and-resource-recovery-group,
-        .lga-base.goulburn-valley-waste-and-resource-recovery-group{
-            fill: var(--chartOrange);
-        }
-        .lga-base.goulburn-valley-waste-and-resource-recovery-group{
-            stroke: var(--chartOrange);
-        }
-        .wrrg-infoPane-background.grampians-central-west-waste-and-resource-recovery-group,
-        .diversion.grampians-central-west-waste-and-resource-recovery-group,
-        .lga-base.grampians-central-west-waste-and-resource-recovery-group{
-            fill: var(--chartYellow);
-        }
-        .lga-base.grampians-central-west-waste-and-resource-recovery-group{
-            stroke: var(--chartYellow);
-        }
-        .wrrg-infoPane-background.loddon-mallee-waste-and-resource-recovery-group,
-        .diversion.loddon-mallee-waste-and-resource-recovery-group,
-        .lga-base.loddon-mallee-waste-and-resource-recovery-group{
-            fill: var(--chartPowderBlue);
-        }
-        .lga-base.loddon-mallee-waste-and-resource-recovery-group{
-            stroke: var(--chartPowderBlue);
-        }
-        .wrrg-infoPane-background.metropolitan-waste-and-resource-recovery-group,
-        .diversion.metropolitan-waste-and-resource-recovery-group,
-        .lga-base.metropolitan-waste-and-resource-recovery-group{
-            fill: var(--chartPurple);
-        }
-        .lga-base.metropolitan-waste-and-resource-recovery-group{
-            stroke: var(--chartPurple);
-        }
-        .wrrg-infoPane-background.north-east-waste-and-resource-recovery-group,        
-        .lga-base.north-east-waste-and-resource-recovery-group,
-        .diversion.north-east-waste-and-resource-recovery-group{
-            fill: var(--chartTeal);
-        }
-        .lga-base.north-east-waste-and-resource-recovery-group{
-            stroke: var(--chartTeal);
-        }
-        .donut-arc{
-            stroke: #fff;
-            stroke-width: 1px;
-            fill: var(--chartLightGrey);
-        }
-        .donut-diversion-pct{
-            font-size: 10px;
-            font-weight: bold;
-            text-anchor: middle;
-            dominant-baseline: middle;
-        }
-        .wrrg-infoPane-background{
-            opacity: 0.3
-        }
-        .lga-label{
-            text-anchor: middle;
-            dominant-baseline: middle;
-            font-size: 8px; 
-            pointer-events: none;
-            fill: #000;
-        }
-        .donut-diversion-pct,
-        .wrrg-icon,
-        .wrrg-infoPane-header,
-        .wrrg-infoPane-label,
-        .wrrg-infoPane-data{
-            fill: rgba(100, 100, 100, 1);   
-            background-blend-mode: multiply;
-        }
-        .wrrg-icon{
+            .main-title{
+                font-size: 30px;
+                font-weight: 500;
+                fill: #000;
+                dominant-baseline: 'hanging';
+                mix-blend-mode: multiply;
+                text-transform: uppercase;
+            }
+            .main-subtitle{
+                font-size: 16px;
+                fill: #000;
+                dominant-baseline: 'hanging';
+                mix-blend-mode: multiply;
+            }
+            .lga-base{
+                fill: none;
+                stroke: #FFF;
+                stroke-width: 0.25px;
+                cursor: pointer;
+            }
+            .wrrg-infoPane-background{
+                mix-blend-mode: multiply
+            }
+            .wrrg-infoPane-divider{
+                stroke:#000;
+                stroke-width: 0.5px
+            }
+            .wrrg-infoPane-background.barwon-south-west-waste-and-resource-recovery-group,
+            .diversion.barwon-south-west-waste-and-resource-recovery-group,
+            .lga-base.barwon-south-west-waste-and-resource-recovery-group{
+                fill: var(--chartLightGreen);
+            }
+            .lga-base.barwon-south-west-waste-and-resource-recovery-group{
+                stroke: var(--chartLightGreen);
+            }
+            .wrrg-infoPane-background.gippsland-waste-and-resource-recovery-group,
+            .diversion.gippsland-waste-and-resource-recovery-group,
+            .lga-base.gippsland-waste-and-resource-recovery-group{
+                fill: var(--chartGray);
+            }
+            .lga-base.gippsland-waste-and-resource-recovery-group{
+                stroke: var(--chartGray);
+            }
+            .wrrg-infoPane-background.goulburn-valley-waste-and-resource-recovery-group,
+            .diversion.goulburn-valley-waste-and-resource-recovery-group,
+            .lga-base.goulburn-valley-waste-and-resource-recovery-group{
+                fill: var(--chartOrange);
+            }
+            .lga-base.goulburn-valley-waste-and-resource-recovery-group{
+                stroke: var(--chartOrange);
+            }
+            .wrrg-infoPane-background.grampians-central-west-waste-and-resource-recovery-group,
+            .diversion.grampians-central-west-waste-and-resource-recovery-group,
+            .lga-base.grampians-central-west-waste-and-resource-recovery-group{
+                fill: var(--chartYellow);
+            }
+            .lga-base.grampians-central-west-waste-and-resource-recovery-group{
+                stroke: var(--chartYellow);
+            }
+            .wrrg-infoPane-background.loddon-mallee-waste-and-resource-recovery-group,
+            .diversion.loddon-mallee-waste-and-resource-recovery-group,
+            .lga-base.loddon-mallee-waste-and-resource-recovery-group{
+                fill: var(--chartPowderBlue);
+            }
+            .lga-base.loddon-mallee-waste-and-resource-recovery-group{
+                stroke: var(--chartPowderBlue);
+            }
+            .wrrg-infoPane-background.metropolitan-waste-and-resource-recovery-group,
+            .diversion.metropolitan-waste-and-resource-recovery-group,
+            .lga-base.metropolitan-waste-and-resource-recovery-group{
+                fill: var(--chartPurple);
+            }
+            .lga-base.metropolitan-waste-and-resource-recovery-group{
+                stroke: var(--chartPurple);
+            }
+            .wrrg-infoPane-background.north-east-waste-and-resource-recovery-group,        
+            .lga-base.north-east-waste-and-resource-recovery-group,
+            .diversion.north-east-waste-and-resource-recovery-group{
+                fill: var(--chartTeal);
+            }
+            .lga-base.north-east-waste-and-resource-recovery-group{
+                stroke: var(--chartTeal);
+            }
+            .donut-arc{
+                stroke: #fff;
+                stroke-width: 1px;
+                fill: var(--chartLightGrey);
+            }
+            .donut-diversion-pct{
+                font-size: 10px;
+                font-weight: bold;
+                text-anchor: middle;
+                dominant-baseline: middle;
+            }
+            .wrrg-infoPane-background{
+                opacity: 0.3
+            }
+            .lga-label{
+                text-anchor: middle;
+                dominant-baseline: middle;
+                font-size: 8px; 
+                pointer-events: none;
+                fill: #000;
+            }
+            .donut-diversion-pct,
+            .wrrg-icon,
+            .wrrg-infoPane-header,
+            .wrrg-infoPane-label,
+            .wrrg-infoPane-data{
+                fill: rgba(100, 100, 100, 1);   
+                background-blend-mode: multiply;
+            }
+            .wrrg-icon{
 
-        }
-        .wrrg-infoPane-header{
-            font-size: 14px;
-            font-weight: bold;
-            text-anchor: middle;
-        }
-        .wrrg-infoPane-label{
-            font-size: 10px;
-            font-weight: bold;
-        }
-        .align-middle{
-            text-anchor: middle;
-        }
-        .wrrg-infoPane-data{
-            font-size: 10px;
-            text-anchor: end;
-        }
-  </style>
-</head>
+            }
+            .wrrg-infoPane-header{
+                font-size: 16px;
+                font-weight: 500;
+                text-anchor: middle;
+            }
+            .wrrg-infoPane-label{
+                font-size: 10px;
+                font-weight: 500;
+            }
+            .align-middle{
+                text-anchor: middle;
+            }
+            .wrrg-infoPane-data{
+                font-size: 10px;
+                text-anchor: end;
+            }
+        </style>
+    </head>
 
-<body>
+    <body>
 
-  <div id = "map-container">
-      <svg id ="map"></svg>
-  </div>
+    <div id = "map-container">
+        <svg id ="map"></svg>
+    </div>
 
-  <!-- JavaScript Libraries -->
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://d3js.org/topojson.v2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
     <script>
-        const settings = { 
-            svgID:                  'map',
-            year:                   '2019/20',
-            dims: {
-                width:              1080,
-                height:             720,
-                margin: {
-                    top: 50,    left: 30,   right: 30,  bottom: 50
-                }
-            },
-            geometry: {              
-                projection:         d3.geoMercator(),      // Choice of map projection (see d3 docs for standard projections, and add d3-geo-projection plugin for further projections)
-                centerLong:         143.7,                 // Used to center the map on Victoria
-                centerLat:          -36.1,                 // ..
-                projectionScale:    4000,                  // and scale the projection to fit the canvas (note: )
-                translationPctX:    0.45,                  // Setting used (as a proportion of width to horizontally position the map 
-                translationPctY:    0.435,                  // .. (use with geometry settings to create margins and space for annotation)
-            },
-            infoPane: {
+
+        ////////////////////////////////////////////////////////////////////////////////
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
+        ////////////////////////////////////////////////////////////////////////////////
+
+            const settings = { 
+                svgID:                  'map',
+                year:                   '2019-20',
                 dims: {
-                    width:      230,
-                    height:     140,
-                    rx:         10,
-                    ry:         10    
+                    width:              1080,
+                    height:             720,
+                    margin: {
+                        top: 50,    left: 30,   right: 30,  bottom: 50
+                    }
                 },
-                wrrgPos: {
-                    "Barwon South West Waste and Resource Recovery Group": {
-                        label: "Barwon South West",
-                        labelOffsetY: 20,
-                        cx: 200,        cy: 610,
-                        pointerX: 350,   pointerY: -50,
-                        pointerSide: 'right'
-                    }, 
-                    "Gippsland Waste and Resource Recovery Group": {
-                        label: "Gippsland",
-                        labelOffsetY: 20,
-                        cx:         860,        cy: 610,
-                        pointerX: -30,   pointerY: -100,
-                        pointerSide: 'top'
-                    }, 
-                    "Goulburn Valley Waste and Resource Recovery Group": {
-                        label: "Goulburn Valley",
-                        labelOffsetY: 20,
-                        cx: 670,        cy: 200,
-                        pointerX: 30,   pointerY: 250,
-                        pointerSide: 'bottom'                    
+                geometry: {              
+                    projection:         d3.geoMercator(),      // Choice of map projection (see d3 docs for standard projections, and add d3-geo-projection plugin for further projections)
+                    centerLong:         143.7,                 // Used to center the map on Victoria
+                    centerLat:          -36.1,                 // ..
+                    projectionScale:    4000,                  // and scale the projection to fit the canvas (note: )
+                    translationPctX:    0.45,                  // Setting used (as a proportion of width to horizontally position the map 
+                    translationPctY:    0.435,                  // .. (use with geometry settings to create margins and space for annotation)
+                },
+                infoPane: {
+                    dims: {
+                        width:      230,
+                        height:     140,
+                        rx:         10,
+                        ry:         10    
                     },
-                    "Grampians Central West Waste and Resource Recovery Group": {
-                        label: "Grampians Central Valley",
-                        labelOffsetY: 20,
-                        cx: 150,         cy: 405,
-                        pointerX: 400,   pointerY: 40,
-                        pointerSide: 'right'
-                    },
-                    "Loddon Mallee Waste and Resource Recovery Group": {
-                        label: "Loddon Mallee",
-                        labelOffsetY: 40,
-                        cx: 150,        cy: 200,
-                        pointerX: 400,   pointerY: 150,
-                        pointerSide: 'right'
-                    },
-                    "Metropolitan Waste and Resource Recovery Group": {
-                        label: "Metropolitan",
-                        labelOffsetY: 40,
-                        cx: 530,    cy: 650,
-                        pointerX: 180,   pointerY: -130,
-                        pointerSide: 'top'
-                    },
-                    "North East Waste and Resource Recovery Group": {
-                        label: "North East",
-                        labelOffsetY: 40,
-                        cx: 940,        cy: 300,
-                        pointerX: -150,   pointerY: 150,
-                        pointerSide: 'left'
-                    }   
-                }    
+                    wrrgPos: {
+                        "Barwon South West Waste and Resource Recovery Group": {
+                            label: "Barwon South West",
+                            labelOffsetY: 20,
+                            cx: 200,        cy: 610,
+                            pointerX: 350,   pointerY: -50,
+                            pointerSide: 'right'
+                        }, 
+                        "Gippsland Waste and Resource Recovery Group": {
+                            label: "Gippsland",
+                            labelOffsetY: 20,
+                            cx:         860,        cy: 610,
+                            pointerX: -30,   pointerY: -100,
+                            pointerSide: 'top'
+                        }, 
+                        "Goulburn Valley Waste and Resource Recovery Group": {
+                            label: "Goulburn Valley",
+                            labelOffsetY: 20,
+                            cx: 670,        cy: 200,
+                            pointerX: 30,   pointerY: 250,
+                            pointerSide: 'bottom'                    
+                        },
+                        "Grampians Central West Waste and Resource Recovery Group": {
+                            label: "Grampians Central Valley",
+                            labelOffsetY: 20,
+                            cx: 150,         cy: 405,
+                            pointerX: 400,   pointerY: 40,
+                            pointerSide: 'right'
+                        },
+                        "Loddon Mallee Waste and Resource Recovery Group": {
+                            label: "Loddon Mallee",
+                            labelOffsetY: 40,
+                            cx: 150,        cy: 200,
+                            pointerX: 400,   pointerY: 150,
+                            pointerSide: 'right'
+                        },
+                        "Metropolitan Waste and Resource Recovery Group": {
+                            label: "Metropolitan",
+                            labelOffsetY: 40,
+                            cx: 530,    cy: 650,
+                            pointerX: 180,   pointerY: -130,
+                            pointerSide: 'top'
+                        },
+                        "North East Waste and Resource Recovery Group": {
+                            label: "North East",
+                            labelOffsetY: 40,
+                            cx: 940,        cy: 300,
+                            pointerX: -150,   pointerY: 150,
+                            pointerSide: 'left'
+                        }   
+                    }    
+                }
+
             }
 
-        }
-        const data = {
-            schema: {
-                list: {
-                    collection: ['Garbage', 'Recyclables', 'Organics'],
-                    chain:      ['collected', 'processed']
-                }
-            },
-            byWRRG: {},
-        }
+            const data = {
+                table:      {},
+                schema: {
+                    list: {
+                        collection: ['Garbage', 'Recyclables', 'Organics'],
+                        chain:      ['collected', 'processed']
+                    }
+                },
+                byWRRG: {},
+            }
+            const gsTableLinks =   {
+                byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+                byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+                byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+                byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+                byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+                kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+                kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+            }
 
 
-        /////////////////////////////////////////////////////////////////////////////////
-        ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
-        /////////////////////////////////////////////////////////////////////////////////
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
 
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                // 1. Parse WRRG Data
-                await parseData(loadedData.byWRRG.elements)
-                // 2. Load map data and render
-                Promise.all([		                                // Use Promise.all to load multiple data files
-                    d3.json('data/victorianLGAs.geojson'),			// 0. LGA map shape data
-                    d3.tsv("data/victorianLGAs.txt"),			    // 1. LGA map meta data, including the mapping of LGAs to WRRGs
-                ]).then( mapData => {
-                    renderMap(settings, mapData[0], mapData[1])	
-                });
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                        // 1. Parse WRRG Data
+                            await parseData(data.table.byWRRG)                 // 1. Parse data
+                            // 2. Load map data and render
+                            Promise.all([		                                // Use Promise.all to load multiple data files
+                                d3.json('data/victorianLGAs.geojson'),			// 0. LGA map shape data
+                                d3.tsv("data/victorianLGAs.txt"),			    // 1. LGA map meta data, including the mapping of LGAs to WRRGs
+                            ]).then( mapData => {
+                                renderMap(settings, mapData[0], mapData[1])	
+                            });
+                        }
+                    }
+                })
+            }                       
+        };
 
 
-        /////////////////////////////////
-        ///// DATA PARSING FUNCTION  ///
-        /////////////////////////////////
+        //////////////////////////////////
+        /// 1.  DATA PARSING FUNCTION  ///
+        //////////////////////////////////
 
         async function parseData(wrrgData){
             // Parse WRRG Data
@@ -383,9 +444,9 @@
         };
 
 
-        /////////////////////////////////////
-        ///// MAP VIS RENDERING FUNCTION  ///
-        /////////////////////////////////////
+        ///////////////////////////////////////
+        /// 2.  MAP VIS RENDERING FUNCTION  ///
+        //////////////////////////////////////
 
         function renderMap(settings, mapShapeData, mapMetaData){
         // 0. WRANGLE DATA
@@ -528,7 +589,7 @@
                 const diversionRate = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)),
                     labelGroup = wrrgPane.append('g')
                         .attr('transform', `translate(${10} , ${0})`)
- 
+
                 renderDonut(labelGroup, {x: 20, y: 50}, {r: 20  }, {pct: diversionRate, materialClass:  helpers.slugify(wrrg)} )
                 labelGroup.append('text').classed('wrrg-infoPane-label ', true)
                     .attr('transform', `translate(${0} , ${80})`)
@@ -592,99 +653,99 @@
                 .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top + 25})`)
                 .text(`by Waste Recovery and Resource Group in ${settings.year}`)
 
-      }; // end renderMap()
+    }; // end renderMap()
+
+        /////////////////////////////
+        /// X HELPER FUNCTIONS    ///
+        /////////////////////////////
+
+        function renderDonut(container, coords, dims, data ){
+            // Setup shape generator and data
+            const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
+                pie = d3.pie().padAngle(0.005)
+                    .sort(null)
+                    .value(d => d.value),
+                chartData = pie([
+                    {value: data.pct,    class: 'diversion '+data.materialClass},
+                    {value: 1- data.pct, class: 'landfill'}
+                ])
+
+            const donutGroup = container.append('g')
+
+            donutGroup.append('g').classed('arc-group', true)
+                .selectAll("path.donut-arc")
+                .data(chartData)
+                .join("path").attr('class', d => `${d.data.class} donut-arc`)            
+                    .attr("d", arc)
+                    .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
+            
+            donutGroup.append('text')
+                .attr('class', `${data.materialClass} donut-diversion-pct`)  
+                .text(helpers.numberFormatters.formatPct(data.pct))
+                .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
+        };
 
 
-    function renderDonut(container, coords, dims, data ){
-        // Setup shape generator and data
-        const arc = d3.arc().innerRadius(dims.r * 0.67).outerRadius(dims.r - 1),
-            pie = d3.pie().padAngle(0.005)
-                .sort(null)
-                .value(d => d.value),
-            chartData = pie([
-                {value: data.pct,    class: 'diversion '+data.materialClass},
-                {value: 1- data.pct, class: 'landfill'}
-            ])
 
-        const donutGroup = container.append('g')
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (var i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
 
-        donutGroup.append('g').classed('arc-group', true)
-            .selectAll("path.donut-arc")
-            .data(chartData)
-            .join("path").attr('class', d => `${d.data.class} donut-arc`)            
-                .attr("d", arc)
-                .style("transform", `translate(${coords.x}px, ${coords.y}px) scale(-1, 1)` )
-        
-        donutGroup.append('text')
-            .attr('class', `${data.materialClass} donut-diversion-pct`)  
-            .text(helpers.numberFormatters.formatPct(data.pct))
-            .style("transform", `translate(${coords.x}px, ${coords.y}px)` )
-    };
-
-
-    /////////////////////////////
-    /// X HELPER FUNCTIONS    ///
-    /////////////////////////////
-
-    const helpers= {
-        numberFormatters: {
-            formatComma:           	d3.format(",.0f"),
-            formatComma1dec:       	d3.format(",.1f"),
-            formatComma2dec:       	d3.format(",.2f"),
-            formatInteger:         	d3.format(".0f"),   
-            formatCostInteger:     	d3.format("$,.0f"),  
-            formatCost1dec:        	d3.format("$,.1f"),  
-            formatPct:          	d3.format(".0%"), 
-            formatPct1dec:          d3.format(".1%")  
-        },
-        numberParsers: {
-            parseDateSlash: d3.timeParse("%d/%m/%Y")
-        },
-        slugify: function (str) {
-            str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
-            const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
-                to   = "aaaaeeeeiiiioooouuuunc------"
-            for (var i=0, l=from.length ; i<l ; i++) {
-                str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-            }
-            str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-                .replace(/\s+/g, '-') // collapse whitespace and replace by -
-                .replace(/-+/g, '-'); // collapse dashes
-            return str;
-        }, 
-        wrap: function(text, width, lineHeight) {
-            text.each(function() {
-                let text = d3.select(this),
-                    words = text.text().split(/\s+/).reverse(),
-                    word,
-                    line = [],
-                    lineNumber = 0,
-                    y = text.attr("y"),
-                    x = text.attr("x"),
-                    fontSize = parseFloat(text.style("font-size")),
-                    dy = parseFloat(text.attr("dy")),
-                    tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-                while (word = words.pop()) {
-                    line.push(word);
-                    tspan.text(line.join(" "));
-
-                    if (tspan.node().getComputedTextLength() > width) {
-                        line.pop();
+                    while (word = words.pop()) {
+                        line.push(word);
                         tspan.text(line.join(" "));
-                        line = [word];
-                        tspan = text.append("tspan")
-                            .attr("x", x)
-                            .attr("y",  y)
-                            .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                    }                    
-                }            
-            })
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                })
+            }
         }
-    }
 
 
-  </script>
-</body>
+    </script>
+    </body>
 
 </html>

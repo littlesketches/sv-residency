@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -176,13 +177,15 @@
 
         .main-title{
             font-size: 30px;
-            font-weight: 600;
-            fill: var(--secondaryBottleGreen);
-            dominant-baseline: 'hanging'
+            font-weight: 500;
+            fill: #000;
+            dominant-baseline: 'hanging';
+            text-transform: uppercase;
+
         }
         .main-subtitle{
             font-size: 14px;
-            fill: var(--secondaryBottleGreen);
+            fill: #000;
             dominant-baseline: 'hanging';
             font-weight: 400;
         }
@@ -315,18 +318,20 @@
 
 <body>
 
-  <div id = "vis-container">
-      <svg id ="flow-vis"></svg>
-  </div>
+    <div id = "vis-container">
+        <svg id ="flow-vis"></svg>
+    </div>
 
-  <!-- JavaScript Libraries -->
-    <!-- <script src="https://d3js.org/d3.v6.min.js"></script> -->
-    <script src="js/d3.v6.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+
     <script>
+
+        ////////////////////////////////////////////////////////////////////////////////
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
+        ////////////////////////////////////////////////////////////////////////////////
+
         const settings = { 
             svgID:                  'flow-vis',
-            year:                   '2019/20',
+            year:                   '2019-20',
             dims: {
                 width:              780,
                 height:             1080,
@@ -346,6 +351,7 @@
             },           
         }
         const data = {
+            table:      {},
             byType: {
                 material:           {},     
                 destination:        {},
@@ -355,23 +361,44 @@
             inputData: {}
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
 
-      /////////////////////////////////////////////////////////////////////////////////
-      ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
-      /////////////////////////////////////////////////////////////////////////////////
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
 
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                await parseData(loadedData.byMaterial.elements)
-                await renderVis()
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                            await parseData(data.table.byMaterial)                 // 1. Parse data
+                            await renderVis()       // 2. Render visualisation(s)
+                        }
+                    }
+                })
+            }                       
+        };
 
 
-        // I. PARSE DATA
+        ////////////////////////////////////
+        // 1. PARSE AND WRANGLE DATA     ///
+        ////////////////////////////////////
+
         async function parseData(materialData) {
             // 1. Parse numeric data types to number
             materialData.forEach(d => {
@@ -435,7 +462,11 @@
             data.inputData.material = materialData
         };
 
-        // II. RENDER FLOW VISUALISATION
+
+        ////////////////////////////////////////
+        // 2. RENDER THE FLOW VISUALISATION  ///
+        ////////////////////////////////////////
+
         async function renderVis(){
             // 0. SETUP GEOMETRY FROM DATA
             const visWidth = settings.dims.width - settings.dims.margin.left - settings.dims.margin.right,
@@ -457,7 +488,7 @@
                 'Organics':                     'M24.693-19.657a1.337 1.337 0 00-.948-.483 83.169 83.169 0 00-4.71-.117c-15.562 0-21.91 3.082-24.496 5.668C-11.4-8.652-10.327-.008-9.81 2.69a40.338 40.338 0 00-2.227 3.037 23.104 23.104 0 01-1.711-1.71 5.294 5.294 0 001.983-2.616c1.165-3.316-.7-7.518-1.85-9.276-1.257-1.923-1.535-6.977-1.535-8.763a1.338 1.338 0 00-2.19-1.033c-6.961 5.733-8.963 14.066-6.876 18.81 1.204 2.736 3.343 4.243 6.021 4.243.733 0 1.38-.114 1.876-.24a25.112 25.112 0 002.859 2.904c-3.35 5.946-3.721 10.486-3.745 10.834a1.336 1.336 0 001.337 1.426 1.34 1.34 0 001.333-1.242c.003-.036.298-3.716 2.894-8.702A36.17 36.17 0 01-7.883 4.62c2.387.435 4.698.668 6.87.668 22.703 0 25.972-23.684 26.002-23.923a1.328 1.328 0 00-.296-1.021zM-18.194 2.707c-1.62 0-2.788-.866-3.571-2.646-1.733-3.94.543-9.694 4.077-13.676.197 2.336.675 5.433 1.834 7.206 1.005 1.538 2.32 4.777 1.564 6.923a2.649 2.649 0 01-1.11 1.392c-.78-1.164-1.442-2.474-1.74-3.86a1.337 1.337 0 10-2.618.565c.317 1.472.938 2.85 1.687 4.09-.041.002-.08.006-.123.006zM18.35-8.121C13.26.283 5.065 3.807-5.848 2.247-3.098-.72.57-3.832 5.454-6.711a1.337 1.337 0 10-1.359-2.305C-.792-6.136-4.553-3.036-7.458.014c-.268-3.308 0-8.822 3.89-12.71 3.103-3.105 11.342-4.884 22.604-4.884 1.215 0 2.256.022 3.032.047-.431 1.974-1.47 5.7-3.718 9.412z',
                 'Plastics':                     'M-3.906-25a1.944 1.944 0 00-1.94 1.939v3.854c0 .61.332 1.1.774 1.454l-5.183 4.622a.928.928 0 00-.308.69v5.674c0 1.238.666 2.28 1.606 2.948-.952.813-1.607 1.974-1.607 3.321 0 1.461.766 2.703 1.86 3.511-1.093.808-1.86 2.049-1.86 3.509s.766 2.703 1.86 3.51c-1.094.809-1.86 2.051-1.86 3.512 0 1.46.767 2.7 1.86 3.508-1.094.809-1.86 2.05-1.86 3.511A4.446 4.446 0 00-6.127 25H6.126a4.446 4.446 0 004.437-4.437c0-1.46-.765-2.702-1.86-3.51 1.094-.809 1.86-2.05 1.86-3.51s-.766-2.702-1.86-3.51c1.094-.808 1.86-2.05 1.86-3.511 0-1.46-.766-2.7-1.86-3.509 1.095-.808 1.86-2.05 1.86-3.51 0-1.348-.655-2.509-1.607-3.322.94-.668 1.607-1.71 1.607-2.948v-5.673a.928.928 0 00-.309-.69l-5.183-4.623c.442-.354.774-.845.774-1.454v-3.854A1.944 1.944 0 003.906-25zm0 1.852h7.812c.05 0 .087.036.087.087v3.854c0 .05-.036.089-.087.089h-7.812a.085.085 0 01-.087-.09v-3.853c0-.051.036-.087.087-.087zm1.074 5.881h5.664l5.88 5.242v5.258c0 1.013-.82 1.833-1.833 1.833H-6.88a1.832 1.832 0 01-1.833-1.833v-5.258zM-6.127-3.083H6.126a2.585 2.585 0 110 5.17H-6.127a2.585 2.585 0 110-5.17zm0 7.022H6.126a2.583 2.583 0 110 5.168H-6.127a2.585 2.585 0 110-5.168zm0 7.02H6.126a2.585 2.585 0 110 5.168H-6.127a2.583 2.583 0 110-5.168zm0 7.02H6.126a2.585 2.585 0 110 5.17H-6.127a2.585 2.585 0 110-5.17z',
                 'Metals':                       'M-9.375-9.943c0 .471.38.852.852.852H8.523a.851.851 0 100-1.704H-8.523a.851.851 0 00-.852.852zm17.898-8.239H3.835l1.137-3.977C5.415-23.66 4.83-25 3.267-25H1.96c-1.562 0-2.528.568-3.096 2.273l-1.705 4.545h-5.682c0 2.273-3.977 6.25-3.977 6.25v31.818S-9.09 23.011-9.09 25H9.09c0-1.989 3.41-5.114 3.41-5.114v-31.818s-3.977-4.04-3.977-6.25zM2.13-23.295c1.704 0 1.136 1.136.568 2.272H-.142c.568-1.704 1.136-2.272 2.273-2.272zM.994-19.318c.762 0 1.233.477 1.279 1.136h-3.551c.431-.659 1.511-1.136 2.272-1.136zm6.404 42.045H-7.398l-1.693-2.272H9.091c-.551.693-1.313 1.465-1.693 2.272zm-17.625-3.409v-30.682c1.136-1.136 2.84-2.84 3.409-4.545H6.818c.568 1.704 2.313 3.358 3.41 4.545v30.682L9.09 18.75H-9.091z',
-                'Paper and card':               'M-.281-12.63H6.98c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023H-.28c-.563 0-1.023.46-1.023 1.023 0 .562.41 1.022 1.023 1.022zm0-3.631H6.98c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023H-.28c-.563 0-1.023.46-1.023 1.023 0 .562.41 1.023 1.023 1.023zM5.753 7.824c0-.563-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.023 1.023 1.023H4.73c.563 0 1.023-.46 1.023-1.023zm-21.12-3.17H4.73c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.022 1.023 1.022zm0-4.194H4.73C5.293.46 5.753 0 5.753-.562c0-.563-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.022 1.023 1.022zm0-4.193H4.73c.563 0 1.023-.46 1.023-1.023 0-.562-.46-1.022-1.023-1.022h-20.096c-.563 0-1.023.46-1.023 1.022 0 .563.46 1.023 1.023 1.023zm0-4.193h8.08c.563 0 1.023-.46 1.023-1.023v-8.08c0-.562-.46-1.022-1.023-1.022h-8.08c-.562 0-1.022.46-1.022 1.023v8.08c0 .562.46 1.022 1.023 1.022zm1.023-8.08h6.034v6.034h-6.034zm1.79 38.506h31.807c.562 0 1.023-.46 1.023-1.023v-37.38c0-.563-.46-1.023-1.023-1.023h-5.727v-4.551c0-.563-.46-1.023-1.023-1.023h-31.756c-.562 0-1.023.46-1.023 1.023v37.38c0 .563.46 1.023 1.023 1.023h5.676v4.551c0 .563.41 1.023 1.023 1.023zM18.18-14.88v35.335h-29.71v-3.529h24.085c.563 0 1.023-.46 1.023-1.023V-14.88zm-36.409-5.575h29.761v35.336H-18.23z',
+                'Paper and cardboard':           'M-.281-12.63H6.98c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023H-.28c-.563 0-1.023.46-1.023 1.023 0 .562.41 1.022 1.023 1.022zm0-3.631H6.98c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023H-.28c-.563 0-1.023.46-1.023 1.023 0 .562.41 1.023 1.023 1.023zM5.753 7.824c0-.563-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.023 1.023 1.023H4.73c.563 0 1.023-.46 1.023-1.023zm-21.12-3.17H4.73c.563 0 1.023-.46 1.023-1.023s-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.022 1.023 1.022zm0-4.194H4.73C5.293.46 5.753 0 5.753-.562c0-.563-.46-1.023-1.023-1.023h-20.096c-.563 0-1.023.46-1.023 1.023 0 .562.46 1.022 1.023 1.022zm0-4.193H4.73c.563 0 1.023-.46 1.023-1.023 0-.562-.46-1.022-1.023-1.022h-20.096c-.563 0-1.023.46-1.023 1.022 0 .563.46 1.023 1.023 1.023zm0-4.193h8.08c.563 0 1.023-.46 1.023-1.023v-8.08c0-.562-.46-1.022-1.023-1.022h-8.08c-.562 0-1.022.46-1.022 1.023v8.08c0 .562.46 1.022 1.023 1.022zm1.023-8.08h6.034v6.034h-6.034zm1.79 38.506h31.807c.562 0 1.023-.46 1.023-1.023v-37.38c0-.563-.46-1.023-1.023-1.023h-5.727v-4.551c0-.563-.46-1.023-1.023-1.023h-31.756c-.562 0-1.023.46-1.023 1.023v37.38c0 .563.46 1.023 1.023 1.023h5.676v4.551c0 .563.41 1.023 1.023 1.023zM18.18-14.88v35.335h-29.71v-3.529h24.085c.563 0 1.023-.46 1.023-1.023V-14.88zm-36.409-5.575h29.761v35.336H-18.23z',
                 'Rubber':                       'M0-25c-13.79 0-25 11.21-25 25s11.21 25 25 25S25 13.79 25 0 13.79-25 0-25zm0 48.263C-12.79 23.263-23.263 12.79-23.263 0c0-12.79 10.474-23.263 23.263-23.263 12.79 0 23.263 10.42 23.263 23.263C23.263 12.79 12.79 23.263 0 23.263zM0-17.42c-9.579 0-17.421 7.79-17.421 17.421 0 9.579 7.79 17.421 17.421 17.421 9.579 0 17.421-7.79 17.421-17.421C17.421-9.579 9.58-17.421 0-17.421zm0 33.053c-8.632 0-15.632-7-15.632-15.632s7-15.632 15.632-15.632S15.632-8.632 15.632 0 8.632 15.632 0 15.632zm0-30.21c-8.053 0-14.579 6.525-14.579 14.578 0 8.053 6.526 14.579 14.579 14.579S14.579 8.053 14.579 0 8.053-14.579 0-14.579zm0 27.42c-7.053 0-12.842-5.737-12.842-12.842 0-7.053 5.737-12.842 12.842-12.842 7.053 0 12.842 5.737 12.842 12.842 0 7.053-5.79 12.842-12.842 12.842z',
                 'Landfill':                     'M15.323 2.42h1.612v1.612h-1.612zm8.064-14.517H25v1.613h-1.613zM8.871 10.483h1.613v1.614H8.87zm14.28-8.634l-1.14 1.14.472.473a3.11 3.11 0 01.904 2.183 3.11 3.11 0 01-.904 2.183l-.473.473 1.14 1.14.473-.472A4.732 4.732 0 0025 5.645a4.732 4.732 0 00-1.377-3.323zm-4.603-4.847c0 1.629.635 3.16 1.787 4.313l.869.868 1.14-1.14-.869-.87a4.457 4.457 0 01-1.314-3.171c0-1.405.671-2.747 1.795-3.59l1.109-.831-.968-1.29-1.11.83a6.13 6.13 0 00-2.439 4.88zm-1.431-6.01l1.109-.83-.968-1.291-1.109.831a6.13 6.13 0 00-2.44 4.88c0 1.63.635 3.16 1.787 4.313l.87.87 1.14-1.14-.87-.87a4.46 4.46 0 01-1.313-3.173c0-1.405.67-2.747 1.794-3.59zm1.668-2.852l1.14 1.14.473-.473a4.667 4.667 0 001.376-3.323 4.667 4.667 0 00-1.376-3.324l-.473-.472-1.14 1.14.472.473c.583.583.904 1.359.904 2.183 0 .824-.32 1.6-.904 2.183zm-6.67-9.525a10.078 10.078 0 016.008-2.002c1.124 0 2.038.914 2.038 2.039a1.19 1.19 0 01-1.187 1.187 1.18 1.18 0 01-1.062-.657l-.255-.51-1.442.722.255.51a2.784 2.784 0 002.504 1.548c1.544 0 2.8-1.257 2.8-2.8A3.655 3.655 0 0018.123-25a11.7 11.7 0 00-6.976 2.325l-.34.256.967 1.29zm.15 7.799l-10.07.56a3.18 3.18 0 00-2.07 5.42l.918.919 1.14-1.14-.918-.919a1.567 1.567 0 011.02-2.67l10.07-.56a3.143 3.143 0 00.588-6.184 1.115 1.115 0 01-.846-1.084v-.917h-1.613v.917c0 1.255.85 2.344 2.068 2.649a1.528 1.528 0 01-.286 3.009zM-21.027-3.52a2.1 2.1 0 00-.747 1.598v.616A2.113 2.113 0 00-18.72.584l.17-.086v.308h1.614V.498l.17.085a2.113 2.113 0 003.056-1.888v-.616a2.113 2.113 0 00-2.112-2.111c-.068 0-.134.017-.2.023l-3.012-6.022 7.329-3.67 3.937 7.252a3.7 3.7 0 00-.77.825 5.314 5.314 0 00-3.96 2.351l-.27.407 1.341.894.271-.406a3.707 3.707 0 013.09-1.654h.499l.222-.446a2.102 2.102 0 011.89-1.167h.615v-1.613h-.616c-.295 0-.582.037-.86.102l-3.971-7.315a1.618 1.618 0 00-2.158-.678l-10.045 5.046a1.635 1.635 0 00-.726 2.186zm1.587 2.66c-.315.158-.721-.094-.721-.446v-.616c0-.352.406-.605.721-.446l.892.446v.616zm4.117-1.062v.616c0 .352-.404.605-.721.446l-.891-.446v-.616l.89-.446c.317-.159.722.094.722.446zm-5.152-7.387l2.638 5.276h-.711v.308l-.17-.085a2.114 2.114 0 00-.75-.2l-2.297-4.654zM2.504-2.865l1.443-.722a3.704 3.704 0 00-3.33-2.058H.458A3.7 3.7 0 00-2.61-7.258h-.616v1.613h.616A2.1 2.1 0 01-.722-4.478l.224.446H.616a2.1 2.1 0 011.888 1.167zM-7.258.806V-.806h-.138a6.272 6.272 0 00-4.464 1.849l1.14 1.14A4.669 4.669 0 01-7.396.806zm4.839 3.226h1.613v1.613H-2.42zm-8.065 1.613h1.613v1.613h-1.613zm3.226 14.516h1.613v1.613h-1.613zm6.452-6.451H.806v1.613H-.806zm-4.34-27.42c.325 0 .652-.077.944-.222l.17-.086v.308h1.613v-.308l.17.085a2.113 2.113 0 003.056-1.888v-.616a2.113 2.113 0 00-3.056-1.889l-.17.086v-.308h-1.613v.308l-.17-.085a2.113 2.113 0 00-3.056 1.888v.616c0 1.165.947 2.111 2.111 2.111zm3.618-3.173c.317-.157.722.094.722.446v.616c0 .352-.405.606-.722.446l-.891-.446v-.616zm-4.117.446c0-.352.407-.603.722-.446l.89.446v.616l-.89.446c-.316.159-.722-.094-.722-.446zM6.622 3.502l-.085.17 1.443.722.085-.171A7.68 7.68 0 008.87.806H7.258c0 .931-.22 1.863-.636 2.696zm4.49-5.334L11.7-4.07c.217-.829-.265-1.684-1.098-1.949l-1.115-.354a1.678 1.678 0 00-1.998.805L6.27-3.244C4.006-2.614 2.102-1.213.878.73L.7 1.015C.602.975.506.932.406.898L.255.848l-.511 1.529.151.05a4.343 4.343 0 012.663 2.51 3.673 3.673 0 003.426 2.321c.4 0 .792-.064 1.166-.189l1.065-.354a2.1 2.1 0 011.312 0l1.508.502.51-1.53-.152-.05.22-.629a8.662 8.662 0 00-.5-6.84zM7.706 5.184l-1.065.355A2.067 2.067 0 014.057 4.34a5.953 5.953 0 00-1.943-2.545l.13-.206C3.306-.097 4.997-1.29 7.006-1.769l.356-.084 1.555-2.964c.005-.009.04-.03.082-.017l1.141.356-.745 2.84.28.533a6.954 6.954 0 01.416 5.58l-.232.665a3.706 3.706 0 00-2.154.044zm.55 16.59h.616v-1.613h-.616c-1.42 0-2.696.79-3.33 2.06l1.442.72a2.099 2.099 0 011.888-1.167zm-6.543-1.613h1.041l.237-.236a4.67 4.67 0 013.324-1.377h.944v-1.613h-.944a6.27 6.27 0 00-4.216 1.613h-.386a5.057 5.057 0 00-4.914 3.837l1.565.39a3.447 3.447 0 013.35-2.614zm15.65 0h-.1c-.12-.113-.25-.213-.373-.322.083-.165.162-.33.24-.499l4.14-1.656-.6-1.498-2.766 1.107c.162-.54.291-1.09.393-1.645l2.972-1.19-.6-1.497-2.033.814 3.971-6.95-4.864 1.215-4.864-1.216 4.02 7.034-.022.265-1.79-1.79-1.14 1.14 2.612 2.612c-.06.25-.126.499-.2.746l-1.27-1.272-1.141 1.14 1.795 1.795c-.052.116-.102.233-.157.348a11.737 11.737 0 00-6.437-1.907H8.87v1.613h.277c2.726 0 5.29 1.062 7.217 2.99l.237.236h.76a5 5 0 013.694 1.613h-41.94a5.674 5.674 0 013.949-1.613h.333l.76-.759a2.963 2.963 0 013.364-.546l.827.414.722-1.443-.827-.413a4.568 4.568 0 00-1.004-.36 7.29 7.29 0 014.695-1.732h.807v-1.612h-.807c-.39 0-.779.033-1.162.084a6.512 6.512 0 013.136-3.395l-.722-1.443a8.172 8.172 0 00-1.913 1.34l-.367-.367A9.12 9.12 0 00-15.54 8.87h-1.783l.353-2.018a2.365 2.365 0 00-.526-1.93 2.515 2.515 0 00-1.934-.89h-.17c-1.07 0-2.019.659-2.362 1.642l-.327.937-.995.317C-24.31 7.255-25 8.179-25 9.226c0 1.116.78 2.08 1.897 2.347l.875.208a9.157 9.157 0 00.145 9.165l.53.884c-.44.361-.842.772-1.189 1.235L-24.194 25h48.08l-.584-1.167a6.607 6.607 0 00-5.94-3.672zm.38-10.459l1.588-.397-1.588 2.779-1.588-2.78zm-41.13-.476c0-.343.239-.648.593-.76l1.764-.562.592-1.697c.117-.337.454-.562.839-.562h.17c.276 0 .53.115.7.315.086.104.222.32.17.617l-.422 2.421-2.1 1.4-1.647-.393c-.388-.093-.658-.413-.658-.78zm2.688 10.89a7.536 7.536 0 01.192-8.062l.122-.183 2.082-1.387h2.765a7.507 7.507 0 015.306 2.198l.438.437a8.208 8.208 0 00-1.268 2.731 8.898 8.898 0 00-4 2.903 4.485 4.485 0 00-1.92 1.121l-.294.295a7.27 7.27 0 00-2.923.779z'
             }
@@ -500,7 +531,7 @@
                     .attr('id', `material-label-${helpers.slugify(material)}`)
                     .classed(`material-label ${helpers.slugify(material)} ${data.byType.material[material].class}`, true)
                     .attr('x', settings.geometry.container.height * 1.15)
-                    .attr('y', 0)
+                    .attr('y', 2)
                     .attr('dy', 0)
                     .text(material)
                     .call(helpers.wrap, settings.geometry.container.width - settings.geometry.container.height * 1.5, 1.1)
@@ -750,10 +781,142 @@
                     }                    
                 }            
             })
+        },
+        exportPNG: function(settings){
+            d3.select('body').append('canvas')
+                .attr('id', `${settings.svgID}-canvas`)
+                .attr('width', settings.dims.width* 2)
+                .attr('height', settings.dims.height * 2)
+            d3.select('body').append('div')
+                .attr('id', `png-container`)
+
+            var svgString = new XMLSerializer().serializeToString(document.querySelector(`#${settings.svgID}`));
+
+            var canvas = document.getElementById(`${settings.svgID}-canvas`);
+            var ctx = canvas.getContext("2d");
+            var DOMURL = self.URL || self.webkitURL || self;
+            var img = new Image();
+            var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+            var url = DOMURL.createObjectURL(svg);
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                var png = canvas.toDataURL("image/png");
+                document.querySelector('#png-container').innerHTML = '<img src="'+png+'"/>';
+                DOMURL.revokeObjectURL(png);
+            };
+            img.src = url;
+        },
+        exportPNG2: function(settings){
+           const  img = new Image(),
+                serializer = new XMLSerializer(),
+                svgStr = serializer.serializeToString(document.getElementById(settings.svgID));
+
+            img.src = 'data:image/svg+xml;base64,'+window.btoa(svgStr);
+
+            var canvas = document.createElement("canvas");
+            canvas.width = settings.dims.width;
+            canvas.height = settings.dims.height;
+            canvas.getContext("2d").drawImage(img,0,0, settings.dims.width, settings.dims.height);
+
+            var imgURL = canvas.toDataURL("image/png");
+
+            var dlLink = document.createElement('a');
+                dlLink.download = "image";
+                dlLink.href = imgURL;
+                dlLink.dataset.downloadurl = ["image/png", dlLink.download, dlLink.href].join(':');
+
+                document.body.appendChild(dlLink);
+                dlLink.click();
+                document.body.removeChild(dlLink);
+            
+        },
+        SVGToImage(settings){
+            let _settings = {
+                svg: null,
+                // Usually all SVG have transparency, so PNG is the way to go by default
+                mimetype: "image/png",
+                quality: 0.92,
+                width: "auto",
+                height: "auto",
+                outputFormat: "base64"
+            };
+
+            // Override default settings
+            for (let key in settings) { _settings[key] = settings[key]; }
+
+            return new Promise(function(resolve, reject){
+                let svgNode;
+
+                // Create SVG Node if a plain string has been provided
+                if(typeof(_settings.svg) == "string"){
+                    // Create a non-visible node to render the SVG string
+                    let SVGContainer = document.createElement("div");
+                    SVGContainer.style.display = "none";
+                    SVGContainer.innerHTML = _settings.svg;
+                    svgNode = SVGContainer.firstElementChild;
+                }else{
+                    svgNode = _settings.svg;
+                }
+
+                let canvas = document.createElement('canvas');
+                let context = canvas.getContext('2d'); 
+
+                let svgXml = new XMLSerializer().serializeToString(svgNode);
+                let svgBase64 = "data:image/svg+xml;base64," + btoa(svgXml);
+
+                const image = new Image();
+
+                image.onload = function(){
+                    let finalWidth, finalHeight;
+
+                    // Calculate width if set to auto and the height is specified (to preserve aspect ratio)
+                    if(_settings.width === "auto" && _settings.height !== "auto"){
+                        finalWidth = (this.width / this.height) * _settings.height;
+                    // Use image original width
+                    }else if(_settings.width === "auto"){
+                        finalWidth = this.naturalWidth;
+                    // Use custom width
+                    }else{
+                        finalWidth = _settings.width;
+                    }
+
+                    // Calculate height if set to auto and the width is specified (to preserve aspect ratio)
+                    if(_settings.height === "auto" && _settings.width !== "auto"){
+                        finalHeight = (this.height / this.width) * _settings.width;
+                    // Use image original height
+                    }else if(_settings.height === "auto"){
+                        finalHeight = this.naturalHeight;
+                    // Use custom height
+                    }else{
+                        finalHeight = _settings.height;
+                    }
+
+                    // Define the canvas intrinsic size
+                    canvas.width = finalWidth;
+                    canvas.height = finalHeight;
+
+                    // Render image in the canvas
+                    context.drawImage(this, 0, 0, finalWidth, finalHeight);
+
+                    if(_settings.outputFormat == "blob"){
+                        // Fullfil and Return the Blob image
+                        canvas.toBlob(function(blob){
+                            resolve(blob);
+                        }, _settings.mimetype, _settings.quality);
+                    }else{
+                        // Fullfil and Return the Base64 image
+                        resolve(canvas.toDataURL(_settings.mimetype, _settings.quality));
+                    }
+                };
+
+                // Load the SVG in Base64 to the image
+                image.src = svgBase64;
+            });
         }
+
     }
 
-  </script>
+    </script>
 </body>
 
 </html>

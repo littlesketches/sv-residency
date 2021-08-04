@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3js.org/topojson.v2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -126,24 +128,27 @@
             fill: var(--secondaryBottleGreen);
         }
         .main-title{
-            font-size: 40px;
-            font-weight: 600;
+            font-size: 36px;
+            font-weight: 500;
             dominant-baseline: hanging;
             mix-blend-mode: darken;
+            text-transform: uppercase;
+            fill: #000;
         }
         .main-subtitle{
             font-size: 16px;
             font-weight: 500;
             dominant-baseline: hanging;
             mix-blend-mode: darken;
+            fill: #000;
         }
         .total-exports-label{
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 400;
         }
         .total-exports-vol{
             font-size: 16px;
-            font-weight: bold;  
+            font-weight: 700;  
             text-anchor: end;
         }
         .total-material-name{
@@ -160,7 +165,7 @@
         .total-exports-total{
             font-size: 30px;
             font-weight: bold;
-            stroke-width: 0.75px;
+            stroke-width: 1.25px;
             fill: rgba(255, 255, 255, 0.8); 
             stroke: var(--secondaryBottleGreen);
        }
@@ -175,14 +180,14 @@
         }
         .country-label,
         .country-label-pct{
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             text-anchor: middle;
             dominant-baseline: middle;
-            text-shadow: 2px 2px 5px #fff;
+            text-shadow: 2px 2px 2px #fff;
         }
         .country-label-pct{
-            font-size: 10px;
+            font-size: 12px;
         }
         .export-connector{
             stroke-width: 1;
@@ -229,18 +234,15 @@
   </div>
 
   <!-- JavaScript Libraries -->
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://d3js.org/topojson.v2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
     <script>
 
-    ////////////////////////////////////////
-    ///// DATA AND VIS SETTINGS OBJECTS  ///
-    ////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////
+        /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
+        ////////////////////////////////////////////////////////////////////////////////
 
         const settings = { 
             svgID:                  'map',
-            year:                   '2019/20',              
+            year:                   '2019-20',              
             dims: {
                 width:              1080,
                 height:             720,
@@ -261,6 +263,7 @@
             }
         }
         const data = {
+            table:      {},
             schema: {
                 list: {},
             },
@@ -268,39 +271,55 @@
             inputData: {}
         }
 
+        const gsTableLinks =   {
+            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
+            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
+            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
+            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+        }
+
+        // Build from GSheet data
+        buildFromGSheetData(gsTableLinks)
+
+        function buildFromGSheetData(gsTableLinks) {
+            let noLoadedTables = 0
+            const tablesToLoad = Object.keys(gsTableLinks)
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    delimiter: '\t',
+                    download: true,
+                    header: true,
+                    complete: async (results) => {
+                        data.table[tableName] = results.data
+                        noLoadedTables++
+                        if(noLoadedTables === tablesToLoad.length){
+                            // 1. Parse data used in visualisation
+                            await parseData(data.table.byMaterialExport)
+                            // 2. Load map data and call render map function
+                            Promise.all([		                               // Use Promise.all to load multiple data files
+                                d3.json('data/world-110m.json'),			   // 0. World map
+                                d3.json('data/states.geojson.txt'),			   // 1. Australian stats
+                            ]).then( mapData => {
+                                renderMap(settings, mapData[0], mapData[1])	    // Renders map and export data annotation
+                            });
+                        }
+                    }
+                })
+            }                       
+        };
 
 
-    /////////////////////////////////////////////////////////////////////////////////
-    ///// INIT SEQUENCE | LOAD MAP SHAPE FILE AND META DATA AND CALL RENDER MAP   ///
-    /////////////////////////////////////////////////////////////////////////////////
-
-        // Load function - called by Tabletop library which retrieves the Google Sheet data and calls the parsing and rendering functions
-        Tabletop.init({
-            key: 	'https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit?usp=sharing',
-            callback: async(loadedData) => {
-                // 1. Parse data used in visualisation
-                await parseData(loadedData.byMaterialExport)
-                // 2. Load map data and call render map function
-                Promise.all([		                               // Use Promise.all to load multiple data files
-                    d3.json('data/world-110m.json'),			   // 0. World map
-                    d3.json('data/states.geojson.txt'),			   // 1. Australian stats
-                ]).then( mapData => {
-                    renderMap(settings, mapData[0], mapData[1])	    // Renders map and export data annotation
-                });
-            },
-            simpleSheet: false,
-            wanted: [ 'byStream' , 'byMaterial', 'byWRRG', 'byMaterialExport', 'kerbsideData', 'kerbsideComposition']   // Specifies which Google sheets to bring in (and in what order)
-        });
 
 
-
-    ////////////////////////////////////////////
-    ///// DATA PARSING AND SHAPING FUNCTION  ///
-    ////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /// 1. DATA PARSING AND SHAPING FUNCTION  ///
+        /////////////////////////////////////////////
 
         // Parse input data for export volumes by country
-        async function parseData(loadedExportData){
-            const exportData = loadedExportData.elements
+        async function parseData(exportData){
             // 1. Parse numeric data types to number
             exportData.forEach(d => {
                 Object.entries(d).forEach( ([key, value]) => {
@@ -312,7 +331,8 @@
             // 2. Extract lists 
             data.schema.list.country = [...new Set(exportData.sort((a, b) => (a.Total < b.Total) ? 1 : -1).map(d => d.Destination).filter(d => d !== 'Others'))]            // Sort ensures list is ranked by total
             data.schema.list.country.push('Others')               // 'Others' back  to end of array'                                                 
-            data.schema.list.materials = loadedExportData.columnNames.filter(d => d !== "year" && d !== "Destination" && d !== 'Total' && d !== 'exPathOffsetX' && d !== 'exPathOffsetY')      // Materials are in order of how they are in the raw data (i.e. change column order in data to re-order in vis)
+            data.schema.list.materials = Object.keys(exportData[0]).filter(d => d !== "year" && d !== "Destination" && d !== 'Total' && d !== 'exPathOffsetX' && d !== 'exPathOffsetY')      // Materials are in order of how they are in the raw data (i.e. change column order in data to re-order in vis)
+
             // 3. Shape data by export country
             data.schema.list.country.forEach(country => {
                 exportData.forEach(d => {
@@ -367,7 +387,7 @@
             // 4. COLOR EXPORT COUNTRIES *(BY TOTAL) AND ADD COUNTY LABELS
             const colourScale = d3.scaleLinear()
                 .domain(d3.extent(data.inputData.export.map(d => d.Total)))
-                .range(['#9bddfa', '#52baba'])
+                .range(['#A0D6E9', '#93CCB9'])
 
             const exportPathScale = d3.scaleLinear()
                 .domain(d3.extent(data.inputData.export.map(d => d.Total)))
@@ -389,7 +409,7 @@
                     country_cx = countryBBox.x + countryBBox.width /2,
                     country_cy = countryBBox.y + countryBBox.height/2,
                     exportLinkCoords = [ 
-                        {x: vic_cx,     y: vic_cy},
+                        {x: vic_cx-2,     y: vic_cy + 10},
                         {x: d3.mean([vic_cx, country_cx]) + data.byExportCountry[country].exPathOffsetX, y: d3.mean([vic_cy, country_cy]) + data.byExportCountry[country].exPathOffsetY },
                         {x: country_cx, y: country_cy}
                     ],
@@ -406,7 +426,7 @@
                     .text(country)
                 countryLabels.append('text')
                     .classed(`country-label-pct ${helpers.slugify(country)}`, true)
-                    .attr('transform', `translate(${country_cx}, ${country_cy + 4   })`)
+                    .attr('transform', `translate(${country_cx}, ${country_cy + 6 })`)
                     .text(helpers.numberFormatters.formatPct1dec(data.byExportCountry[country].Total / totalExports))
 
                 // c. AddExport path from Vic
@@ -552,72 +572,71 @@
                     .attr('y', 90 + i * materialYSpace)
                     .text(`${helpers.numberFormatters.formatComma(materiaVol)} tonnes`)                    
             })
-      }; // end renderMap()
+    }; // end renderMap()
 
 
-    /////////////////////////////
-    /// X HELPER FUNCTIONS    ///
-    /////////////////////////////
+        /////////////////////////////
+        /// X HELPER FUNCTIONS    ///
+        /////////////////////////////
 
-    const helpers= {
-        numberFormatters: {
-            formatComma:           	d3.format(",.0f"),
-            formatComma1dec:       	d3.format(",.1f"),
-            formatComma2dec:       	d3.format(",.2f"),
-            formatInteger:         	d3.format(".0f"),   
-            formatCostInteger:     	d3.format("$,.0f"),  
-            formatCost1dec:        	d3.format("$,.1f"),  
-            formatPct:          	d3.format(".0%"), 
-            formatPct1dec:          d3.format(".1%")  
-        },
-        numberParsers: {
-            parseDateSlash: d3.timeParse("%d/%m/%Y")
-        },
-        slugify: function (str) {
-            str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
-            const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
-                to   = "aaaaeeeeiiiioooouuuunc------"
-            for (var i=0, l=from.length ; i<l ; i++) {
-                str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-            }
-            str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-                .replace(/\s+/g, '-') // collapse whitespace and replace by -
-                .replace(/-+/g, '-'); // collapse dashes
-            return str;
-        }, 
-        wrap: function(text, width, lineHeight) {
-            text.each(function() {
-                let text = d3.select(this),
-                    words = text.text().split(/\s+/).reverse(),
-                    word,
-                    line = [],
-                    lineNumber = 0,
-                    y = text.attr("y"),
-                    x = text.attr("x"),
-                    fontSize = parseFloat(text.style("font-size")),
-                    dy = parseFloat(text.attr("dy")),
-                    tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+        const helpers= {
+            numberFormatters: {
+                formatComma:           	d3.format(",.0f"),
+                formatComma1dec:       	d3.format(",.1f"),
+                formatComma2dec:       	d3.format(",.2f"),
+                formatInteger:         	d3.format(".0f"),   
+                formatCostInteger:     	d3.format("$,.0f"),  
+                formatCost1dec:        	d3.format("$,.1f"),  
+                formatPct:          	d3.format(".0%"), 
+                formatPct1dec:          d3.format(".1%")  
+            },
+            numberParsers: {
+                parseDateSlash: d3.timeParse("%d/%m/%Y")
+            },
+            slugify: function (str) {
+                str = str.replace(/^\s+|\s+$/g, '').toLowerCase(); // trim           
+                const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;",      // remove accents, swap ñ for n, etc
+                    to   = "aaaaeeeeiiiioooouuuunc------"
+                for (var i=0, l=from.length ; i<l ; i++) {
+                    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                }
+                str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                    .replace(/-+/g, '-'); // collapse dashes
+                return str;
+            }, 
+            wrap: function(text, width, lineHeight) {
+                text.each(function() {
+                    let text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        y = text.attr("y"),
+                        x = text.attr("x"),
+                        fontSize = parseFloat(text.style("font-size")),
+                        dy = parseFloat(text.attr("dy")),
+                        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
 
-                while (word = words.pop()) {
-                    line.push(word);
-                    tspan.text(line.join(" "));
-
-                    if (tspan.node().getComputedTextLength() > width) {
-                        line.pop();
+                    while (word = words.pop()) {
+                        line.push(word);
                         tspan.text(line.join(" "));
-                        line = [word];
-                        tspan = text.append("tspan")
-                            .attr("x", x)
-                            .attr("y",  y)
-                            .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                    }                    
-                }            
-            })
+
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y",  y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }                    
+                    }            
+                })
+            }
         }
-    }
 
-
-  </script>
+    </script>
 </body>
 
 </html>
