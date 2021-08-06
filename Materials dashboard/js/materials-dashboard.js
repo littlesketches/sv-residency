@@ -16,10 +16,9 @@
 ////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////
-//// INIT FUNCTION (CALLED ON LOAD)   //// 
-/////////////////////////////////////////
-
+//////////////////////////
+//// SETTINGS OBJECT  //// 
+//////////////////////////
 
     const settings  = {
         queryParameters:       {},        // Used to store URL query string items
@@ -33,8 +32,7 @@
         tableToSection: {
             data_mrfOutput:             'volume',
             data_commodityValues:       'price',
-            data_materialsVicExport:    'export',
-            data_materialFlows:         'flow'
+            data_materialsVicExport:    'export'
         },
         sectionToTable: {
             volume:                 'data_mrfOutput',
@@ -42,7 +40,9 @@
             export:                 'data_materialsVicExport'
         }
     }
+
     const data = {
+        loaded:             {},
         byMaterial:         {},
         tables:             {},
         schema: {
@@ -65,148 +65,170 @@
 /////////////////////////////////////////
 
 
-        init()
-        // 1. ON PAGE LOAD FUNCTION: PARSE URL QUERY STRING FOR SETTING; THEN GET AND PARSE DATA BEFORE BUILDING DASHBOARD
-        function init(){
+        buildFromGSheetData(settings) 
+        //  Load data and call to build sequence
+        function buildFromGSheetData(config) {
+            // Data table links for each table used from same Google Sheet
+            const gsTableLinks =  {
+                data_mrfOutput:             'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=549382680&single=true&output=tsv',
+                data_materialsVicExport:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=612803144&single=true&output=tsv',
+                data_commodityValues:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=1635331988&single=true&output=tsv'
+            }
+            const tablesToLoad = Object.keys(gsTableLinks)
+            let noLoadedTables = 0
 
+            // Load each table as tsv source using Papa parse
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+                Papa.parse(tableURL,  {
+                    download: true,
+                    header: true,
+                    delimiter: '\t',                        
+                    complete: async (results) => {
+                        parseTable(tableName, results.data)
+                        noLoadedTables++
+                        // Call to buildVis after all tables are loaded and parsed
+                        if(noLoadedTables === tablesToLoad.length){
+                            await applyQuerySettings(config)        // a.  Update (default) settings that might be set from query string
+                            await parseData(data.tables, config)    // b.        
+                            await buildDashboard()                  // c. Build report
+                        }
+                    }
+                })
+            }   
+
+            // Table data parsing function
+            const parseTable = async (tableName, tableData) => {
+                data.tables[settings.tableToSection[tableName]] = tableData.map(row => {
+                    const newObj = {}
+                    Object.entries(row).forEach(([key, value]) => {
+                        switch(key.toLowerCase()){
+                            case 'date':
+                                newObj[key] =  helpers.numberParsers.parseDateSlash(value)
+                                break     
+                            default:
+                                newObj[key] = isNaN(parseFloat(value.replace(/,/g, ''))) ? value : parseFloat(value.replace(/,/g, '')) 
+                        }
+                    })
+                    return newObj
+                })
+            };
+        }; // end buildFromGSheetData
+
+
+        // a. Update settings from query string
+        async function applyQuerySettings(){
             // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
             settings.queryParameters = new URLSearchParams(window.location.search)
             if (settings.queryParameters.has('material')) { state.material = settings.queryParameters.get('material')  }
+        };
 
-            
-            // ii. Load and parse data from GSheet tables; call buildDashboard on completion
-            Tabletop.init({
-                key: 	'https://docs.google.com/spreadsheets/d/1rg66KhwEbN_FhpD0hhdd6SMIb9ApKlxh_93N4y9Qx_s/',
-                callback: async(loadedData) => {	
+        // b. Parse/shape data for rendering
+        async function parseData(loadedData, settings){
+            // a. Reshape data: data lists and shape by material
+            // Extract Date lists
+            Object.keys(loadedData).forEach(tableName => {
+                data.schema.lists.date[tableName] = [...new Set(data.tables[tableName].map(d => d.date))]       // Take unique only (for flows data)
+            })
+            // Extract materials list
+            data.schema.lists.materials = [...new Set(Object.keys(data.tables.volume[0]).map(d => d.slice(d.indexOf('_') + 1)).filter(d => d !== 'date' & d !== 'All collected materials') )].sort()
+            // Extract dashboard section list
+            data.schema.lists.sections = Object.keys(settings.sectionToTable)
+            // Set latest available date as default UNLESS a date is specified in the 
+            data.schema.lists.sections.forEach(section => {
+                state.date[section] = settings.queryParameters.has('date') ? helpers.numberParsers.parseDateSlash(settings.queryParameters.get('date')).toString() : data.tables[section][data.tables[section].length - 1].date.toString()
+            })
 
-                    // a. Parse table data date and number formats
-                    Object.keys(loadedData).forEach(tableName => {
-                        data.tables[settings.tableToSection[tableName]] = loadedData[tableName].elements.map(row => {
-                            const newObj = {}
-                            Object.entries(row).forEach(([key, value]) => {
-                                switch(key.toLowerCase()){
-                                    case 'date':
-                                        newObj[key] =  helpers.numberParsers.parseDateSlash(value)
-                                        break     
-                                    default:
-                                        newObj[key] = isNaN(parseFloat(value.replace(/,/g, ''))) ? value : parseFloat(value.replace(/,/g, '')) 
-                                }
+            // Shape data grouped by materials
+            data.schema.lists.materials.forEach( material => {
+                data.byMaterial[material] = {}
+                Object.keys(settings.sectionToTable).forEach(section => {
+                    switch(section){
+                        case 'volume':
+                            data.byMaterial[material][section] = data.tables[section].map(dataObj => { 
+                                const obj = {}
+                                Object.entries(dataObj).forEach( ([key, value]) => {
+                                    const materialName =  key.slice(key.indexOf('_') +1 ),
+                                        stream = key === 'date' ? key : key.slice(0, key.indexOf('_')) 
+                                    if( (material === materialName && stream !== 'All collected materials') || stream === 'date'){
+                                        obj[stream] = value
+                                    }
+                                })
+                                return obj
                             })
-                            return newObj
-                        })
-                    })
+                            break
 
-                    // b. Reshape data: data lists and shape by material
-                        // Extract Date lists
-                        Object.keys(loadedData).forEach(tableName => {
-                            data.schema.lists.date[settings.tableToSection[tableName]] =  [...new Set(data.tables[settings.tableToSection[tableName]].map(d => d.date))]       // Take unique only (for flows data)
-                        })
-                        // Extract materials list
-                        data.schema.lists.materials = [...new Set(Object.keys(data.tables.volume [0]).map(d => d.slice(d.indexOf('_') + 1)).filter(d => d !== 'date' & d !== 'All collected materials') )].sort()
-                        // Extract dashboard section list
-                        data.schema.lists.sections = Object.keys(settings.sectionToTable)
-                        // Set latest available date as default UNLESS a date is specified in the 
-                        data.schema.lists.sections.forEach(section => {
-                            state.date[section] = settings.queryParameters.has('date') ? helpers.numberParsers.parseDateSlash(settings.queryParameters.get('date')).toString() : data.tables[section][data.tables[section].length - 1].date.toString()
-                        })
-
-                        // Shape data grouped by materials
-                        data.schema.lists.materials.forEach( material => {
-                            data.byMaterial[material] = {}
-                            Object.keys(settings.sectionToTable).forEach(section => {
-                                switch(section){
-                                    case 'volume':
-                                        data.byMaterial[material][section] = data.tables[section].map(dataObj => { 
-                                            const obj = {}
-                                            Object.entries(dataObj).forEach( ([key, value]) => {
-                                                const materialName =  key.slice(key.indexOf('_') +1 ),
-                                                    stream = key === 'date' ? key : key.slice(0, key.indexOf('_')) 
-                                                if( (material === materialName && stream !== 'All collected materials') || stream === 'date'){
-                                                    obj[stream] = value
-                                                }
-                                            })
-                                            return obj
-                                        })
-                                        break
-
-                                    case 'export':
-                                        data.byMaterial[material][section] = data.tables[section].map(dataObj => { 
-                                            const obj = {}
-                                            Object.entries(dataObj).forEach( ([key, value]) => {
-                                                const materialName =  key.slice(key.indexOf('_') +1 ),
-                                                    country = key === 'date' ? key : key.slice(0, key.indexOf('_')) 
-                                                if( material === materialName){
-                                                    obj[country] = value
-                                                } else if(country === 'date'){
-                                                    obj.date = value          
-                                                }
-                                            })
-                                            return obj
-                                        })
-                                        break
-
-                                    case 'price':
-                                        data.byMaterial[material][section] = data.tables[section].map(dataObj => { 
-                                            const obj = {}
-                                            Object.entries(dataObj).forEach( ([key, value]) => {
-                                                const materialType = key === 'date' ? key : key.slice(0, key.indexOf('?')),
-                                                    materialName =  key.slice(key.indexOf('?') +1, key.indexOf('|') )
-                                                    valueChain =  key.slice(key.indexOf('|') +1 )
-                                                
-                                                if(typeof obj[valueChain] === 'undefined'){         // Add a property or valueChain
-                                                    obj[valueChain] = {}
-                                                }
-                                                if(material === materialName){
-                                                    obj[valueChain][materialType] = value          
-                                                } else if(materialType === 'date'){
-                                                    obj.date = value          
-                                                }
-                                            })
-                                            return obj
-                                        })
-
-                                        break
-
-
-
-                                    default:
-                                        data.byMaterial[material][section] = data.tables[section]
-                                }
-
+                        case 'export':
+                            data.byMaterial[material][section] = data.tables[section].map(dataObj => { 
+                                const obj = {}
+                                Object.entries(dataObj).forEach( ([key, value]) => {
+                                    const materialName =  key.slice(key.indexOf('_') +1 ),
+                                        country = key === 'date' ? key : key.slice(0, key.indexOf('_')) 
+                                    if( material === materialName){
+                                        obj[country] = value
+                                    } else if(country === 'date'){
+                                        obj.date = value          
+                                    }
+                                })
+                                return obj
                             })
-                        })
+                            break
 
-                        // Create dashboard settings dropdowns
-                        const materialsSelector = d3.select('#materials-selector').on('change', updateDashboard),
-                            dateSelector = d3.select('#date-selector').on('change', updateDashboard),
-                            indexOfFirstVirginPrices =     17               // Note: goes back May 2019     
-                        data.schema.lists.materials.forEach(material => {
-                            materialsSelector.append('option').classed('materials-option', true)
-                                .attr('value', material)
-                                .html(material)
-                        })
-
-                        data.schema.lists.date.volume
-                            .sort((a, b) => b - a)
-                            .slice(0, indexOfFirstVirginPrices)
-                            .forEach(date => {      
-                                dateSelector.append('option').classed('materials-option', true)
-                                    .attr('value', date)        // Date timestamp as a string
-                                    .html(helpers.timeFormat.toMonthYear(date))
+                        case 'price':
+                            data.byMaterial[material][section] = data.tables[section].map(dataObj => { 
+                                const obj = {}
+                                Object.entries(dataObj).forEach( ([key, value]) => {
+                                    const materialType = key === 'date' ? key : key.slice(0, key.indexOf('?')),
+                                        materialName =  key.slice(key.indexOf('?') +1, key.indexOf('|') )
+                                        valueChain =  key.slice(key.indexOf('|') +1 )
+                                    
+                                    if(typeof obj[valueChain] === 'undefined'){         // Add a property or valueChain
+                                        obj[valueChain] = {}
+                                    }
+                                    if(material === materialName){
+                                        obj[valueChain][materialType] = value          
+                                    } else if(materialType === 'date'){
+                                        obj.date = value          
+                                    }
+                                })
+                                return obj
                             })
-                        // Set the dropdown to match the settings and passed in query string
-                        document.getElementById('materials-selector').value = state.material 
-                        document.getElementById('date-selector').value = state.date.volume 
-                        // Set a slug material class on the main container for specific layout changes
-                        d3.select('main.main-container').classed(helpers.slugify(state.material), true)
 
-                    // d. Build report
-                    await buildDashboard()   
-                },
-                simpleSheet: false,
-                wanted: [ 'data_mrfOutput' , 'data_materialsVicExport', 'data_commodityValues', 'data_materialFlows'  ]   // Specifies which Google sheets to bring in (and in what order)
-            });
-        }; // end init()
+                            break
+
+
+
+                        default:
+                            data.byMaterial[material][section] = data.tables[section]
+                    }
+
+                })
+            })
+
+            // Create dashboard settings dropdowns
+            const materialsSelector = d3.select('#materials-selector').on('change', updateDashboard),
+                dateSelector = d3.select('#date-selector').on('change', updateDashboard),
+                indexOfFirstVirginPrices =     17               // Note: goes back May 2019     
+            data.schema.lists.materials.forEach(material => {
+                materialsSelector.append('option').classed('materials-option', true)
+                    .attr('value', material)
+                    .html(material)
+            })
+
+            data.schema.lists.date.volume
+                .sort((a, b) => b - a)
+                .slice(0, indexOfFirstVirginPrices)
+                .forEach(date => {      
+                    dateSelector.append('option').classed('materials-option', true)
+                        .attr('value', date)        // Date timestamp as a string
+                        .html(helpers.timeFormat.toMonthYear(date))
+                })
+            // Set the dropdown to match the settings and passed in query string
+            document.getElementById('materials-selector').value = state.material 
+            document.getElementById('date-selector').value = state.date.volume 
+            // Set a slug material class on the main container for specific layout changes
+            d3.select('main.main-container').classed(helpers.slugify(state.material), true)
+        };
+
 
         // 2. ON PAGE LOAD FUNCTION: GET AND PARSE DATA 
         async function buildDashboard(material = state.material, date){
@@ -262,12 +284,12 @@
             await buildExportCard(material)  
             await revealDashboard(material) 
 
-       };
+        };
 
 
-////////////////////////////////////
-//// COMPONENT BUILD FUNCTIONS  //// 
-////////////////////////////////////
+    ////////////////////////////////////
+    //// COMPONENT BUILD FUNCTIONS  //// 
+    ////////////////////////////////////
 
         // Populate materials card in static HTML template
         async function buildMaterialsCard(material = state.material, date = state.date.volume){
@@ -737,7 +759,6 @@
                 .attr('cy', yScale(data[data.length - 1]))
         }; // end renderSparkline
 
-
         charts.methods.renderSparkarea = function(svgID, data, settings = {}){
             d3.select(`#${svgID} *`).remove()
             if(d3.sum(data) !== 0){
@@ -772,7 +793,6 @@
                     .attr('d', area)                                                           // ..and line generator
             }
         }; // end renderSparkarea
-
 
         const helpers= {
             numberFormatters: {

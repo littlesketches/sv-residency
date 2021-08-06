@@ -96,6 +96,7 @@
     body{
         font-family: 'DIN Next LT Pro';
         color: var(--charcoal);
+        margin: 0;
     }
     /* Typeface colours grouped */
     h4.subcard-header,
@@ -111,49 +112,51 @@
     .label,
     h3.card-subheader{
         color: var(--secondaryBottleGreenLight);
+        font-weight: 500;
     }
 
     /* Typeface size grouped */
     .material-volume-headline,
     .material-price-headline{
-        font-size: 3vw;
+        font-size: 6vw;
     }
     .data-midsize,
     .data-unit-midsize{
-        font-size: 1.75vw;
+        font-size: 3.5vw;
     }
     h3.card-subheader{
-        font-size: 1.5vw;
+        font-size: 3.0vw;
     }
     h4.subcard-header,
     h4.destination-card-header,
     h4.material-price-card-header{
-        font-size: 1.25vw;
+        font-size: 2.25vw;
     }
     .label,
     .destination-label,
     .data-destination-table, 
     .material-volume-unit,
     .material-price-unit {
-        font-size: 1vw;
+        font-size: 2vw;
     }
     .text-minor,
     .table-header-bold, 
     .table-header, 
     .table-data, 
     .chart-trend-label{
-        font-size: 0.8vw;
+        font-size: 1.6vw;
     }
 
     /* Typeface settings */
     #material-title{
-        font-size: 5vw;
+        font-size: 8vw;
         color: transparent;
         text-stroke: 1px var(--secondaryBottleGreen);
          -webkit-text-stroke: 1px var(--secondaryBottleGreen);
         margin-block-start: 0.0;
         margin-block-end: 0.0;
         opacity: 0;
+        display: none;
     }
     h2.card-header{
         font-size: 3vw;
@@ -177,6 +180,7 @@
     h4.material-price-card-header{
         margin-block-start: 0.0;
         margin-block-end: 0.0;
+        font-weight: 500;
     }
     h4.material-price-card-header, 
     h4.subcard-header.destination{
@@ -207,7 +211,7 @@
     }
     .destination-label,
     .data-destination-table {
-        font-weight: bold;
+        font-weight: 500;
     }
     .material-volume-headline,
     .material-price-headline{
@@ -234,7 +238,6 @@
     .fill{
         stroke: none;
     }
-
     .label.all,
     .all{
         color: var(--secondaryBottleGreen);
@@ -292,8 +295,8 @@
     /* Default Container layout: works for Glass, Metals, Paper and Paperboard which have less than 5 material prices */
     main.main-container {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr 1fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
         grid-column-gap: 5vw; 
         grid-row-gap: 1vw; 
     }
@@ -301,7 +304,7 @@
     .title-container{
         grid-area: 1 / 1 / 2 / 3;
     }
-    .material-flow-container{
+    /* .material-flow-container{
         grid-area: 2 / 1 / 3 / 2;
     }
     .material-price-container{
@@ -309,7 +312,7 @@
     }
     .export-market-container{
         grid-area: 3 / 1 / 4 / 2;
-    }
+    } */
     .sub-card{
         opacity: 0
     }
@@ -331,141 +334,140 @@
     }
     .plastic-packaging .export-market-container{
         grid-area: 4 / 1 / 5 / 2;
-        width: 50%;
+
     }
 
-
     /** MATERIAL FLOW CARD **/
-        .material-collection-container{
+    .material-collection-container{
+        display: grid;
+        grid-template-columns: 2fr  3fr;
+        grid-column-gap: 2vw;  
+    }
+        .recyclables-collected-container{
+            grid-area: 1 / 1 / 2 / 2;
+        }
+        .recyclables-destination-container{
+            grid-area: 1 / 1 / 2 / 2;
+        }
+        .card-header-container{
+            grid-area: 1 / 1 / 2 / 3;
+            border-bottom: 2px solid var(--secondaryGrey);
+        }
+        .recyclables-collected-container{
+            grid-area: 3 / 1 / 4 / 2;
+            display: grid;
+            grid-template-columns: 1.5fr 2.5fr;   
+            grid-template-rows: auto auto auto;    
+        }
+            .collected-subheader{
+                grid-area: 1 / 1 / 2 / 4;
+            }
+            .material-volume-headline-container{
+                grid-area: 2 / 1 / 3 / 3;
+            }
+            .collected-total{
+                grid-area: 2 / 1 / 3 / 4;   
+            }
+            .collected-vs-last-label{
+                grid-area: 3 / 1 / 4 / 2;   
+            }
+            #collected-vs-last-change{
+                grid-area: 3 / 2 / 4 / 3;   
+                padding-left: 0.5rem;
+            }
+            #collected-vs-last-pct{
+                grid-area: 4 / 2 / 5 / 3; 
+                padding-left: 0.5rem;   
+            }
+
+        .recyclables-destination-container{
+            grid-area: 3 / 2 / 4 / 3;   
+        }
+        .recyclables-destination-container-rows{
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr;
+        }  
+            .recyclables-destination-container-rows.header{
+                padding-bottom: 0.75rem
+            } 
+            .table-chart-bar{
+                margin-bottom: 0.75rem; 
+                height: 2px;
+            }
+            .destination-subheader{
+                padding-bottom: 0.5rem;
+            }
+            .destination-label{
+                grid-area: 1 / 1 / 2 / 2; 
+            }
+            .data-destination-table.tonnes{
+                grid-area: 1 / 2 / 2 / 3; 
+            }
+            .data-destination-table.proportion{
+                grid-area: 1 / 3 / 2 / 4; 
+            }
+            .destination-table-bar-container{
+                grid-area: 2 / 1 / 3 / 2; 
+            }
+            #collection-trend-comparison-container{
+                padding-top: 1rem;
+            }
+            .material-destination-trends{
+                grid-area: 3 / 1 / 4 / 2;
+            }
+        .material-destination-container{
             display: grid;
             grid-template-columns: 2fr  3fr;
             grid-column-gap: 2vw;  
+            padding-top: 1vw;
+            padding-bottom: 2vw;
         }
-            .recyclables-collected-container{
-                grid-area: 1 / 1 / 2 / 2;
-            }
-            .recyclables-destination-container{
-                grid-area: 1 / 1 / 2 / 2;
-            }
-            .card-header-container{
-                grid-area: 1 / 1 / 2 / 3;
-                border-bottom: 2px solid var(--secondaryGrey);
-            }
-            .recyclables-collected-container{
-                grid-area: 3 / 1 / 4 / 2;
-                display: grid;
-                grid-template-columns: 1.5fr 2.5fr;   
-                grid-template-rows: auto auto auto;    
-            }
-                .collected-subheader{
-                    grid-area: 1 / 1 / 2 / 4;
-                }
-                .material-volume-headline-container{
-                    grid-area: 2 / 1 / 3 / 3;
-                }
-                .collected-total{
-                    grid-area: 2 / 1 / 3 / 4;   
-                }
-                .collected-vs-last-label{
-                    grid-area: 3 / 1 / 4 / 2;   
-                }
-                #collected-vs-last-change{
-                    grid-area: 3 / 2 / 4 / 3;   
-                    padding-left: 0.5rem;
-                }
-                #collected-vs-last-pct{
-                    grid-area: 4 / 2 / 5 / 3; 
-                    padding-left: 0.5rem;   
-                }
 
-            .recyclables-destination-container{
-                grid-area: 3 / 2 / 4 / 3;   
+        .destination-trend-chart-container{
+            grid-area: 1 / 1 / 2 / 2;     
+        }
+        .destination-trend-table-container{
+            grid-area: 1 / 2 / 2 / 3;     
+        }
+        .destination-trend-table-container-row{
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+        }  
+        .destination-trend-table-container-row.header{
+            padding-top: 0.25rem; 
+            border-bottom: 0.25px dotted var(--secondaryGreyLight);
+        }
+            .data-destination-table-label{
+                grid-area: 1 / 1 / 2 / 2; 
             }
-            .recyclables-destination-container-rows{
-                display: grid;
-                grid-template-columns: 3fr 1fr 1fr;
-            }  
-                .recyclables-destination-container-rows.header{
-                    padding-bottom: 0.75rem
-                } 
-                .table-chart-bar{
-                    margin-bottom: 0.75rem; 
-                    height: 2px;
-                }
-                .destination-subheader{
-                    padding-bottom: 0.5rem;
-                }
-                .destination-label{
-                    grid-area: 1 / 1 / 2 / 2; 
-                }
-                .data-destination-table.tonnes{
-                    grid-area: 1 / 2 / 2 / 3; 
-                }
-                .data-destination-table.proportion{
-                    grid-area: 1 / 3 / 2 / 4; 
-                }
-                .destination-table-bar-container{
-                    grid-area: 2 / 1 / 3 / 2; 
-                }
-                #collection-trend-comparison-container{
-                    padding-top: 1rem;
-                }
-                .material-destination-trends{
-                    grid-area: 3 / 1 / 4 / 2;
-                }
-            .material-destination-container{
-                display: grid;
-                grid-template-columns: 2fr  3fr;
-                grid-column-gap: 2vw;  
-                padding-top: 1vw;
-                padding-bottom: 2vw;
+            .data-destination-table-3mth{
+                grid-area: 1 / 2 / 2 / 3; 
             }
-
-            .destination-trend-chart-container{
-                grid-area: 1 / 1 / 2 / 2;     
-            }
-            .destination-trend-table-container{
-                grid-area: 1 / 2 / 2 / 3;     
-            }
-            .destination-trend-table-container-row{
-                display: grid;
-                grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-            }  
-            .destination-trend-table-container-row.header{
-                padding-top: 0.25rem; 
-                border-bottom: 0.25px dotted var(--secondaryGreyLight);
-            }
-                .data-destination-table-label{
-                    grid-area: 1 / 1 / 2 / 2; 
-                }
-                .data-destination-table-3mth{
-                    grid-area: 1 / 2 / 2 / 3; 
-                }
-                .data-destination-table-1yr{
-                    grid-area: 1 / 3 / 2 / 4; 
-                }        
-                .data-destination-table-3yr{
-                    grid-area: 1 / 4 / 2 / 5; 
-                }   
-                .data-destination-table-5yr{
-                    grid-area: 1 / 5 / 2 / 6; 
-                }   
+            .data-destination-table-1yr{
+                grid-area: 1 / 3 / 2 / 4; 
+            }        
+            .data-destination-table-3yr{
+                grid-area: 1 / 4 / 2 / 5; 
+            }   
+            .data-destination-table-5yr{
+                grid-area: 1 / 5 / 2 / 6; 
+            }   
 
 
     /** MATERIAL PRICE CARDS **/
         .material-price-card-container{
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-column-gap: 5vw;
+            grid-column-gap: 10vw;
         }
         .plastic-packaging  .material-price-card-container{ 
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             grid-column-gap: 5vw;
         }
 
         .material-price-card{
-            padding-bottom: 2vw;
+            padding-bottom: 5vw;
         }
         .material-price-performance-table-container,
         .material-history-performance-table-container{
@@ -808,7 +810,6 @@
         text-orientation: sideways;
         transform: rotate(180deg);
     }
-
 
     #material-flow-container,
     #material-price-container{

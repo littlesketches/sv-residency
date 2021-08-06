@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Materials dashboard">
+		<link rel="stylesheet" type="text/css" href="css/component-style.css" />
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="js/materials-dashboard.js"></script>    
+    </head>
+
+    <body>
+        <main class = "main-container"> 
+            <div class = 'title-container'>
+                <h1 id ='material-title'></h1>
+            </div>
+
+            <div id = 'export-market-container' class = 'export-market-container'>
+                <div class = 'card-header-container'>
+                    <h2 class = 'card-header'>Export market data</h2>
+                </div>
+                <div class = 'sub-card'>
+                    <h3 class = 'card-subheader'>Breakdown by country</h3>
+                    <div id = "export-market-subheader" class = 'label'>of xxxx tonnes of paper and paperboard exported in XXXX</div>
+                    <div class = 'export-market-table-container'></div>
+                </div>
+            </div>
+        </main>
+
+        <div id="settings-container" class = 'onscreen settings-container'>
+            <div class = 'settings-header'>Materials dashboard settings</div> 
+            <div class = 'dropdown-container'>
+                <label for = 'materials-selector'>Collected material: </label>
+                <select name="materials" id="materials-selector"></select>
+            </div> 
+            <div class = 'dropdown-container'>
+                <label for = 'date-selector'>Date: </label>
+                <select name="date" id="date-selector"> </select>                
+            </div> 
+            <svg id = "defs" width="0" height="0"></svg>
+        </div>
+    </body>
+
+</html>
