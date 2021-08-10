@@ -73,33 +73,7 @@
                 font-weight: 500;
                 font-style: medium;
             }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
+
             body{
                 font-family: 'DIN Next LT Pro';
                 margin: 0;
@@ -317,7 +291,6 @@
                         <use id="organics-bin-1" xlink:href="#organics-bin"  transform = "translate(252, 177) scale(-1 1)"/>
                         <use id="garbage-bin-1" xlink:href="#garbage-bin"  transform = "translate(238, 177) scale(-1 1)"/>
                         <use id="recycling-bin-1" xlink:href="#recycling-bin"  transform = "translate(223, 177) scale(-1 1)"/>
-
                         <use id="garbage-bin-2" xlink:href="#garbage-bin"  transform = "translate(62, 177)"/>
                         <use id="recycling-bin-2" xlink:href="#recycling-bin"  transform = "translate(75, 177)"/>
                     </g>
@@ -385,13 +358,7 @@
         }
 
         const gsTableLinks =   {
-            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
-            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
-            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
-            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
-            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
             kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
-            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
         }
 
         // Build from GSheet data

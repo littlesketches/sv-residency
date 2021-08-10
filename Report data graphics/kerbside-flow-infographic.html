@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Kerbside waste flow infographic">
         <meta name="author" content="Sustainability Victoria">
-        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES */
@@ -37,15 +37,6 @@
         /***************************************/
         /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
         /***************************************/
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
             @font-face {
                 font-family: 'DIN Next LT Pro';
                 src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
@@ -82,24 +73,7 @@
                 font-weight: 800;
                 font-style: heavy;
             }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
+
             body{
                 font-family: 'DIN Next LT Pro';
                 margin: 0;
@@ -171,7 +145,6 @@
                 text-transform: uppercase;
             }
             .lga-label-small{
-                /* fill: rgba(0, 0, 0, 0.7); */
                 mix-blend-mode: darken;
             }
             .shadow.recycling{
@@ -977,11 +950,6 @@
         }
 
         const gsTableLinks =   {
-            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
-            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
-            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
-            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
-            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
             kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
             kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
         }

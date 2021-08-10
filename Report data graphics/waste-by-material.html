@@ -32,23 +32,18 @@
                 --tertiaryEmeraldLight: #93CCB9;
                 --tertiaryBlue:         #005E88;
                 --tertiaryBlueLight:    #A0D6E9;
+                /** ALL MATERIALS EXTENSION PALETTE **/
+                --extOrange:          #feb076;        /* Used for textiles*/
+                --extPink:            #f8c1c4;        /* Used for textiles*/
             }
 
         /***************************************/
         /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
         /***************************************/
+
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
                     url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
                     url('fonts/DINNextLTPro-Light.woff') format('woff'),
                     url('fonts/DINNextLTPro-Light.ttf') format('truetype');
@@ -81,24 +76,6 @@
                     url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
                 font-weight: 800;
                 font-style: heavy;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
             }
             body{
                 font-family: 'DIN Next LT Pro';
@@ -190,6 +167,15 @@
             .material-data-table.rubber{
                 fill: var(--secondaryGrey);
             }
+            .arc.textiles,
+            .material-data-table.textiles{
+                fill: var(--extOrange);
+            }
+            .arc.other-materials,
+            .material-data-table.other-materials{
+                fill: var(--extPink);
+            }
+
 
         /********************************/
         /********   DARK MODE ***********/
@@ -237,7 +223,7 @@
 
         const settings = {
             svgID:        'radial-bar-vis',
-            year:         '2019/20', 
+            year:         '2019-20', 
             dims: {
                 height:     720, 
                 width:      1080,
@@ -247,7 +233,6 @@
             },    
             geometry: {
                 arcPadding:     2,
-                arcMinRadius:   150,
                 chartRadius:    300
             }       
         }
@@ -261,11 +246,6 @@
         const gsTableLinks =   {
             byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
             byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
-            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
-            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
-            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
-            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
-            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
         }
 
         // Build from GSheet data
@@ -284,7 +264,7 @@
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
                             await parseData(data.table.byStream, data.table.byMaterial)                 // 1. Parse data
-                            await renderVis(data.byType.material, settings)             // 2. Render visualisation(s)
+                            await renderVis(data.byType.material, settings)                     // 2. Render visualisation(s)
                             }
                     }
                 })
@@ -377,7 +357,7 @@
                     })
                 })
                     
-                chartData = chartData.sort((a,b) => b.total - a.total )
+                chartData = chartData.sort((a,b) => b.diversionRate - a.diversionRate ).filter( d => d.diversionRate !== 0)
 
                 // Setup geometry
                 settings.geometry.circlePos = {
@@ -386,7 +366,7 @@
                 }
 
                 settings.geometry.chartRadius = (settings.dims.height -settings.dims.margin.top) / 2 - settings.dims.margin.top
-                settings.geometry.arcMinRadius = settings.geometry.chartRadius / 2
+                settings.geometry.arcMinRadius = settings.geometry.chartRadius  * 0.4
 
                 settings.geometry.tableOffset = {
                     label:              -settings.geometry.circlePos.x + settings.dims.margin.left,  
@@ -439,12 +419,6 @@
                         .delay((d, i) => i * 500)
                         .duration(1500)
                         .attrTween('d', arcTween)
-
-            // 3. Add body color background rect under the table for clarity of highly circular bars
-                // canvas.append('rect').classed('table-bg', true)
-                //     .attr('width', settings.dims.width/2)
-                //     .attr('height', (arcWidth + settings.geometry.arcPadding) * chartData.length )
-                //     .attr('transform', `translate(${-settings.dims.width/2}, ${-settings.geometry.chartRadius })`)
 
             // 4. Add table/axis group
                 const tableHeaders = canvas.append('g').classed('table-headers', true),
@@ -505,7 +479,7 @@
             // 5. Add a curved labels for diversion radial chart 
                 chartData.forEach((d, i) => {
                     const slugMaterialName =  helpers.slugify(d.material)
-                        labelOffset = 4, 
+                        labelOffset = 6, 
                         labelRadius = getInnerRadius(i) + labelOffset,
                         startPos = {
                             x: settings.geometry.circlePos.x ,

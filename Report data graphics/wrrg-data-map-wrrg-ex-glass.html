@@ -39,18 +39,10 @@
             /***************************************/
             /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
             /***************************************/
+
                 @font-face {
                     font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                        url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                        url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                        url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                    font-weight: 100;
-                    font-style: ultraLight;
-                }
-                @font-face {
-                    font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
                         url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
                         url('fonts/DINNextLTPro-Light.woff') format('woff'),
                         url('fonts/DINNextLTPro-Light.ttf') format('truetype');
@@ -83,24 +75,6 @@
                         url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
                     font-weight: 800;
                     font-style: heavy;
-                }
-                @font-face {
-                    font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                        url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                        url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                        url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                    font-weight: 900;
-                    font-style: normal;
-                }
-                @font-face {
-                    font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                        url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                        url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                        url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                    font-weight: 900;
-                    font-style: normal;
                 }
                 body{
                     font-family: 'DIN Next LT Pro';
@@ -291,13 +265,7 @@
         }
 
         const gsTableLinks =   {
-            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
-            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
-            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
             byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
-            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
-            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
-            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
         }
 
         // Build from GSheet data
@@ -408,6 +376,7 @@
 
         // 3. COLOUR SCALE
             const diversionRate = {}
+console.log(data.schema.list.wrrg)
             data.schema.list.wrrg.forEach( wrrg => diversionRate[wrrg] = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)) )
             const wrrgColor = d3.scaleLinear()
                 .domain(d3.extent(Object.values(diversionRate)) )

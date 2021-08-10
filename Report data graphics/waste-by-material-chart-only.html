@@ -32,12 +32,9 @@
                 --tertiaryEmeraldLight: #93CCB9;
                 --tertiaryBlue:         #005E88;
                 --tertiaryBlueLight:    #A0D6E9;
-
-
                 /** ALL MATERIALS EXTENSION PALETTE **/
                 --extOrange:          #feb076;        /* Used for textiles*/
                 --extPink:            #f8c1c4;        /* Used for textiles*/
-
             }
 
         /***************************************/
@@ -236,7 +233,7 @@
             },    
             geometry: {
                 arcPadding:     2,
-                chartRadius:    200
+                arcMinRadius:   150
             }       
         }
 
@@ -377,7 +374,7 @@
                     landfill:           -settings.geometry.circlePos.x + settings.dims.margin.left + 430, 
                     diversion:          -settings.geometry.circlePos.x + settings.dims.margin.left + 530,  
                     diversionRate:      -10,
-                    labelVertical:      8
+                    labelVertical:      5
                 }
 
 
@@ -422,54 +419,6 @@
                         .delay((d, i) => i * 500)
                         .duration(1500)
                         .attrTween('d', arcTween)
-
-            // 4. Add table/axis group
-                const tableYoffset = settings.dims.height * 0.65,
-                    tableHeaders = canvas.append('g').classed('table-headers', true),
-                    tableAxis = canvas.append('g').classed('r axis table', true)
-                        .selectAll('g')
-                            .data(chartData)
-                            .join('g')
-
-                // a. Tables headers (added directly to canvas group)
-                canvas.append('text').attr("class", `material-data-table table-header material`)
-                    .attr('x', settings.geometry.tableOffset.label)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset)
-                    .text('Collected waste material')
-                canvas.append('text').attr("class", `material-data-table table-header total`)
-                    .attr('x', settings.geometry.tableOffset.total)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset )
-                    .text('Total')
-                canvas.append('text').attr("class", `material-data-table table-header landfill`)
-                    .attr('x', settings.geometry.tableOffset.landfill)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset)
-                    .text('Landfill')
-                canvas.append('text').attr("class", `material-data-table table-header diversion`)
-                    .attr('x', settings.geometry.tableOffset.diversion)
-                    .attr('y', -getInnerRadius(0) - arcWidth * 2 + tableYoffset )
-                    .text('Recycled')
-
-                // b. Table and axis group
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} arc-label material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.label)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
-                    .text(d => d.material)
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} total-volume material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.total)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
-                    .text(d => `${helpers.numberFormatters.formatComma(d.total /1000)} kt`)
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} diversion-volume material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.landfill)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
-                    .text(d => `${helpers.numberFormatters.formatComma(d.landfill /1000)} kt`)
-                tableAxis.append('text')
-                    .attr("class", d => `${d.class} landfill-volume material-data-table`)
-                    .attr('x', settings.geometry.tableOffset.diversion)
-                    .attr('y', (d, i) => -getInnerRadius(i) - arcWidth + settings.geometry.tableOffset.labelVertical  + tableYoffset)
-                    .text(d => `${helpers.numberFormatters.formatComma(d.diverted /1000)} kt`)
 
             // 4. Add background layer and annotation
                 backgroundLayer.append('rect').classed('bg-rect', true)

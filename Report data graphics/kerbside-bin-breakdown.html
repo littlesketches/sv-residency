@@ -37,15 +37,7 @@
         /***************************************/
         /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
         /***************************************/
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
+
             @font-face {
                 font-family: 'DIN Next LT Pro';
                 src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
@@ -55,15 +47,7 @@
                 font-weight: 300;
                 font-style: light;
             }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                font-weight: 400;
-                font-style: normal;
-            }
+
             @font-face {
                 font-family: 'DIN Next LT Pro';
                 src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
@@ -72,33 +56,6 @@
                     url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
                 font-weight: 500;
                 font-style: medium;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
             }
             body{
                 font-family: 'DIN Next LT Pro';
@@ -140,7 +97,6 @@
                 text-anchor: end;
                 fill: #000;
             }
-
             .bin-outline{
                 stroke: #000;
                 stroke-width: 0.5px;
@@ -159,7 +115,7 @@
                         <path fill="#3f4c4a" d="M10.514-13.97l1.063-.502-.096 12.325c-.031.34.173.919-.113 1.119l-.775.645z"/>
                         <path fill="#252d2f" d="M11.54-2.045A.697 2.045 0 0110.844 0a.697 2.045 0 01-.697-2.045.697 2.045 0 01.697-2.046.697 2.045 0 01.698 2.046"/>
                         <g class="garbage-bin-lid">
-                            <path fill="var(--campaign_gannarawwaPinkLight)"" d="M0-15.53c.024.095.048 1.472.048 1.472l10.616.067 1.13-.501.07-1.461-.404-.694c-.308-.781-1.378-1.435-1.868-.484l-6.19-.03c-.873-.78-2.207-.156-2.242.386l-.415.3-.074.654z"/>
+                            <path d="M0-15.53c.024.095.048 1.472.048 1.472l10.616.067 1.13-.501.07-1.461-.404-.694c-.308-.781-1.378-1.435-1.868-.484l-6.19-.03c-.873-.78-2.207-.156-2.242.386l-.415.3-.074.654z"/>
                             <g fill="#000" opacity=".15" >
                                 <path d="M1.037-16.348l9.137.13c1.252-.407 1.974-.36.102.39l-9.267-.05z" />
                                 <path d="M11.047-16.926l-.753.25c-.411-.49-.351-.61-.023-.691.33-.083.51.164.776.44z" />
@@ -206,11 +162,6 @@
         }
 
         const gsTableLinks =   {
-            byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
-            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
-            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
-            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
-            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
             kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
             kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
         }

@@ -1,11 +1,11 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="description" content="SV ">
         <meta name="author" content="Little Sketches ">
-        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
@@ -37,18 +37,10 @@
         /***************************************/
         /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
         /***************************************/
+
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
                     url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
                     url('fonts/DINNextLTPro-Light.woff') format('woff'),
                     url('fonts/DINNextLTPro-Light.ttf') format('truetype');
@@ -82,24 +74,7 @@
                 font-weight: 800;
                 font-style: heavy;
             }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
+
             body{
                 font-family: 'DIN Next LT Pro';
                 margin: 0;
@@ -164,6 +139,10 @@
         /*****  TYPOGRAPHY AND ELEMENT COLOUR  ***/
         /*****************************************/
 
+        .main-title{
+            fill: rgb(40, 40, 40);
+        }
+
         .waste-stream-headline,
         .label.waste-stream,
         .data-label.waste-stream,
@@ -172,18 +151,15 @@
         .waste-stream-headline,
         .generation-unit,
         .landfill-label-bg{
-            fill: rgb(40, 40, 40);
+            fill:  var(--secondaryBottleGreen);
         }
-        .title-label{
-            fill: var(--secondaryBottleGreen);
-        }
+
         .landfill.icon,
         .landfill-headline,
         .landfill-unit, 
         .arrow-landfill{
             fill: var(--tertiaryRed);
         }
-        .main-title,
         .main-subtitle,
         .recovery.icon,
         .recovery-headline,
@@ -196,19 +172,22 @@
         .donut-diversion-pct,
         .diversion-label, 
         .diversion-main-label{
-            fill: var(--svGreen);
+            fill: var(--secondaryBottleGreenLight);
         }
         .diversion-main-label, 
         .diversion-pct-number,
         .diversion-pct-unit{
-            stroke: var(--svGreen);
+            stroke: var(--secondaryBottleGreenLight);
             fill: none;
         }
         .donut-chart-bg{
             fill: #fff;
         }
         .arrow-diversion{
-            fill: #98AD73;      /* Manually picked from gradient */
+            fill: #8F9F9C;      /* Manually picked from gradient */
+        }
+        .main-title{
+            text-transform: uppercase;
         }
         .main-title, 
         .title-label{
@@ -289,7 +268,10 @@
         .generation-headline-figure,
         .generation-unit, 
         .generation-headline{
-            font-weight: bold;
+            font-weight: 500;
+        }
+        .diversion-main-label{
+            font-weight: 700;
         }
         .landfill-headline,
         .diversion-headline{
@@ -342,7 +324,7 @@
         }
         .donut-diversion-pct{
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 500;
             text-anchor: middle;
             dominant-baseline: middle;
         }
@@ -357,7 +339,7 @@
             fill: rgb(40, 40, 40);
             mix-blend-mode: darken;
         }
-    
+        .dark .main-title,
         .dark .vic-outline,
         .dark .title-label,
         .dark .waste-stream-headline,
@@ -376,7 +358,7 @@
         .dark .landfill-unit{
             fill: var(--tertiaryRed);
         }
-        .dark .main-title,
+
         .dark .main-subtitle,
         .dark .recovery.icon,
         .dark .recovery-headline,
@@ -389,12 +371,12 @@
         .dark .donut-diversion-pct,
         .dark .diversion-label, 
         .dark .diversion-main-label{
-            fill: var(--svGreen);
+            fill: var(--secondaryBottleGreenLight);
         }
         .dark .diversion-main-label, 
         .dark .diversion-pct-number,
         .dark .diversion-pct-unit{
-            stroke: var(--svGreen);
+            stroke: var(--secondaryBottleGreenLight);
             fill: none;
         }
 
@@ -443,9 +425,9 @@
                 collection:                         'rgb(150, 150, 150)',
                 landfill:                           'var(--tertiaryRed)',
                 diversionByStream: {
-                    "Municipal solid waste":        'var(--svGreen)',
-                    "Commercial and industrial":    'var(--svGreen)',
-                    "Construction and demolition":  'var(--svGreen)'
+                    "Municipal solid waste":        'var(--secondaryBottleGreenLight)',
+                    "Commercial and industrial":    'var(--secondaryBottleGreenLight)',
+                    "Construction and demolition":  'var(--secondaryBottleGreenLight)'
                 },
                 gradients:      {
                     diversion:      {},
@@ -476,12 +458,6 @@
 
         const gsTableLinks =   {
             byStream:                       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=0&single=true&output=tsv',
-            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
-            byMaterialDestination:          'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=481557945&single=true&output=tsv',
-            byWRRG:                         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1987838964&single=true&output=tsv',
-            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
-            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
-            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
         }
 
         // Build from GSheet data
@@ -783,7 +759,7 @@
                         let offset = 10,
                             radius = (startY - diversionCrestY) / 2 - offset
                         // Build the SVG path string step by step
-                        let d = `M${settings.geometry.diversionCurveCentre.x - 205} ${diversionPathLowerY - offset}`     // Starting point              
+                        let d = `M${settings.geometry.diversionCurveCentre.x - 250} ${diversionPathLowerY - offset}`     // Starting point              
                         d += `L${settings.geometry.diversionCurveCentre.x - 60} ${diversionPathLowerY - offset}`        // Starting point              
                         d += `L${settings.geometry.diversionCurveCentre.x} ${diversionPathLowerY - offset}`             // Move to central curve X pos 
                         d += `A${radius}, ${radius}, 0, 1, 0, ${settings.geometry.diversionCurveCentre.x}, ${diversionCrestY + offset}` 
@@ -896,10 +872,10 @@
                     .attr('d', icons['Victoria'])
                     .attr('transform', `translate(${340}, ${190}) scale(${4.75 })`)   
 
-                titleAnnotation.append('text').classed('title-label', true)
+                titleAnnotation.append('text').classed('main-title', true)
                     .text(`Where did Victoria's waste go in ${settings.year}?`) 
                     .attr('x', 50)
-                    .attr('y', 60)
+                    .attr('y', 30)
         };
 
 
