@@ -1,0 +1,407 @@
+/*****************************************************/
+/*** KERBSIDE COLLECTION TO MRF FLOW VISUALISATION ***/
+/*****************************************************/
+
+    /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
+    :root {
+        /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+        --svGreen:                      #9ACA3C;
+        /** SECONDARY PALLETTE **/
+        --secondaryGreenLight:          #f8faf0;
+        --secondaryBottleGreen:         #174F37;
+        --secondaryBottleGreenLight:    #79B5AA;
+        --secondaryGrey:                #B1B1B0;
+        --secondaryGreyLight:           #CFCFCF;
+        --secondaryGreyLightest:        #ECECEC;
+        /** TERTIARY PALETTE **/
+        --tertiaryPurple:               #51284F;
+        --tertiaryPurpleLight:          #8276B3;
+        --tertiaryRed:                  #E04F39;
+        --tertiaryRedLight:             #F78684;
+        --tertiaryYellow:               #EFC041;
+        --tertiaryYellowLight:          #F5E065;
+        --tertiaryCard:                 #B39981;
+        --tertiaryCardLight:            #DCBFA6;
+        --tertiaryEmerald:              #009E71;
+        --tertiaryEmeraldLight:         #93CCB9;
+        --tertiaryBlue:                 #005E88;
+        --tertiaryBlueLight:            #A0D6E9;
+        /*** ADDED MONOCHROME ***/
+        --charcoal:                    rgb(100, 100, 100);     
+    }
+
+
+/***************************************/
+/*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+/***************************************/
+    @font-face {
+        font-family: 'DIN Next LT Pro';
+        src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+            url('../../shared-assets/fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+            url('../../shared-assets/fonts/DINNextLTPro-Regular.woff') format('woff'),
+            url('../../shared-assets/fonts/DINNextLTPro-Regular.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'DIN Next LT Pro';
+        src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+            url('../../shared-assets/fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+            url('../../shared-assets/fonts/DINNextLTPro-Medium.woff') format('woff'),
+            url('../../shared-assets/fonts/DINNextLTPro-Medium.ttf') format('truetype');
+        font-weight: 500;
+        font-style: medium;
+    }
+    @font-face {
+        font-family: 'DIN Next LT Pro';
+        src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+            url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+            url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff') format('woff'),
+            url('../../shared-assets/fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+        font-weight: 700;
+        font-style: heavy;
+    }
+
+
+/*************************/
+/*  HTML LAYOUT STYLING  */
+/************************/
+    body, select{
+        font-family: 'DIN Next LT Pro';
+        color: var(--charcoal)
+    }
+    h1.vis-header{ 
+        font-size: 4vw;
+        margin-block-end: 0rem;
+        color: var(--tertiaryEmerald);  
+        font-weight: 500;
+        text-transform: uppercase;      
+    }
+    .date-selector-container,
+    .dropdown-container select{
+        font-size: 1.75vw;
+    }
+    .stepper-container nav a{
+        color: var(--secondaryGrey);
+        font-size: 1.75vw;
+        text-transform: uppercase;
+        font-weight: 400;
+    }
+    .stepper-container nav li.step-current a {
+        color: var(--tertiaryEmerald);
+        font-weight: 500;
+    }
+    .hidden{
+        display: none;
+    }
+    .date-selector-container{
+        display: inline-flex;
+        padding: 0.5rem 0rem 1.5rem 0rem;
+    }
+    .dropdown-container select{
+        border: none;
+        border-bottom: dotted 0.5px #000;
+        margin-right: 0.75rem;
+    }
+
+/****************************************/
+/*** HTML STEPPER NAVIGATION STYLING  ***/
+/****************************************/
+
+    .stepper-container {
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto 2rem auto;
+        width: 100%;
+        border-top: solid var(--charcoal) 2px;
+        font-size: 2vw;
+    }
+    .stepper-container nav {
+        text-align: center;
+        background: #fff;
+    }
+    .stepper-container nav ul {
+        position: relative;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: flex;
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+        -ms-box-orient: horizontal;
+        -ms-box-pack: center;
+        -webkit-flex-flow: row wrap;
+        -moz-flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        justify-content: center;
+        align-items: center;
+    }
+    .stepper-container nav ul li {
+        position: relative;
+        z-index: 1;
+        display: block;
+        margin: 0;
+        text-align: center;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        cursor: pointer;
+    }
+    .stepper-container nav a {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 2.5;
+    }
+    .stepper-container nav a span {
+        vertical-align: middle;
+    }
+    .stepper-container nav a:focus {
+        outline: none;
+    }
+    .stepper-container nav li:last-child::before {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--tertiaryEmerald);
+        content: '';
+        -webkit-transition: -webkit-transform 0.3s;
+        transition: transform 0.3s;
+    }
+    /* Stepper underline */
+    .stepper-container nav li:first-child.step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-300%,0,0);
+        transform: translate3d(-300%,0,0);
+    }
+    .stepper-container nav li:nth-child(2).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-200%,0,0);
+        transform: translate3d(-200%,0,0);
+    }
+    .stepper-container nav li:nth-child(3).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-210%,0,0);
+        transform: translate3d(-100%,0,0);
+    }
+    /* .stepper-container nav li:nth-child(4).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-100%,0,0);
+        transform: translate3d(-100%,0,0);
+    } */
+    .stepper-container nav a {
+        padding: 0.75rem 0.2rem 1.25rem 0.2rem;
+        line-height: 1;
+        -webkit-transition: color 0.3s, -webkit-transform 0.3s; 
+        transition: color 0.3s, transform 0.3s;
+        font-weight: 400;
+    }
+    .stepper-container nav li.step-current a {
+        -webkit-transform: translate3d(0,8px,0);
+        transform: translate3d(0,8px,0);
+    }
+    @media screen and (max-width: 58em) {
+        .stepper-container nav a:before {
+            margin-right: 0;
+        }
+    }
+
+
+/*******************************/
+/*****  SVG VIS TYPOGRAPHY   ***/
+/*******************************/
+
+    /* SVG Flow visualisation typographic elements */
+    .title-label-group{
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+    .title-label{
+        font-size:      60px;
+        font-weight:    600;
+        text-anchor:    middle;
+    }
+    .title-label.small{
+        font-size: 32px;
+    }
+    .title-label.collection,
+    .node-group-arrow.collection{ 
+        fill: url(#collection-gradient)
+    }
+    .title-label.destination,
+    .node-group-arrow.destination{
+        fill: url(#destination-gradient)
+    }
+    .title-label.recycling,
+    .node-group-arrow.recycling{
+        fill: url(#recycling-gradient)
+    }
+    text.label.node,
+    text.label.node.unit{
+        fill: #fff;
+        text-anchor: middle;
+        font-weight: 500;
+        stroke: none;
+    }
+    text.label.node{
+        letter-spacing: -1px;
+    }
+
+    .linkLabel,
+    .nodeLabel.textOnPath{
+        font-size: 20px;
+        font-weight: 500;
+        pointer-events: none;
+    }
+    .linkLabel{
+        text-shadow: #fff 1px 1px 3px;
+    }
+    .nodeLabel.textOnPath{
+        text-shadow: #fff 5px 5px 10px;
+    }
+    .node-label-centered{
+        pointer-events: none;
+    }
+    .flow-icon.text-header{
+        font-weight: 500;
+        font-size: 30px;
+        opacity: 0.8;
+    }
+    .flow-icon.text{
+        font-weight: 500;
+        font-size: 20px;
+        opacity: 0.8;
+    }
+    #collection-total-sub-header{
+        pointer-events: none;
+        font-size: 46px;
+        dominant-baseline: middle;
+        text-anchor: middle;
+        fill: var(--charcoal);
+    }
+
+    /**********************************/
+    /*** SVG FLOW VIS LAYER STYLING ***/
+    /**********************************/
+    .layer{
+        transition: transform 3s ease-in-out;	
+        transform-origin: 50% 50% 0px;	
+    }
+    .layer.isometric{
+        transform: rotateY(0deg) rotateX(55deg) rotateZ(45deg) scale(0.95);
+        transform-origin: 50% 50% 0px;
+    }
+
+    /************************************/
+    /*** SVG FLOW VIS ELEMENT STYLING ***/
+    /************************************/
+    .node,
+    .link{
+        cursor: pointer;
+    }
+    .node.source,
+    .node.target{
+        stroke: #fff;
+        stroke-width: 8px;
+    }
+    .node-arrow{
+        fill: #fff;
+        opacity: 0.25;
+    }
+    .linkLabel.local-reprocessing,
+    .linkLabel.local-reprocessing.destination-colour,
+    .node.local-reprocessing, 
+    .nodeLabel.local-reprocessing{ 
+        fill: var(--secondaryBottleGreen);
+    }
+    .linkLabel.export,
+    .linkLabel.export.destination-colour,
+    .node.export, 
+    .nodeLabel.export{ 
+        fill: var(--secondaryBottleGreenLight);
+    }
+    .linkLabel.landfill,
+    .linkLabel.landfill.destination-colour,
+    .node.landfill, 
+    .nodeLabel.landfill{ 
+        fill:  var(--tertiaryCard);
+    }
+    .linkLabel.paper-and-paperboard, 
+    .linkLabel.paper-and-paperboard.collection-colour, 
+    .node.paper-and-paperboard, 
+    .nodeLabel.paper-and-paperboard{ 
+        fill: var(--tertiaryYellow);
+    }
+    .linkLabel.glass-packaging, 
+    .linkLabel.glass-packaging.collection-colour, 
+    .node.glass-packaging, 
+    .nodeLabel.glass-packaging{ 
+        fill:  var(--tertiaryPurple);
+    }
+    .linkLabel.plastic-packaging,
+    .linkLabel.plastic-packaging.collection-colour,
+    .node.plastic-packaging,
+    .nodeLabel.plastic-packaging{ 
+        fill: var(--tertiaryRed);
+    }
+    .linkLabel.metal-packaging,
+    .linkLabel.metal-packaging.collection-colour,
+    .node.metal-packaging,
+    .nodeLabel.metal-packaging{ 
+        fill: var(--tertiaryBlue);
+    }
+    .linkLabel.contamination,
+    .linkLabel.contamination.collection-colour,
+    .node.contamination,
+    .nodeLabel.contamination{ 
+        fill: var(--secondaryGrey);
+    }
+
+    /* Link styling */
+    .link-group{
+        mix-blend-mode: multiply;
+    }
+    .link,
+    .annotationPath, 
+    .nodeLabelPath,
+    .bin-illustration-group path{
+        fill: none;
+    }
+    .link.collection_destination,
+    .link.destination_collection,
+    .link.destination_landfill,
+    .landfill-arrow{
+        opacity: 0.25;
+    }
+    .link.collection_destination.monochrome,
+    .link.destination_collection.monochrome,
+    .link.destination_landfill.monochrome{
+        stroke: #000;
+        opacity: 0.1;
+    }
+    .link.destination_landfill{
+        stroke: #000;
+    }
+    .landfill-arrow{
+        fill: #000;
+    }
+    .annotationPath, 
+    .nodeLabelPath{
+        stroke: none;
+    }
+
+    /* Illustration stylgin */
+    .flow-icon{
+        transition: transform 1s ease-in-out;	
+        pointer-events: none;
+    }
+    .bin-illustration-group path{
+        stroke: rgb(152, 152, 152);
+        stoke-width: 4px;  
+    }
