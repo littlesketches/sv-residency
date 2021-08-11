@@ -251,14 +251,14 @@
     }
     .label.landfill,
     .landfill{
-        color: var(--tertiaryPurple);
+        color: var(--tertiaryCard);
     }
     .landfill.stroke{
-        color: var(--tertiaryPurple);
+        color: var(--tertiaryCard);
     }
     .landfill.fill{
-        background-color: var(--tertiaryPurple);
-        fill: var(--tertiaryPurple);
+        background-color: var(--tertiaryCard);
+        fill: var(--tertiaryCard);
     }
 
 
@@ -818,7 +818,7 @@
         fill: var(--tertiaryBlue);
     }
     #landfill-trend-chart .sparkarea{
-        fill: var(--tertiaryPurple);
+        fill: var(--tertiaryCard);
     }
 
     /* No car style */
