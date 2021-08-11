@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="SV Resource recovery market bulletin">
+        <meta name="description" content="SV Resource recovery market bulletin graphics">
         <meta name="author" content="Little Sketches ">
         <style>
             /* COLOUR PALETTES */
@@ -92,7 +92,7 @@
                 font-weight: 700;
                 color: var(--secondaryBottleGreen);
             }
-            p, ul{
+            p, ul, ol{
                 color: rgb(40, 40, 40);
                 font-weight: 300;
             }
@@ -103,12 +103,18 @@
                 text-transform: uppercase;
                 color: var(--secondaryBottleGreen);
             }
+            .highlight{
+                font-size: 1.25rem;
+                font-weight: 500;
+                text-transform: uppercase;
+                color: var(--secondaryBottleGreenLight);
+            }
             
         </style>
     </head>
 
     <body>
-        <h1>SV Recovered resources Market Bulletin graphics index</h1>
+        <h1>SV Recovered Resources Market Bulletin graphics index</h1>
         <div>
             <p>This page contains links to HTML/SVG/JS based data visualisations that (will be) embedded into various sections of online version of the <a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin' target="_blank">SV Recovered Resources Market Bulletin</a>.
                 The aim for each of these visualisations is that they will automatically update when data is updated in the supporting data tables. 
@@ -125,7 +131,7 @@
             <p> The GitHub repository (i.e. code) for these visualisations and apps can be found <a href = "https://github.com/littlesketches/sv-stuff" target = "_blank"> here</a> (note: this will be moved to a SV data team repo shortly).             
             </p>
 
-            <h2>CURRENT STATUS</h2>
+            <p class = 'highlight'>CURRENT STATUS</p>
             <ul>
                 <li>Graphics being tested for embedding in the CMS version of the Market Bulletin </li>
                 <li>Flows diagram in progress ETA for draft is 13-Aug</li>
@@ -137,9 +143,9 @@
                 <li>Series titles (i.e. 'Paper and ??') and colours to be finalised</li>
                 <li>Documentation on query strings to be added: this will mostly apply to choosing dates and date ranges to display</li>
             </ul>
-
-
         </div>
+
+        <hr>
         <div>
             <div class ="vis-list-type">Kerbside flows diagram </div> 
             <ul>
@@ -167,7 +173,7 @@
                 <li><a href ="time-series-charts/export-paper.html">Paper and paperboard materials </a></li>
                 <li><a href ="time-series-charts/export-glass.html">Glass packaging </a></li>
                 <li><a href ="time-series-charts/export-plastics.html">Plastic packaging materials </a></li>
-                <li><a href ="time-series-charts/export-paper.html">Metal packaging materials  </a></li>
+                <li><a href ="time-series-charts/export-metals.html">Metal packaging materials  </a></li>
             </ul>   
             <ul>
                 <li><a href ="materials-dashboard/export.html?material=Paper and paperboard">Paper and paperboard exports by country table</a></li>
@@ -195,8 +201,8 @@
                 <li><a href ="market-capacity-tables/index.html?material=Paper and paperboard">Paper and paperboard</a></li>
                 <li><a href ="market-capacity-tables/flindexow.html?material=Glass packaging">Glass packaging</a></li>
                 <li><a href ="market-capacity-tables/flowindex.html?material=Plastic packaging">Plastic packaging</a></li>
-                <li><a href ="mmarket-capacity-index.html?material=Metal packaging">Metal packaging</a></li>
-            </ul>   
+                <li><a href ="market-capacity-index.html?material=Metal packaging">Metal packaging</a></li>
+            </ul>
 
             <div  class ="vis-list-type">Unused dashboard and table components</div> 
             <ul>            
@@ -212,9 +218,24 @@
                 <li><a href ="materials-dashboard/flow.html?material=Plastic packaging">Plastic packaging exports material flow trends</a></li>
                 <li><a href ="materials-dashboard/flow.html?material=Metal packaging">Metal packaging exports material flow trends</a></li>
             </ul>
-
         </div>
+        <hr>
 
+        <div>
+                <p class = 'highlight'> About the visualisations</p>
+                <p>There are five separate code bases that support these visualisations:
+                </p>
+                <ol>
+                    <li>Kerbside collection flows: is an application that supports the kerbside flows graphic only. It is connected to the 'data_mrfOutput' table</li>
+                    <li>Time series charts: is an application that supports all interactive line, area and layer (stacked area) charts. These charts are individually configured (from JS objects located directly in their HTML page) to connect to either the 'data_mrfOutput' or 'data_materialsVicExport' tables</li>
+                    <li>Materials dashboard: is an application that supports the 'flow, price and exports' dashboards and individual components used as 'performance tables'. These are connected to either or all of the 'data_mrfOutput', 'data_materialsVicExport' and 'data_commodityValues' tables</li>
+
+                    <li>Value chain price: is a small application that supports the value chain pricing diagrams. It's geometry (i.e. positioning of node and price labels) is configured from an JS object (editable from within its main.js code) and is connected to the 'data_commodityValues' tables</li>
+                    <li>Market capacity tables: is a small application that produces the colour-coded end market capacity tables (as colour-coded tables are not currently supported by the CMS). Its inputs (including date for publication) are contained in the 'data_marketCapacity' tables</li>
+                </ol>
+                <p> Further reference documentation will be added to each applications github repo page (soon).</p>
+ 
+        </div>
+        
     </body>
-
 </html>
