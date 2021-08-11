@@ -1,0 +1,703 @@
+/**********************************************/
+/*** MARKET BULLETIN MATERIALS DASHBOARD ***/
+/**********************************************/
+
+    /* 2021 BRAND COLOUR PALETTE */
+    :root {
+        /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+        --svGreen:                       #9ACA3C;
+        /** SECONDARY PALLETTE **/
+        --secondaryGreenLight:           #D5E0A1;
+        --secondaryBottleGreen:          #174F37;
+        --secondaryBottleGreenLight:     #79B5AA;
+        --secondaryGrey:                 #B1B1B0;
+        --secondaryGreyLight:            #CFCFCF;
+        --secondaryGreyLightest:         #ECECEC;
+        /** TERTIARY PALETTE **/
+        --tertiaryPurple:       #51284F;
+        --tertiaryPurpleLight:  #8276B3;
+        --tertiaryRed:          #E04F39;
+        --tertiaryRedLight:     #F78684;
+        --tertiaryYellow:       #EFC041;
+        --tertiaryYellowLight:  #F5E065;
+        --tertiaryCard:         #B39981;
+        --tertiaryCardLight:    #DCBFA6;
+        --tertiaryEmerald:      #009E71;
+        --tertiaryEmeraldLight: #93CCB9;
+        --tertiaryBlue:         #005E88;
+        --tertiaryBlueLight:    #A0D6E9;
+        /*** ADDED MONOCHROME ***/
+        --charcoal:         rgb(100, 100, 100);        
+    }
+
+    /***************************************/
+    /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+    /***************************************/
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                url('../fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
+                url('../fonts/DINNextLTPro-UltraLight.woff') format('woff'),
+                url('../fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
+            font-weight: 100;
+            font-style: ultraLight;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                url('../fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                url('../fonts/DINNextLTPro-Light.woff') format('woff'),
+                url('../fonts/DINNextLTPro-Light.ttf') format('truetype');
+            font-weight: 300;
+            font-style: light;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                url('../fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                url('../fonts/DINNextLTPro-Regular.woff') format('woff'),
+                url('../fonts/DINNextLTPro-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                url('../fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                url('../fonts/DINNextLTPro-Medium.woff') format('woff'),
+                url('../fonts/DINNextLTPro-Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: medium;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                url('../fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                url('../fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                url('../fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+            font-weight: 800;
+            font-style: heavy;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
+                url('../fonts/DINNextLTPro-Black.woff2') format('woff2'),
+                url('../fonts/DINNextLTPro-Black.woff') format('woff'),
+                url('../fonts/DINNextLTPro-Black.ttf') format('truetype');
+            font-weight: 900;
+            font-style: ultraHeavy;
+        }
+
+
+/*********************************/
+/*****  TYPOGRAPHY  & HTML    ***/
+/*********************************/
+
+    body, 
+    select{
+        font-family: 'DIN Next LT Pro';
+        color: var(--charcoal);
+        margin: 0;
+    }
+    .hidden{
+        display: none
+    }
+    h1.vis-header{ 
+        font-size: 4vw;
+        margin-block-end: 0rem;
+    }
+    .selector-container,
+    .dropdown-container select{
+        color: var(--charcoal);
+        font-size: 1.75vw;
+    }
+    .dropdown-container{
+        display: inline-flex;
+        padding: 0.5rem 0rem 0.5rem 0rem;
+    }
+    .dropdown-container select{
+        border: none;
+        border-bottom: dotted 0.5px var(--charcoal);
+    }
+
+    /* Typeface colours grouped */
+    h4.subcard-header,
+    h4.material-price-card-header,
+    .material-volume-headline,
+    .material-price-headline{
+        color: var(--secondaryBottleGreen);
+        color: var(--charcoal);
+        /* color: var(--secondaryBottleGreenLight); */
+    }    
+    .text-minor,
+    .chart-trend-label{
+        color: var(--chartGray); 
+    }
+    .label,
+    h3.card-subheader{
+        color: var(--secondaryBottleGreenLight);
+        color: var(--charcoal);
+        font-weight: 500;
+    }
+    /* Typeface size grouped */
+    .material-volume-headline,
+    .material-price-headline{
+        font-size: 5vw;
+    }
+    .data-midsize,
+    .data-unit-midsize{
+        font-size: 3.5vw;
+    }
+    h3.card-subheader{
+        font-size: 2.5vw;
+        text-transform: uppercase;
+    }
+    h4.subcard-header,
+    h4.destination-card-header,
+    h4.material-price-card-header{
+        font-size: 2.0vw;
+    }
+    .label,
+    .destination-label,
+    .data-destination-table, 
+    .material-volume-unit,
+    .material-price-unit {
+        font-size: 1.75vw;
+    }
+    .text-minor,
+    .table-header-bold, 
+    .table-header, 
+    .table-data, 
+    .chart-trend-label{
+        font-size: 1.5vw;
+    }
+
+    /* Typeface settings */
+    h2.card-header{
+        font-size: 3vw;
+        color: transparent; 
+        text-stroke: 0.75px var(--secondaryBottleGreen);
+         -webkit-text-stroke: 0.75px var(--secondaryBottleGreen);
+        margin-block-start: 0.25rem;
+        margin-block-end: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;        
+    }
+    h3.card-subheader{
+        margin-block-end: 0.75rem;
+        border-bottom: solid 2px var(--charcoal);
+    }
+    h3.card-subheader.destination-trend{  
+        margin-top: 2vw;
+        margin-block-end: 0.0;
+    }    
+    h4.subcard-header,
+    h4.destination-card-header,
+    h4.material-price-card-header{
+        margin-block-start: 0.0;
+        margin-block-end: 0.0;
+        font-weight: 500;
+    }
+    h4.material-price-card-header, 
+    h4.subcard-header.destination{
+        padding-bottom: 0.5rem;
+    }
+    h4.subcard-header.destination{
+        padding-top: 1rem;
+    }
+    /* Labels and table typography */
+    .align-right{
+        text-align: right
+    }
+    .price-label{
+        padding-bottom: 0.5rem;  
+        color: var(--secondaryBottleGreenLight);  
+    }
+    .price-performance-label,
+    .price-history-label{
+        padding-top: 0.5rem;      
+        padding-bottom: 0.25rem;      
+    }
+    .table-header-bold{
+        justify-self: end;
+    }
+    .table-header,
+    .table-data, 
+    .chart-trend-label{
+        padding: 0.25rem 0;
+    }
+    .destination-label,
+    .data-destination-table {
+        font-weight: 500;
+    }
+    .material-volume-headline,
+    .material-price-headline{
+        grid-area: 1 / 1 / 2 / 2;
+        font-weight: bold;    
+        align-self: end;
+        justify-self: end;
+        margin-top: 1rem;
+    }
+    .material-volume-unit,
+    .material-price-unit{
+        grid-area: 1 / 2 / 2 / 3;
+        align-self: end;
+        padding: 0 0 0.5rem 0.5rem;
+    }
+
+
+/*****************************************************/
+/**** KERBSIDE COLLECTION DESTINATION COLOUR PALETTE */
+/****************************************************/
+    .stroke{
+        fill: none;
+    }
+    .fill{
+        stroke: none;
+    }
+    .label.all,
+    .all{
+        color: var(--secondaryBottleGreen);
+    }
+    .all.stroke{
+        stroke: var(--secondaryBottleGreen);
+    }
+    .all.fill{
+        fill: var(--secondaryBottleGreen);
+    }
+
+    .label.local-reprocessing,
+    .local-reprocessing{
+        color: var(--secondaryBottleGreen);
+    }
+    .local-reprocessing.stroke{
+        stroke: var(--secondaryBottleGreen);
+    }
+    .local-reprocessing.fill{
+        background-color: var(--secondaryBottleGreen);
+        fill: var(--secondaryBottleGreen);
+    }
+    .label.export,
+    .export{
+        color: var(--tertiaryEmeraldLight);
+    }
+    .export.stroke{
+        stroke: var(--tertiaryEmeraldLight);
+    }
+    .export.fill{
+        background-color: var(--tertiaryEmeraldLight);
+        fill: var(--tertiaryEmeraldLight);
+    }
+    .label.landfill,
+    .landfill{
+        color: var(--tertiaryCard);
+    }
+    .landfill.stroke{
+        color: var(--tertiaryCard);
+    }
+    .landfill.fill{
+        background-color: var(--tertiaryCard);
+        fill: var(--tertiaryCard);
+    }
+
+
+/*****************************/
+/**** SCREEN PAGE LAYOUT  ****/
+/*****************************/
+
+    body{
+        padding: 1rem
+    }
+
+    /* Default Container layout: works for Glass, Metals, Paper and Paperboard which have less than 5 material prices */
+    main.main-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        grid-column-gap: 5vw; 
+        grid-row-gap: 1vw; 
+    }
+    /* Top level grid tile layout */
+    .title-container{
+        grid-area: 1 / 1 / 2 / 3;
+        /* border-bottom: 2px solid var(--charcoal); */
+    }
+    .sub-card{
+        opacity: 0
+    }
+
+    /* Plastic packagingContainer layout to accommodate more prices */
+    main.main-container.plastic-packaging{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+    }
+    /* Top level grid tile layout */
+    .plastic-packaging .material-flow-container{
+        grid-area: 2 / 1 / 3 / 2;
+        width: 50%;
+        height: fit-content
+    }
+    .plastic-packaging .material-price-container{
+        grid-area: 3 / 1 / 4 / 2;
+    }
+    .plastic-packaging .export-market-container{
+        grid-area: 4 / 1 / 5 / 2;
+
+    }
+
+    /** MATERIAL FLOW CARD **/
+    .material-collection-container{
+        display: grid;
+        grid-template-columns: 2fr  3fr;
+        grid-column-gap: 2vw;  
+    }
+        .recyclables-collected-container{
+            grid-area: 1 / 1 / 2 / 2;
+        }
+        .recyclables-destination-container{
+            grid-area: 1 / 1 / 2 / 2;
+        }
+        .card-header-container{
+            grid-area: 1 / 1 / 2 / 3;
+            border-bottom: 2px solid var(--secondaryGrey);
+        }
+        .recyclables-collected-container{
+            grid-area: 3 / 1 / 4 / 2;
+            display: grid;
+            grid-template-columns: 1.5fr 2.5fr;   
+            grid-template-rows: auto auto auto;    
+        }
+            .collected-subheader{
+                grid-area: 1 / 1 / 2 / 4;
+            }
+            .material-volume-headline-container{
+                grid-area: 2 / 1 / 3 / 3;
+            }
+            .collected-total{
+                grid-area: 2 / 1 / 3 / 4;   
+            }
+            .collected-vs-last-label{
+                grid-area: 3 / 1 / 4 / 2;   
+            }
+            #collected-vs-last-change{
+                grid-area: 3 / 2 / 4 / 3;   
+                padding-left: 0.5rem;
+            }
+            #collected-vs-last-pct{
+                grid-area: 4 / 2 / 5 / 3; 
+                padding-left: 0.5rem;   
+            }
+
+        .recyclables-destination-container{
+            grid-area: 3 / 2 / 4 / 3;   
+        }
+        .recyclables-destination-container-rows{
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr;
+        }  
+            .recyclables-destination-container-rows.header{
+                padding-bottom: 0.75rem
+            } 
+            .table-chart-bar{
+                margin-bottom: 0.75rem; 
+                height: 2px;
+            }
+            .destination-subheader{
+                padding-bottom: 0.5rem;
+            }
+            .destination-label{
+                grid-area: 1 / 1 / 2 / 2; 
+            }
+            .data-destination-table.tonnes{
+                grid-area: 1 / 2 / 2 / 3; 
+            }
+            .data-destination-table.proportion{
+                grid-area: 1 / 3 / 2 / 4; 
+            }
+            .destination-table-bar-container{
+                grid-area: 2 / 1 / 3 / 2; 
+            }
+            #collection-trend-comparison-container{
+                padding-top: 1rem;
+            }
+            .material-destination-trends{
+                grid-area: 3 / 1 / 4 / 2;
+            }
+        .material-destination-container{
+            display: grid;
+            grid-template-columns: 2fr  3fr;
+            grid-column-gap: 2vw;  
+            padding-top: 1vw;
+            padding-bottom: 2vw;
+        }
+
+        .destination-trend-chart-container{
+            grid-area: 1 / 1 / 2 / 2;     
+        }
+        .destination-trend-table-container{
+            grid-area: 1 / 2 / 2 / 3;     
+        }
+        .destination-trend-table-container-row{
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+        }  
+        .destination-trend-table-container-row.header{
+            padding-top: 0.25rem; 
+            border-bottom: 0.25px dotted var(--secondaryGreyLight);
+        }
+            .data-destination-table-label{
+                grid-area: 1 / 1 / 2 / 2; 
+            }
+            .data-destination-table-3mth{
+                grid-area: 1 / 2 / 2 / 3; 
+            }
+            .data-destination-table-1yr{
+                grid-area: 1 / 3 / 2 / 4; 
+            }        
+            .data-destination-table-3yr{
+                grid-area: 1 / 4 / 2 / 5; 
+            }   
+            .data-destination-table-5yr{
+                grid-area: 1 / 5 / 2 / 6; 
+            }   
+
+
+    /** MATERIAL PRICE CARDS **/
+        .material-price-card-container{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-column-gap: 10vw;
+        }
+        .plastic-packaging  .material-price-card-container{ 
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-column-gap: 5vw;
+        }
+
+        .material-price-card{
+            padding-bottom: 5vw;
+        }
+        .material-price-performance-table-container,
+        .material-history-performance-table-container{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+        .material-price-performance-table-container.header,
+        .material-history-performance-table-container.header{
+            padding-top: 0.25rem; 
+            border-bottom: 0.25px dotted var(--secondaryGrey);
+        }
+            .material-price-trend-header,
+            .table-price-trend-chart-container{
+                grid-area: 1 / 1 / 3 / 2; 
+                align-self: center;
+            }
+            .material-price-comp-header{
+                grid-area: 1 / 2 / 2 / 5; 
+                text-align: right;
+            }
+            .material-price-table-trend,
+            .material-history-table-period{
+                grid-area: 1 / 1 / 2 / 2; 
+            }
+            .material-price-table-1mth,
+            .material-history-table-low{
+                grid-area: 1 / 2 / 2 / 3; 
+            }
+            .material-price-table-3mth,
+            .material-history-table-ave{
+                grid-area: 1 / 3 / 2 / 4; 
+            }
+            .material-price-table-12mth,
+            .material-history-table-high{
+                grid-area: 1 / 4 / 2 / 5; 
+            }
+            .material-price-lastMth-header{
+                grid-area: 2 / 2 / 3 / 3; 
+            }
+            .material-price-3mth-header{
+                grid-area: 2 / 3 / 3 / 4; 
+            }
+            .material-price-12mth-header{
+                grid-area: 2 / 4 / 3 / 5; 
+            }
+
+
+    /** EXPORT MARKET CARDS **/
+        #export-market-subheader{
+            padding: 1rem 0rem;
+            border-top: solid 2px var(--charcoal);
+        }
+        .export-market-table-rows{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 2.5vw 1fr 1fr 1fr 1fr;
+            padding: 0.25rem 0.25rem;
+            border-bottom: 0.25px solid #efeeee;
+        }
+        .export-market-table-header-volumes{
+            grid-area: 1 / 3 / 2 / 5; 
+            text-align: center;
+            font-weight: 600;
+        }
+        .export-market-table-header-vsHistorical{
+            grid-area: 1 / 6 / 2 / 10; 
+            text-align: center;
+            font-weight: 600;
+        }
+        .export-market-table-country-header{
+            grid-area: 1 / 1 / 2 / 2;     
+        }
+        .export-market-table-trend-header{
+            grid-area: 1 / 2 / 2 / 3;     
+        }
+        .export-market-table-currentMonth-header{
+            grid-area: 1 / 3 / 2 / 4;     
+        }
+        .export-market-table-lastMonth-header{
+            grid-area: 1 / 4 / 2 / 5;     
+        }
+        .export-market-table-3mth-header{
+            grid-area: 1 / 6 / 2 / 7;     
+        }
+        .export-market-table-1yr-header{
+            grid-area: 1 / 7 / 2 / 8;     
+        }
+        .export-market-table-3yr-header{
+            grid-area: 1 / 8 / 2 / 9;     
+        }
+        .export-market-table-5yr-header{
+            grid-area: 1 / 9 / 2 / 10;     
+        }
+        .export-market-table-country-name{
+            grid-area: 1 / 1 / 3 / 2;  
+            font-weight: 600;   
+        }
+        .export-market-table-trend-chart{
+            grid-area: 1 / 2 / 3 / 3;     
+        }
+        .export-market-table-currentMonth{
+            grid-area: 1 / 3 / 2 / 4;     
+        }
+        .export-market-table-currentMonth-comp{
+            grid-area: 2 / 3 / 3 / 4;     
+        }
+        .export-market-table-lastMonth{
+            grid-area: 1 / 4 / 2 / 5;     
+        }
+        .export-market-table-lastMonth-comp{
+            grid-area: 2 / 4 / 3 / 5;     
+        }
+        .export-market-table-3mth{
+            grid-area: 1 / 6 / 2 / 7;     
+        }
+        .export-market-table-3mth-comp{
+            grid-area: 2 / 6 / 3 / 7;     
+        }
+        .export-market-table-1yr{
+            grid-area: 1 / 7 / 2 / 8;     
+        }
+        .export-market-table-1yr-comp{
+            grid-area: 2 / 7 / 3 / 8;     
+        }
+        .export-market-table-3yr{
+            grid-area: 1 / 8 / 2 / 9;     
+        }
+        .export-market-table-3yr-comp{
+            grid-area: 2 / 8 / 3 / 9;     
+        }
+        .export-market-table-5yr{
+            grid-area: 1 / 9 / 2 / 10;     
+        }
+        .export-market-table-5yr-comp{
+            grid-area: 2 / 9 / 3 / 10;     
+        }
+
+
+/* CHART STYLING */
+    path.sparkline{
+        fill: none;
+        stroke:   var(--secondaryBottleGreen);
+        stroke-width: 3px;
+    }
+    circle.sparkline-start-point{
+        fill:  var(--secondaryBottleGreen);
+        r: 5px;
+    }
+    circle.sparkline-end-point{
+        fill: var(--secondaryBottleGreenLight);
+        r: 8px;
+    }
+    path.sparkarea{
+        stroke: none;
+
+    }
+
+    #destination-trend-chart .sparkarea{
+        fill: url("#diagonalHatch-all");
+    }
+    #local-reprocessing-trend-chart .sparkarea{
+        fill: url("#diagonalHatch-local-reprocessing");
+    }
+    #export-trend-chart .sparkarea{
+        fill: url("#diagonalHatch-export");
+    }
+    #landfill-trend-chart .sparkarea{
+        fill: url("#diagonalHatch-landfill");
+    }
+
+/*** SETTINGS CONTROLS ***/
+    #settings-container{
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 20vw;
+        padding: 1rem 1rem 0rem;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.6);
+
+    }
+    /* .dropdown-container{
+        padding: 0.25rem 0;
+    }
+    .dropdown-container label{
+        font-weight: bold;
+        font-size: 1vw;
+    }
+    select#materials-selector,
+    select#date-selector {
+        color: #fff;  
+        font-family: 'DIN Next LT Pro';
+        font-size: 1vw;
+        background-color: transparent;
+        border: none;
+    }
+    .settings-header{
+        font-weight: bold;
+        font-size: 1.25vw;
+        padding: 0.25rem 0;
+    } */
+
+/*****************************/
+/** Neumorphic fun styling  **/
+/*****************************/
+
+    .neumorphic h1#material-title{
+        text-stroke: none;
+        -webkit-text-stroke: none;
+        font-size: 8vw; 
+        color: #fff;
+        text-shadow: 5px 5px 10px #c9c9c9
+    }
+
+    /* .neumorphic  */
+    .card{
+        margin: 0.75rem 0 ;
+        padding: 0.75rem 1.5rem 0;
+        border-radius: 6px;
+        background: #ffffff;
+        box-shadow:  8px 8px 16px #c9c9c9, 
+                -8px -8px 16px #ffffff;	
+    }
+
+
