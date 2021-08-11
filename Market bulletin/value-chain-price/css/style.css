@@ -1,0 +1,149 @@
+/**********************************************/
+/*** MARKET BULLETIN MATERIALS DASHBOARD ***/
+/**********************************************/
+
+    /* 2021 BRAND COLOUR PALETTE */
+    :root {
+        /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
+        --svGreen:                      #9ACA3C;
+        /** SECONDARY PALLETTE **/
+        --secondaryGreenLight:          #D5E0A1;
+        --secondaryBottleGreen:         #174F37;
+        --secondaryBottleGreenLight:    #79B5AA;
+        --secondaryGrey:                #B1B1B0;
+        --secondaryGreyLight:           #CFCFCF;
+        --secondaryGreyLightest:        #ECECEC;
+        /** TERTIARY PALETTE **/
+        --tertiaryPurple:               #51284F;
+        --tertiaryPurpleLight:          #8276B3;
+        --tertiaryRed:                  #E04F39;
+        --tertiaryRedLight:             #F78684;
+        --tertiaryYellow:               #EFC041;
+        --tertiaryYellowLight:          #F5E065;
+        --tertiaryCard:                 #B39981;
+        --tertiaryCardLight:            #DCBFA6;
+        --tertiaryEmerald:              #009E71;
+        --tertiaryEmeraldLight:         #93CCB9;
+        --tertiaryBlue:                 #005E88;
+        --tertiaryBlueLight:            #A0D6E9;
+        /*** ADDED MONOCHROME ***/
+        --charcoal:         rgb(100, 100, 100);        
+    }
+
+    /***************************************/
+    /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
+    /***************************************/
+
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
+                url('../../shared-assets/fonts/DINNextLTPro-Regular.woff2') format('woff2'),
+                url('../../shared-assets/fonts/DINNextLTPro-Regular.woff') format('woff'),
+                url('../../shared-assets/fonts/DINNextLTPro-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
+                url('../../shared-assets/fonts/DINNextLTPro-Medium.woff2') format('woff2'),
+                url('../../shared-assets/fonts/DINNextLTPro-Medium.woff') format('woff'),
+                url('../../shared-assets/fonts/DINNextLTPro-Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: medium;
+        }
+        @font-face {
+            font-family: 'DIN Next LT Pro';
+            src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
+                url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
+                url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff') format('woff'),
+                url('../../shared-assets/fonts/DINNextLTPro-Heavy.ttf') format('truetype');
+            font-weight: 800;
+            font-style: heavy;
+        }
+
+
+
+/*******************************/
+/*****  VIS HTML STYLING     ***/
+/*******************************/
+
+    body, 
+    select{
+        font-family: 'DIN Next LT Pro';
+        color: var(--charcoal);
+    }
+    h1.vis-header{ 
+        font-size: 4vw;
+        margin-block-end: 0rem;
+    }
+    .selector-container,
+    .dropdown-container select{
+        color: var(--charcoal);
+        font-size: 1.75vw;
+    }
+    .dropdown-container{
+        display: inline-flex;
+        padding: 0.5rem 0rem 0.5rem 0rem;
+    }
+    .dropdown-container select{
+        border: none;
+        border-bottom: dotted 0.5px var(--charcoal);
+    }
+
+/***************************/
+/*****  SVG STYLING     ***/
+/***************************/
+
+    .node-label{
+        fill: var(--charcoal);
+        font-size: 24px;
+        text-shadow: 2px 2px 0px #fff;
+    }
+    .node,
+    .link{
+        stroke: var(--charcoal);
+    }
+    .node{ 
+        fill: #fff;        
+    }
+    .recovered{
+        fill: var(--tertiaryEmerald);
+    }
+    .virgin{
+        fill: var(--tertiaryPurpleLight);
+    }
+    .recovered.price-label-leader, 
+    .type-label.recovered{
+        stroke: var(--tertiaryEmerald);
+    }
+    .virgin.price-label-leader,
+    .type-label.virgin{
+        stroke: var(--tertiaryPurple);
+    }
+    .price-label-value{
+        font-size: 24px;
+        font-weight: 500;
+    }
+    .price-label{
+        font-size: 14px;
+    }
+    .price-label-leader, 
+    .type-label{
+        stroke-width: 0.75px;
+        fill: transparent; 
+    }
+    .type-label{
+        font-size: 45px;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+    .node-label, 
+    .type-label{
+        text-anchor: middle;
+        dominant-baseline: middle;
+    }
+    .price-label-value,
+    .price-label{
+        dominant-baseline: hanging;
+    }
