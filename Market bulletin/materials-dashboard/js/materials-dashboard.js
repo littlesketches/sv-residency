@@ -277,7 +277,7 @@
             .attr('height', 4)
             .append('path')
                 .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                .attr('stroke', 'var(--tertiaryPurple)')
+                .attr('stroke', 'var(--tertiaryCard)')
                 .attr('stroke-width', 0.75)
                 .attr("opacity", 1);
 
