@@ -265,14 +265,13 @@
                         data.table[tableName] = results.data
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
-                            // 1. Parse data used in visualisation
-                            await parseData(data.table.byMaterialExport)
-                            // 2. Load map data and call render map function
-                            Promise.all([		                               // Use Promise.all to load multiple data files
-                                d3.json('data/world-110m.json'),			   // 0. World map
-                                d3.json('data/states.geojson.txt'),			   // 1. Australian stats
+                            await applyQuerySettings(settings)                // 1. Update settings if a query string is passed in
+                            await parseData(data.table.byMaterialExport)      // 2. Parse data used in visualisation
+                            Promise.all([		                              // 3. Load map data and call render map function | // Use Promise.all to load multiple data files
+                                d3.json('data/world-110m.json'),			   // a. World map
+                                d3.json('data/states.geojson.txt'),			   // b. Australian stats
                             ]).then( mapData => {
-                                renderMap(settings, mapData[0], mapData[1])	    // Renders map and export data annotation
+                                renderMap(settings, mapData[0], mapData[1])	  // 4. Renders map and export data annotation
                             });
                         }
                     }
@@ -286,6 +285,14 @@
         /////////////////////////////////////////////
         /// 1. DATA PARSING AND SHAPING FUNCTION  ///
         /////////////////////////////////////////////
+
+        async function applyQuerySettings(settings){
+            // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
+            settings.queryParameters = new URLSearchParams(window.location.search)
+            if (settings.queryParameters.has('year')) { 
+                settings.year = settings.queryParameters.get('year')  
+            }
+        };
 
         // Parse input data for export volumes by country
         async function parseData(exportData){
@@ -311,7 +318,7 @@
                 })
             })
             // d. Store data for referencing in render 
-            data.inputData.export = exportData
+            data.inputData.export = exportData.filter(d => d.year === settings.year)
         }; // end parseData()
 
         // Render the map visualisation, using the map shape data and parse export data 

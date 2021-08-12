@@ -376,8 +376,9 @@
                         data.table[tableName] = results.data
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
-                            await parseData(data.table.kerbsideData)                 // 1. Parse data
-                            await renderVis(data.table.kerbsideData, settings)       // 2. Render visualisation(s)
+                            await applyQuerySettings(settings)                       // 1. Update settings if a query string is passed in
+                            await parseData(data.table.kerbsideData)                 // 2. Parse data
+                            await renderVis(data.table.kerbsideData, settings)       // 3. Render visualisation(s)
                         }
                     }
                 })
@@ -388,6 +389,14 @@
         ////////////////////////////////////
         // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
+
+        async function applyQuerySettings(settings){
+            // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
+            settings.queryParameters = new URLSearchParams(window.location.search)
+            if (settings.queryParameters.has('year')) { 
+                settings.year = settings.queryParameters.get('year')  
+            }
+        };
 
         async function parseData(kerbsideData) {      
             // 1. Parse numeric data types to number

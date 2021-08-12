@@ -283,12 +283,11 @@
                         data.table[tableName] = results.data
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
-                        // 1. Parse WRRG Data
-                            await parseData(data.table.byWRRG)                 // 1. Parse data
-                            // 2. Load map data and render
-                            Promise.all([		                                // Use Promise.all to load multiple data files
-                                d3.json('data/victorianLGAs.geojson'),			// 0. LGA map shape data
-                                d3.tsv("data/victorianLGAs.txt"),			    // 1. LGA map meta data, including the mapping of LGAs to WRRGs
+                            await applyQuerySettings(settings)                // 1. Update settings if a query string is passed in
+                            await parseData(data.table.byWRRG)                 // 2. Parse data
+                            Promise.all([		                               // 3. Load map data and render | Use Promise.all to load multiple data files
+                                d3.json('data/victorianLGAs.geojson'),			// a. LGA map shape data
+                                d3.tsv("data/victorianLGAs.txt"),			    // b. LGA map meta data, including the mapping of LGAs to WRRGs
                             ]).then( mapData => {
                                 renderMap(settings, mapData[0], mapData[1])	
                             });
@@ -302,6 +301,14 @@
         ///////////////////////////////////
         /// 1. DATA PARSING FUNCTION    ///
         ///////////////////////////////////
+
+        async function applyQuerySettings(settings){
+            // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
+            settings.queryParameters = new URLSearchParams(window.location.search)
+            if (settings.queryParameters.has('year')) { 
+                settings.year = settings.queryParameters.get('year')  
+            }
+        };
 
         async function parseData(wrrgData){
             // Parse WRRG Data
@@ -376,7 +383,6 @@
 
         // 3. COLOUR SCALE
             const diversionRate = {}
-console.log(data.schema.list.wrrg)
             data.schema.list.wrrg.forEach( wrrg => diversionRate[wrrg] = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)) )
             const wrrgColor = d3.scaleLinear()
                 .domain(d3.extent(Object.values(diversionRate)) )

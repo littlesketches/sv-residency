@@ -781,6 +781,14 @@
         // A. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
 
+        async function applyQuerySettings(settings){
+            // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
+            settings.queryParameters = new URLSearchParams(window.location.search)
+            if (settings.queryParameters.has('year')) { 
+                settings.year = settings.queryParameters.get('year')  
+            }
+        };
+
         async function parseData(wasteStreamData, materialData) {      
             // 1. Parse numeric data types to number
             wasteStreamData.forEach(d => {

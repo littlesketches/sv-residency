@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="SV Resource recovery market bulletin">
-        <meta name="author" content="Little Sketches ">
-        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <meta name="description" content="Waste diversion radial chart with table">
+        <meta name="author" content="Sustainability Victoria">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
@@ -20,18 +20,18 @@
                 --secondaryGreyLight:            #CFCFCF;
                 --secondaryGreyLightest:         #ECECEC;
                 /** TERTIARY PALETTE **/
-                --tertiaryPurple:       #51284F;
-                --tertiaryPurpleLight:  #8276B3;
-                --tertiaryRed:          #E04F39;
-                --tertiaryRedLight:     #F78684;
-                --tertiaryYellow:       #EFC041;
-                --tertiaryYellowLight:  #F5E065;
-                --tertiaryCard:         #B39981;
-                --tertiaryCardLight:    #DCBFA6;
-                --tertiaryEmerald:      #009E71;
-                --tertiaryEmeraldLight: #93CCB9;
-                --tertiaryBlue:         #005E88;
-                --tertiaryBlueLight:    #A0D6E9;
+                --tertiaryPurple:               #51284F;
+                --tertiaryPurpleLight:          #8276B3;
+                --tertiaryRed:                  #E04F39;
+                --tertiaryRedLight:             #F78684;
+                --tertiaryYellow:               #EFC041;
+                --tertiaryYellowLight:          #F5E065;
+                --tertiaryCard:                 #B39981;
+                --tertiaryCardLight:            #DCBFA6;
+                --tertiaryEmerald:              #009E71;
+                --tertiaryEmeraldLight:         #93CCB9;
+                --tertiaryBlue:                 #005E88;
+                --tertiaryBlueLight:            #A0D6E9;
                 /** ALL MATERIALS EXTENSION PALETTE **/
                 --extOrange:          #feb076;        /* Used for textiles*/
                 --extPink:            #f8c1c4;        /* Used for textiles*/
@@ -223,7 +223,7 @@
 
         const settings = {
             svgID:        'radial-bar-vis',
-            year:         '2019-20', 
+            year:         '2018-19', 
             dims: {
                 height:     720, 
                 width:      1080,
@@ -263,9 +263,10 @@
                         data.table[tableName] = results.data
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
-                            await parseData(data.table.byStream, data.table.byMaterial)                 // 1. Parse data
-                            await renderVis(data.byType.material, settings)                     // 2. Render visualisation(s)
-                            }
+                            await applyQuerySettings(settings)                              // 1. Update settings if a query string is passed in
+                            await parseData(data.table.byStream, data.table.byMaterial)     // 2. Parse data
+                            await renderVis(data.byType.material, settings)                 // 3. Render visualisation(s)
+                        }
                     }
                 })
             }                       
@@ -275,6 +276,14 @@
         ////////////////////////////////////
         // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
+
+        async function applyQuerySettings(settings){
+            // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
+            settings.queryParameters = new URLSearchParams(window.location.search)
+            if (settings.queryParameters.has('year')) { 
+                settings.year = settings.queryParameters.get('year')  
+            }
+        };
 
         async function parseData(wasteStreamData, materialData) {      
             // 1. Parse numeric data types to number
@@ -311,7 +320,7 @@
                     } 
                 })
             })
-
+        
             // 2. Extract lists 
             data.schema.list.material = [...new Set(materialData.filter(d => d.level ===1).map(d => d.source))]
 
@@ -319,14 +328,14 @@
             data.schema.list.material.forEach( material => {                    // For each unique material...
                 data.byType.material[material] = {value: 0}
                 materialData
-                    .filter(d => d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
+                    .filter(d => d.year === settings.year && d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
                     .forEach( d => {
                         data.byType.material[material].value += d.value         // Sum the value of output flows
                         data.byType.material[material].class = `${helpers.slugify(d.materialClass)} material`         // Assign the specified (material) class
                     })
                 // Add the diversion rates per material
                 materialData
-                    .filter(d => d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
+                    .filter(d => d.year === settings.year && d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
                     .forEach( d => {
                         if(d.targetClass === 'recovered'){
                             data.byType.material[material].diversion = d.value  / data.byType.material[material].value      

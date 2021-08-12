@@ -33,11 +33,9 @@
                 --tertiaryBlue:         #005E88;
                 --tertiaryBlueLight:    #A0D6E9;
 
-
                 /** ALL MATERIALS EXTENSION PALETTE **/
                 --extOrange:          #feb076;        /* Used for textiles*/
                 --extPink:            #f8c1c4;        /* Used for textiles*/
-
             }
 
         /***************************************/
@@ -226,7 +224,7 @@
 
         const settings = {
             svgID:        'radial-bar-vis',
-            year:         '2019-20', 
+            year:         '2018-19', 
             dims: {
                 height:     1080, 
                 width:      720,
@@ -266,8 +264,9 @@
                         data.table[tableName] = results.data
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
-                            await parseData(data.table.byStream, data.table.byMaterial)                 // 1. Parse data
-                            await renderVis(data.byType.material, settings)             // 2. Render visualisation(s)
+                            await applyQuerySettings(settings)                              // 1. Update settings if a query string is passed in
+                            await parseData(data.table.byStream, data.table.byMaterial)     // 2. Parse data
+                            await renderVis(data.byType.material, settings)                 // 3. Render visualisation(s)
                         }
                     }
                 })
@@ -278,6 +277,14 @@
         ////////////////////////////////////
         // 1. PARSE AND WRANGLE DATA     ///
         ////////////////////////////////////
+
+        async function applyQuerySettings(settings){
+            // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
+            settings.queryParameters = new URLSearchParams(window.location.search)
+            if (settings.queryParameters.has('year')) { 
+                settings.year = settings.queryParameters.get('year')  
+            }
+        };
 
         async function parseData(wasteStreamData, materialData) { 
             // 1. Parse numeric data types to number
@@ -322,14 +329,14 @@
             data.schema.list.material.forEach( material => {                    // For each unique material...
                 data.byType.material[material] = {value: 0}
                 materialData
-                    .filter(d => d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
+                    .filter(d => d.year === settings.year && d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
                     .forEach( d => {
                         data.byType.material[material].value += d.value         // Sum the value of output flows
                         data.byType.material[material].class = `${helpers.slugify(d.materialClass)} material`         // Assign the specified (material) class
                     })
                 // Add the diversion rates per material
                 materialData
-                    .filter(d => d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
+                    .filter(d => d.year === settings.year && d.level ===1 && d.source === material)         // Filter for level 1 (first material > destination) and match the material  
                     .forEach( d => {
                         if(d.targetClass === 'recovered'){
                             data.byType.material[material].diversion = d.value  / data.byType.material[material].value      
