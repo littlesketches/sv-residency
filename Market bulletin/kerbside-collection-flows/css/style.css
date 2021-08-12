@@ -248,11 +248,11 @@
         text-anchor: middle;
         font-weight: 500;
         stroke: none;
-    }
-    text.label.node{
         letter-spacing: -1px;
     }
-
+    text.label.node.unit{
+        letter-spacing: 0px;
+    }
     .linkLabel,
     .nodeLabel.textOnPath{
         font-size: 20px;
@@ -268,17 +268,41 @@
     .node-label-centered{
         pointer-events: none;
     }
-    .flow-icon.text-header{
-        font-weight: 500;
-        font-size: 30px;
-        opacity: 0.8;
+
+    .system-contamination{
+        stroke: var(--charcoal);
+        stroke-width: 1.5px;
+        fill: transparent;
     }
-    .flow-icon.text{
-        font-weight: 500;
-        font-size: 20px;
-        opacity: 0.8;
+    .system-contamination.title{
+        font-weight: 800;
+        font-size: 100px;
     }
-    #collection-total-sub-header{
+    .system-contamination.sub-title{
+        font-weight: 800;
+        font-size: 50px;
+    }
+    .system-recovery{
+        font-weight: 800;
+        fill:  var(--charcoal);
+    }
+    .system-recovery.title{
+        fill:  var(--charcoal);
+        font-size: 180px;
+        letter-spacing: -2px
+    }
+    .system-recovery.sub-title{
+        font-size: 80px;
+    }
+    .system-title-figure{
+        font-weight: 800;
+        font-size: 200px;
+        stroke: var(--secondaryBottleGreenLight);
+        fill: transparent;
+    }
+
+
+    #step-annotation{
         pointer-events: none;
         font-size: 46px;
         dominant-baseline: middle;
