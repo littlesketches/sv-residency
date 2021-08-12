@@ -321,7 +321,9 @@
         transform: rotateY(0deg) rotateX(55deg) rotateZ(45deg) scale(0.95);
         transform-origin: 50% 50% 0px;
     }
-
+    .illustration-group-layer{
+        pointer-events: none;
+    }
     /************************************/
     /*** SVG FLOW VIS ELEMENT STYLING ***/
     /************************************/
@@ -350,6 +352,7 @@
     .nodeLabel.export{ 
         fill: var(--secondaryBottleGreenLight);
     }
+
     .linkLabel.landfill,
     .linkLabel.landfill.destination-colour,
     .node.landfill, 
