@@ -114,7 +114,13 @@
         scales: {},       // Programatically created when max node and link sizes are calculated based on selected date range 
         linkPos:    {},
         palette:    {},         // Programatically created to matched to CSS colours for sources and targets
-        queryParameters:    {}  // Objet to stor query string parameters
+        queryParameters:    {},  // Objet to stor query string parameters
+        annotation: {
+            commentary: {
+                'step-1':   'A breakdown of where material volumes collected for resource recovery',
+                'step-2':   'A look at where collected materials goes',
+            }
+        }
     }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -282,13 +288,12 @@
         //----- 2. DATA PREPARATION | FILTER DATA FOR DATE BOUNDS -----//
             // a. Filter and set chartData based on selected dates
             vis.flow.data.chartData = data.filter(d => 
-                +d.date > +vis.flow.data.lists.date[vis.flow.data.lists.month.indexOf(vis.flow.state.dateRange.from)] &&
+                +d.date >= +vis.flow.data.lists.date[vis.flow.data.lists.month.indexOf(vis.flow.state.dateRange.from)] &&
                 +d.date <= +vis.flow.data.lists.date[vis.flow.data.lists.month.indexOf(vis.flow.state.dateRange.to)]
             )
             // b. Set source an target lists directly from chartData
             vis.flow.data.lists.sources = [...new Set(vis.flow.data.chartData.map(d => d.source))]
             vis.flow.data.lists.targets = [...new Set(vis.flow.data.chartData.map(d => d.target))]
-
 
         //----- 3. SCALES | GET NODE SIZES AND DATA FOR SCALES -----//
             // a. Call function to set node and link scales   
@@ -376,7 +381,6 @@
                     radius = settings.scales.nodeRadScale(value),
                     xPos = settings.geometry.nodeGroupPos.targets.x,
                     yPos =  currentTargetY + settings.scales.nodeRadScale(value)   // radius of current circle
-
 
                 const nodeGroup = nodeLayerTarget.append('g')
                     .attr('node-data', JSON.stringify({target, xPos, yPos, value, radius }))
@@ -731,12 +735,12 @@
                 dateString = vis.flow.state.dateRange
                 
             annotationLayer.append('text')
-                .attr('id', 'collection-total-sub-header')
+                .attr('id', 'step-annotation')
                 .classed('title-text', true)
                 .attr('x', settings.dims.width * 0.5)
                 .attr('y', settings.dims.height * 0.5)
                 .attr('dy', 0)
-                .text(`A breakdown of where material volumes collected for resource recovery from`)
+                .text(settings.annotation.commentary['step-1'])
 
 
 
@@ -806,9 +810,9 @@
         function groupLabelMouseover(){
             const duration = 200,
                 groupType =  this.classList[1]
-            d3.selectAll(`.links-group, .node-group :not(.${groupType}), .title-label-group:not(.${groupType}), .nodeLabel:not(.${groupType}), .${groupType}.node-group-arrow, .annotation-direction`)
-                .transition().duration(duration)
-                .style('opacity', 0)
+            // d3.selectAll(`.links-group, .node-group :not(.${groupType}), .title-label-group:not(.${groupType}), .nodeLabel:not(.${groupType}), .${groupType}.node-group-arrow, .annotation-direction`)
+            //     .transition().duration(duration)
+            //     .style('opacity', 0)
         };
 
         function groupLabelMouseout(){
@@ -817,14 +821,17 @@
                     ?`.links-group, .node-group *, .title-label-group, .nodeLabel, .node-group-arrow, .annotation-direction`  
                     : `.links-group, .node-group *, .title-label-group:not(.recycling), .nodeLabel, .node-group-arrow, .annotation-direction`
 
-            d3.selectAll(selection)
-                .transition().duration(duration)
-                .style('opacity', null)
+            // d3.selectAll(selection)
+            //     .transition().duration(duration)
+            //     .style('opacity', null)
         };
 
     }; // renderFlowVis()
 
     vis.flow.methods.renderIsometricIllustrations = async (layer) => {
+        const landfillVolume = settings.nodeSize.target.filter(d => Object.keys(d)[0] === 'Landfill')[0].Landfill,
+             totalCollected = d3.sum(settings.nodeSize.target.map(d => Object.values(d)[0]) )
+
         const buildings = layer.attr('id', 'flow-icon-building')
             .append('use').attr('href', '#icon-building')
             .classed('flow-icon', true)
@@ -835,26 +842,28 @@
             .classed('flow-icon', true)
             .attr('transform', 'translate(750, -50) scale(0.65)')
 
-        const infographicHeader = layer.append('text')
-            .classed('flow-icon text-header', true)
-            .attr('transform', 'translate(50, 770)')
-            .text('How resources are recovered')
+        // Contamination rate
         layer.append('text')
-            .classed('flow-icon text', true)
-            .attr('transform', 'translate(50, 800)')
-            .html('Space for a more qualitative description of flows, potentially')
+            .attr('id', 'system-contamination-pct')
+            .classed('title system-contamination', true)
+            .attr('transform', 'translate(50, 700)')
+            .html(`${helpers.numberFormatters.formatPct1dec(landfillVolume/totalCollected)}`)
         layer.append('text')
-            .classed('flow-icon text', true)
-            .attr('transform', 'translate(50, 830)')
-            .html('involving discussion of data and trends for the selected time period;')
+            .classed('sub-title system-contamination', true)
+            .attr('transform', 'translate(50, 750)')
+            .html('contamination')
+
+        // Total recovery
         layer.append('text')
-            .classed('flow-icon text', true)
-            .attr('transform', 'translate(50, 860)')
-            .html('or simply a more basic description suited to more beginner audience.')
+            .attr('id', 'system-recovery-volume')
+            .classed('title system-recovery', true)
+            .attr('transform', 'translate(50, 960)')
+            .html(`${helpers.numberFormatters.formatComma(totalCollected - landfillVolume)}`)
         layer.append('text')
-            .classed('flow-icon text', true)
-            .attr('transform', 'translate(50, 890)')
-            .html('')
+            .classed('sub-title system-recovery', true)
+            .attr('transform', 'translate(50, 1030)')
+            .html('tonnes recovered')
+
     }; // end renderIsometricIllustrations()
 
     vis.flow.methods.renderCollectionIllustrations = async (layer) => {
@@ -1022,22 +1031,19 @@
     }; // end setLinkPositions()
 
 
-
     //////////////////////////////////////////////////
     /// GENERAL UPDATE VIS FOR NEW DATA/DATE RANGE ///
     //////////////////////////////////////////////////
 
     vis.flow.methods.scene.intro = async(duration) => {
-        // 0. Set onload element visibilty 
-            //  .node-group.target.layer, 
-            // .annotation-nodeLabels.target, 
+        // Set onload element visibilty 
         d3.selectAll(` 
                 .link.collection_destination, 
                 .link.destination_collection, 
                 .link.destination_landfill, 
                 .landfill-arrow,
                 .annotation-linkPaths-group, 
-                .annotation-linkLabels, 
+                .linkLabel, 
                 .title-label-group.recycling,
                 .illustration-isometric-layer,
                 .illustration-collection-layer, 
@@ -1047,7 +1053,7 @@
             .style('opacity', 0)
 
         // No pointer events
-        d3.select(`#${settings.svgID}`).style('pointer-events', 'none') 
+       vis.flow.methods.anim.blockEvents(null)
 
         // Into animation settings
         vis.flow.state.step = 'step-1'
@@ -1074,7 +1080,7 @@
                 toDateIndex = vis.flow.data.lists.month.indexOf(toDate)
 
             // 2. Make sure date range is at least one month
-            if(toDateIndex >= fromDateIndex){
+            if(toDateIndex > fromDateIndex){
                 toDateIndex = fromDateIndex
                 document.getElementById('toDate').value = document.getElementById('fromDate').value
             }
@@ -1099,7 +1105,7 @@
         ////////////////////////
 
         // 1. Update chart data
-            vis.flow.data.chartData = vis.flow.data.chart.filter(d => +d.date > vis.flow.state.dateRange.from && +d.date <= vis.flow.state.dateRange.to)
+            vis.flow.data.chartData = vis.flow.data.chart.filter(d => +d.date >=     vis.flow.state.dateRange.from && +d.date <= vis.flow.state.dateRange.to)
 
         // 2. Reset scales for maximum chart data value
             await vis.flow.methods.setScales()
@@ -1191,6 +1197,28 @@
                 settings.nodePos.target[target] = {x: xPos, y: yPos, radius: radius}
                 currentTargetY = yPos + settings.scales.nodeRadScale(value) + settings.geometry.nodeSpacing.target // add radius of prior circle + buffer
             })    
+
+            // iii. If in horizontal mode, update the translations
+            if(!vis.flow.state.verticalNodePos){
+                d3.selectAll('.node-group.source .node-group')
+                    .transition().duration(duration)
+                        .style('opacity', null)
+                        .style('transform', function(d, i){
+                            const nodeData = JSON.parse(this.getAttribute('node-data'))
+                            return `scale(1.65) translate(
+                                ${nodeData.yPos - settings.dims.height * 0.45}px, 
+                                ${settings.dims.height * 0.2 - nodeData.yPos - nodeData.radius}px)`
+                        })
+                d3.selectAll('.node-group.target .node-group')
+                    .transition().duration(duration)
+                        .style('opacity', null)
+                        .style('transform', function(d, i){
+                            const nodeData = JSON.parse(this.getAttribute('node-data'))
+                            return `scale(1.65) translate(  
+                                ${-settings.dims.width * 0.6 + nodeData.yPos - settings.dims.height * 0.25}px, 
+                                ${settings.dims.height * 0.575 - nodeData.yPos - nodeData.radius}px)`
+                        })
+            }
 
         // 4. Update the links
             // a. Call function to determine set link position data
@@ -1314,7 +1342,6 @@
                                 .transition().duration(duration)
                                 .attr('transform', `translate(${currentContaminationReturnX - 30}, ${nodeEnd[1] + settings.scales.linkScale(total/2) + 5}) scale(${2})`)
                         } 
-
                 })
             })
 
@@ -1343,6 +1370,30 @@
                 .text(contaminatedExportText)
                 .call(helpers.textWrap, 160, 1)
 
+        // Update the system illustration
+        const landfillVolume = settings.nodeSize.target.filter(d => Object.keys(d)[0] === 'Landfill')[0].Landfill,
+             totalCollected = d3.sum(settings.nodeSize.target.map(d => Object.values(d)[0]) )
+
+        d3.select('#system-contamination-pct')
+            .transition().duration(duration)
+            .tween('text', function(d){
+                const currentValue = +this.textContent.replace(/\%|,/g, '') / 100
+                let i = d3.interpolate(currentValue, landfillVolume/totalCollected);
+                return function(t){  
+                    d3.select(this).text(helpers.numberFormatters.formatPct1dec(i(t)))  
+                };
+            });
+        d3.select('#system-recovery-volume')
+            .transition().duration(duration)
+            .tween('text', function(d){
+                const currentValue = +this.textContent.replace(/\$|,/g, '')
+                let i = d3.interpolate(currentValue, totalCollected - landfillVolume);
+                return function(t){  
+                    d3.select(this).text(`${helpers.numberFormatters.formatComma(i(t))}`)  
+                };
+            });
+
+
     }; // end updateVis()
 
 
@@ -1353,8 +1404,12 @@
 
     // Block all interaction during intro animation/transition
     vis.flow.methods.anim.blockEvents = function(duration){
-        d3.select(`#${settings.svgID}`).style('pointer-events', 'none') 
-        setTimeout(() => { d3.select(`#${settings.svgID}`).style('pointer-events', null)}, duration + 50)
+        d3.selectAll(`#${settings.svgID} *`).style('pointer-events', 'none') 
+        if(duration){
+            setTimeout(() => { 
+                d3.selectAll(`#${settings.svgID} *`).style('pointer-events', null)}, 
+            duration)
+        }
     }; // end blockEvents()
 
     vis.flow.methods.anim.animatePath = (pathID, forward = true, duration = settings.animation.updateDuration, delay = 0, ease = d3.easeCubicIn) => {
@@ -1367,7 +1422,7 @@
             .style('stroke-dashoffset', forward ?  0 : pathLength )
     }; // end animatePath()
 
-    vis.flow.methods.anim.setVerticalNodeAxis = function(vertical = true, duration = 2000, introAnim = false){
+    vis.flow.methods.anim.setVerticalNodeAxis = function(vertical = true, duration = settings.animation.updateDuration, introAnim = false){
         // 1. Move to vertical
         if(vertical){
             // a Reset to default transforms
@@ -1409,7 +1464,6 @@
     }; // end setVerticalNodeAxis()
 
     vis.flow.methods.anim.setAnnotation = function(step = vis.flow.state.step, duration){
-        console.log(step)
         // Control the position the Collection, Destination and Recycling labels
         switch(step){
             case 'step-1': // Horizontal node intro scene
@@ -1428,10 +1482,26 @@
                 d3.select('.title-label-group.recycling').style('pointer-events', 'none')
                     .transition().duration(duration)
                     .style('opacity', 0)
-                d3.select('#collection-total-sub-header')
+                d3.select('#step-annotation').style('pointer-events', 'none')
                     .transition().duration(duration)
                     .style('opacity', null)
 
+                // Reset commentary annotation
+                d3.select('#step-annotation').transition().duration(duration * 0.25)
+                    .style('opacity', 0)
+                setTimeout(() => {
+                    d3.select('#step-annotation')
+                        .text(settings.annotation.commentary['step-1'])
+                        .transition().duration(duration * 0.75)
+                            .attr('transform', null)
+                            .style('opacity', null)                    
+                }, duration * 0.25);
+
+                // Move collection and destination labels, and transition arrows
+                d3.select('.node-group-arrow.upper.collection').transition().duration(duration)
+                    .attr('transform', `translate(0, -58) scale(5)`)
+                d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
+                    .attr('transform', `translate(0, 18) scale(5)`)
                 break
 
             case 'step-2': // Vertical node 'default' view for Collection and destination
@@ -1441,9 +1511,27 @@
                 d3.select('.title-label-group.destination')
                     .transition().duration(duration)
                     .attr('transform', `translate(${settings.geometry.nodeGroupPos.targets.x}, ${settings.dims.margin.top} )`)
-                d3.selectAll('.title-label-group.recycling, #collection-total-sub-header').style('pointer-events', 'none')
+                d3.selectAll('.title-label-group.recycling').style('pointer-events', 'none')
                     .transition().duration(duration)
                     .style('opacity', 0)
+
+                // Move collection and destination labels, and transition arrows
+                d3.select('.node-group-arrow.upper.collection').transition().duration(duration)
+                    .attr('transform', `translate(0, -58) scale(5)`)
+                d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
+                    .attr('transform', `translate(0, 18) scale(5)`)
+
+                // Move and update commetary
+                d3.select('#step-annotation').transition().duration(duration * 0.5)
+                    .attr('transform', `translate(0, -${settings.dims.height * 0.225})`)
+                    .style('opacity', 0)
+                setTimeout(() => {
+                    d3.select('#step-annotation')
+                        .text(settings.annotation.commentary['step-2'])
+                        .transition().duration(duration * 0.5)
+                            .attr('transform', `translate(0, -${settings.dims.height * 0.45})`)
+                            .style('opacity', null)                    
+                }, duration * 0.5);
 
                 break
 
@@ -1457,7 +1545,7 @@
                 d3.select('.title-label-group.destination')
                     .transition().duration(duration)
                     .attr('transform', `translate(${settings.geometry.nodeGroupPos.targets.x}, ${settings.dims.height - settings.dims.margin.top * 0.15} )`)
-                d3.selectAll('#collection-total-sub-header').style('pointer-events', 'none')
+                d3.selectAll('#step-annotation').style('pointer-events', 'none')
                     .transition().duration(duration)
                     .style('opacity', 0)
 
@@ -1466,7 +1554,10 @@
                     .attr('transform', `translate(0, -58) scale(5)`)
                 d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
                     .attr('transform', `translate(0, 18) scale(5)`)
-                d3.selectAll('.node-group-arrow.destination').transition().duration(duration/2)
+
+
+                d3.selectAll('#step-annotation').style('pointer-events', 'none')
+                    .transition().duration(duration)
                     .style('opacity', 0)
 
                 break
@@ -1485,9 +1576,9 @@
                     .attr('transform', `translate(${settings.geometry.nodeGroupPos.targets.x + 250}, ${nodePosTargetY - 300}) rotate(-90)`)
 
                 d3.select('.node-group-arrow.upper.collection').transition().duration(duration)
-                    .attr('transform', `translate(330, -10) scale(5) rotate(90)`)
+                    .attr('transform', `translate(200, -10) scale(5) rotate(90)`)
                 d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
-                    .attr('transform', `translate(-330, -10) scale(5) rotate(90)`)
+                    .attr('transform', `translate(-200, -10) scale(5) rotate(90)`)
                 d3.selectAll('.title-label.destination, .node-group-arrow.destination')
                     .transition().duration(250)
                     .style('opacity', 0)
@@ -1499,9 +1590,9 @@
                         .style('opacity', null)
                 }, 250)    
 
-                // d3.selectAll('#collection-total-sub-header').style('pointer-events', 'none')
-                //     .transition().duration(duration)
-                //     .style('opacity', 0)
+                d3.selectAll('#step-annotation').style('pointer-events', 'none')
+                    .transition().duration(duration)
+                    .style('opacity', 0)
                 break
 
             default: 
@@ -1509,39 +1600,90 @@
         }
     }; // end setAnnotation()
 
-    vis.flow.methods.anim.drawDestinationLinks = function(forward = true, duration = 2000){
+    vis.flow.methods.anim.setPointerEvents = function(step = vis.flow.state.step){
+        // Control the interactions (pointer-events) available on each scene and during transitions
+        switch(step){
+            case 'step-1': // Horizontal node intro scene
+                vis.flow.methods.anim.blockEvents(null)         // No events
+                d3.selectAll(` 
+                        .link.collection_destination, 
+                        .link.destination_collection, 
+                        .link.destination_landfill, 
+                        .landfill-arrow,
+                        .annotation-linkPaths-group, 
+                        .linkLabel, 
+                        .title-label-group.recycling,
+                        .illustration-isometric-layer,
+                        .illustration-collection-layer, 
+                        .node-group
+                    `)
+                    .style('pointer-events', 'none')
+
+                break
+
+            case 'step-2': // Vertical node 'default' view for Collection and destination
+                vis.flow.methods.anim.blockEvents(settings.animation.updateDuration)        
+                setTimeout(() => {
+                    d3.selectAll('.link.destination_collection, .title-label-group.recycling')
+                        .style('pointer-events', 'none')
+                    d3.selectAll('.link.collection_destination, .link.destination_landfill')
+                        .style('pointer-events', 'auto')
+                        .style('opacity', null)                    
+                }, settings.animation.updateDuration + 10);
+
+                break
+
+            case 'step-3': // Circular flow view
+                vis.flow.methods.anim.blockEvents(settings.animation.updateDuration)         // No events
+
+                d3.selectAll('.link.destination_collection')
+                    .style('pointer-events', 'auto')
+                    .style('opacity', null)
+
+                break
+
+            case 'step-4': // Isometric system view
+                vis.flow.methods.anim.blockEvents(settings.animation.updateDuration)         // No events
+                break
+
+            default: 
+                
+        }
+    }; // end setPointerEvents()
+
+    vis.flow.methods.anim.drawDestinationLinks = function(forward = true, duration = settings.animation.updateDuration){
+        const animOffset = 100,
+            offsetDuration = duration - document.querySelectorAll('.link.collection_destination').length * animOffset           
         // a. Draw destination links 
         if(forward){
-            d3.selectAll('.link.collection_destination')
-                .style('pointer-events', 'auto')
-                .style('opacity', null)
-
             document.querySelectorAll('.link.collection_destination').forEach((node, i) => {
-                vis.flow.methods.anim.animatePath(node.id, true, duration, i * 100)
+                vis.flow.methods.anim.animatePath(node.id, true, offsetDuration, i * animOffset)
             })
+            d3.selectAll('.link.destination_landfill, .landfill-arrow')
+                .transition().duration(500).delay(duration)
+                .style('opacity', null) 
         } else {
         // b. Undraw circular links
             document.querySelectorAll('.link.collection_destination').forEach((node, i) => {
-                vis.flow.methods.anim.animatePath(node.id, false, duration, i * 100)
+                vis.flow.methods.anim.animatePath(node.id, false, offsetDuration, i * animOffset)
             })
+            d3.selectAll('.link.destination_landfill, .landfill-arrow')
+                .transition().duration(duration)
+                .style('opacity', 0) 
         }
     }; // end drawDestinationLinks()
 
-    vis.flow.methods.anim.drawCircularLinks = function(forward = true, duration = 2000){
+    vis.flow.methods.anim.drawCircularLinks = function(forward = true, duration = settings.animation.updateDuration){
+        const animOffset = 100,
+            offsetDuration = duration - document.querySelectorAll('.link.collection_destination').length * animOffset           
         // a. Draw circular links 
         if(forward){
-            d3.selectAll('.link.destination_collection')
-                .style('pointer-events', 'auto')
-                .style('opacity', null)
-
             document.querySelectorAll('.return.link').forEach((node, i) => {
-                vis.flow.methods.anim.animatePath(node.id, true, duration, i * 100)
+                vis.flow.methods.anim.animatePath(node.id, true, offsetDuration, i * animOffset)
             })
             vis.flow.state.circularFlow = true
-
-        } else {
-
         // b. Undraw circular links
+        } else {
             document.querySelectorAll('.return.link').forEach(node => {
                 vis.flow.methods.anim.animatePath(node.id, false, duration, 0)
             })
@@ -1581,7 +1723,6 @@
     };
 
 
-
     ////////////////////////////
     /// SETUP THE INTERFACE  ///
     ////////////////////////////
@@ -1596,25 +1737,20 @@
         })
 
         // Update date range
-        const dateFromIndex = vis.flow.state.dateRange.from ? vis.flow.data.lists.month.indexOf(vis.flow.state.dateRange.from) : 1,
+        const dateFromIndex = vis.flow.state.dateRange.from ? vis.flow.data.lists.month.indexOf(vis.flow.state.dateRange.from) : 0,
             dateToIndex = vis.flow.state.dateRange.to ? vis.flow.data.lists.month.indexOf(vis.flow.state.dateRange.to) : 0
-
         if(!vis.flow.state.dateRange.from || !vis.flow.state.dateRange.to){
             vis.flow.state.dateRange.from = vis.flow.data.lists.month[dateFromIndex]
             vis.flow.state.dateRange.to = vis.flow.data.lists.month[dateToIndex]
         }
-
         // Setup date selector section
-        d3.selectAll('.date-selector').on('change', vis.flow.methods.updateVis)
-        document.getElementById('toDate').value =   vis.flow.state.dateRange.to 
+        d3.selectAll('.date-selector').on('change', function(){vis.flow.methods.updateVis()})
+        document.getElementById('toDate').value =  vis.flow.state.dateRange.to 
         document.getElementById('fromDate').value = vis.flow.state.dateRange.from 
         d3.select('#monthsLabel').html(`${dateFromIndex - dateToIndex + 1} month`)
 
     }; // end setInterface()
 
-    vis.flow.methods.hoverEvents = (enabled = true) => {
-        d3.selectAll('node').style('pointer-events', on ? enabled : 'none')
-    }; // end hoverEvents()
 
     vis.flow.methods.addNav = () => {
         // Setup stepper        
@@ -1636,8 +1772,8 @@
                 case 'step-4': isometricSystemView();       break  
                 default: break
             }
-            // Block events during transition
-            vis.flow.methods.anim.blockEvents(settings.animation.updateDuration)
+            // Set pointer events for each step
+            vis.flow.methods.anim.setPointerEvents()
         })
 
         // Step-1 Node only view: 
@@ -1666,6 +1802,7 @@
                 vis.flow.methods.anim.showIsometric(false) 
                 vis.flow.state.isometric = false
             }
+
         };
 
         // Step-2 Collection to Destination
@@ -1725,7 +1862,7 @@
 
         // Step-4 Show isometric view
         function isometricSystemView() {
-            // 0. Move annotation labeas 
+            // 0. Move annotation labels 
             vis.flow.methods.anim.setAnnotation(vis.flow.state.step, settings.animation.updateDuration) 
 
             // 1. Transition nodes to vertical position
@@ -1750,68 +1887,6 @@
             }
         };
     }; // end addNav()
-
-
-    vis.flow.methods.toggleIsometric = async(svgID, settings, duration = 3000) => {
-        d3.selectAll(`#${svgID} *`).style('pointer-events', 'none')
-        setTimeout( () => { d3.selectAll(`#${svgID} *`).style('pointer-events', null)}, duration)
-        // a. 2D to Isometric
-        if(!vis.flow.state.isometric){
-            const nodePosSourceY = (d3.max(Object.values(settings.nodePos.source).map(d=> d.y)) - d3.min(Object.values(settings.nodePos.source).map(d=> d.y))) / 2 + d3.min(Object.values(settings.nodePos.source).map(d=> d.y)),
-            nodePosTargetY = (d3.max(Object.values(settings.nodePos.target).map(d=> d.y)) - d3.min(Object.values(settings.nodePos.target).map(d=> d.y))) / 2 + d3.min(Object.values(settings.nodePos.target).map(d=> d.y))
-            d3.selectAll('.layer').classed('isometric', true)
-            // Move collection and destination labels, and transition arrows
-            d3.select('.title-label-group.collection').transition().duration(duration)
-                .attr('transform', `translate(${settings.geometry.nodeGroupPos.sources.x - 150}, ${nodePosSourceY}) rotate(-90)`)
-            d3.select('.node-group-arrow.upper.collection').transition().duration(duration)
-                .attr('transform', `translate(330, -10) scale(5) rotate(90)`)
-            d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
-                .attr('transform', `translate(-330, -10) scale(5) rotate(90)`)
-            d3.select('.title-label-group.destination').transition().duration(duration)
-                .attr('transform', `translate(${settings.geometry.nodeGroupPos.targets.x + 250}, ${nodePosTargetY - 300}) rotate(-90)`)
-            d3.selectAll('.title-label.destination, .node-group-arrow.destination').transition().duration(250)
-                .style('opacity', 0)
-            // Show the recycling loops
-            d3.selectAll('.link.destination_collection')
-                .style('pointer-events', 'auto')
-                .transition().duration(duration)
-                    .style('opacity', null)
-            d3.select('.title-label-group.recycling').style('pointer-events', null)
-                .transition().duration(duration)
-                    .style('opacity', null)
-
-            setTimeout( () => {
-                d3.select('.title-label.destination').html('Recovered materials')
-                d3.selectAll('.title-label.destination, .node-group-arrow.destination')
-                    .transition().duration(250)
-                    .style('opacity', 1)
-            }, 250)    
-        // b. Isometric to 2D
-        } else {
-            const nodePosY = vis.flow.state.circularFlow ? settings.dims.height - settings.dims.margin.top/4 : settings.dims.margin.top 
-            d3.selectAll('.layer').classed('isometric', false)
-            // Move collection and destination labels, and transition arrows
-            d3.select('.title-label-group.collection').transition().duration(duration)
-                .attr('transform', `translate(${settings.geometry.nodeGroupPos.sources.x}, ${nodePosY})`)
-            d3.select('.node-group-arrow.upper.collection').transition().duration(duration)
-                .attr('transform', `translate(0, -58) scale(5)`)
-            d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
-                .attr('transform', `translate(0, 18) scale(5)`)
-            d3.select('.title-label-group.destination').transition().duration(duration)
-                .attr('transform', `translate(${settings.geometry.nodeGroupPos.targets.x}, ${nodePosY})`)
-            d3.selectAll('.title-label.destination, .node-group-arrow.destination').transition().duration(duration/2)
-                .style('opacity', 0)
-            setTimeout( () => {
-                d3.select('.title-label.destination').html('Destination')
-                d3.selectAll('.title-label.destination, .node-group-arrow.destination')
-                    .transition().duration(250)
-                    .style('opacity', 1)
-            }, 250)    
-
-        }
-        // c. Update state
-        vis.flow.state.isometric = !vis.flow.state.isometric 
-    }; // end toggleIsometric()
 
 
 
