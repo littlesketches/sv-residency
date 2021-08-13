@@ -263,7 +263,7 @@
                         data.table[tableName] = results.data
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
-                            await applyQuerySettings(settings)                                      // 1. Update settings if a query string is passed in
+                            await applyQuerySettings(settings)                              // 1. Update settings if a query string is passed in
                             await parseData(data.table.byStream, data.table.byMaterial)     // 2. Parse data
                             await renderVis(data.byType.material, settings)                 // 3. Render visualisation(s)
                         }
@@ -284,8 +284,6 @@
                 settings.year = settings.queryParameters.get('year')  
             }
         };
-
-
 
         async function parseData(wasteStreamData, materialData) { 
             // 1. Parse numeric data types to number
