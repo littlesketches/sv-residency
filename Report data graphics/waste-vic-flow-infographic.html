@@ -1687,7 +1687,7 @@
                             .attr('stroke-width', flowScale(mrfValue))
 
                         // Append MRF data label
-                        annotationLayer.append('text').classed(`${className}  mrf-data-label` , true)
+                        annotationLayer.append('text').classed(`${className} mrf-data-label` , true)
                             .text(`${helpers.numberFormatters.formatComma2dec(mrfValue/1000000)} Mt of ${material.toLowerCase()}`)
                             .attr('x', settings.geometry.mrfEndPos[className].x + settings.geometry.mrfEndPos[className].dataLabelOffset.x)
                             .attr('y', settings.geometry.mrfEndPos[className].y + 170 + settings.geometry.mrfEndPos[className].dataLabelOffset.y)
@@ -1696,7 +1696,7 @@
                     }
 
 
-                    // e. Add Export  links
+                    // e. Add Export links
                     const exportValue = d3.sum(materialsToExportData.filter(d => d.materialClass === className).map(d => d.value))
                     if(exportValue) {
                         exportLinkStartX += flowScale(exportValue) / 2        // Update the link position
@@ -1930,18 +1930,22 @@
 
                     // Animate in export flows and label  
                     setTimeout(() => {
-                        document.querySelectorAll('.mrf.flow-link')
-                            .forEach((node, i) => helpers.animatePath(node, 2500,  50 * i) )
-                        d3.select('#waste-to-mrf-label')
-                            .transition().duration(duration['step-3'])
+                      d3.select('#waste-to-mrf-label')
+                            .transition().duration(duration['step-3'] * 0.5)
+                            .style('opacity', null)  
+                      document.querySelectorAll('.mrf.flow-link')
+                            .forEach((node, i) => helpers.animatePath(node, 1500,  500 * i) )
+                        d3.selectAll('.mrf-data-label').transition().duration(500)
+                            .delay( (d,i) => 500 + i * 500 )
                             .style('opacity', null)
+  
                     }, document.querySelectorAll('.export.flow-link').length * 50 + 2500)
 
                 }, document.querySelectorAll('.landfill.flow-link').length * 50 + 2500 )
 
             }, animDelay); 
 
-            animDelay += duration['step-3']  + 4000
+            animDelay += duration['step-3']  + 6000
 
 
             //////////////////////////////////////
