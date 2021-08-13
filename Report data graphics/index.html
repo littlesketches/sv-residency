@@ -38,16 +38,7 @@
         /***************************************/
             @font-face {
                 font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
                     url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
                     url('fonts/DINNextLTPro-Light.woff') format('woff'),
                     url('fonts/DINNextLTPro-Light.ttf') format('truetype');
@@ -81,26 +72,18 @@
                 font-weight: 800;
                 font-style: heavy;
             }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Black'), local('DIN-Next-LT-Pro-Black'),
-                    url('fonts/DINNextLTPro-Black.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Black.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Black.ttf') format('truetype');
-                font-weight: 900;
-                font-style: normal;
-            }
 
             body{
                 font-family: 'DIN Next LT Pro';
-                margin: 10vw;
+                margin: 7.5vw 10vw;
             }
             h1{
                 font-size: 2.5rem;
                 text-transform: uppercase;
                 color: var(--secondaryBottleGreenLight);
             }
-            p{
+            p, ul{
+                font-weight: 300;
                 color: rgb(40, 40, 40)
             }
             .vis-list-type{
@@ -117,11 +100,12 @@
     <body>
         <h1>SV Annual report graphics index</h1>
         <div>
-            <p>This page contains links to SVG based data visualisation being drafted for the upcoming 2019/20 <a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/waste-annual-reports-and-data' target="_blank">Victorian Local Government Annual Waste Services Report</a>
+            <p>This page contains links to SVG based data visualisation being drafted for the upcoming 2019/20 
+                <a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/waste-annual-reports-and-data' target="_blank">Victorian Local Government Annual Waste Services Report</a>
                 and <a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/waste-annual-reports-and-data/2018-to-2019' target="_blank">Victorian Recycling Industry Annual report</a>.
             </p>
-            <p>
-               All graphics are in draft and have initially been desigend for embedded in the print reports. However all graphics are 'programmed' and digital-first, meaning that are connected to data and be easily extended for web-based rendering and use.
+            <p>All graphics are in draft and have initially been designed for embedded in the print reports. 
+                However all graphics are 'programmed' and digital-first, meaning that are connected to data and be easily extended for web-based rendering and use.
             </p>
             <p>The linked dataset supporting these visualisations can be found and updated <a href="https://docs.google.com/spreadsheets/d/1V5HL7zCHGETUCDT8-3ZiDm9XncmOTEo9WDSP1Xe3wd0/edit#gid=0" target="_blank">here</a>. 
                 The GitHub repository (i.e. code) for these visualisations and apps can be found <a href = "https://github.com/littlesketches/sv-stuff" target = "_blank"> here</a> (note: this will be moved to a SV data team repo shortly). 
@@ -134,6 +118,7 @@
             </p>
             <p>No interactive has yet been attached to these graphics, however those listed with a &#x262f; symbol have a 'dark mode' that can be toggled by pressing the 'shift' key while viewing the graphic
         </div>
+
         <div>
             <div class ="vis-list-type">Data graphics and illustrations</div> 
             <ul>
