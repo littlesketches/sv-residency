@@ -84,6 +84,9 @@
                 margin: 0;
                 font-family: 'DIN Next LT Pro';
             }
+            .overlay{
+                pointer-events: none;
+            }
             .node{
                 stroke: var(--nightSky);
                 stroke-width: 8px;
@@ -672,30 +675,30 @@
                     </g>
                     </g>
                     <g id="streetlights-group">
-                    <g id="streetlight-3-group">
-                        <path fill="#5992c7" fill-opacity=".8" d="M630.59 3190.68l-14.38.88c-20.63-.72-24.63 17.89-24.56 28.01v182.44c0 .5 1.92.9 4.3.9 2.4 0 4.32-.4 4.32-.9v-182.44c.99-15.66 10.23-19.4 16.12-19.39l13.65-.35z"/>
-                        <path fill="#fff" d="M655.7 3199.05a1.18 1.14 0 00-1.15-1.16h-21.53a1.18 1.14 0 00-1.16 1.16v4.55c0 .64.52 1.16 1.16 1.16h21.53a1.18 1.14 0 001.16-1.16z"/>
-                        <path fill="#fff" fill-opacity=".18" d="M630.85 3198.76l-72.1 208.76h213.37L654.7 3197.86z"/>
-                        <path fill="#f0ecc9" d="M630.05 3200.18h28.2c-.64-5.87 3.54-13.27-15.47-13.37-6.65.25-11.35 2.16-12.92 4.92z"/>
-                        <path fill="#e6e7c1" d="M612.57 3198.09c-12.63-.2-16.62 15.25-16.54 25.37v179.78c0 .5-.82.91 1.56.91 2.4 0 4.32-.4 4.31-.9l-1.37-179.79c1-15.66 6.67-21.27 12.02-23.37 5-.71 3.9-1.62.02-2z"/>
-                        <path fill="#e3dbdb" d="M630.05 3200.18h12.19c3.97.63 2.29-12.63.54-13.37-6.65.25-11.35 2.16-12.92 4.92z"/>
-                    </g>
-                    <g id="streetlight-2-group">
-                        <path fill="#5992c7" fill-opacity=".8" d="M1125.32 3260.2l-14.37.89c-20.64-.72-24.64 17.89-24.57 28.01v182.43c0 .5 1.92.91 4.31.91 2.39 0 4.31-.4 4.31-.9V3289.1c1-15.67 10.23-19.4 16.13-19.4l13.64-.34z"/>
-                        <path fill="#fff" d="M1150.44 3268.58a1.18 1.14 0 00-1.16-1.16h-21.53a1.18 1.14 0 00-1.15 1.16v4.55c0 .64.51 1.16 1.15 1.16h21.53a1.18 1.14 0 001.16-1.16z"/>
-                        <path fill="#fff" fill-opacity=".18" d="M1125.58 3268.28l-72.1 208.77h213.38l-117.43-209.67z"/>
-                        <path fill="#f0ecc9" d="M1124.78 3269.71h28.2c-.64-5.88 3.54-13.27-15.47-13.38-6.65.26-11.35 2.17-12.92 4.93z"/>
-                        <path fill="#e6e7c1" d="M1107.3 3267.61c-12.63-.19-16.62 15.26-16.54 25.38v179.78c0 .5-.82.9 1.57.9 2.38 0 4.31-.4 4.3-.9l-1.37-179.78c1-15.67 6.67-21.27 12.02-23.37 5-.72 3.9-1.63.02-2z"/>
-                        <path fill="#e3dbdb" d="M1124.78 3269.71h12.19c3.98.63 2.3-12.63.54-13.38-6.65.26-11.35 2.17-12.92 4.93z"/>
-                    </g>
-                    <g id="streetlight-1-group">
-                        <path fill="#5992c7" fill-opacity=".8" d="M2270.86 3238.6l14.38.88c20.63-.72 24.63 17.9 24.56 28.02v182.43c0 .5-1.92.9-4.3.9-2.4 0-4.32-.4-4.32-.9V3267.5c-.99-15.67-10.23-19.4-16.12-19.4l-13.65-.35z"/>
-                        <path fill="#fff" d="M2245.74 3246.97a1.18 1.14 0 011.16-1.15h21.53a1.18 1.14 0 011.16 1.15v4.55c0 .64-.52 1.16-1.16 1.16h-21.53a1.18 1.14 0 01-1.16-1.16z"/>
-                        <path fill="#fff" fill-opacity=".18" d="M2270.6 3246.68l72.1 208.76h-213.37l117.42-209.66z"/>
-                        <path fill="#f0ecc9" d="M2271.4 3248.1h-28.2c.64-5.87-3.54-13.27 15.47-13.37 6.65.25 11.35 2.16 12.92 4.93z"/>
-                        <path fill="#e6e7c1" d="M2288.88 3246c12.63-.18 16.62 15.26 16.54 25.39v179.78c0 .5.82.9-1.56.9-2.4 0-4.32-.4-4.31-.9l1.37-179.78c-1-15.67-6.67-21.27-12.02-23.38-5-.71-3.9-1.62-.02-2z"/>
-                        <path fill="#e3dbdb" d="M2271.4 3248.1h-12.19c-3.97.64-2.29-12.63-.54-13.37 6.65.25 11.35 2.16 12.92 4.93z"/>
-                    </g>
+                        <g id="streetlight-3-group">
+                            <path fill="#5992c7" fill-opacity=".8" d="M630.59 3190.68l-14.38.88c-20.63-.72-24.63 17.89-24.56 28.01v182.44c0 .5 1.92.9 4.3.9 2.4 0 4.32-.4 4.32-.9v-182.44c.99-15.66 10.23-19.4 16.12-19.39l13.65-.35z"/>
+                            <path fill="#fff" d="M655.7 3199.05a1.18 1.14 0 00-1.15-1.16h-21.53a1.18 1.14 0 00-1.16 1.16v4.55c0 .64.52 1.16 1.16 1.16h21.53a1.18 1.14 0 001.16-1.16z"/>
+                            <path fill="#fff" fill-opacity=".18" d="M630.85 3198.76l-72.1 208.76h213.37L654.7 3197.86z"/>
+                            <path fill="#f0ecc9" d="M630.05 3200.18h28.2c-.64-5.87 3.54-13.27-15.47-13.37-6.65.25-11.35 2.16-12.92 4.92z"/>
+                            <path fill="#e6e7c1" d="M612.57 3198.09c-12.63-.2-16.62 15.25-16.54 25.37v179.78c0 .5-.82.91 1.56.91 2.4 0 4.32-.4 4.31-.9l-1.37-179.79c1-15.66 6.67-21.27 12.02-23.37 5-.71 3.9-1.62.02-2z"/>
+                            <path fill="#e3dbdb" d="M630.05 3200.18h12.19c3.97.63 2.29-12.63.54-13.37-6.65.25-11.35 2.16-12.92 4.92z"/>
+                        </g>
+                        <g id="streetlight-2-group">
+                            <path fill="#5992c7" fill-opacity=".8" d="M1125.32 3260.2l-14.37.89c-20.64-.72-24.64 17.89-24.57 28.01v182.43c0 .5 1.92.91 4.31.91 2.39 0 4.31-.4 4.31-.9V3289.1c1-15.67 10.23-19.4 16.13-19.4l13.64-.34z"/>
+                            <path fill="#fff" d="M1150.44 3268.58a1.18 1.14 0 00-1.16-1.16h-21.53a1.18 1.14 0 00-1.15 1.16v4.55c0 .64.51 1.16 1.15 1.16h21.53a1.18 1.14 0 001.16-1.16z"/>
+                            <path fill="#fff" fill-opacity=".18" d="M1125.58 3268.28l-72.1 208.77h213.38l-117.43-209.67z"/>
+                            <path fill="#f0ecc9" d="M1124.78 3269.71h28.2c-.64-5.88 3.54-13.27-15.47-13.38-6.65.26-11.35 2.17-12.92 4.93z"/>
+                            <path fill="#e6e7c1" d="M1107.3 3267.61c-12.63-.19-16.62 15.26-16.54 25.38v179.78c0 .5-.82.9 1.57.9 2.38 0 4.31-.4 4.3-.9l-1.37-179.78c1-15.67 6.67-21.27 12.02-23.37 5-.72 3.9-1.63.02-2z"/>
+                            <path fill="#e3dbdb" d="M1124.78 3269.71h12.19c3.98.63 2.3-12.63.54-13.38-6.65.26-11.35 2.17-12.92 4.93z"/>
+                        </g>
+                        <g id="streetlight-1-group">
+                            <path fill="#5992c7" fill-opacity=".8" d="M2270.86 3238.6l14.38.88c20.63-.72 24.63 17.9 24.56 28.02v182.43c0 .5-1.92.9-4.3.9-2.4 0-4.32-.4-4.32-.9V3267.5c-.99-15.67-10.23-19.4-16.12-19.4l-13.65-.35z"/>
+                            <path fill="#fff" d="M2245.74 3246.97a1.18 1.14 0 011.16-1.15h21.53a1.18 1.14 0 011.16 1.15v4.55c0 .64-.52 1.16-1.16 1.16h-21.53a1.18 1.14 0 01-1.16-1.16z"/>
+                            <path fill="#fff" fill-opacity=".18" d="M2270.6 3246.68l72.1 208.76h-213.37l117.42-209.66z"/>
+                            <path fill="#f0ecc9" d="M2271.4 3248.1h-28.2c.64-5.87-3.54-13.27 15.47-13.37 6.65.25 11.35 2.16 12.92 4.93z"/>
+                            <path fill="#e6e7c1" d="M2288.88 3246c12.63-.18 16.62 15.26 16.54 25.39v179.78c0 .5.82.9-1.56.9-2.4 0-4.32-.4-4.31-.9l1.37-179.78c-1-15.67-6.67-21.27-12.02-23.38-5-.71-3.9-1.62-.02-2z"/>
+                            <path fill="#e3dbdb" d="M2271.4 3248.1h-12.19c-3.97.64-2.29-12.63-.54-13.37 6.65.25 11.35 2.16 12.92 4.93z"/>
+                        </g>
                     </g>
                 </g>
                 <g id="layer-destination-scene">
@@ -1258,6 +1261,11 @@
                         <path id="ship-windows" fill="#10698a" d="M2272 2078.98h-7.06v5.8h7.05zm15.71 0h-7.05v5.8h7.05zm15.71 0h-7.05v5.8h7.05zm15.81 0h-7.04v5.8h7.04zm15.72 0h-7.05v5.8h7.05zm15.81 0h-7.05v5.8h7.05zm15.72 0h-7.05v5.8h7.05zm-91.06-20.2h-5.9v4.87h5.9zm13.33 0h-5.9v4.87h5.9zm13.34 0h-5.9v4.87h5.9zm13.24 0h-5.9v4.87h5.9zm13.33 0h-5.9v4.87h5.9zm13.34 0h-5.9v4.87h5.9zm13.33 0h-5.9v4.87h5.9zm-74.67-16.18h-4.38v3.62h4.38zm9.71 0H2286v3.62h4.38zm9.72 0h-4.38v3.62h4.38zm9.81 0h-4.38v3.62h4.38zm9.72 0h-4.39v3.62h4.4zm9.71 0h-4.38v3.62h4.38zm9.71 0h-4.38v3.62h4.38z"/>
                     </g>
                 </g>
+                <g id ='layer-overlays'>
+                    <path id = "destination-scene-overlay" class = 'overlay' fill='var(--nightSky)' d = "M-5.43 1620.78v935.13H2480.9v-935.13c-346.44-130.2-829.13-275.87-1263.12-271.95-444.57-5.8-990.93 160.01-1223.2 271.95z"></path>
+                    <path id = "product-scene-overlay" class = 'overlay' fill='var(--nightSky)' d = "M-5.43 2555.92h2486.3v951.96H-5.43z"></path>
+                </g>
+
               </svg>
         </div>
     </body>
@@ -1266,7 +1274,7 @@
 
         ////////////////////////////////////////////////////////////////////////////////
         /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
-        ////////////////////////////////////////////////////////////////////////////////s
+        ////////////////////////////////////////////////////////////////////////////////
 
         const settings = {
             svgID:          'scene-vis',
@@ -1363,7 +1371,7 @@
         }
 
         const gsTableLinks =   {
-            byMaterial:                     'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
+            byMaterial:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=272100684&single=true&output=tsv',
         }
 
         // Build from GSheet data
@@ -1372,7 +1380,7 @@
         function buildFromGSheetData(gsTableLinks) {
             let noLoadedTables = 0
             const tablesToLoad = Object.keys(gsTableLinks)
-            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
+            for (const [tableName, tableURL] of Object.entries(gsTableLinks)) {
                 Papa.parse(tableURL,  {
                     delimiter: '\t',
                     download: true,
@@ -1381,9 +1389,11 @@
                         data.table[tableName] = results.data
                         noLoadedTables++
                         if(noLoadedTables === tablesToLoad.length){
-                            await applyQuerySettings(settings)                     // 1. Update settings if a query string is passed in
-                            await parseData(data.table.byMaterial)                 // 2. Parse data
-                            await renderVis(data.table.byMaterial, settings)       // 3. Render visualisation(s)
+                            d3.select(`#${settings.svgID}`).style('opacity', 0)    // 0. Set SVG for reveal
+                            await applyQuerySettings(settings)                    // 1. Update settings if a query string is passed in
+                            await parseData(data.table.byMaterial)                // 2. Parse data
+                            await renderVis(data.table.byMaterial, settings)      // 3. Render visualisation(s)
+                            await animation(settings)    
                         }
                     }
                 })
@@ -1391,9 +1401,9 @@
         };
 
 
-        ////////////////////////////////////
-        // 1. PARSE AND WRANGLE DATA     ///
-        ////////////////////////////////////
+        /////////////////////////////////
+        // 1. PARSE AND WRANGLE DATA  ///
+        /////////////////////////////////
 
         async function applyQuerySettings(settings){
             // i. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
@@ -1469,10 +1479,9 @@
 
         /////////////////////////////////////////////////
         // 2. RENDER THE VICTORIAN WASTE FLOW GRAPHIC ///
-        ////////////////////////////////////////////////
+        /////////////////////////////////////////////////
 
         async function renderVis(materialData, settings){
-
             // Material icons
             const icons = {         //
                 'aggregates-masonry-soil':      'M4.348 5.885c-2.614 0-3.923 3.161-2.074 5.01 1.848 1.848 5.009.54 5.009-2.075a2.934 2.934 0 00-2.935-2.935zm0 4.23c-1.154 0-1.731-1.395-.915-2.211.815-.816 2.21-.238 2.21.916 0 .715-.58 1.295-1.295 1.295zm12.336 6.902c.008-2.624-3.162-3.945-5.02-2.092-1.858 1.852-.546 5.026 2.078 5.026a2.934 2.934 0 002.942-2.934zm-4.237 0c-.008-1.166 1.4-1.754 2.225-.93.823.824.235 2.232-.93 2.225-.715 0-1.295-.58-1.295-1.295zm-17.656-3.28a.82.82 0 011.4-.579.82.82 0 11-1.4.58zm5.189 1.165a.82.82 0 011.399-.58.82.82 0 11-1.4.58zm6.13 5.049a.82.82 0 01-.579-1.4.82.82 0 11.58 1.4zm2.394-4.984a.82.82 0 01-.58-1.399.82.82 0 11.58 1.4zm-11.098 2.46a.82.82 0 01.58 1.399.82.82 0 11-.58-1.4zM24.76 20.59L8.086 3.915a5.738 5.738 0 00-8.102 0l-.257.256c-.063-.43-.14-.86-.245-1.281l-.11-.44a1.478 1.478 0 00-1.789-1.074l-3.206.8-4.262-17.092A9.01 9.01 0 00-6.5-18.317a2.47 2.47 0 00.118-2.192 2.439 2.439 0 00-1.642-1.411 2.505 2.505 0 00-2.78 1.222 4.102 4.102 0 01-5.753 1.435 2.504 2.504 0 00-3.029.225 2.435 2.435 0 00-.788 2.017 2.47 2.47 0 001.133 1.88 9.003 9.003 0 004.583 1.408l4.263 17.099-3.207.8a1.475 1.475 0 00-1.075 1.788l.11.44A13.098 13.099 0 00-13.22 9.74a5.201 5.201 0 00-1.896 1.206l-9.644 9.644a.82.82 0 00.58 1.399h48.36a.82.82 0 00.58-1.4zM-18.741-17.16a.797.797 0 01.26-.668.866.866 0 011.042-.053 5.74 5.74 0 008.06-2.01.853.853 0 01.944-.442.796.796 0 01.545.468.838.838 0 01-.042.746 7.381 7.381 0 01-10.423 2.599.84.84 0 01-.386-.64zm5.748 3.33c.27-.041.54-.082.808-.149.266-.066.527-.15.784-.24l4.187 16.79-1.59.397zm.015 19.826l-.07-.28 10.87-2.71.07.28a11.503 11.504 0 01.328 2.39l-3.73 3.729-.77-3.088a.82.82 0 00-1.592.397l1.009 4.043-.516.516-.329-.328a5.22 5.22 0 00-3.783-1.528 11.463 11.464 0 01-1.487-3.42zm-.979 6.108a3.604 3.604 0 015.09 0l.328.328-7.92 7.917h-5.743zm-.184 8.245L1.143 5.073a4.097 4.097 0 015.784.001L22.202 20.35z',
@@ -1506,7 +1515,6 @@
                 annotationLayer = svg.append('g').classed('annotation-group', true),
                 headlineOffsetY = 140
 
-
             // Generators and scales
             const link = d3.linkVertical() .source(d => d.source).target(d => d.target)         // Bezier link generator accepting object {source: [x,y], and   target [x,y] }
             const circleClockwise = (originObj, radius) => "M "+(originObj.x+radius)+","+originObj.y +" m 0,0  a "+radius+","+radius+" 0 0 1 "+(-radius * 2)+",0 a "+radius+","+radius+" 0 0 1 "+(radius * 2)+",0" 
@@ -1524,12 +1532,12 @@
             // Update geometry settings
             settings.geometry.generationPos.x = settings.dims.width * 0.5
             settings.geometry.generationPos.y = settings.dims.height * 0.285
-            settings.geometry.landfillStartPos.x =  settings.geometry.generationPos.x  - settings.geometry.generationTotalRadius + totalLandfillWidth / 2 + 20
-            settings.geometry.landfillStartPos.y =  settings.geometry.generationPos.y  
-            settings.geometry.mrfStartPos.x =  settings.geometry.generationPos.x
-            settings.geometry.mrfStartPos.y =  settings.geometry.generationPos.y  
-            settings.geometry.exportStartPos.x =  settings.geometry.generationPos.x  + settings.geometry.generationTotalRadius - totalExportWidth / 2 - 20
-            settings.geometry.exportStartPos.y =  settings.geometry.generationPos.y  
+            settings.geometry.landfillStartPos.x = settings.geometry.generationPos.x - settings.geometry.generationTotalRadius + totalLandfillWidth / 2 + 20
+            settings.geometry.landfillStartPos.y = settings.geometry.generationPos.y  
+            settings.geometry.mrfStartPos.x = settings.geometry.generationPos.x
+            settings.geometry.mrfStartPos.y = settings.geometry.generationPos.y  
+            settings.geometry.exportStartPos.x = settings.geometry.generationPos.x + settings.geometry.generationTotalRadius - totalExportWidth / 2 - 20
+            settings.geometry.exportStartPos.y = settings.geometry.generationPos.y  
 
             // Mutatable geometry variables
             let landfillLinkStartX = settings.geometry.landfillStartPos.x - totalLandfillWidth / 2,
@@ -1540,33 +1548,38 @@
 
             // 1. Add generation graphic (top) from data
                 // a. Add Total node
-                generationNodes.append('circle').classed('material-node total', true)
+                const totalGenerationNode = generationNodes.append('g')
+                    .attr('id', 'total-generation-node-group')
+
+                totalGenerationNode.append('circle').classed('material-node total', true)
                     .attr('id', `total-generation-node`)
                     .attr('cx', settings.geometry.generationPos.x )
                     .attr('cy', settings.geometry.generationPos.y )
-                    .attr('r', settings.geometry.generationTotalRadius)
+                    .attr('r', 0)
+                       .transition().duration(3000)
+                       .attr('r', settings.geometry.generationTotalRadius)
 
-                generationNodes.append('text').classed('total-sub-label data-label total', true)
+                totalGenerationNode.append('text').classed('total-sub-label data-label total', true)
                     .text('Victoria')
                     .attr('x', settings.geometry.generationPos.x )
                     .attr('y', settings.geometry.generationPos.y - settings.geometry.generationTotalRadius * 0.7)
 
-                generationNodes.append('text').classed('total-sub-label data-label total', true)
+                totalGenerationNode.append('text').classed('total-sub-label data-label total', true)
                     .text('generated')
                     .attr('x', settings.geometry.generationPos.x )
                     .attr('y', settings.geometry.generationPos.y - settings.geometry.generationTotalRadius * 0.5)
 
-                generationNodes.append('text').classed('total-label data-label total', true)
+                totalGenerationNode.append('text').classed('total-label data-label total', true)
                     .text(helpers.numberFormatters.formatComma1dec(totalGeneration / 1000000))
                     .attr('x', settings.geometry.generationPos.x )
                     .attr('y', settings.geometry.generationPos.y + settings.geometry.generationTotalRadius * 0.1)
 
-                generationNodes.append('text').classed('total-unit-label data-label total', true)
+                totalGenerationNode.append('text').classed('total-unit-label data-label total', true)
                     .text('million tonnes')
                     .attr('x', settings.geometry.generationPos.x )
                     .attr('y', settings.geometry.generationPos.y + settings.geometry.generationTotalRadius * 0.5)
 
-                generationNodes.append('text').classed('total-unit-label data-label total', true)
+                totalGenerationNode.append('text').classed('total-unit-label data-label total', true)
                     .text('of waste')
                     .attr('x', settings.geometry.generationPos.x )
                     .attr('y', settings.geometry.generationPos.y + settings.geometry.generationTotalRadius * 0.7)
@@ -1577,20 +1590,22 @@
                     const className = materialGeneration.filter(d => d.source === material)[0].materialClass,
                         value = d3.sum(materialGeneration.filter(d => d.source === material).map(d => d.value) )
 
-                    // i. Add generation material node circle
+                    // i. Calculate node position
                     const nodeX = settings.geometry.generationPos.x + Math.cos(- Math.PI + Math.PI * 0.025 + Math.PI * 0.95 / (data.list.material.length - 1) * i) * settings.geometry.generationOuterRadius,
                           nodeY = settings.geometry.generationPos.y + Math.sin(- Math.PI + Math.PI * 0.025 +  Math.PI * 0.95 / (data.list.material.length - 1) * i) * settings.geometry.generationOuterRadius
 
-                    const node = generationNodes.append('circle').classed(`${className} node`, true)
+                    // ii. Add generation material node group
+                    const materialNodeGroup = generationNodes.append('g')
+                        .classed(`${className} material-node-group`, true)
+                        .attr('transform', `translate(${nodeX}, ${nodeY})`)
+
+                    const node = materialNodeGroup.append('circle').classed(`${className} node`, true)
                         .attr('r', settings.geometry.generationMaterialRadius)
-                        .attr('cx', nodeX )
-                        .attr('cy', nodeY )
 
                     // ii. Add generation material icon
-                    generationNodes.append('path').classed(`${className} generation-icon`, true)
+                    const icon = materialNodeGroup.append('path').classed(`${className} generation-icon`, true)
                         .attr('d', icons[className])
-                        .attr('transform', `translate(${nodeX}, ${nodeY}) scale(2.25)`)
-
+                        .attr('transform', `scale(2.25)`)
 
                     // ii. Add generation material link
                     generationFlows.append('path').classed(`${className} flow-link generation`, true)
@@ -1598,10 +1613,10 @@
                         .attr('stroke-width', flowScale(value))
 
                     // iii. Add Material circular label
-                    const nodeLabel = generationNodes.append('g').classed('nodeLabel-group', true)
+                    const nodeLabel = materialNodeGroup.append('g').classed('nodeLabel-group', true)
                     nodeLabel.append('path').attr('id', `${className}-labelPath`)
                         .classed('nodeLabelPath', true)
-                        .attr('d', circleClockwise({x: nodeX, y: nodeY}, settings.geometry.generationMaterialRadius + 6 ) )
+                        .attr('d', circleClockwise({x: 0, y: 0}, settings.geometry.generationMaterialRadius + 6 ) )
                     nodeLabel.append('text').attr('id', `${className}-label`)
                         .classed(`nodeLabel textOnPath material ${className}}`, true)
                         .append('textPath').attr("xlink:href", `#${className}-labelPath`)				
@@ -1611,10 +1626,10 @@
                             .text(material)
 
                     // iv. Add volume circular label
-                    const nodeVolumeLabel = generationNodes.append('g').classed('nodeVolumeLabel-group', true)
+                    const nodeVolumeLabel = materialNodeGroup.append('g').classed('nodeVolumeLabel-group', true)
                     nodeVolumeLabel.append('path').attr('id', `${className}-volume-labelPath`)
                         .classed('nodeLabelPath', true)
-                        .attr('d', circleAntiClockwise({x: nodeX, y: nodeY}, settings.geometry.generationMaterialRadius + 26 ) )
+                        .attr('d', circleAntiClockwise({x: 0, y: 0}, settings.geometry.generationMaterialRadius + 26 ) )
                     nodeVolumeLabel.append('text').attr('id', `${className}-volume-label`)
                         .classed(`nodeLabel textOnPath material ${className}}`, true)
                         .append('textPath').attr("xlink:href", `#${className}-volume-labelPath`)				
@@ -1623,9 +1638,9 @@
                             .style('letter-spacing', 2.5)         
                             .text(`${helpers.numberFormatters.formatComma1dec(value/1000000)} Mt`)
 
-
                     // c. Add Landfill links
                     const landfillValue = materialsToLandfillData.filter(d => d.materialClass === className)[0].value
+
                     if(landfillValue) {
                         landfillLinkStartX += flowScale(landfillValue) / 2        // Update the link position
                         landfillOffsetY += flowScale(landfillValue) / 2 
@@ -1700,7 +1715,7 @@
                         exportOffsetY += flowScale(exportValue) / 2 
 
                         // Append export flows
-                        exportFlows.append('path').classed(`${className} flow-link landfill`, true)
+                        exportFlows.append('path').classed(`${className} flow-link export`, true)
                             .attr('d', exportPath)
                             .attr('stroke-width', flowScale(exportValue))
                     }
@@ -1710,40 +1725,52 @@
 
             // GENERAL ANNOTATION
                 // a. Main title
-                annotationLayer.append('text').classed('vis-title', true)
+                annotationLayer.append('text')
+                    .attr('id', 'main-title')
+                    .classed('vis-title', true)
                     .text("Victorian material flow at a glance, "+settings.year)
                     .attr('x', 50)
                     .attr('y', 140)
 
                 // b. Generation totals
-                annotationLayer.append('text').classed('destination-title destination', true)
+                annotationLayer.append('text')
+                    .attr('id', 'waste-materials-label')
+                    .classed('destination-title destination', true)
                     .text("Waste materials")
                     .attr('x', 50)
                     .attr('y', settings.dims.height * 0.1)
 
                 // c. Destination annotation 
-                annotationLayer.append('text').classed('destination-title destination', true)
+                annotationLayer.append('text')
+                    .attr('id', 'waste-destination-label')
+                    .classed('destination-title destination', true)
                     .text("How materials were managed")
                     .attr('x', 50)
                     .attr('y', settings.dims.height * 0.41)
                     .attr('dy', 0)
                     .call(helpers.wrap, 500, 1, 1)
 
-                annotationLayer.append('text').classed('destination-label ', true)
+                annotationLayer.append('text')
+                    .attr('id', 'waste-to-landfill-label')
+                    .classed('destination-label ', true)
                     .attr('x', settings.dims.width * 0.10)
                     .attr('y', settings.dims.height * 0.535)
                     .attr('dy', 0)
                     .text(`${helpers.numberFormatters.formatComma1dec(totalLandfill/1000000)} Mt of waste was sent to landfill`)
                     .call(helpers.wrap,  350, 1,1)
 
-                annotationLayer.append('text').classed('destination-label ', true)
+                annotationLayer.append('text')
+                    .attr('id', 'waste-to-export-label')
+                    .classed('destination-label ', true)
                     .attr('x', settings.dims.width * 0.90)
                     .attr('y', settings.dims.height * 0.535)
                     .attr('dy', 0)
                     .text(`${helpers.numberFormatters.formatComma1dec(totalExport/1000000)} Mt of waste was exported for reprocessing`)
                     .call(helpers.wrap,  350, 1,1)
 
-                annotationLayer.append('text').classed('destination-label ', true)
+                annotationLayer.append('text')
+                    .attr('id', 'waste-to-mrf-label')
+                    .classed('destination-label ', true)
                     .attr('x', settings.dims.width * 0.5)
                     .attr('y', settings.dims.height * 0.5)
                     .attr('dy', 0)
@@ -1751,7 +1778,9 @@
                     .call(helpers.wrap,  450, 1,1)
 
                 // c. Lower scene
-                annotationLayer.append('text').classed('product-title product', true)
+                annotationLayer.append('text')
+                    .attr('id', 'waste-product-label')
+                    .classed('product-title product', true)
                     .text("Products made from recovered materials are all around us...")
                     .attr('x', 50)
                     .attr('y', settings.dims.height * 0.755)
@@ -1790,7 +1819,155 @@
                     .attr('y', settings.dims.height * 0.8)
                     .attr('dy', 0)
                     .call(helpers.wrap,  400, 1,1)
+
         };
+
+
+        ////////////////////////////////
+        // 3. ANIMATION  SEQUENCING  ///
+        ////////////////////////////////
+
+        function introSetup(settings){
+
+
+            console.log('Faded')
+        };
+
+        async function animation(settings){
+
+            const duration =  {
+                'step-1':       1200,        // Bring SVG into view
+                'step-2':       2000,       
+                'step-3':       4000,
+                'step-4':       4000,
+                'step-pause':   2000
+            }
+            let animDelay = 0
+
+
+            //////////////////////////////////////////////    
+            /// STEP 0 - SETUP ON LOAD VIEWABLE ITEMS  ///
+            //////////////////////////////////////////////   
+
+            d3.selectAll(`.flow-link, .annotation-group text, .material-node-group`)
+                .style('opacity', 0)
+
+            //////////////////////////////  
+            /// STEP 1 - INTRO REVEAL  ///
+            //////////////////////////////  
+
+            console.log('Destination scene reveal at: '+animDelay)
+
+            // Reveal entire svg
+            d3.select(`#${settings.svgID}`)
+                .transition().duration(duration['step-1'])
+                    .style('opacity', null)
+            // Animate in the total generation node
+            d3.select(`total-generation-node`)
+                .transition().duration(duration['step-1'])
+                .attr('r', settings.geometry.generationTotalRadius)
+            // Show the annotation
+            d3.select('#main-title').transition().duration(duration['step-1'])
+                .style('opacity', null)
+
+            animDelay += duration['step-1']
+
+
+            ///////////////////////////////////////////// 
+            /// STEP 2 - GENERATION COMPONENTS REVEAL ///
+            /////////////////////////////////////////////  
+
+            console.log('Generation components scene reveal at: '+animDelay)
+            setTimeout(() => {
+                // Animate in material nodes and flows
+                d3.selectAll('.material-node-group')
+                    .transition().duration(250)
+                    .delay((d, i) =>  i * 80 + 1000)
+                        .style('opacity', null)
+                // Animate flows  
+                document.querySelectorAll('.generation.flow-link')
+                    .forEach((node, i) => helpers.animatePath(node, 1500,  1000+ 80 * i) )
+                // Show the annotation
+                d3.select('#waste-materials-label').transition().duration(duration['step-2'])
+                    .style('opacity', null)
+            }, animDelay); 
+
+            animDelay += duration['step-2'] + document.querySelectorAll('.generation.flow-link').length * 200
+
+
+
+            ////////////////////////////////////////// 
+            /// STEP 3 - DESTINATION SCENE REVEAL  ///
+            //////////////////////////////////////////  
+
+            console.log('Destination scene reveal at: '+animDelay)
+
+            setTimeout(() => {
+                // Clear overlay
+                d3.selectAll('#destination-scene-overlay')
+                    .transition().duration(duration['step-3'])
+                        .style('opacity', 0)
+
+                // Show the annotation
+                d3.select('#waste-destination-label')
+                    .transition().duration(duration['step-3'])
+                    .style('opacity', null)
+
+                // Animate in landfill flows and label  
+                document.querySelectorAll('.landfill.flow-link')
+                    .forEach((node, i) => helpers.animatePath(node, 2500,  50 * i) )
+                d3.select('#waste-to-landfill-label')
+                    .transition().duration(duration['step-3'])
+                    .style('opacity', null)
+
+                // Animate in export flows and label  
+                setTimeout(() => {
+                    document.querySelectorAll('.export.flow-link')
+                        .forEach((node, i) => helpers.animatePath(node, 2500,  50 * i) )
+                    d3.select('#waste-to-export-label')
+                        .transition().duration(duration['step-3'])
+                        .style('opacity', null)
+
+                    // Animate in export flows and label  
+                    setTimeout(() => {
+                        document.querySelectorAll('.mrf.flow-link')
+                            .forEach((node, i) => helpers.animatePath(node, 2500,  50 * i) )
+                        d3.select('#waste-to-mrf-label')
+                            .transition().duration(duration['step-3'])
+                            .style('opacity', null)
+                    }, document.querySelectorAll('.export.flow-link').length * 50 + 2500)
+
+                }, document.querySelectorAll('.landfill.flow-link').length * 50 + 2500 )
+
+            }, animDelay); 
+
+            animDelay += duration['step-3']  + 4000
+
+
+            //////////////////////////////////////
+            /// STEP 4 - PRODUCT SCENE REVEAL  ///
+            //////////////////////////////////////  
+
+            console.log('Product scene reveal at: '+animDelay)
+
+            setTimeout(() => {
+                // Clear overlay
+                d3.selectAll('#product-scene-overlay')
+                    .transition().duration(duration['step-4'])
+                    .style('opacity', 0)
+                // Show the main label annotation
+                d3.select('#waste-product-label')
+                    .transition().duration(duration['step-4'])
+                    .style('opacity', null)
+                // Show each product text
+                d3.selectAll('.product-text ')
+                    .transition().duration(1000)
+                    .delay((d, i) => i * 1500 + duration['step-4'] - 1500 )
+                    .style('opacity', null)
+
+            }, animDelay); 
+        };
+
 
 
         ////////////////////////////////////
@@ -1851,6 +2028,15 @@
                         text.style("transform",  "translateY(-"+(10 * (lineNumber))+"px)")
                     }
                 })
+            },
+            animatePath: function (node, duration = 3000, delay = 3000){
+                const pathLength = node.getTotalLength()
+                d3.select(node)
+                    .style('opacity', null)
+                    .style('stroke-dasharray',  `${pathLength} ${pathLength}`)
+                    .style('stroke-dashoffset',  pathLength)
+                    .transition().duration(duration).delay(delay)
+                    .style('stroke-dashoffset', 0)
             }
         }
 
