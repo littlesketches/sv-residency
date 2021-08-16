@@ -315,7 +315,7 @@
                         label: 'Virgin glass',
                         labelXOffset: settings.dims.width * 0,
                         leaderStartYOffset: settings.dims.height * 0.15,
-                        x: settings.dims.width * 0.875 ,
+                        x: settings.dims.width * 0.80 ,
                         y: settings.dims.height * 0.825,
                         
                     }
@@ -400,10 +400,18 @@
         if (settings.queryParameters.has('date')) { 
             settings.state.date = settings.queryParameters.get('date')  
         }
+        // ii. Check for stepper
+        if(document.getElementsByClassName('stepper-container').length > 0){
+            document.querySelector('.step-current span')
+            settings.state.material = document.querySelector('.step-current span').innerHTML
+        }
+
+
     }; // end applyQuerySettings()
 
     // b. Parse/shape data for rendering
     async function parseData(settings){
+        console.log('Parsing data')
         //  Reshape data: data lists and shape by material
         const priceData = data.tables[settings.tableName]
             // Extract Date lists
@@ -443,37 +451,56 @@
     }; // end parseData()
 
     // c. Setup the dropdown interface
-    async function setupInterface(settings){
-        const dateSelector = d3.select('#date-selector').classed('vis-selector', true),
-                materialSelector = d3.select('#material-selector').classed('vis-selector', true)
-        
-        data.schema.lists.month.forEach(d => { dateSelector.append('option').attr('value', d).html(d) })
-        data.schema.lists.materials.forEach( d => { materialSelector.append('option').attr('value', d).html(d) })
+    async function setupInterface(  settings){
+        console.log('Setting up interface')
+        if(document.getElementById('date-selector')){
+            const dateSelector = d3.select('#date-selector').classed('vis-selector', true)    
+            data.schema.lists.month.forEach(d => { dateSelector.append('option').attr('value', d).html(d) })
+            document.getElementById('date-selector').value = settings.state.date = settings.state.date ? settings.state.date : data.schema.lists.month[0]
+        }
 
-        document.getElementById('date-selector').value = settings.state.date = settings.state.date ? settings.state.date : data.schema.lists.month[0]
-        document.getElementById('material-selector').value = settings.state.material = settings.state.material ? settings.state.material : data.schema.lists.materials[0]
+        if(document.getElementById('material-selector')){
+            const materialSelector = d3.select('#material-selector').classed('vis-selector', true)
+            data.schema.lists.materials.forEach( d => { materialSelector.append('option').attr('value', d).html(d) })
+            document.getElementById('material-selector').value = settings.state.material = settings.state.material ? settings.state.material : data.schema.lists.materials[0]
+        }
 
-        d3.selectAll('.vis-selector').on('change',  rebuild)
-
-        function rebuild(){
+        // Dropdown events
+        d3.selectAll('.vis-selector').on('change',  function(){
             settings.state.date = document.getElementById('date-selector').value
-            settings.state.material = document.getElementById('material-selector').value
-            const duration = 500
+            if(document.getElementById('material-selector')){
+                settings.state.material = document.getElementById('material-selector').value
+            }
+            rebuild()
+        })
 
+        // Stepper events
+        if(document.querySelector('.stepper-container')){
+            d3.selectAll('.step-item').on('click', function(){
+                settings.state.material = this.children[0].children[0].innerHTML
+                d3.selectAll('step-item').classed('step-current', false)
+                d3.select(this).classed('step-current', true)
+            
+                rebuild()
+            })
+        }
+
+    }; // end setupInterface()
+
+    function rebuild(){
+        const duration = 500
+        d3.select(`#${settings.svgID}`)
+            .transition().duration(duration * 0.5)
+            .style('opacity', 0)
+
+        setTimeout(() => {
+            d3.selectAll(`#${settings.svgID} *`).remove()
+            buildVis(settings)
             d3.select(`#${settings.svgID}`)
                 .transition().duration(duration * 0.5)
-                .style('opacity', 0)
-
-            setTimeout(() => {
-                d3.selectAll(`#${settings.svgID} *`).remove()
-                buildVis(settings)
-                d3.select(`#${settings.svgID}`)
-                    .transition().duration(duration * 0.5)
-                    .style('opacity', null)
-            }, duration * 0.5);
-
-        }
-    }; // end setupInterface()
+                .style('opacity', null)
+        }, duration * 0.5);
+    }
 
     // d. Build the diagram
     async function buildVis(settings){
@@ -614,6 +641,8 @@
             .attr('x', settings.geometry.price[settings.state.material]['Virgin'].labelPos.x )
             .attr('y', settings.geometry.price[settings.state.material]['Virgin'].labelPos.y )
             .text(settings.geometry.price[settings.state.material]['Virgin'].label)
+
+
 
 
     }; // end buildVis()
