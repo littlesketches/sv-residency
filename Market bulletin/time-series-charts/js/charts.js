@@ -44,7 +44,6 @@ chart.methods.misc.applyQuerySettings = async (settings) => {
 
 //  SERIES LINE AND AREA CHART WITH CONTEXT WINDOW
 chart.methods.seriesContext.renderChart = async(settings) => {
-
     //------------------- 0. SETUP CHART TYPE, DIMENSIONS, REFERENCES AND DATA OBJECTS -------------------------//
         // a. Setup reference variables including the individual chart object (Ids are used for multi-chart pages)
         const chartType = settings.config.chartType,
@@ -867,7 +866,7 @@ function buildFromGSheetData(config) {
         data_mrfOutput:             'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=549382680&single=true&output=tsv',
         data_materialsVicExport:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=612803144&single=true&output=tsv',
         data_commodityValues:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=1635331988&single=true&output=tsv'
-        }
+    }
     const tablesToLoad = Object.keys(gsTableLinks)
     let noLoadedTables = 0
 
