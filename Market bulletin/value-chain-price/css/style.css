@@ -150,3 +150,112 @@
     .price-label{
         dominant-baseline: hanging;
     }
+
+
+/****************************************/
+/*** HTML STEPPER NAVIGATION STYLING  ***/
+/****************************************/
+
+    .stepper-container {
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto 2rem auto;
+        width: 100%;
+        border-top: solid var(--charcoal) 2px;
+        font-size: 2vw;
+    }
+    .stepper-container nav {
+        text-align: center;
+        background: #fff;
+    }
+    .stepper-container nav ul {
+        position: relative;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: flex;
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+        -ms-box-orient: horizontal;
+        -ms-box-pack: center;
+        -webkit-flex-flow: row wrap;
+        -moz-flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        justify-content: center;
+        align-items: center;
+    }
+    .stepper-container nav ul li {
+        position: relative;
+        z-index: 1;
+        display: block;
+        margin: 0;
+        text-align: center;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        cursor: pointer;
+    }
+    .stepper-container nav a {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 2.5;
+    }
+    .stepper-container nav a span {
+        vertical-align: middle;
+    }
+    .stepper-container nav a:focus {
+        outline: none;
+    }
+    .stepper-container nav li:last-child::before {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--tertiaryEmerald);
+        content: '';
+        -webkit-transition: -webkit-transform 0.3s;
+        transition: transform 0.3s;
+    }
+    /* Stepper underline */
+    .stepper-container nav li:first-child.step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-300%,0,0);
+        transform: translate3d(-300%,0,0);
+    }
+    .stepper-container nav li:nth-child(2).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-200%,0,0);
+        transform: translate3d(-200%,0,0);
+    }
+    .stepper-container nav li:nth-child(3).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-100%,0,0);
+        transform: translate3d(-100%,0,0);
+    }
+    /* .stepper-container nav li:nth-child(4).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-100%,0,0);
+        transform: translate3d(-100%,0,0);
+    } */
+    .stepper-container nav a {
+        padding: 0.75rem 0.2rem 1.25rem 0.2rem;
+        line-height: 1;
+        -webkit-transition: color 0.3s, -webkit-transform 0.3s; 
+        transition: color 0.3s, transform 0.3s;
+        font-weight: 400;
+    }
+    .stepper-container nav li.step-current a {
+        -webkit-transform: translate3d(0,8px,0);
+        transform: translate3d(0,8px,0);
+    }
+    @media screen and (max-width: 58em) {
+        .stepper-container nav a:before {
+            margin-right: 0;
+        }
+    }
