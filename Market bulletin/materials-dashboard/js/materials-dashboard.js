@@ -226,8 +226,12 @@
                     .html(helpers.timeFormat.toMonthYear(date))
             })
         // Set the dropdown to match the settings and passed in query string
-        document.getElementById('materials-selector').value = state.material 
-        document.getElementById('date-selector').value = state.date.volume 
+        if(document.getElementById('materials-selector')){
+            document.getElementById('materials-selector').value = state.material 
+        }
+        if(document.getElementById('date-selector')){
+            document.getElementById('date-selector').value = state.date.volume 
+        }    
         // Set a slug material class on the main container for specific layout changes
         d3.select('main.main-container').classed(helpers.slugify(state.material), true)
     };
@@ -700,13 +704,20 @@
 
     // Update the dashboard data for material and/or date selection
     async function updateDashboard(){
-        const material = document.getElementById('materials-selector').value
-            date = document.getElementById('date-selector').value
-        state.material = material
-        state.date.volume = date
-        state.date.price = date
-        state.date.export = date
-            d3.select('.main-container').attr('class', `main-container ${helpers.slugify(state.material)}`)
+        if(document.getElementById('materials-selector')){
+            state.material =  document.getElementById('materials-selector').value
+        }
+        if(document.getElementById('date-selector')){
+            state.date.volume = document.getElementById('date-selector').value
+            state.date.price = document.getElementById('date-selector').value
+            state.date.export = document.getElementById('date-selector').value
+        }
+
+    if(d3.select('.main-container').classed('single-component')){
+        d3.select('.main-container').attr('class', `main-container single-component ${helpers.slugify(state.material)}`)
+    } else {
+        d3.select('.main-container').attr('class', `main-container ${helpers.slugify(state.material)}`)
+    }
 
         await buildDashboard()
     };
