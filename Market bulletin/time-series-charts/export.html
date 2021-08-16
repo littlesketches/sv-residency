@@ -13,13 +13,23 @@
     </head>
 
     <body>
-        <h1 class = "chart-header">Exported recovered materials of all types</h1>
+        <h1 class = "chart-header">Exported recovered materials</h1>
         <div class = "chart-container">
             <div class = "chart-sub-header">
                 Volume exported by country each month between <span id="fromDate-subheader"></span> and <span id="toDate-subheader"></span>
             </div>
         </div>
-
+        <div class="stepper-container">
+            <nav class = "stepper-nav">
+                <ul>
+                    <li id="step-1" class ="step-item step-current"><a><span value='All collected materials'>All materials</span></a></li>
+                    <li id="step-1" class ="step-item"><a><span value='Paper and paperboard'>Paper and paperboard</span></a></li>
+                    <li id="step-2" class ="step-item"><a><span value='Glass packaging'>Glass packaging</span></a></li>
+                    <li id="step-3" class ="step-item"><a><span value='Plastic packaging'>Plastic packaging</span></a></li>
+                    <li id="step-4" class ="step-item"><a><span value='Metal packaging'>Metal packaging</span></a></li>
+                </ul>
+            </nav>
+        </div><!-- /tabs -->
         <div class="chart-container">
             <svg id = "chart-export-main"></svg>
             <div class="context-chart-title">Historical data: use the interactive time window below to change the data range of the main chart.</div>
@@ -28,12 +38,15 @@
         
         <script>
             // Chart settings and configuration object
+
             const settings = {   
                 data: {
                     source:             'GS',
                     tableName:          'data_materialsVicExport',
                     gsTableLinks:   {
+                        data_mrfOutput:             'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=549382680&single=true&output=tsv',
                         data_materialsVicExport:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=612803144&single=true&output=tsv',
+                        data_commodityValues:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=1635331988&single=true&output=tsv'
                     }
                 },
 
@@ -57,6 +70,13 @@
                 },
                 group:              'All collected materials',                          // b. Materials group as named in the source data header (after the '_') : ['All collected materials, Paper and Paperboard, Glass packaging, Plastic packaging, Metal packaging]
                 series:             ['Indonesia', 'Malaysia', 'Korea', 'India', 'Pakistan', 'China', 'All other countries'],      // c. Names of the data series in the source data header (before the '_') 
+                seriesByMaterial: {
+                    'All collected materials':  ['Indonesia', 'Malaysia', 'Korea', 'India', 'Pakistan', 'China', 'All other countries'],
+                    'Paper and paperboard':     ['Indonesia', 'Thailand', 'Vietnam', 'Malaysia', 'India', 'Korea', 'All other countries'],
+                    'Glass packaging':          ['Malaysia', 'Bangladesh'],
+                    'Plastic packaging':        ['Indonesia', 'Vietnam', 'Malaysia', 'Taiwan', 'China', 'All other countries'],
+                    'Metal packaging':          ['Indonesia', 'Thailand', 'India', 'Taiwan', 'Korea', 'All other countries']
+                },
                 labelOffset: {  
                     x: 20, 
                     y: 0
@@ -85,6 +105,31 @@
             async function buildVis(config){
                 await chart.methods.misc.applyQuerySettings(config)     // a.  Update (default) settings that might be set from query string
                 await chart.methods.seriesContext.renderChart(config)     // c. Render the chart specifying
+            };
+
+            // Add stepper interface to re-render charts by material
+            d3.selectAll('.step-item')
+                .on('click', function(){
+                    d3.selectAll('.step-item').classed('step-current', false)
+                    d3.select(this).classed('step-current', true)
+                    settings.group = this.children[0].children[0].getAttribute('value')
+                    settings.series = settings.seriesByMaterial[this.children[0].children[0].getAttribute('value')]
+                    rebuild(settings)
+                })
+
+            function rebuild(config){
+                const duration = 500
+                d3.selectAll(`#${config.svgID}, #${config.contextSvgID}`)
+                    .transition().duration(duration * 0.5)
+                    .style('opacity', 0)
+
+                setTimeout(() => {
+                    d3.selectAll(`#${config.svgID} *, #${config.contextSvgID} *`).remove()
+                    chart.methods.seriesContext.renderChart(config) 
+                    d3.selectAll(`#${config.svgID}, #${config.contextSvgID}`)
+                        .transition().duration(duration * 0.5)
+                        .style('opacity', null)
+                }, duration * 0.5);
             };
         </script>
     </body>
