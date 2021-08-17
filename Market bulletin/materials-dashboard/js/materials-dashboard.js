@@ -122,6 +122,7 @@
             state.material = settings.queryParameters.get('material')  
             d3.selectAll('.materials-option').style('display', 'none')
             d3.select('#flow-header').html(`Kerbside collected ${state.material.toLowerCase()} data`)
+            d3.select('#export-header').html(`${state.material} export data trends`)
         }
     };
 

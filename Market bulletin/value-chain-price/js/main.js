@@ -475,10 +475,10 @@
         })
 
         // Stepper events
-        if(document.querySelector('.stepper-container')){
+        if(document.querySelectorAll('.step-item').length > 0){
             d3.selectAll('.step-item').on('click', function(){
                 settings.state.material = this.children[0].children[0].innerHTML
-                d3.selectAll('step-item').classed('step-current', false)
+                d3.selectAll('.step-item').classed('step-current', false)
                 d3.select(this).classed('step-current', true)
             
                 rebuild()

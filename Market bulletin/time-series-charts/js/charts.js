@@ -472,6 +472,8 @@ chart.methods.seriesContext.renderChart = async(settings) => {
             .on('mousemove', showChartTooltip)
             .on('mouseleave', hideChartTooltip)
 
+    let totalLineWidth, totalLineWidthSet = false   // Variables to set totals divider line once
+
     // b. Prepare tooltip elements ()
         // Tooltip background (beneath text to improve legibility when tooltip covers part of the data)
         tooltipGroup.append('rect').attr('id', `${svgID}-tooltip-bg`)
@@ -487,7 +489,8 @@ chart.methods.seriesContext.renderChart = async(settings) => {
 
         // Slicer month label
         tooltipElements.append('text').attr('id',`${svgID}-tooltip-slicer-month-label`)
-            .classed('tooltip-slicer-header tooltip-element', true)   
+            .classed('tooltip-slicer-header tooltip-element', true)  
+
         // Slicer series data circle and label
         Object.entries(chartObj.series).forEach( ([index, obj]) => {
             const seriesName = Object.keys(obj)[0], values = Object.values(obj)[0]
@@ -587,18 +590,25 @@ chart.methods.seriesContext.renderChart = async(settings) => {
                 .attr('x', `${chartObj.scales.xFocus(closestDataPoint)} `) 
                 .attr('y', `${settings.dims.margin.top + 28 + 17 * seriesRank}`) 
                 .text(`${helpers.numberFormatters.formatComma(values[closestIndex].value)} tonnes`)
-                // Make dots bigger
+            // Make dots bigger
             const selection = document.querySelectorAll(`.data-point.${helpers.slugify(seriesName)}`)
             d3.select(selection[closestIndex]).attr('r', chartObj.state.dataPointRadius * 2)
         })
+
         // Update the total line if there are more than one series shown
-        if(chartObj.series.length > 1){    
+        if(chartObj.series.length > 1){  
+            // Set a total line width (rather than recalc on mouse movement)
+            if(!totalLineWidthSet || tooltipElements.node().getBBox().width < totalLineWidth){
+                totalLineWidth  = tooltipElements.node().getBBox().width
+                totalLineWidthSet = true
+            }
+            // Setup the tooltip
             d3.select(`#${svgID}-total-tooltip-series-divider`)     
-                .attr('d', `M${chartObj.scales.xFocus(closestDataPoint) + 20}, ${totalYpos - 2} h${tooltipElements.node().getBBox().width - 10}`)
+                .attr('d', `M${chartObj.scales.xFocus(closestDataPoint) + 20}, ${totalYpos - 2} h${totalLineWidth - 10}`)
             d3.select(`#${svgID}-total-tooltip-series-label`)
-                .attr('x', `${chartObj.scales.xFocus(closestDataPoint) + 20} `) 
+                .attr('x', `${chartObj.scales.xFocus(closestDataPoint) + 20}`) 
             d3.select(`#${svgID}-total-tooltip-value-label`)
-                .attr('x', `${chartObj.scales.xFocus(closestDataPoint)} `) 
+                .attr('x', `${chartObj.scales.xFocus(closestDataPoint)}`) 
                 .text(`${helpers.numberFormatters.formatComma(monthTotal)} tonnes`) 
         }
         // Set position of values group (offset from BBox of labels)
@@ -861,6 +871,9 @@ chart.methods.seriesContext.renderChart = async(settings) => {
 
 // Loading function 
 function buildFromGSheetData(config) {
+    // Hide charts for reveal
+    d3.selectAll('.chart-container').style('opacity', 0)     
+    
     // Data table links for each table used from same Google Sheet
     const gsTableLinks =  {
         data_mrfOutput:             'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=549382680&single=true&output=tsv',
@@ -882,6 +895,10 @@ function buildFromGSheetData(config) {
                 // Call to buildVis after all tables are loaded and parsed
                 if(noLoadedTables === tablesToLoad.length){
                     await buildVis(config)
+                    // Reveal chart
+                    d3.selectAll('.chart-container')
+                        .transition().duration(800)
+                        .style('opacity', null)     
                 }
             }
         })
