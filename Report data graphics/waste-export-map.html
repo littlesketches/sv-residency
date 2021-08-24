@@ -6,7 +6,6 @@
     <meta name="description" content="Victorian recovered material export map">
     <meta name="author" content="Sustainability Victoria">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://d3js.org/topojson.v2.min.js"></script>
     <style>
         /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -257,7 +256,7 @@
             Promise.all([
                 d3.tsv(gsTableLinks.exportWasteData),
                 d3.json('data/world-110m.json'),			   // a. World map
-                d3.json('data/states.geojson.txt')			   // b. Australian stats
+                d3.json('data/states.geojson.txt')			   // b. Australian states
             ]).then( rawData => {
                 // 3. Parse each loaded data table and store in data.table object, using the parseTable helper 
                 parseTable('exportWasteData', rawData[0])
