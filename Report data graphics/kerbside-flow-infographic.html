@@ -5,8 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Kerbside waste flow infographic">
         <meta name="author" content="Sustainability Victoria">
-        <script src="https://d3js.org/d3.v6.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
         <style>
             /* COLOUR PALETTES */
             :root {
@@ -20,18 +19,34 @@
                 --secondaryGreyLight:            #CFCFCF;
                 --secondaryGreyLightest:         #ECECEC;
                 /** TERTIARY PALETTE **/
-                --tertiaryPurple:       #51284F;
-                --tertiaryPurpleLight:  #8276B3;
-                --tertiaryRed:          #E04F39;
-                --tertiaryRedLight:     #F78684;
-                --tertiaryYellow:       #EFC041;
-                --tertiaryYellowLight:  #F5E065;
-                --tertiaryCard:         #B39981;
-                --tertiaryCardLight:    #DCBFA6;
-                --tertiaryEmerald:      #009E71;
-                --tertiaryEmeraldLight: #93CCB9;
-                --tertiaryBlue:         #005E88;
-                --tertiaryBlueLight:    #A0D6E9;
+                --tertiaryPurple:               #51284F;
+                --tertiaryPurpleLight:          #8276B3;
+                --tertiaryRed:                  #E04F39;
+                --tertiaryRedLight:             #F78684;
+                --tertiaryYellow:               #EFC041;
+                --tertiaryYellowLight:          #F5E065;
+                --tertiaryCard:                 #B39981;
+                --tertiaryCardLight:            #DCBFA6;
+                --tertiaryEmerald:              #009E71;
+                --tertiaryEmeraldLight:         #93CCB9;
+                --tertiaryBlue:                 #005E88;
+                --tertiaryBlueLight:            #A0D6E9;
+                /*** EXTENDED PALETTE  ***/
+                --xLightestPurple:              #A59DC8;     
+                --xOrange:                      #feb076;     
+                --xLime:                        #BBCC66;     
+                --xGreen:                       #66CCAC;     
+                --xBlueCyan:                    #94E1EC;     
+                --xMidBlue:                     #48B5EB;     
+                --xMagenta:                     #d780c3;     
+                --xCharcoal:                    #36454F; 
+                --xDarkOrange:                  #863F13; 
+                --xDarkLime:                    #77862D;     
+                --xDarkYellow:                  #A57A0E; 
+                --xDarkCard:                    #6F5843; 
+                --xDarkBlueCyan:                #177283; 
+                --xDarkMagenta:                 #73264C; 
+                --darkGrey:                     rgb(100, 100, 100);
             }
 
         /***************************************/
@@ -148,7 +163,7 @@
                 mix-blend-mode: darken;
             }
             .shadow.recycling{
-                fill: #A9871C;
+                fill: var(--xDarkYellow);
             }
             /************************************/
             /**** STREET SCENE WASTE GRAPHIC  ***/
@@ -168,8 +183,6 @@
             .lga-stream-title{   
                 fill: var(--secondaryBottleGreen);
                 fill: #000;
-                /* stroke: #000; */
-                /* stroke-width: 0.75px; */
                 font-weight: 500;
                 text-transform: uppercase;
             }
@@ -187,17 +200,37 @@
                 stroke: #000;
                 stroke-width: 0.5px;
             } 
-            .recycling-breakdown.paper{
-                fill: var(--secondaryBottleGreenLight);
+            .paper,
+            .paper-and-cardboard{
+                fill: var(--xBlueCyan );
             }
-            .recycling-breakdown.plastic{
+            .recycling-breakdown-material-label.paper,
+            .recycling-breakdown-material-label.paper-and-cardboard{
+                fill: var(--xDarkBlueCyan);
+            }
+            .plastics{
+                fill: var(--tertiaryYellow);
+            }
+            .recycling-breakdown-material-label.plastics{
+                fill: var(--xDarkYellow);
+            }
+            .metals{
+                fill: var(--xMidBlue);
+            }
+            .recycling-breakdown-material-label.metals{
                 fill: var(--tertiaryBlue);
             }
-            .recycling-breakdown.metal{
-                fill: var(--tertiaryBlueLight);
-            }
-            .recycling-breakdown.glass{
+            .glass{
                 fill: var(--tertiaryPurpleLight)
+            }
+            .recycling-breakdown-material-label.glass{
+                fill: var(--tertiaryPurple);
+            }
+            .contaminants{
+                fill: var(--tertiaryRed);
+            }
+            .recycling-breakdown-material-label.contaminants{
+                fill: var(--tertiaryRed);
             }
             .flowPath{
                 stroke-linejoin: round;
@@ -386,7 +419,7 @@
                             <circle fill="#008848" fill="#cfa"   cx="269.364" cy="152.865" r="11.612" />
                         </g>
                         <path class="road" fill="#7991A9" fill="#486a80" d="M374.419 172.093c-113.113-4.992-327.493-4.896-417.079.525l-.175 2.8 417.429-.524z"/>
-                        <rect class="foreground-grass" fill="#CED99E" fill="#9bc2a2" width="600" height="400" x="-42.8" y="174.622"/>
+                        <rect class="foreground-grass" fill="#D5E0A1" width="600" height="400" x="-42.8" y="174.622"/>
                         <rect id="footpath"  fill="#cea98d" fill="#c4c09f" width="600" height="3.799" x="-42.8" y="178.042"/>
                     </g>
 
@@ -452,9 +485,9 @@
                         </clipPath>
                     </defs>
                     <path class = "sky" fill="#d7f4ee" d="M-388.285 204C298.443-82.731 945.97-65.578 1595.258 204v375.633H-388.285z"/>
-                    <path class = "ground" fill="#CED99E" d="M458.211 513.585h416.948v60.923H458.211z"/>
-                    <path class = "foreground-grass" fill="#CED99E" d="M-388.776 579.613c277.38-170.866 617.885-172.25 854.673-154.826-.601 27.529 14.06 149.008 14.06 149.008z"/>
-                    <path class = "foreground-grass" fill="#CED99E" d="M1591.542 598.231c-257.8-114.563-325.884-189.535-877.28-173.444.6 27.529-16.28 129.386-14.06 149.008 299.705 4.497 591.637 19.829 891.34 24.436z"/>
+                    <path class = "ground" fill="#D5E0A1" d="M458.211 513.585h416.948v60.923H458.211z"/>
+                    <path class = "foreground-grass" fill="#D5E0A1" d="M-388.776 579.613c277.38-170.866 617.885-172.25 854.673-154.826-.601 27.529 14.06 149.008 14.06 149.008z"/>
+                    <path class = "foreground-grass" fill="#D5E0A1" d="M1591.542 598.231c-257.8-114.563-325.884-189.535-877.28-173.444.6 27.529-16.28 129.386-14.06 149.008 299.705 4.497 591.637 19.829 891.34 24.436z"/>
                     <path fill="#668000" d="M147.66 433.268c45.087 20.51 45.773 66.02 171.067 12.547 111.378-33.595-2.914-29.678-171.067-12.547z"/>
                     <g>
                         <path class = "road" fill="#7991A9" d="M159.247 444.127c-216.63 55.61-321.793 120.665-113.632 127.82l655.655-8.99c145.413 1.444 341.293-1.026 516.892 9.83 133.563-10.114-81-106.958-166.028-129.528l55.3-2.07c152.067 21.515 373.91 142.08 118.475 139.453l-1245.321 4.154c-3.003-.622-369.142 6.358-369.142 6.358l.26-5.525s227.095-12.048 331.27-3.861c-211.381-32.989-115.417-54.64 159.778-139.375z"/>
@@ -733,7 +766,7 @@
                     </defs>
                     <g>
                         <rect id = "council-sky" width="800" height="130" x="-30.096" y="50" fill="#d8f4ee"/>
-                        <rect id = "council-grass"  width="800" height="30" x="-30.096" y="170.365" fill="#ced8a1" />
+                        <rect id = "council-grass"  width="800" height="30" x="-30.096" y="170.365" fill="#D5E0A1" />
                         <path id = "council-road" fill="#7a92a8" d="M-30.096 190.536l503.398-1.32-.22-3.077c-7.154-.11-263.976-.495-283.139-1.718-15.011-.957-34.662-14.582-43.561-14.44-2.057.033-15.66-.72-15.1.364 1.712 3.319 23.28 15.742 5.038 16.046-57.588.958-110.235-.278-167.295 1.067z"/>
                     </g>
                     <g id = "council-building-group")">
@@ -949,33 +982,49 @@
             }
         }
 
-        const gsTableLinks =   {
-            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
-            kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
-        }
+
 
         // Build from GSheet data
-        buildFromGSheetData(gsTableLinks)
+        buildFromGSheetData(settings)
 
-        function buildFromGSheetData(gsTableLinks) {
-            let noLoadedTables = 0
-            const tablesToLoad = Object.keys(gsTableLinks)
-            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-                Papa.parse(tableURL,  {
-                    delimiter: '\t',
-                    download: true,
-                    header: true,
-                    complete: async (results) => {
-                        data.table[tableName] = results.data
-                        noLoadedTables++
-                        if(noLoadedTables === tablesToLoad.length){
-                            await applyQuerySettings(settings)                                                       // 1. Update settings if a query string is passed in
-                            await parseData(data.table.kerbsideData   , data.table.kerbsideComposition)              // 2. Parse data
-                            await renderVis(data.table.kerbsideData, data.table.kerbsideComposition, settings)       // 3. Render visualisation(s)
+        function buildFromGSheetData(settings) {
+            // 1. Specify data table links for each table used (tsv published output from each separate sheet/table)
+            const gsTableLinks =   {
+                kerbsideCollectionData:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+                kerbsideComposition:            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=1848611910&single=true&output=tsv',
+            }
+
+            // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+            Promise.all(
+                Object.values(gsTableLinks).map(link => d3.tsv(link))       // Pass in array of d3.tsv loaders with each link
+            ).then( rawData => {
+                // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
+                rawData.forEach((tableData, i) => {  parseTable(Object.keys(gsTableLinks)[i], tableData) })
+                return data
+
+            }).then( async (data) => {
+                // 3. Initiate vis build sequence with data now loaded
+                await applyQuerySettings(settings)                                                       // a. Update settings if a query string is passed in
+                await transformData(data.table.kerbsideCollectionData   , data.table.kerbsideComposition)              // b. Parse data
+                await renderVis(data.table.kerbsideCollectionData, data.table.kerbsideComposition, settings)       // c. Render visualisation(s)
+            })
+
+            // X. Table data parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
+            const parseTable = (tableName, tableData) => {
+                data.table[tableName] = tableData.map(row => {
+                    const newObj = {}
+                    Object.entries(row).forEach(([key, value]) => {
+                        switch(key.trim().toLowerCase()){
+                            case 'year':
+                                newObj[key.trim()] =  value
+                                break     
+                            default:
+                                newObj[key.trim()] = isNaN(parseFloat(value.replace(/\$|,/g, ''))) ? value : parseFloat(value.replace(/\$|,/g, '')) 
                         }
-                    }
+                    })
+                    return newObj
                 })
-            }                       
+            };                
         };
 
 
@@ -991,23 +1040,8 @@
             }
         };
 
-        async function parseData(kerbsideData, recycleBinData) {      
-            // 1. Parse numeric data types to number
-            kerbsideData.forEach(d => {
-                Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
-                    } 
-                })
-            })
-            recycleBinData.forEach(d => {
-                Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
-                    } 
-                })
-            })
-            // 2. Extract lists
+        async function transformData(kerbsideData, recycleBinData) {      
+            // 1. Extract lists
             data.schema.list.year =   [...new Set(kerbsideData.map( d => d.year))]
             data.schema.list.kerbsideRecycleMaterials =   [...new Set(recycleBinData.map( d => d.material))]
             data.schema.list.kerbsideRecycleMaterialGroups =   [...new Set(recycleBinData.map( d => d.group))]
@@ -1326,7 +1360,7 @@
                             .classed(`recycling-breakdown-material-label ${materialSlug}`, true) 
                             .attr('transform', material !== 'Contaminants' ?  `translate(${0} , ${(cumulativeProp + clipHeight /2) * recycleBinScale})`  :  `translate(${70} , ${iconHeight * iconScale - 10 })` )
                             .text(`${material}: ${helpers.numberFormatters.formatPct1dec(materialProp)}`) 
-                            .style('font-weight', material !== 'Contaminants' ? null : 'bold' )
+                            .style('font-weight', material !== 'Contaminants' ? null : 500 )
 
                         cumulativeProp += clipHeight     // Update cumulative position for label
                     })

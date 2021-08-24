@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <meta name="description" content="Victorian recovered material export map">
+    <meta name="author" content="Sustainability Victoria">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -123,7 +122,7 @@
         }
         .total-exports-vol{
             font-size: 16px;
-            font-weight: 700;  
+            font-weight: 800;  
             text-anchor: end;
         }
         .total-material-name{
@@ -176,14 +175,14 @@
         }
         .info-page-header{
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 500;
         }
         .info-page-subheader{
-            font-size: 8px;
+            font-size: 10px;
         }
         .country-total-vol{
             font-size: 10px;
-            font-weight: bold;
+            font-weight: 500;
         }
         .country-total-vol,
         .country-material-vol,
@@ -192,13 +191,12 @@
         }
         .country-list-name{
             font-size: 10px;
-            font-weight: bold;
+            font-weight: 500;
         }
         .country-material-vol,
         .country-material-name{
-            font-size: 6.5px;
+            font-size: 8px;
         }
-
   </style>
 </head>
 
@@ -237,6 +235,7 @@
                 },
             }
         }
+
         const data = {
             table:      {},
             schema: {
@@ -246,40 +245,47 @@
             inputData: {}
         }
 
-        const gsTableLinks =   {
-            byMaterialExport:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
-        }
-
         // Build from GSheet data
-        buildFromGSheetData(gsTableLinks)
+        buildFromGSheetData(settings)
 
-        function buildFromGSheetData(gsTableLinks) {
-            let noLoadedTables = 0
-            const tablesToLoad = Object.keys(gsTableLinks)
-            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-                Papa.parse(tableURL,  {
-                    delimiter: '\t',
-                    download: true,
-                    header: true,
-                    complete: async (results) => {
-                        data.table[tableName] = results.data
-                        noLoadedTables++
-                        if(noLoadedTables === tablesToLoad.length){
-                            await applyQuerySettings(settings)                // 1. Update settings if a query string is passed in
-                            await parseData(data.table.byMaterialExport)      // 2. Parse data used in visualisation
-                            Promise.all([		                              // 3. Load map data and call render map function | // Use Promise.all to load multiple data files
-                                d3.json('data/world-110m.json'),			   // a. World map
-                                d3.json('data/states.geojson.txt'),			   // b. Australian stats
-                            ]).then( mapData => {
-                                renderMap(settings, mapData[0], mapData[1])	  // 4. Renders map and export data annotation
-                            });
+        function buildFromGSheetData(settings) {
+            // 1. Specify data table links for each table used (tsv published output from each separate sheet/table)
+            const gsTableLinks =   {
+                exportWasteData:               'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=660443265&single=true&output=tsv',
+            }
+            // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+            Promise.all([
+                d3.tsv(gsTableLinks.exportWasteData),
+                d3.json('data/world-110m.json'),			   // a. World map
+                d3.json('data/states.geojson.txt')			   // b. Australian stats
+            ]).then( rawData => {
+                // 3. Parse each loaded data table and store in data.table object, using the parseTable helper 
+                parseTable('exportWasteData', rawData[0])
+                return rawData
+            }).then( async (rawData) => {
+                // 4. Initiate vis build sequence with data now loaded
+                await applyQuerySettings(settings)                      // a. Update settings if a query string is passed in
+                await parseData(data.table.exportWasteData)             // b. Parse data used in visualisation
+                await renderMap(settings, rawData[1], rawData[2])	    // c. Renders map and export data annotation
+            })
+
+            // X. Table data parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
+            const parseTable = (tableName, tableData) => {
+                data.table[tableName] = tableData.map(row => {
+                    const newObj = {}
+                    Object.entries(row).forEach(([key, value]) => {
+                        switch(key.trim().toLowerCase()){
+                            case 'year':
+                                newObj[key.trim()] =  value
+                                break     
+                            default:
+                                newObj[key.trim()] = isNaN(parseFloat(value.replace(/\$|,/g, ''))) ? value : parseFloat(value.replace(/\$|,/g, '')) 
                         }
-                    }
+                    })
+                    return newObj
                 })
-            }                       
+            };   
         };
-
-
 
 
         /////////////////////////////////////////////
@@ -296,22 +302,15 @@
 
         // Parse input data for export volumes by country
         async function parseData(exportData){
-            // 1. Parse numeric data types to number
-            exportData.forEach(d => {
-                Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
-                    } 
-                })
-            })
-            // 2. Extract lists 
-            data.schema.list.country = [...new Set(exportData.sort((a, b) => (a.Total < b.Total) ? 1 : -1).map(d => d.Destination).filter(d => d !== 'Others'))]            // Sort ensures list is ranked by total
+            // 1. Extract lists 
+            const yearData = exportData.filter(d => d.year === settings.year)
+            data.schema.list.country = [...new Set(yearData.sort((a, b) => (a.Total < b.Total) ? 1 : -1).map(d => d.Destination).filter(d => d !== 'Others'))]            // Sort ensures list is ranked by total
             data.schema.list.country.push('Others')               // 'Others' back  to end of array'                                                 
-            data.schema.list.materials = Object.keys(exportData[0]).filter(d => d !== "year" && d !== "Destination" && d !== 'Total' && d !== 'exPathOffsetX' && d !== 'exPathOffsetY')      // Materials are in order of how they are in the raw data (i.e. change column order in data to re-order in vis)
+            data.schema.list.materials = Object.keys(yearData[0]).filter(d => d !== "year" && d !== "Destination" && d !== 'Total' && d !== 'exPathOffsetX' && d !== 'exPathOffsetY'  && d !== 'endOffsetX' && d !== 'endOffsetY')      // Materials are in order of how they are in the raw data (i.e. change column order in data to re-order in vis)
 
-            // 3. Shape data by export country
+            // 2. Shape data by export country
             data.schema.list.country.forEach(country => {
-                exportData.forEach(d => {
+                yearData.forEach(d => {
                     if(d.Destination === country){
                         data.byExportCountry[country] = d
                     }
@@ -322,8 +321,7 @@
         }; // end parseData()
 
         // Render the map visualisation, using the map shape data and parse export data 
-        function renderMap(settings, worldShapeData, statesShapeData){
-
+        async function renderMap(settings, worldShapeData, statesShapeData){
             // 1. SPECIFY LAYOUT GROUPS: Layers appended in rendering order
             const svg = d3.select(`#${settings.svgID}`).attr('viewBox', `0 0 ${settings.dims.width} ${settings.dims.height}`),
                 mapGroup = svg.append('g').classed('map-group', true),
@@ -381,13 +379,14 @@
                 vic_cy =  vicBBox.y + vicBBox.height/2
 
             data.schema.list.country.filter(d => d !== 'Others').forEach( country => {
+console.log(country, data.byExportCountry[country].endOffsetX, data.byExportCountry[country].endOffsetY)
                 const countryBBox = d3.select(`#${helpers.slugify(country)}`).node().getBBox(),
-                    country_cx = countryBBox.x + countryBBox.width /2,
-                    country_cy = countryBBox.y + countryBBox.height/2,
+                    country_cx = countryBBox.x + countryBBox.width / 2 + data.byExportCountry[country].endOffsetX,
+                    country_cy = countryBBox.y + countryBBox.height/ 2 + data.byExportCountry[country].endOffsetY,
                     exportLinkCoords = [ 
                         {x: vic_cx-2,     y: vic_cy + 10},
                         {x: d3.mean([vic_cx, country_cx]) + data.byExportCountry[country].exPathOffsetX, y: d3.mean([vic_cy, country_cy]) + data.byExportCountry[country].exPathOffsetY },
-                        {x: country_cx, y: country_cy}
+                        {x: country_cx , y: country_cy }
                     ],
                     exportTotalVol = data.byExportCountry[country].Total
 
@@ -405,7 +404,7 @@
                     .attr('transform', `translate(${country_cx}, ${country_cy + 6 })`)
                     .text(helpers.numberFormatters.formatPct1dec(data.byExportCountry[country].Total / totalExports))
 
-                // c. AddExport path from Vic
+                // c. Add Export path from Vic
                 exportPaths.append('path').classed(`export-connector ${helpers.slugify(country)}`, true)
                     .attr('d', exportPathGenerator(exportLinkCoords))  
                     .style('stroke-width', exportPathScale(exportTotalVol))

@@ -5,8 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Waste annual report graphic">
         <meta name="author" content="Sustainability Victoria">
-        <script src="https://d3js.org/d3.v6.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -20,18 +19,35 @@
                 --secondaryGreyLight:            #CFCFCF;
                 --secondaryGreyLightest:         #ECECEC;
                 /** TERTIARY PALETTE **/
-                --tertiaryPurple:       #51284F;
-                --tertiaryPurpleLight:  #8276B3;
-                --tertiaryRed:          #E04F39;
-                --tertiaryRedLight:     #F78684;
-                --tertiaryYellow:       #EFC041;
-                --tertiaryYellowLight:  #F5E065;
-                --tertiaryCard:         #B39981;
-                --tertiaryCardLight:    #DCBFA6;
-                --tertiaryEmerald:      #009E71;
-                --tertiaryEmeraldLight: #93CCB9;
-                --tertiaryBlue:         #005E88;
-                --tertiaryBlueLight:    #A0D6E9;
+                --tertiaryPurple:               #51284F;
+                --tertiaryPurpleLight:          #8276B3;
+                --tertiaryRed:                  #E04F39;
+                --tertiaryRedLight:             #F78684;
+                --tertiaryYellow:               #EFC041;
+                --tertiaryYellowLight:          #F5E065;
+                --tertiaryCard:                 #B39981;
+                --tertiaryCardLight:            #DCBFA6;
+                --tertiaryEmerald:              #009E71;
+                --tertiaryEmeraldLight:         #93CCB9;
+                --tertiaryBlue:                 #005E88;
+                --tertiaryBlueLight:            #A0D6E9;
+                /*** EXTENDED PALETTE  ***/
+                --xLightestPurple:              #A59DC8;     
+                --xOrange:                      #feb076;     
+                --xLime:                        #BBCC66;     
+                --xGreen:                       #66CCAC;     
+                --xBlueCyan:                    #94E1EC;     
+                --xMidBlue:                     #48B5EB;     
+                --xMagenta:                     #d780c3;     
+                --xCharcoal:                    #36454F; 
+                --xDarkOrange:                  #863F13; 
+                --xDarkLime:                    #77862D;     
+                --xDarkYellow:                  #A57A0E; 
+                --xDarkCard:                    #6F5843; 
+                --xDarkBlueCyan:                #177283; 
+                --xDarkMagenta:                 #73264C; 
+                --darkGrey:                     rgb(100, 100, 100);
+
             }
 
         /***************************************/
@@ -79,7 +95,6 @@
                 margin: 0;
             }
 
-
             /***************************/
             /*****  GENERAL STYLING  ***/
             /***************************/
@@ -112,10 +127,10 @@
                 fill: var(--tertiaryRed);
             }
             .recyclables {
-                fill: var(--tertiaryYellow);
+                fill: var(--xDarkYellow);
             }
             .organics {
-                fill: var(--svGreen);
+                fill: var(--tertiaryEmerald);
             }
 
         </style>
@@ -348,41 +363,51 @@
 
         const data = {          // Initiate data object that populated by the parseData() function, 
             table:      {},
-            byPeriod:   {},
-            byType:   {
-                material: {}
-            },
             schema: {
                 list:  {}
             }
         }
 
-        const gsTableLinks =   {
-            kerbsideData:                   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
-        }
+        // Call build function
+        buildFromGSheetData(settings)
 
-        // Build from GSheet data
-        buildFromGSheetData(gsTableLinks)
+        function buildFromGSheetData(settings) {
+            // 1. Specify data table links for each table used (tsv published output from each separate sheet/table)
+            const gsTableLinks =   {
+                kerbsideCollectionData:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
+            }
 
-        function buildFromGSheetData(gsTableLinks) {
-            let noLoadedTables = 0
-            const tablesToLoad = Object.keys(gsTableLinks)
-            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-                Papa.parse(tableURL,  {
-                    delimiter: '\t',
-                    download: true,
-                    header: true,
-                    complete: async (results) => {
-                        data.table[tableName] = results.data
-                        noLoadedTables++
-                        if(noLoadedTables === tablesToLoad.length){
-                            await applyQuerySettings(settings)                       // 1. Update settings if a query string is passed in
-                            await parseData(data.table.kerbsideData)                 // 2. Parse data
-                            await renderVis(data.table.kerbsideData, settings)       // 3. Render visualisation(s)
+            // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+            Promise.all(
+                Object.values(gsTableLinks).map(link => d3.tsv(link))       // Pass in array of d3.tsv loaders with each link
+            ).then( rawData => {
+                // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
+                rawData.forEach((tableData, i) => {  parseTable(Object.keys(gsTableLinks)[i], tableData) })
+                return data
+
+            }).then( async (data) => {
+                // 3. Initiate vis build sequence with data now loaded
+                await applyQuerySettings(settings)                                    // a. Apply query string settings
+                await transformData(data.table.kerbsideCollectionData)              // b. Parse data
+                await renderVis(data.table.kerbsideCollectionData, settings)        // c. Render visualisation(s)
+            })
+
+            // X. Table data parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
+            const parseTable = (tableName, tableData) => {
+                data.table[tableName] = tableData.map(row => {
+                    const newObj = {}
+                    Object.entries(row).forEach(([key, value]) => {
+                        switch(key.trim().toLowerCase()){
+                            case 'year':
+                                newObj[key.trim()] =  value
+                                break     
+                            default:
+                                newObj[key.trim()] = isNaN(parseFloat(value.replace(/\$|,/g, ''))) ? value : parseFloat(value.replace(/\$|,/g, '')) 
                         }
-                    }
+                    })
+                    return newObj
                 })
-            }                       
+            };              
         };
 
 
@@ -398,16 +423,8 @@
             }
         };
 
-        async function parseData(kerbsideData) {      
-            // 1. Parse numeric data types to number
-            kerbsideData.forEach(d => {
-                Object.entries(d).forEach( ([key, value]) => {
-                    if(!isNaN(parseFloat(value.replace(/\$|,/g, '') )) && key.toLowerCase() !== 'year'){ 
-                        d[key] = parseFloat(value.replace(/\$|,/g, ''))
-                    } 
-                })
-            })
-            // 2. Extract lists
+        async function transformData(kerbsideData) {      
+            // 1. Extract lists
             data.schema.list.year =   [...new Set(kerbsideData.map( d => d.year))]
         };
 
