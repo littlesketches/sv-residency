@@ -368,7 +368,7 @@
             color: var(--xcharcoal)
         }
         .material-summary-label-bar.building-and-demolition-materials,
-        .material-summary-label-bar.aggregates-masonry-and-soils{
+        .material-summary-label-bar.aggregates-masonry-and-soil{
             background: repeating-linear-gradient(
                 45deg, transparent, transparent 0.25vw,
                 var(--tertiaryRedLight) 0.25vw,
@@ -376,24 +376,24 @@
             );
         }
         .material-summary-table-performance.building-and-demolition-materials,
-        .material-summary-table-performance.aggregates-masonry-and-soils{
+        .material-summary-table-performance.aggregates-masonry-and-soil{
             border-top:var(--tertiaryRedLight) 0.2vw solid;
             border-bottom:var(--tertiaryRedLight) 0.2vw solid;
         }
         .material-summary-table-volumes.building-and-demolition-materials,
-        .material-summary-table-volumes.aggregates-masonry-and-soils{
+        .material-summary-table-volumes.aggregates-masonry-and-soil{
             border-bottom:var(--tertiaryRedLight) 0.125vw dotted;
         }
         .material-summary-label.building-and-demolition-materials,
-        .material-summary-label.aggregates-masonry-and-soils{
+        .material-summary-label.aggregates-masonry-and-soil{
             color: var(--tertiaryRedLight);
         }
         #building-and-demolition-materials-sparkline .sparkline,
-        #aggregates-masonry-and-soils-sparkline .sparkline{
+        #aggregates-masonry-and-soil-sparkline .sparkline{
             stroke: var(--tertiaryRedLight);
         }
         #building-and-demolition-materials-sparkline .marker,
-        #aggregates-masonry-and-soils-sparkline .marker{
+        #aggregates-masonry-and-soil-sparkline .marker{
             fill: var(--tertiaryRedLight);
         }
         .material-summary-label-bar.glass{
@@ -686,6 +686,7 @@
         /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
         ////////////////////////////////////////////////////////////////////////////////
 
+        // Instantite settings and data objects
         const settings = {
             year:                   '2019-20', 
             dims: {
@@ -699,10 +700,6 @@
                     height: 100,
                     margin: { top: 15, right: 5, bottom: 15, left: 25 }
                 },
-            },
-
-            variables: {
-                peoplePerHousehold:     2.5
             }
         }
 
@@ -713,7 +710,7 @@
             }
         }
 
-
+        // Call build function
         buildFromGSheetData(settings)
 
         // Load data from TSV files from GSheet
@@ -729,7 +726,6 @@
             Promise.all(
                 Object.values(gsTableLinks).map(link => d3.tsv(link))       // Pass in array of d3.tsv loaders with each link
             ).then( rawData => {
-console.log(rawData)
                 // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
                 rawData.forEach((tableData, i) => {  parseTable(Object.keys(gsTableLinks)[i], tableData) })
                 return data
@@ -932,8 +928,8 @@ console.log(rawData)
                 fiveYearContainer.append('div').classed('material-summary-table-data total', true).html(totalRecoveryVsFiveYearPct)
 
                 // d. Add material sparkline
-                const sparklineSVG =      sparklineContainer.append('svg').attr('id', `${helpers.slugify(material)}-sparkline`)
-                const sparkData     = dataTable.map(d => d[`${material}_${data.schema.list.destination[1]}`] + d[`${material}_${data.schema.list.destination[2]}`])
+                const sparklineSVG =  sparklineContainer.append('svg').attr('id', `${helpers.slugify(material)}-sparkline`)
+                const sparkData  = dataTable.map(d => d[`${material}_${data.schema.list.destination[1]}`] + d[`${material}_${data.schema.list.destination[2]}`])
                 renderSparkline(`${helpers.slugify(material)}-sparkline`, sparkData, settings.dims.minor_sparkline)
             })
 
