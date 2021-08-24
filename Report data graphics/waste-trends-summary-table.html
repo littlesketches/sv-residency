@@ -10,14 +10,14 @@
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
                 /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                       #9ACA3C;
+                --svGreen:                      #9ACA3C;
                 /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:           #D5E0A1;
-                --secondaryBottleGreen:          #174F37;
-                --secondaryBottleGreenLight:     #79B5AA;
-                --secondaryGrey:                 #B1B1B0;
-                --secondaryGreyLight:            #CFCFCF;
-                --secondaryGreyLightest:         #ECECEC;
+                --secondaryGreenLight:          #D5E0A1;
+                --secondaryBottleGreen:         #174F37;
+                --secondaryBottleGreenLight:    #79B5AA;
+                --secondaryGrey:                #B1B1B0;
+                --secondaryGreyLight:           #CFCFCF;
+                --secondaryGreyLightest:        #ECECEC;
                 /** TERTIARY PALETTE **/
                 --tertiaryPurple:               #51284F;
                 --tertiaryPurpleLight:          #8276B3;
@@ -32,9 +32,21 @@
                 --tertiaryBlue:                 #005E88;
                 --tertiaryBlueLight:            #A0D6E9;
                 /*** EXTENDED PALETTE  ***/
+                --xLightestPurple:              #A59DC8;     
                 --xOrange:                      #feb076;     
+                --xLime:                        #BBCC66;     
+                --xGreen:                       #66CCAC;     
+                --xBlueCyan:                    #94E1EC;     
+                --xMidBlue:                     #48B5EB;     
                 --xMagenta:                     #d780c3;     
-                --xcharcoal:                    rgb(100, 100, 100);     
+                --xCharcoal:                    #36454F; 
+                --xDarkOrange:                  #863F13; 
+                --xDarkLime:                    #77862D;     
+                --xDarkYellow:                  #A57A0E; 
+                --xDarkCard:                    #6F5843; 
+                --xDarkBlueCyan:                #177283; 
+                --xDarkMagenta:                 #73264C; 
+                --darkGrey:                     rgb(100, 100, 100);
             }
 
         /***************************************/
@@ -386,7 +398,7 @@
         }
         .material-summary-label.building-and-demolition-materials,
         .material-summary-label.aggregates-masonry-and-soil{
-            color: var(--tertiaryRedLight);
+            color: var(--tertiaryRed);
         }
         #building-and-demolition-materials-sparkline .sparkline,
         #aggregates-masonry-and-soil-sparkline .sparkline{
@@ -411,7 +423,7 @@
             border-bottom:var(--tertiaryPurpleLight) 0.125vw dotted;
         }
         .material-summary-label.glass{
-            color: var(--tertiaryPurpleLight)
+            color: var(--tertiaryPurple)
         }
         #glass-sparkline .sparkline{
             stroke: var(--tertiaryPurpleLight);
@@ -435,7 +447,7 @@
             border-bottom:var(--tertiaryYellow) 0.125vw dotted;
         }
         .material-summary-label.plastics{
-            color: var(--tertiaryYellow)
+            color: var(--xDarkYellow)
         }
         #plastics-sparkline .sparkline{
             stroke: var(--tertiaryYellow);
@@ -447,73 +459,73 @@
         .material-summary-label-bar.paper-and-cardboard{
             background: repeating-linear-gradient(
                 45deg, transparent, transparent 0.25vw,
-                var(--tertiaryBlueLight) 0.25vw,
-                var(--tertiaryBlueLight) 0.5vw
+                var(--xBlueCyan) 0.25vw,
+                var(--xBlueCyan) 0.5vw
             );
         }
         .material-summary-table-performance.paper-and-cardboard{
-            border-top:var(--tertiaryBlueLight) 0.2vw solid;
-            border-bottom:var(--tertiaryBlueLight) 0.2vw solid;
+            border-top:var(--xBlueCyan) 0.2vw solid;
+            border-bottom:var(--xBlueCyan) 0.2vw solid;
         }
         .material-summary-table-volumes.paper-and-cardboard{
-            border-bottom:var(--tertiaryBlueLight) 0.125vw dotted;
+            border-bottom:var(--xBlueCyan) 0.125vw dotted;
         }
         .material-summary-label.paper-and-cardboard{
-            color: var(--tertiaryBlueLight)
+            color: var(--xDarkBlueCyan)
         }
         #paper-and-cardboard-sparkline .sparkline{
-            stroke: var(--tertiaryBlueLight);
+            stroke: var(--xBlueCyan);
         }
         #paper-and-cardboard-sparkline .marker{
-            fill: var(--tertiaryBlueLight);
+            fill: var(--xBlueCyan);
         }
 
         .material-summary-label-bar.organics{
             background: repeating-linear-gradient(
                 45deg, transparent, transparent 0.25vw,
-                var(--tertiaryEmerald) 0.25vw,
-                var(--tertiaryEmerald) 0.5vw
+                var(--xGreen) 0.25vw,
+                var(--xGreen) 0.5vw
             );
         }
         .material-summary-table-performance.organics{
-            border-top:var(--tertiaryEmerald) 0.2vw solid;
-            border-bottom:var(--tertiaryEmerald) 0.2vw solid;
+            border-top:var(--xGreen) 0.2vw solid;
+            border-bottom:var(--xGreen) 0.2vw solid;
         }
         .material-summary-table-volumes.organics{
-            border-bottom:var(--tertiaryEmerald) 0.125vw dotted;
+            border-bottom:var(--xGreen) 0.125vw dotted;
         }
         .material-summary-label.organics{
             color: var(--tertiaryEmerald)
         }
         #organics-sparkline .sparkline{
-            stroke: var(--tertiaryEmerald);
+            stroke: var(--xGreen);
         }
         #organics-sparkline .marker{
-            fill: var(--tertiaryEmerald);
+            fill: var(--xGreen);
         }
 
         .material-summary-label-bar.metals{
             background: repeating-linear-gradient(
                 45deg, transparent, transparent 0.25vw,
-                var(--tertiaryBlue) 0.25vw,
-                var(--tertiaryBlue) 0.5vw
+                var(--xMidBlue) 0.25vw,
+                var(--xMidBlue) 0.5vw
             );
         }
         .material-summary-table-performance.metals{
-            border-top:var(--tertiaryBlue) 0.2vw solid;
-            border-bottom:var(--tertiaryBlue) 0.2vw solid;
+            border-top:var(--xMidBlue) 0.2vw solid;
+            border-bottom:var(--xMidBlue) 0.2vw solid;
         }
         .material-summary-table-volumes.metals{
-            border-bottom:var(--tertiaryBlue) 0.125vw dotted;
+            border-bottom:var(--xMidBlue) 0.125vw dotted;
         }
         .material-summary-label.metals{
             color: var(--tertiaryBlue)
         }
         #metals-sparkline .sparkline{
-            stroke: var(--tertiaryBlue);
+            stroke: var(--xMidBlue);
         }
         #metals-sparkline .marker{
-            fill: var(--tertiaryBlue);
+            fill: var(--xMidBlue);
         }
 
         .material-summary-label-bar.rubber{
@@ -531,7 +543,7 @@
             border-bottom:var(--xMagenta) 0.125vw dotted;
         }
         .material-summary-label.rubber{
-            color: var(--xMagenta)
+            color: var(--xDarkMagenta)
         }
         #rubber-sparkline .sparkline{
             stroke: var(--xMagenta);
@@ -555,7 +567,7 @@
             border-bottom:var(--xOrange) 0.125vw dotted;
         }
         .material-summary-label.textiles{
-            color: var(--xOrange)
+            color: var(--xDarkOrange)
         }
         #textiles-sparkline .sparkline{
             stroke: var(--xOrange);
@@ -686,7 +698,7 @@
         /// 0. BUILD SEQUENCE: INIT SETTINGS AND DATA OBJECTS AND LOADING => RENDER  ///
         ////////////////////////////////////////////////////////////////////////////////
 
-        // Instantite settings and data objects
+        // Instantiate settings and data objects
         const settings = {
             year:                   '2019-20', 
             dims: {
@@ -719,7 +731,7 @@
 
             // 1. Specify data table links for each table used (tsv published output from each separate sheet/table)
             const gsTableLinks =  {
-                changeInWaste:                  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=393823608&single=true&output=tsv'
+                wasteByMaterialDestination:                  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=393823608&single=true&output=tsv'
             }
 
             // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
@@ -733,8 +745,8 @@
             }).then( async (data) => {
                 // 3. Initiate vis build sequence with data now loaded
                 await applyQuerySettings(config)            // a. Apply query string settings
-                await transformData(data.table.changeInWaste)                           // b.  Transform and shape data
-                await renderVis(data.table.changeInWaste, config)  
+                await transformData(data.table.wasteByMaterialDestination)                           // b.  Transform and shape data
+                await renderVis(data.table.wasteByMaterialDestination, config)  
             })
 
             // X. Table data parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
