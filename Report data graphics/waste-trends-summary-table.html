@@ -5,8 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Kerbside bin composition">
         <meta name="author" content="Sustainability Victoria">
-        <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
         <style>
             /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
             :root {
@@ -34,8 +33,8 @@
                 --tertiaryBlueLight:            #A0D6E9;
                 /*** EXTENDED PALETTE  ***/
                 --xOrange:                      #feb076;     
-                --xPink:                        #f8c1c4;     
-                --xcharcoal:                     rgb(100, 100, 100);     
+                --xMagenta:                     #d780c3;     
+                --xcharcoal:                    rgb(100, 100, 100);     
             }
 
         /***************************************/
@@ -232,7 +231,7 @@
                 display: grid;
             }
             .headline-figure{
-                font-weight: 700;
+                font-weight: 800;
                 font-size: 8vw;
                 line-height: 1;
                 text-align: right;
@@ -303,8 +302,6 @@
                 text-align: center;
             }
 
-
-
         /***********************************/
         /**** HEADLINE METRICS COLOURS  ***/
         /**********************************/
@@ -370,33 +367,35 @@
         .materials-tables-container{
             color: var(--xcharcoal)
         }
-
-
-        .material-summary-label-bar.building-and-demolition-materials{
+        .material-summary-label-bar.building-and-demolition-materials,
+        .material-summary-label-bar.aggregates-masonry-and-soils{
             background: repeating-linear-gradient(
                 45deg, transparent, transparent 0.25vw,
                 var(--tertiaryRedLight) 0.25vw,
                 var(--tertiaryRedLight) 0.5vw
             );
         }
-        .material-summary-table-performance.building-and-demolition-materials{
+        .material-summary-table-performance.building-and-demolition-materials,
+        .material-summary-table-performance.aggregates-masonry-and-soils{
             border-top:var(--tertiaryRedLight) 0.2vw solid;
             border-bottom:var(--tertiaryRedLight) 0.2vw solid;
         }
-        .material-summary-table-volumes.building-and-demolition-materials{
+        .material-summary-table-volumes.building-and-demolition-materials,
+        .material-summary-table-volumes.aggregates-masonry-and-soils{
             border-bottom:var(--tertiaryRedLight) 0.125vw dotted;
         }
-        .material-summary-label.building-and-demolition-materials{
+        .material-summary-label.building-and-demolition-materials,
+        .material-summary-label.aggregates-masonry-and-soils{
             color: var(--tertiaryRedLight);
         }
-        #building-and-demolition-materials-sparkline .sparkline{
+        #building-and-demolition-materials-sparkline .sparkline,
+        #aggregates-masonry-and-soils-sparkline .sparkline{
             stroke: var(--tertiaryRedLight);
         }
-        #building-and-demolition-materials-sparkline .marker{
+        #building-and-demolition-materials-sparkline .marker,
+        #aggregates-masonry-and-soils-sparkline .marker{
             fill: var(--tertiaryRedLight);
         }
-
-
         .material-summary-label-bar.glass{
             background: repeating-linear-gradient(
                 45deg, transparent, transparent 0.25vw,
@@ -520,25 +519,25 @@
         .material-summary-label-bar.rubber{
             background: repeating-linear-gradient(
                 45deg, transparent,  transparent 0.25vw,
-                var(--xPink) 0.25vw,
-                var(--xPink) 0.5vw
+                var(--xMagenta) 0.25vw,
+                var(--xMagenta) 0.5vw
             );
         }
         .material-summary-table-performance.rubber{
-            border-top:var(--xPink) 0.2vw solid;
-            border-bottom:var(--xPink) 0.2vw solid;
+            border-top:var(--xMagenta) 0.2vw solid;
+            border-bottom:var(--xMagenta) 0.2vw solid;
         }
         .material-summary-table-volumes.rubber{
-            border-bottom:var(--xPink) 0.125vw dotted;
+            border-bottom:var(--xMagenta) 0.125vw dotted;
         }
         .material-summary-label.rubber{
-            color: var(--xPink)
+            color: var(--xMagenta)
         }
         #rubber-sparkline .sparkline{
-            stroke: var(--xPink);
+            stroke: var(--xMagenta);
         }
         #rubber-sparkline .marker{
-            fill: var(--xPink);
+            fill: var(--xMagenta);
         }
 
         .material-summary-label-bar.textiles{
@@ -691,18 +690,14 @@
             year:                   '2019-20', 
             dims: {
                 major_sparkline: {
-                    width:              780,
-                    height:             1080,
-                    margin: {
-                        top: 50, right: 20, bottom: 50, left: 20
-                    }
+                    width: 200,
+                    height: 60,
+                    margin: { top: 10, right: 10, bottom: 5, left: 10 }
                 },
                 minor_sparkline: {
-                    width:              780,
-                    height:             1080,
-                    margin: {
-                        top: 50, right: 20, bottom: 50, left: 20
-                    }
+                    width: 200,
+                    height: 100,
+                    margin: { top: 15, right: 5, bottom: 15, left: 25 }
                 },
             },
 
@@ -712,25 +707,9 @@
         }
 
         const data = {          // Initiate data object that populated by the parseData() function, 
-            tables:     {},
-            charts:     {
-                diversionRateTotal:     {},
-                diversionVolumeTotal:   {},
-                diversionRate:          {},
-                diversionVolume:        {},
-                landfillVolume:         {},
-                totalVolume:            {},
-                export:                 {},
-                exportAll:              {},
-
-                costPerHousehold:      {},
-                wastePerPerson:         {},
-            },
+            table:     {},
             schema: {
-                list:  {
-
-                    kerbsideTypes:      ['Garbage', 'Recycling', 'Organics']
-                }
+                list:  {}
             }
         }
 
@@ -750,20 +729,21 @@
             Promise.all(
                 Object.values(gsTableLinks).map(link => d3.tsv(link))       // Pass in array of d3.tsv loaders with each link
             ).then( rawData => {
-                // a. Parse each loaded data table and store in data.tables object, using the parseTable helper 
+console.log(rawData)
+                // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
                 rawData.forEach((tableData, i) => {  parseTable(Object.keys(gsTableLinks)[i], tableData) })
                 return data
 
             }).then( async (data) => {
                 // 3. Initiate vis build sequence with data now loaded
                 await applyQuerySettings(config)            // a. Apply query string settings
-                await transformData(data.tables.changeInWaste)                           // b.  Transform and shape data
-                await renderVis(data.tables.changeInWaste, config)  
+                await transformData(data.table.changeInWaste)                           // b.  Transform and shape data
+                await renderVis(data.table.changeInWaste, config)  
             })
 
-            // Table data parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
+            // X. Table data parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
             const parseTable = (tableName, tableData) => {
-                data.tables[tableName] = tableData.map(row => {
+                data.table[tableName] = tableData.map(row => {
                     const newObj = {}
                     Object.entries(row).forEach(([key, value]) => {
                         switch(key.trim().toLowerCase()){
@@ -849,7 +829,6 @@
             d3.select('#total-waste-container .headline-figure').html(helpers.numberFormatters.formatComma1dec(wasteManaged_mil))
             d3.select('#diversion-rate-container .headline-figure').html(helpers.numberFormatters.formatComma(totalRecovery_mil / wasteManaged_mil * 100))
             d3.select('#landfill-waste-container .headline-figure').html(helpers.numberFormatters.formatComma1dec(landfilled_mil))
-
             d3.select('#total-recovery-container .headline-figure').html(helpers.numberFormatters.formatComma1dec(totalRecovery_mil))
             d3.select('#local-recovery-container .headline-figure').html(helpers.numberFormatters.formatComma1dec(localRecovery_mil))
             d3.select('#export-container .headline-figure').html(helpers.numberFormatters.formatComma1dec(export_mil))
@@ -862,20 +841,12 @@
                 exportData =  dataTable.map(dataObj =>  d3.sum(Object.entries(dataObj).filter( ([key, value]) => key.slice(key.indexOf('_') + 1) === data.schema.list.destination[2]).map(d => d[1]) ) / 1000000 ),
                 diversionRateData =  managedWasteData.map( (d,i) => (d - landfilledData[i]) / d)
 
-            const headlineSparklineDims =  {
-                width: 200,
-                height: 60,
-                margin: { top: 10, right: 10, bottom: 5, left: 10 }
-            }
-
-            renderSparkline(`total-waste-sparkline`, managedWasteData, headlineSparklineDims, true)
-            renderSparkline(`total-landfill-sparkline`, landfilledData, headlineSparklineDims, true)
-            renderSparkline(`diversion-rate-sparkline`, diversionRateData, headlineSparklineDims, true)
-
-            renderSparkline(`total-recovery-sparkline`, recoveryData, headlineSparklineDims, true)
-            renderSparkline(`local-recovery-sparkline`, localRecoveryData, headlineSparklineDims, true)
-            renderSparkline(`export-sparkline`, exportData, headlineSparklineDims, true)
-
+            renderSparkline(`total-waste-sparkline`, managedWasteData, settings.dims.major_sparkline, true)
+            renderSparkline(`total-landfill-sparkline`, landfilledData, settings.dims.major_sparkline, true)
+            renderSparkline(`diversion-rate-sparkline`, diversionRateData, settings.dims.major_sparkline, true)
+            renderSparkline(`total-recovery-sparkline`, recoveryData, settings.dims.major_sparkline, true)
+            renderSparkline(`local-recovery-sparkline`, localRecoveryData, settings.dims.major_sparkline, true)
+            renderSparkline(`export-sparkline`, exportData, settings.dims.major_sparkline, true)
 
             // 3. Build DOM for each material
             const recoveredData = data.schema.list.material.filter(d => d !== 'Other materials'),
@@ -916,9 +887,12 @@
                 const materialLabel = materialContainer.append('div')
                     .classed(`material-summary-label-container ${helpers.slugify(material)}`, true)
 
-                materialLabel.append('div').classed(`material-summary-label ${helpers.slugify(material)}`, true)
+                materialLabel.append('div')
+                    .classed(`material-summary-label ${helpers.slugify(material)}`, true)
                     .html(material)
-                materialLabel.append('div').classed(`material-summary-label-bar ${helpers.slugify(material)}`, true)
+
+                materialLabel.append('div')
+                    .classed(`material-summary-label-bar ${helpers.slugify(material)}`, true)
 
                 const tableContainer = materialContainer.append('div')
                     .classed('material-summary-table', true)
@@ -934,11 +908,11 @@
 
                 const performanceTable = tableContainer.append('div').classed(`material-summary-table-performance ${helpers.slugify(material)}`, true)
 
-                const volumesContainer = performanceTable.append('div').classed(`material-summary-table-volumes ${helpers.slugify(material)}`, true)
-                const perLabelsContainer = performanceTable.append('div').classed('material-summary-table-performance-label-container', true)
-                const oneYearContainer = performanceTable.append('div').classed('material-summary-table-performance-1yr-container', true)
-                const fiveYearContainer = performanceTable.append('div').classed('material-summary-table-performance-5yr-container', true)
-                const sparklineContainer = performanceTable.append('div').classed('material-summary-table-trend-container', true)
+                const volumesContainer = performanceTable.append('div').classed(`material-summary-table-volumes ${helpers.slugify(material)}`, true),
+                    perLabelsContainer = performanceTable.append('div').classed('material-summary-table-performance-label-container', true),
+                    oneYearContainer = performanceTable.append('div').classed('material-summary-table-performance-1yr-container', true),
+                    fiveYearContainer = performanceTable.append('div').classed('material-summary-table-performance-5yr-container', true),
+                    sparklineContainer = performanceTable.append('div').classed('material-summary-table-trend-container', true)
 
                 volumesContainer.append('div').classed('material-summary-table-header year', true).html(`${settings.year} volume (tonnes)` )
                 volumesContainer.append('div').classed('material-summary-table-data local-recovery', true).html(helpers.numberFormatters.formatComma(yearLocalRecovery))
@@ -957,15 +931,10 @@
                 fiveYearContainer.append('div').classed('material-summary-table-data export', true).html(exportVsFiveYearPct)
                 fiveYearContainer.append('div').classed('material-summary-table-data total', true).html(totalRecoveryVsFiveYearPct)
 
-                // d. Add sparkline
+                // d. Add material sparkline
                 const sparklineSVG =      sparklineContainer.append('svg').attr('id', `${helpers.slugify(material)}-sparkline`)
-                const sparkData = dataTable.map(d => d[`${material}_${data.schema.list.destination[1]}`] + d[`${material}_${data.schema.list.destination[2]}`])
-                const materialSparklineDims =  {
-                    width: 200,
-                    height: 100,
-                    margin: { top: 15, right: 5, bottom: 15, left: 25 }
-                }
-                renderSparkline(`${helpers.slugify(material)}-sparkline`, sparkData, materialSparklineDims)
+                const sparkData     = dataTable.map(d => d[`${material}_${data.schema.list.destination[1]}`] + d[`${material}_${data.schema.list.destination[2]}`])
+                renderSparkline(`${helpers.slugify(material)}-sparkline`, sparkData, settings.dims.minor_sparkline)
             })
 
             // 4. Fade in vis
