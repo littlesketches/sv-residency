@@ -5,73 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="Sustainability Victoria">
+        <link rel="stylesheet" href="./css/core.css">
         <style>
-            /* COLOUR PALETTES */
-            :root {
-                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                       #9ACA3C;
-                /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:           #D5E0A1;
-                --secondaryBottleGreen:          #174F37;
-                --secondaryBottleGreenLight:     #79B5AA;
-                --secondaryGrey:                 #B1B1B0;
-                --secondaryGreyLight:            #CFCFCF;
-                --secondaryGreyLightest:         #ECECEC;
-                /** TERTIARY PALETTE **/
-                --tertiaryPurple:       #51284F;
-                --tertiaryPurpleLight:  #8276B3;
-                --tertiaryRed:          #E04F39;
-                --tertiaryRedLight:     #F78684;
-                --tertiaryYellow:       #EFC041;
-                --tertiaryYellowLight:  #F5E065;
-                --tertiaryCard:         #B39981;
-                --tertiaryCardLight:    #DCBFA6;
-                --tertiaryEmerald:      #009E71;
-                --tertiaryEmeraldLight: #93CCB9;
-                --tertiaryBlue:         #005E88;
-                --tertiaryBlueLight:    #A0D6E9;
-            }
-
-        /***************************************/
-        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-        /***************************************/
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
-                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: light;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                font-weight: 400;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                font-weight: 500;
-                font-style: medium;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
-            }
-
             body{
                 font-family: 'DIN Next LT Pro';
                 margin: 7.5vw 10vw;
@@ -131,9 +66,9 @@
             <div  class ="vis-list-type">Data visualisations</div> 
             <ul>
                 <li><a href ="waste-vic-flow-sankey.html">Victorian waste flows (sankey)</a></li>
-                <li><a href ="waste-diversion-rate-radial-chart.html">Waste by material radial chart only &#x262f;'</a></li>
-                <li><a href ="waste-diversion-by-material-stacked.html">Waste by material radial chart with stacked table &#x262f;'</a></li>
-                <li><a href ="waste-diversion-by-material.html">Waste by material radial chart with table on left&#x262f;</a></li>
+                <li><a href ="waste-diversion-by-material.html?layout=chart-only">Waste by material radial chart only &#x262f;'</a></li>
+                <li><a href ="waste-diversion-by-material.html?layout=portrait">Waste by material radial chart with stacked table &#x262f;'</a></li>
+                <li><a href ="waste-diversion-by-material.html?layout=landscape">Waste by material radial chart with table on left&#x262f;</a></li>
                 <li><a href ="waste-trends-summary-table.html">Waste trends summary tables</a></li>
                 <li><a href ="waste-metrics-slopegraphs.html">Waste trends slope chart set (unfinished)</a></li>
             </ul>    
@@ -142,9 +77,9 @@
             <ul>
                 <li><a href ="waste-export-map.html">Recovered resources exports map</a></li>
                 <li><a href ="wrrg-map.html">Recovered resources WRRG map</a></li>
-                <li><a href ="wrrg-map-multi-coloured.html">Recovered resources WRRG map with colour coded WRRGs</a></li>
-                <li><a href ="wrrg-map-ex-glass.html">Recovered resources WRRG map (excl. glass)</a></li>
-                <li><a href ="wrrg-map-ex-glass-multi-coloured.html">Recovered resources WRRG map (excl. glass) with colour-coded WRRGs</a></li>
+                <li><a href ="wrrg-map.html?colourScale=categorical">Recovered resources WRRG map with colour coded WRRGs</a></li>
+                <li><a href ="wrrg-map.html?showGlass=false">Recovered resources WRRG map (excl. glass)</a></li>
+                <li><a href ="wrrg-map.html?showGlass=false&colourScale=categorical">Recovered resources WRRG map (excl. glass) with colour-coded WRRGs</a></li>
             </ul>   
 
             <div  class ="vis-list-type">Experiments that are mostly incomplete ideas and use static data)</div> 

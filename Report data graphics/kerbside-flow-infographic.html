@@ -6,106 +6,48 @@
         <meta name="description" content="Kerbside waste flow infographic">
         <meta name="author" content="Sustainability Victoria">
         <script src="https://d3js.org/d3.v7.min.js"></script>
+        <link rel="stylesheet" href="./css/core.css">
         <style>
-            /* COLOUR PALETTES */
-            :root {
-                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                       #9ACA3C;
-                /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:           #D5E0A1;
-                --secondaryBottleGreen:          #174F37;
-                --secondaryBottleGreenLight:     #79B5AA;
-                --secondaryGrey:                 #B1B1B0;
-                --secondaryGreyLight:            #CFCFCF;
-                --secondaryGreyLightest:         #ECECEC;
-                /** TERTIARY PALETTE **/
-                --tertiaryPurple:               #51284F;
-                --tertiaryPurpleLight:          #8276B3;
-                --tertiaryRed:                  #E04F39;
-                --tertiaryRedLight:             #F78684;
-                --tertiaryYellow:               #EFC041;
-                --tertiaryYellowLight:          #F5E065;
-                --tertiaryCard:                 #B39981;
-                --tertiaryCardLight:            #DCBFA6;
-                --tertiaryEmerald:              #009E71;
-                --tertiaryEmeraldLight:         #93CCB9;
-                --tertiaryBlue:                 #005E88;
-                --tertiaryBlueLight:            #A0D6E9;
-                /*** EXTENDED PALETTE  ***/
-                --xLightestPurple:              #A59DC8;     
-                --xOrange:                      #feb076;     
-                --xLime:                        #BBCC66;     
-                --xGreen:                       #66CCAC;     
-                --xBlueCyan:                    #94E1EC;     
-                --xMidBlue:                     #48B5EB;     
-                --xMagenta:                     #d780c3;     
-                --xCharcoal:                    #36454F; 
-                --xDarkOrange:                  #863F13; 
-                --xDarkLime:                    #77862D;     
-                --xDarkYellow:                  #A57A0E; 
-                --xDarkCard:                    #6F5843; 
-                --xDarkBlueCyan:                #177283; 
-                --xDarkMagenta:                 #73264C; 
-                --darkGrey:                     rgb(100, 100, 100);
-            }
 
-        /***************************************/
-        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-        /***************************************/
+            /***********************************************************/
+            /***********************************************************/
+            /****                                                   ****/
+            /**** KERBSIDE COLLECTION INFOGRAPHIC  | CUSTOM CSS     ****/
+            /**** ---------------------------------------------     ****/
+            /**** - CSS Variables and loaded fonts from core.css    ****/
+            /****                                                   ****/
+            /***********************************************************/
+            /***********************************************************/
+
             @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: light;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
+                font-family: 'Better Times';
+                src: local('Better Times'),
+                    url('./fonts/Better-Times.ttf') format('truetype');
                 font-weight: 400;
                 font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                font-weight: 500;
-                font-style: medium;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
             }
 
             body{
                 font-family: 'DIN Next LT Pro';
-                margin: 0;
+                margin: 0;                          /* Full bleed presentation */
             }
 
-            /***************************/
-            /*****  TYPOGRAPHY       ***/
-            /***************************/
+            /************************/
+            /*****  TYPOGRAPHY    ***/
+            /************************/
 
             .recycling-rate-main{
                 font-size: 60px;
                 letter-spacing: -3px;
                 font-weight: 400;
             }
-            .lga-label-title,
+            .main-title,
             .lga-label-headline{
                 font-size: 30px;
+            }
+            .main-title{
+                fill:  #000;
+                text-transform: uppercase;
             }
             .waste-destination-title,
             .lga-stream-title{
@@ -120,9 +62,7 @@
             .lga-data-label.large, 
             .recycling-breakdown-label, 
             .recycling-rate-label, 
-            .table-header {
-                font-size: 16px;
-            }
+            .table-header,
             .table-content, 
             .lga-annotation{
                 font-size: 16px;
@@ -155,49 +95,62 @@
             .recycling-rate-main{
                 dominant-baseline: middle;
             }
-            .lga-label-title{
-                fill:  #000;
-                text-transform: uppercase;
-            }
+
             .lga-label-small{
                 mix-blend-mode: darken;
             }
-            .shadow.recycling{
-                fill: var(--xDarkYellow);
-            }
+
             /************************************/
             /**** STREET SCENE WASTE GRAPHIC  ***/
             /************************************/
 
+            /* Typography  */
+            .shadow.recycling{
+                fill: var(--xDarkYellow);
+            }
             .garbage, 
             .contaminants{
                 fill: var(--tertiaryRed);
             }
             .recycling {
-                fill: var(--tertiaryYellow);
+                fill: var(--xDarkYellow);
             }
             .organics {
                 fill: var(--tertiaryEmerald);
             }
+            .lga-label-title,
+            .lga-label-small, 
+            .waste-destination-title,
+            .lga-stream-title, 
+            .lga-data-label.large{
+                fill:  #000;
+            }
             .waste-destination-title,
             .lga-stream-title{   
-                fill: var(--secondaryBottleGreen);
-                fill: #000;
                 font-weight: 500;
                 text-transform: uppercase;
             }
+            .extended-typography .waste-destination-title,
+            .extended-typography .lga-stream-title{
+                font-family: 'Better Times';
+                font-size: 30px;
+            }
+
             .lga-data-label.large{
                 mix-blend-mode: multiply;
-                fill: #000;
+            }
+
+            /* Inset circular graphics including material colour assignment */
+            .recycling-breakdown-chart-bg, 
+            .recycling-breakdown-outer{
+                stroke: var(--xCharcoal);
             }
             .recycling-breakdown-chart-bg{
-                fill:   var(--secondaryGreyLightest);
-                fill:   #fff;
-                stroke: rgba(0,0,0, 0.7);
-                stroke-width: 2px
+                fill:           #fff;
+                fill-opacity:   0.7;
+                stroke-width:   2px;
             }
             .recycling-breakdown-outer{
-                stroke: #000;
                 stroke-width: 0.5px;
             } 
             .paper,
@@ -232,13 +185,15 @@
             .recycling-breakdown-material-label.contaminants{
                 fill: var(--tertiaryRed);
             }
+
+            /* Flow paths */
             .flowPath{
                 stroke-linejoin: round;
                 fill: none;
                 stroke-dasharray: 1.5 5;
-                mix-blend-mode: multiply;
             }
-            .flowPath.recycling.paper{
+            .flowPath.recycling.paper,
+            .flowPath.recycling.paper-and-cardboard{
                 stroke-dasharray: 1.5 20;
                 stroke-dashoffset: 0;
                 stroke: var(--secondaryBottleGreenLight);
@@ -269,7 +224,11 @@
 
     <body>
         <div class = "svg-container">
-            <svg id = "streetscene-vis" viewBox ="370 300 1080 1280 " xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+            <svg id = "kerbside-graphic" class ='extended-typography'>
+                <!-- FULL PAGE GRAPHIC IS COMPOSED OF THREE SEPARATE ILLUSTRATIONS WITH DATA VIS AND ANNOTATIONS OVERLAID FROM A JS   -->
+
+                <!-- 1. UPPER SCENE BACKGOROUND ILLUSTRATION FOR THE MRF AND LANDFILL SCENE -->
                 <g id = "street-scene" transform="scale(4)">
                     <defs>
                         <clipPath id="clipPath205" clipPathUnits="userSpaceOnUse">
@@ -359,74 +318,74 @@
                     <g id="background-layer">
                         <rect class="sky"  fill="#d7f4ee"   width="800" height="191.519" x="-43.048" y="0"/>
                         <g id="city-skyline-1" transform="matrix(-1.09149 0 0 1.09149 284.57 -.793)">
-                            <path id="city-sklyine-back-1" fill="#c9d9cf" fill="#B2B2B2"  d="M137.054 160.073v-7.938h12.7v-21.96h10.319v7.938h4.762v10.054h5.557v-26.459h6.879v29.105h15.102l-.02-23.813h6.084v23.813h6.615v-9.26h5.292v-7.674h6.085v11.642h3.704v-15.875h3.44v19.579h4.498v-30.163h8.372l.095 30.163h2.91v-7.938h5.292v7.673h4.498v-12.7h7.408v12.7h2.646v-10.054h5.291v21.167z"/>
-                            <path id="city-skyline-front-1" fill="#b4ccc6" fill="#cfcfcf"  d="M141.567 160.442v-3.826h4.905v-7.849h7.75v8.045h2.846v-10.595h6.279v4.905h5.984v-4.71h2.649v7.555h4.317v-18.934h15.01v9.712h8.633v-21.093h6.475v22.368h9.671v-5.906h9.23v10.752h15.794v-12.37h5.139v14.464h7.707v-4.092h5.994v5.9h4.633v6.184z" />
+                            <path id="city-sklyine-back-1" fill="#c9d9cf"  d="M137.054 160.073v-7.938h12.7v-21.96h10.319v7.938h4.762v10.054h5.557v-26.459h6.879v29.105h15.102l-.02-23.813h6.084v23.813h6.615v-9.26h5.292v-7.674h6.085v11.642h3.704v-15.875h3.44v19.579h4.498v-30.163h8.372l.095 30.163h2.91v-7.938h5.292v7.673h4.498v-12.7h7.408v12.7h2.646v-10.054h5.291v21.167z"/>
+                            <path id="city-skyline-front-1" fill="#b4ccc6" d="M141.567 160.442v-3.826h4.905v-7.849h7.75v8.045h2.846v-10.595h6.279v4.905h5.984v-4.71h2.649v7.555h4.317v-18.934h15.01v9.712h8.633v-21.093h6.475v22.368h9.671v-5.906h9.23v10.752h15.794v-12.37h5.139v14.464h7.707v-4.092h5.994v5.9h4.633v6.184z" />
                         </g>
                         <g id="city-skyline-2"  transform="matrix(1.09149 0 0 1.09149 -12.539 -10.893)">
-                            <path id="city-sklyine-back-2"  fill="#c9d9cf" fill="#B2B2B2"  d="M137.054 160.073v-7.938h12.7v-21.96h10.319v7.938h4.762v10.054h5.557v-26.459h6.879v29.105h15.102l-.02-23.813h6.084v23.813h6.615v-9.26h5.292v-7.674h6.085v11.642h3.704v-15.875h3.44v19.579h4.498v-30.163h8.372l.095 30.163h2.91v-7.938h5.292v7.673h4.498v-12.7h7.408v12.7h2.646v-10.054h5.291v21.167z"/>
-                            <path id="city-skyline-front-2"  fill="#b4ccc6"  fill="#cfcfcf" d="M141.567 160.442v-3.826h4.905v-7.849h7.75v8.045h2.846v-10.595h6.279v4.905h5.984v-4.71h2.649v7.555h4.317v-18.934h15.01v9.712h8.633v-21.093h6.475v22.368h9.671v-5.906h9.23v10.752h15.794v-12.37h5.139v14.464h7.707v-4.092h5.994v5.9h4.633v6.184z" />
+                            <path id="city-sklyine-back-2"  fill="#c9d9cf" d="M137.054 160.073v-7.938h12.7v-21.96h10.319v7.938h4.762v10.054h5.557v-26.459h6.879v29.105h15.102l-.02-23.813h6.084v23.813h6.615v-9.26h5.292v-7.674h6.085v11.642h3.704v-15.875h3.44v19.579h4.498v-30.163h8.372l.095 30.163h2.91v-7.938h5.292v7.673h4.498v-12.7h7.408v12.7h2.646v-10.054h5.291v21.167z"/>
+                            <path id="city-skyline-front-2"  fill="#b4ccc6"  d="M141.567 160.442v-3.826h4.905v-7.849h7.75v8.045h2.846v-10.595h6.279v4.905h5.984v-4.71h2.649v7.555h4.317v-18.934h15.01v9.712h8.633v-21.093h6.475v22.368h9.671v-5.906h9.23v10.752h15.794v-12.37h5.139v14.464h7.707v-4.092h5.994v5.9h4.633v6.184z" />
                         </g>
                         <path id="grass-background" fill="#00502e" d="M377.23 170.213C263.445 159.893 86.36 160.091-3.758 171.3l-.176 5.792 381.34-1.086z"/>
                         <g id="home-1"  transform="translate(-278.84 1.616)">
-                            <rect fill="#6b87a4" stroke-width=".332" width="51.053" height="2.749" x="237.574" y="145.217" ry="1"/>
-                            <path fill="#efe2bb" stroke-width=".522" d="M241.396 147.966h45.126l40.244-3.376v22.138l-85.37 3.905z"/>
-                            <path fill="#c8b7b7" stroke-width=".266" d="M240.587 166.978h47.449l39.642-3.175v4.184l-87.091 2.646z" />
+                            <rect fill="#6b87a4" width="51.053" height="2.749" x="237.574" y="145.217" ry="1"/>
+                            <path fill="#efe2bb" d="M241.396 147.966h45.126l40.244-3.376v22.138l-85.37 3.905z"/>
+                            <path fill="#c8b7b7" d="M240.587 166.978h47.449l39.642-3.175v4.184l-87.091 2.646z" />
                             <path fill="#616298" opacity=".5" d="M241.396 148.091h6.942v11.125h-6.942z" />
-                            <path fill="#9cb8d6" stroke-width="1.056" d="M999.93 481.54v67.019h82.379l-.653.498 178.606-.395-89.62-66.775v-.348l-12.514-9.036z"  transform="scale(.26458)"/>
+                            <path fill="#9cb8d6" d="M999.93 481.54v67.019h82.379l-.653.498 178.606-.395-89.62-66.775v-.348l-12.514-9.036z"  transform="scale(.26458)"/>
                             <rect fill="#6b87a4" width="9.612" height="1.51" x="239.25" y="159.138" ry=".549"/>
                             <path fill="#e3dbdb" opacity=".5" d="M271.005 144.954l-29.523.15 14.632-25.643z" transform="matrix(1.60062 0 0 .69665 -145.54 44.185)"/>
                             <path fill="#616298" d="M292.294 152.14l12.139-1.059v8.497l-12.139 1.059z" />
                             <path fill="#ac9d93" d="M256.781 152.88h9.171v17.597h-9.171z" />
-                            <path fill="#6b87a4" stroke-width=".327" d="M278.113 165.53l41.998.147a.999.999 0 011 1v.749a.996.996 0 01-1 1l-41.998-.148a.999.999 0 01-1-1v-.749a.996.996 0 011-1z"  transform="matrix(.99742 -.07184 .06703 .99775 0 0)"/>
+                            <path fill="#6b87a4"d="M278.113 165.53l41.998.147a.999.999 0 011 1v.749a.996.996 0 01-1 1l-41.998-.148a.999.999 0 01-1-1v-.749a.996.996 0 011-1z"  transform="matrix(.99742 -.07184 .06703 .99775 0 0)"/>
                             <path fill="#616298" opacity=".5" d="M309.552 150.582l12.139-1.058v8.497l-12.139 1.058z" />
                             <path fill="#616298" opacity=".5" d="M272.672 152.774h8.508v7.993h-8.508z"/>
                         </g>
                         <g id="home-2">
                             <rect fill="#6b87a4" width="96.505" height="2.749" x="237.574" y="145.217" ry="1"/>
-                            <path fill="#efe2bb" stroke-width=".522" d="M241.396 147.966h93.012v22.667h-93.012z"/>
-                            <path fill="#c8b7b7" stroke-width=".266" d="M240.587 164.862h94.499v5.771h-94.499z" />
-                            <path fill="#616298" stroke-width=".1" d="M241.396 148.091h6.942v11.125h-6.942z" />
-                            <path fill="#9cb8d6" stroke-width="1.056" d="M999.93 481.54v67.019h82.379l-.653.498 178.606-.395-89.62-66.775v-.348h-.466z" transform="scale(.26458)"/>
+                            <path fill="#efe2bb" d="M241.396 147.966h93.012v22.667h-93.012z"/>
+                            <path fill="#c8b7b7" d="M240.587 164.862h94.499v5.771h-94.499z" />
+                            <path fill="#616298" d="M241.396 148.091h6.942v11.125h-6.942z" />
+                            <path fill="#9cb8d6" d="M999.93 481.54v67.019h82.379l-.653.498 178.606-.395-89.62-66.775v-.348h-.466z" transform="scale(.26458)"/>
                             <rect fill="#6b87a4" width="9.612" height="1.51" x="239.25" y="159.138" ry=".549"/>
-                            <path fill="#eeebdd" stroke-width=".265" d="M271.005 144.954l-29.523.15 14.632-25.643z" transform="matrix(1.60062 0 0 .69665 -145.54 44.185)"/>
+                            <path fill="#eeebdd" d="M271.005 144.954l-29.523.15 14.632-25.643z" transform="matrix(1.60062 0 0 .69665 -145.54 44.185)"/>
                         </g>
                         <g id="tree-4"  transform="translate(-34.61 -.224)">
-                            <path   fill="#F2855D" fill="#c87137" d="M326.005 171.342v-10.677h-6.452c-2.762 8.62-6.111 6.06-8.17-3.041l-2.921.139c1.19 7.69 4.883 16.973 11.871 9.926v3.3z" />
-                            <circle fill="#00502e" fill="teal" cx="310.077" cy="141.019" r="10.497"/>
-                            <circle fill="#009857" fill="#71c837" cx="318.935" cy="153.631" r="8.679" />
-                            <circle fill="#9ACA3C" fill="#aade87" cx="330.491" cy="157.561" r="8.679"/>
-                            <circle fill="#CED99E" fill="#aade87"  cx="303.976" cy="152.282" r="8.679"/>
+                            <path   fill="#F2855D" d="M326.005 171.342v-10.677h-6.452c-2.762 8.62-6.111 6.06-8.17-3.041l-2.921.139c1.19 7.69 4.883 16.973 11.871 9.926v3.3z" />
+                            <circle fill="#00502e" cx="310.077" cy="141.019" r="10.497"/>
+                            <circle fill="#009857" cx="318.935" cy="153.631" r="8.679" />
+                            <circle fill="#9ACA3C" cx="330.491" cy="157.561" r="8.679"/>
+                            <circle fill="#CED99E" cx="303.976" cy="152.282" r="8.679"/>
                         </g>
                         <g id="tree-3"  transform="translate(22 0)">
-                            <path   fill="#F2855D" fill="#c87137" d="M326.005 171.342v-10.677h-6.452c-2.762 8.62-6.111 6.06-8.17-3.041l-2.921.139c1.19 7.69 4.883 16.973 11.871 9.926v3.3z" />
-                            <circle fill="#00502e" fill="teal"  cx="313.046" cy="141.16" r="10.497" />
-                            <circle fill="#009857" fill="#71c837" cx="321.762" cy="154.903" r="8.679"  />
-                            <circle fill="#CED99E" fill="#aade87" cx="330.349" cy="155.44" r="8.679" />
-                            <circle fill="#9ACA3C" fill="#aade87" cx="309.066" cy="155.392" r="8.679" />
+                            <path   fill="#F2855D" d="M326.005 171.342v-10.677h-6.452c-2.762 8.62-6.111 6.06-8.17-3.041l-2.921.139c1.19 7.69 4.883 16.973 11.871 9.926v3.3z" />
+                            <circle fill="#00502e" cx="313.046" cy="141.16" r="10.497" />
+                            <circle fill="#009857" cx="321.762" cy="154.903" r="8.679"  />
+                            <circle fill="#CED99E" cx="330.349" cy="155.44" r="8.679" />
+                            <circle fill="#9ACA3C" cx="309.066" cy="155.392" r="8.679" />
                         </g>
                         <g id="tree-2"  transform="matrix(.92228 0 0 .92228 -203.556 8.37)">
-                            <path   fill="#F2855D" fill="#c87137" d="M292.244 172.695V162.02h-6.452c-2.762 8.62-6.11 6.06-8.169-3.041l-2.922.138c1.19 7.691 4.883 16.973 11.872 9.927v3.3z"/>
-                            <circle fill="#CED99E" fill="#aade87"  cx="285.205" cy="154.511" r="9.265" />
-                            <circle fill="#8DBF87" fill="#87de87" cx="277.169" cy="141.781" r="10.497"  />
-                            <circle fill="#009857" fill="#b3ff80"  cx="295.94"  cy="159.145" r="8.033" />
-                            <circle fill="#008848" fill="#cfa"     cx="269.364" cy="152.865" r="11.612" />
+                            <path   fill="#F2855D" d="M292.244 172.695V162.02h-6.452c-2.762 8.62-6.11 6.06-8.169-3.041l-2.922.138c1.19 7.691 4.883 16.973 11.872 9.927v3.3z"/>
+                            <circle fill="#CED99E" cx="285.205" cy="154.511" r="9.265" />
+                            <circle fill="#8DBF87" cx="277.169" cy="141.781" r="10.497"  />
+                            <circle fill="#009857" cx="295.94"  cy="159.145" r="8.033" />
+                            <circle fill="#008848" cx="269.364" cy="152.865" r="11.612" />
                         </g>
                         <g id="tree-1" transform="matrix(.92228 0 0 .92228 -249.186 11.802)">
-                            <path   fill="#F2855D" fill="#c87137"d="M292.244 172.695V162.02h-6.452c-2.762 8.62-6.11 6.06-8.169-3.041l-2.922.138c1.19 7.691 4.883 16.973 11.872 9.927v3.3z"/>
-                            <circle fill="#CED99E" fill="#aade87"  cx="285.205" cy="154.511" r="9.265"  />
-                            <circle fill="#8DBF87" fill="#87de87"  cx="277.169" cy="141.781" r="10.497" />
-                            <circle fill="#009857" fill="#b3ff80"  cx="295.94"  cy="159.145" r="8.033" />
-                            <circle fill="#008848" fill="#cfa"   cx="269.364" cy="152.865" r="11.612" />
+                            <path   fill="#F2855D" d="M292.244 172.695V162.02h-6.452c-2.762 8.62-6.11 6.06-8.169-3.041l-2.922.138c1.19 7.691 4.883 16.973 11.872 9.927v3.3z"/>
+                            <circle fill="#CED99E" cx="285.205" cy="154.511" r="9.265"  />
+                            <circle fill="#8DBF87" cx="277.169" cy="141.781" r="10.497" />
+                            <circle fill="#009857" cx="295.94"  cy="159.145" r="8.033" />
+                            <circle fill="#008848" cx="269.364" cy="152.865" r="11.612" />
                         </g>
-                        <path class="road" fill="#7991A9" fill="#486a80" d="M374.419 172.093c-113.113-4.992-327.493-4.896-417.079.525l-.175 2.8 417.429-.524z"/>
+                        <path class="road" fill="#7991A9" d="M374.419 172.093c-113.113-4.992-327.493-4.896-417.079.525l-.175 2.8 417.429-.524z"/>
                         <rect class="foreground-grass" fill="#D5E0A1" width="600" height="400" x="-42.8" y="174.622"/>
-                        <rect id="footpath"  fill="#cea98d" fill="#c4c09f" width="600" height="3.799" x="-42.8" y="178.042"/>
+                        <rect id="footpath"  fill="#cea98d" width="600" height="3.799" x="-42.8" y="178.042"/>
                     </g>
 
                     <g id="animation-layer">
                         <g id="waste-truck" transform='translate(5, 0)'>
                             <g id="chassis-group">
-                                <rect id="undertray"fill="#8ca18e"  width="49.371" height="11.66" x="122.886" y="156.812" ry="2.729" transform="skewX(-.79) scale(1 .9999)"/>
+                                <rect id="undertray"fill="#8ca18e"  width="49.371" height="11.66" x="122.886" y="156.812" ry="2.729"/>
                                 <rect id="undertray-front" fill="#4c6463"  width="9.679" height="7.372" x="96.752" y="162.691"rx="0"/>
                                 <rect id="bumper" fill="#eaf3e0" width="6.584" height="9.51" x="94.782" y="161.087" ry="2.6"/>
                                 <path id="cab" fill="#a4c283" d="M117.099 139.056c-3.214.22-6.522.047-9.766.034-4.367-.07-7.879 4.213-7.97 7.225v15.093c0 .804.648 1.452 1.452 1.452h16.284c1.43 0 2.58-1.151 2.58-2.58v-18.644c0-1.43-1.15-2.58-2.58-2.58zm-11.19 3.33h7.355c.554 0 1 .446 1 1v7.944c0 .554-.446 1-1 1h-9.471c-.554 0-1.263-1.664-1.113-2.197l1.93-6.822c.15-.533.745-.925 1.3-.925z"/>
@@ -463,7 +422,6 @@
                         <use id="garbage-bin-1"     xlink:href="#garbage-bin-flat"  transform = "translate(217, 190) scale(1.7 1.7)"/>
                         <use id="organics-bin-1"    xlink:href="#organics-bin"      transform = "translate(330, 190) scale(-1.5 1.5)"/>
                     </g>
-
                     <g id="foreground-layer">
                         <g id="streetlight-group">
                             <path fill="#5992c7" opacity=".8" transform="scale(.26458)" d="M220.904 373.309l-20.974 1.326c-30.105-1.082-35.945 26.99-35.834 42.265v275.2c0 .757 2.802 1.367 6.285 1.367 3.482 0 6.287-.61 6.287-1.367V416.9c1.447-23.634 14.93-29.275 23.527-29.255l19.912-.53z"  />
@@ -475,17 +433,18 @@
                     </g>
                 </g>
 
+                <!-- 2. CENTRE ILLUSTRATION FOR THE MRF AND LANDFILL SCENE -->
                 <g id = "destination-scene" transform="translate(500, 920) scale(0.7)">
                     <defs>
                         <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                            <path fill="#ff0" stroke-width=".265" d="M120.873 138.9a.128.128 0 00-.128.129v3.888l-13.881.05a.108.108 0 00-.109.107v20.91c0 .06.049.107.109.107 20.582-.111 63.248.059 63.248.059s.128-18.903.128-25.071a.128.128 0 00-.128-.128z"/>
+                            <path fill="#ff0" d="M120.873 138.9a.128.128 0 00-.128.129v3.888l-13.881.05a.108.108 0 00-.109.107v20.91c0 .06.049.107.109.107 20.582-.111 63.248.059 63.248.059s.128-18.903.128-25.071a.128.128 0 00-.128-.128z"/>
                         </clipPath>
                         <clipPath id="b" clipPathUnits="userSpaceOnUse">
                             <path fill="#5d7a5a" d="M169.207 124.721c-.996.006-1.846.51-2.022 1.928H136.98c-2.216 0-4.053 1.784-4 4 .069 2.386-.046 8.585-.06 9.357l-4.032.054s-1.176-5.292-3.37-6.134c-1.05-.402-3.522-.726-4.583-.018-2.016 1.346-1.619 5.32-1.706 10.245v10.655c0 2.216 1.784 4 4 4h11.394c.692 1.024 1.653 2.245 2.357 2.53h34.165c4.432 0 8-3.569 8-8v-18.689a7.98 7.98 0 00-7.9-7.997c-.174-1.423-1.03-1.93-2.03-1.93h-.008z"/>
                         </clipPath>
                     </defs>
                     <path class = "sky" fill="#d7f4ee" d="M-388.285 204C298.443-82.731 945.97-65.578 1595.258 204v375.633H-388.285z"/>
-                    <path class = "ground" fill="#D5E0A1" d="M458.211 513.585h416.948v60.923H458.211z"/>
+                    <path class = "ground" fill="#c8ab37" d="M458.211 513.585h416.948v60.923H458.211z"/>
                     <path class = "foreground-grass" fill="#D5E0A1" d="M-388.776 579.613c277.38-170.866 617.885-172.25 854.673-154.826-.601 27.529 14.06 149.008 14.06 149.008z"/>
                     <path class = "foreground-grass" fill="#D5E0A1" d="M1591.542 598.231c-257.8-114.563-325.884-189.535-877.28-173.444.6 27.529-16.28 129.386-14.06 149.008 299.705 4.497 591.637 19.829 891.34 24.436z"/>
                     <path fill="#668000" d="M147.66 433.268c45.087 20.51 45.773 66.02 171.067 12.547 111.378-33.595-2.914-29.678-171.067-12.547z"/>
@@ -545,55 +504,55 @@
                             <circle cx="151.715" cy="518.817" r="18.881" fill="#b3ff80"/>
                             <circle cx="89.254" cy="504.058" r="27.291" fill="#cfa"/>
                         </g>
-                        <g>
-                            <circle cx="529.941" cy="539.384" r="13.485" fill="#483e37"/>
-                            <circle cx="548.554" cy="519.182" r="13.485" fill="#6c5d53"/>
-                            <circle cx="561.986" cy="536.598" r="13.485" fill="#6c5d53"/>
-                            <circle cx="561.986" cy="536.598" r="13.485" fill="#6c5d53"/>
-                            <circle cx="625.38" cy="526.845" r="13.485" fill="#2b2200"/>
-                            <circle cx="626.076" cy="544.261" r="13.485" fill="#2b2200"/>
-                            <circle cx="525.28" cy="517.838" r="13.485" fill="#483e37"/>
-                            <circle cx="570.346" cy="512.912" r="13.485" fill="#6c5d53"/>
-                            <circle cx="598.908" cy="527.541" r="13.485" fill="#ac9d93"/>
-                            <circle cx="598.908" cy="527.541" r="13.485" fill="#ac9d93"/>
-                            <path fill="#ac9d93" d="M599.159 557.229l-48.808-36.514 56.026-24.011z"/>
-                            <path fill="#ac9d93" d="M664.175 556.545l-48.807-36.515 56.025-24.01z"/>
-                            <path fill="#a05a2c" d="M604.777 554.614l-37.717 8.934 11.122-37.132z"/>
-                            <circle cx="591.535" cy="499.006" r="13.485" fill="#483e37"/>
-                            <circle cx="578.667" cy="496.597" r="6.641" fill="#6c5d53"/>
-                            <circle cx="608.524" cy="505.116" r="13.485" fill="#6c5d53"/>
-                            <circle cx="600.311" cy="475.003" r="13.485" fill="#6c5d53"/>
-                            <circle cx="669.18" cy="511.788" r="13.485" fill="#2b2200"/>
-                            <circle cx="611.02" cy="488.826" r="13.485" fill="#2b2200"/>
-                            <circle cx="542.491" cy="504.15" r="6.641" fill="#483e37"/>
-                            <circle cx="625.096" cy="468.427" r="10.748" fill="#6c5d53"/>
-                            <circle cx="634.495" cy="487.163" r="13.485" fill="#ac9d93"/>
-                            <circle cx="634.495" cy="487.163" r="13.485" fill="#ac9d93"/>
-                            <path fill="#a05a2c" d="M652.684 512.867l-37.718 8.933 11.123-37.13z"/>
-                            <circle cx="539.522" cy="545.544" r="13.485" fill="#483e37"/>
-                            <circle cx="590.986" cy="524.657" r="13.485" fill="#6c5d53"/>
-                            <circle cx="604.418" cy="542.073" r="13.485" fill="#6c5d53"/>
-                            <circle cx="604.418" cy="542.073" r="13.485" fill="#6c5d53"/>
-                            <circle cx="667.811" cy="532.32" r="13.485" fill="#2b2200"/>
-                            <circle cx="674.667" cy="553.158" r="13.485" fill="#2b2200"/>
-                            <circle cx="560.969" cy="523.313" r="13.485" fill="#483e37"/>
-                            <circle cx="612.777" cy="518.387" r="13.485" fill="#6c5d53"/>
-                            <circle cx="641.339" cy="533.016" r="13.485" fill="#ac9d93"/>
-                            <circle cx="641.339" cy="533.016" r="13.485" fill="#ac9d93"/>
-                            <path fill="#ac9d93" d="M641.59 562.704l-48.807-36.514 56.026-24.011z"/>
-                            <path fill="#ac9d93" d="M693.45 552.622l-48.807-36.514 56.025-24.011z"/>
-                            <path fill="#a05a2c" d="M659.528 558.72l-37.718 8.934 11.123-37.131z"/>
-                            <circle cx="633.967" cy="504.481" r="13.485" fill="#483e37"/>
-                            <circle cx="571.128" cy="481.398" r="13.485" fill="#6c5d53"/>
-                            <circle cx="650.955" cy="510.591" r="13.485" fill="#6c5d53"/>
-                            <circle cx="642.743" cy="480.479" r="13.485" fill="#6c5d53"/>
-                            <circle cx="687.178" cy="468.407" r="13.485" fill="#2b2200"/>
-                            <circle cx="653.451" cy="494.301" r="13.485" fill="#2b2200"/>
-                            <circle cx="588.002" cy="498.333" r="9.721" fill="#483e37"/>
-                            <circle cx="663.421" cy="477.324" r="13.485" fill="#6c5d53"/>
-                            <circle cx="676.927" cy="492.638" r="13.485" fill="#ac9d93"/>
-                            <circle cx="683.771" cy="500.851" r="13.485" fill="#ac9d93"/>
-                            <path fill="#a05a2c" d="M531.773 552.173l-37.718 8.933 11.123-37.13z"/>
+                        <g id="landfill">
+                            <circle cx="529.941" cy="539.384" r="13.485"fill="#483e37"/>
+                            <circle r="13.485" cy="519.182" cx="548.554"fill="#6c5d53"/>
+                            <circle cx="561.986" cy="536.598" r="13.485"fill="#6c5d53"/>
+                            <circle r="13.485" cy="536.598" cx="561.986" fill="#6c5d53"/>
+                            <circle cx="625.38" cy="526.845" r="13.485"fill="#2b2200"/>
+                            <circle r="13.485" cy="514.037" cx="558.621" fill="#2b2200"/>
+                            <circle r="13.485" cy="517.838" cx="525.28" fill="#483e37"/>
+                            <circle cx="570.346" cy="512.912" r="13.485"fill="#6c5d53"/>
+                            <circle r="13.485" cy="527.541" cx="598.908" fill="#ac9d93"/>
+                            <circle cx="598.908" cy="527.541" r="13.485"fill="#ac9d93"/>
+                            <path d="M599.159 557.229l-48.808-36.514 56.026-24.011z" fill="#ac9d93"/>
+                            <path d="M615.116 515.37l-48.807-36.514 56.026-24.01z" fill="#ac9d93"/>
+                            <path transform="rotate(-50.126 1059.754 570.744) scale(.42876)" d="M1800.859 474.236l-72.387-54.155 83.093-35.612z" fill="#a05a2c"/>
+                            <circle r="13.485" cy="499.006" cx="591.535"  fill="#483e37"/>
+                            <circle cx="578.667" cy="496.597" r="6.641"   fill="#6c5d53"/>
+                            <circle r="13.485" cy="505.116" cx="608.524"  fill="#6c5d53"/>
+                            <circle cx="514.897" cy="512.235" r="13.485"  fill="#6c5d53"/>
+                            <circle r="13.485" cy="511.788" cx="669.18"   fill="#2b2200"/>
+                            <circle cx="610.582" cy="480.065" r="13.485"  fill="#2b2200"/>
+                            <circle cx="542.491" cy="504.15" r="6.641"    fill="#483e37"/>
+                            <circle r="10.748" cy="490.329" cx="568.591"  fill="#6c5d53"/>
+                            <circle cx="632.305" cy="500.304" r="13.485"  fill="#ac9d93"/>
+                            <circle r="13.485" cy="476.212" cx="634.933"  fill="#ac9d93"/>
+                            <path transform="rotate(-33.321 1172.357 707.543) scale(.42876)"  d="M1800.859 474.236l-72.387-54.155 83.093-35.612z" fill="#a05a2c""/>
+                            <circle r="13.485" cy="475.898" cx="559.233"  fill="#483e37"/>
+                            <circle cx="590.986" cy="524.657" r="13.485"  fill="#6c5d53"/>
+                            <circle r="13.485" cy="542.073" cx="604.418"  fill="#6c5d53"/>
+                            <circle cx="631.137" cy="549.519" r="13.485"  fill="#6c5d53"/>
+                            <circle r="13.485" cy="532.32" cx="667.811"   fill="#2b2200"/>
+                            <circle cx="686.056" cy="550.529" r="13.485"  fill="#2b2200"/>
+                            <circle cx="560.969" cy="523.313" r="13.485"  fill="#483e37"/>
+                            <circle r="13.485" cy="490.792" cx="654.827"  fill="#6c5d53"/>
+                            <circle cx="641.339" cy="533.016" r="13.485"  fill="#ac9d93"/>
+                            <circle r="13.485" cy="533.016" cx="641.339"  fill="#ac9d93"/>
+                            <path transform="rotate(20.052 664.996 634.498)"  d="M641.59 562.704l-48.807-36.514 56.026-24.011z" fill="#ac9d93""/>
+                            <path d="M699.144 519.77l-48.807-36.514 56.026-24.01z" fill="#ac9d93" />
+                            <path transform="rotate(-50.126 1095.73 480.842) scale(.42876)" d="M1800.859 474.236l-72.387-54.155 83.093-35.612z" fill="#a05a2c"/>
+                            <circle cx="534.098" cy="498.787" r="13.485"  fill="#483e37"/>
+                            <circle r="13.485" cy="513.812" cx="485.276"  fill="#6c5d53"/>
+                            <circle cx="515.607" cy="485.186" r="13.485"  fill="#6c5d53"/>
+                            <circle r="13.485" cy="546.182" cx="548.13"   fill="#6c5d53"/>
+                            <circle cx="696.377" cy="497.316" r="13.485"  fill="#2b2200"/>
+                            <circle r="13.485" cy="502.185" cx="497.953"  fill="#2b2200"/>
+                            <circle r="9.721" cy="478.184" cx="589.316"   fill="#483e37"/>
+                            <circle cx="684.008" cy="473.382" r="13.485"  fill="#6c5d53"/>
+                            <circle r="13.485" cy="528.556" cx="506.098"  fill="#ac9d93"/>
+                            <circle cx="688.589" cy="528.446" r="13.485"  fill="#ac9d93"/>
+                            <path transform="matrix(.4895 -.20554 .2428 .47982 -471.52 706.254)" d="M1800.859 474.236l-72.387-54.155 83.093-35.612z" fill="#a05a2c"/>
                         </g>
                         <path fill="#668000" d="M927.224 471.785c-17.071 2.545-81.842 8.2-124.94-10.43 32.428-6.013 192.504-6.781 124.94 10.43z"/>
                         <g transform="translate(-22)">
@@ -711,6 +670,7 @@
                     </g>
                 </g>
 
+                <!-- 3. BACKGROUND ILLUSTRATION FOR THE LOWER SCENE WITH COUNCIL BUIlDING AND BINS -->
                 <g id = "council-scene" transform= "translate(445, 1285) scale(2.75)">
                     <defs>
                         <g id="garbage-bin-council"">
@@ -728,7 +688,6 @@
                                     <path d="M.52-15.134l11.01.028c.199.006 3.684-1.513 3.591-.999-.124.69-.225.615-3.662 1.81H.521z"/>
                                 </g>
                             </g>
-
                         </g>
                         <g id="recycling-bin-council"">
                             <path fill="#252d2f" d="M4.427-2.15A1.153 2.045 0 013.274-.107 1.153 2.045 0 012.121-2.15a1.153 2.045 0 011.153-2.045 1.153 2.045 0 011.153 2.045"/>
@@ -761,7 +720,6 @@
                                     <path d="M.52-15.134l11.01.028c.199.006 3.684-1.513 3.591-.999-.124.69-.225.615-3.662 1.81H.521z"/>
                                 </g>
                             </g>
-
                         </g>
                     </defs>
                     <g>
@@ -943,7 +901,6 @@
                     <use id="recycling-bin-2"   xlink:href="#recycling-bin-council"     transform = "translate(305, 196) scale(-1.5 1.5)"/>
                     <use id="organics-bin-2"    xlink:href="#organics-bin-council"      transform = "translate(345, 196) scale(-1.5 1.5)"/>
                     <use id="bin-chicken-2" xlink:href="#bin-chicken"  transform = "translate(235, 188) scale(-0.55 0.55)"/>
-
                 </g>
             </svg>
         </div>
@@ -957,7 +914,7 @@
         ////////////////////////////////////////////////////////////////////////////////
 
         const settings = {
-            svgID:          'streetscene-vis',
+            svgID:          'kerbside-graphic',
             year:           '2019-20', 
             dims: {
                 height:     1530, 
@@ -983,11 +940,11 @@
         }
 
 
-
         // Build from GSheet data
         buildFromGSheetData(settings)
 
         function buildFromGSheetData(settings) {
+            d3.select(`#${settings.svgID}`).style('opacity', 0)
             // 1. Specify data table links for each table used (tsv published output from each separate sheet/table)
             const gsTableLinks =   {
                 kerbsideCollectionData:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
@@ -1004,9 +961,10 @@
 
             }).then( async (data) => {
                 // 3. Initiate vis build sequence with data now loaded
-                await applyQuerySettings(settings)                                                       // a. Update settings if a query string is passed in
-                await transformData(data.table.kerbsideCollectionData   , data.table.kerbsideComposition)              // b. Parse data
+                await applyQuerySettings(settings)                                                                 // a. Update settings if a query string is passed in
+                await transformData(data.table.kerbsideCollectionData   , data.table.kerbsideComposition)          // b. Parse data
                 await renderVis(data.table.kerbsideCollectionData, data.table.kerbsideComposition, settings)       // c. Render visualisation(s)
+                await animateVis(settings)       // d. Animate in
             })
 
             // X. Table data parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
@@ -1038,6 +996,9 @@
             if (settings.queryParameters.has('year')) { 
                 settings.year = settings.queryParameters.get('year')  
             }
+            if (settings.queryParameters.has('extended-typography')) { 
+                d3.select(`#${settings.svgID}`).classed('extended-typography', settings.queryParameters.get('extended-typography') === "false" ? false  : true)
+             }
         };
 
         async function transformData(kerbsideData, recycleBinData) {      
@@ -1054,29 +1015,29 @@
 
         async function renderVis(collectionData, compositionData, settings){
             // 0. Data
-                const yearData = collectionData.filter(d => d.year === settings.year)[0],
-                    recycleBinData =  compositionData.filter(d => d.year === settings.year),
-                    totalCouncilCost = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'cost').map( d => yearData[d])),
-                    totalCollection = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'volume').map( d => yearData[d])),
-                    garbagePerPropertyTonnes = yearData.Garbage_volume / yearData.Population * settings.variables.peoplePerHousehold,
-                    garbageCostPerTonne = yearData.Garbage_cost  / yearData.Garbage_volume,
-                    garbagePerPropertyCost = yearData.Garbage_cost / yearData.Population * settings.variables.peoplePerHousehold,
-                    garbagePerTonneCost = yearData.Garbage_cost / yearData.Garbage_volume
-                    recyclingPerPropertyTonnes = yearData.Recycling_volume / yearData.Population * settings.variables.peoplePerHousehold,
-                    recyclingCostPerTonne = yearData.Recycling_cost / yearData.Recycling_volume ,
-                    recyclingPerPropertyCost = yearData.Recycling_cost / yearData.Population * settings.variables.peoplePerHousehold,
-                    recyclingPerTonneCost = yearData.Recycling_cost / yearData.Recycling_volume,
-                    organicsPerPropertyTonnes = yearData.Organics_volume / yearData.Population * settings.variables.peoplePerHousehold,
-                    organicsCostPerTonne  = yearData.Organics_cost / yearData.Organics_volume,
-                    organicsPerPropertyCost = yearData.Organics_cost / yearData.Population * settings.variables.peoplePerHousehold,
-                    organicsPerTonneCost = yearData.Organics_cost / yearData.Organics_volume
+            const yearData = collectionData.filter(d => d.year === settings.year)[0],
+                recycleBinData =  compositionData.filter(d => d.year === settings.year),
+                totalCouncilCost = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'cost').map( d => yearData[d])),
+                totalCollection = d3.sum(Object.keys(yearData).filter(d => d.slice(d.indexOf('_') + 1) === 'volume').map( d => yearData[d])),
+                garbagePerPropertyTonnes = yearData.Garbage_volume / yearData.Population * settings.variables.peoplePerHousehold,
+                garbageCostPerTonne = yearData.Garbage_cost  / yearData.Garbage_volume,
+                garbagePerPropertyCost = yearData.Garbage_cost / yearData.Population * settings.variables.peoplePerHousehold,
+                garbagePerTonneCost = yearData.Garbage_cost / yearData.Garbage_volume
+                recyclingPerPropertyTonnes = yearData.Recycling_volume / yearData.Population * settings.variables.peoplePerHousehold,
+                recyclingCostPerTonne = yearData.Recycling_cost / yearData.Recycling_volume ,
+                recyclingPerPropertyCost = yearData.Recycling_cost / yearData.Population * settings.variables.peoplePerHousehold,
+                recyclingPerTonneCost = yearData.Recycling_cost / yearData.Recycling_volume,
+                organicsPerPropertyTonnes = yearData.Organics_volume / yearData.Population * settings.variables.peoplePerHousehold,
+                organicsCostPerTonne  = yearData.Organics_cost / yearData.Organics_volume,
+                organicsPerPropertyCost = yearData.Organics_cost / yearData.Population * settings.variables.peoplePerHousehold,
+                organicsPerTonneCost = yearData.Organics_cost / yearData.Organics_volume
 
-                const icons = {
-                    bin:        "M16.444-2.62a.889.864 0 01-.888.864.889.864 0 01-.89-.864.889.864 0 01.89-.865.889.864 0 01.888.865M15.4-6.07l.582-12.974H1.796l.8 17.776c.028.693.615 1.24 1.328 1.24h9.29A3.386 3.386 0 0112.2-3.77c.482-1.33 1.75-2.242 3.199-2.3zm4.156-15.567h-1.334v.865h1.334a.438.438 0 00.444-.432.438.438 0 00-.444-.433zM15.809-5.2h-.005a2.348 2.348 0 00-.248-.013c-1.456-.008-2.652 1.116-2.694 2.531-.042 1.415 1.085 2.604 2.539 2.678 1.453.075 2.702-.993 2.813-2.404.111-1.412-.957-2.651-2.405-2.792zm-.253 4.308c-.982 0-1.778-.773-1.778-1.728s.796-1.729 1.778-1.729c.981 0 1.777.774 1.777 1.729 0 .458-.187.898-.52 1.222a1.803 1.803 0 01-1.257.506zm1.333-19.015a.439.439 0 00.444-.432v-.432H.444A.438.438 0 000-20.34c0 .239.199.432.444.432zm.444-2.16c0-.24-.199-.433-.444-.433H2.667c-.565 0-1.069.347-1.258.864h15.924z",
-                    binBody:    "M15.4-6.069l.582-12.974H1.796l.8 17.776c.028.693.615 1.24 1.328 1.24h9.29A3.386 3.386 0 0112.2-3.77c.482-1.33 1.75-2.242 3.199-2.3z",
-                    binWheel:   "M16.444-2.62a.877.877 0 01-.888.864.877.877 0 01-.89-.864c0-.478.399-.865.89-.865.49 0 .888.387.888.865M15.81-5.2h-.005a2.348 2.348 0 00-.248-.013c-1.456-.008-2.652 1.116-2.694 2.531-.042 1.415 1.085 2.604 2.539 2.678 1.453.075 2.702-.993 2.813-2.404.111-1.412-.957-2.651-2.405-2.792zm-.253 4.308c-.982 0-1.778-.773-1.778-1.728s.796-1.729 1.778-1.729c.981 0 1.777.774 1.777 1.729 0 .458-.187.898-.52 1.222a1.803 1.803 0 01-1.257.506z",
-                    binLid:     "M19.556-21.636h-1.334v.865h1.334a.438.438 0 00.444-.432.438.438 0 00-.444-.433zm-2.667 1.729a.439.439 0 00.444-.432v-.432H.444A.438.438 0 000-20.34c0 .239.199.432.444.432zm.444-2.16c0-.24-.199-.433-.444-.433H2.667c-.565 0-1.069.347-1.258.864h15.924z",
-                }
+            const icons = {
+                bin:        "M16.444-2.62a.889.864 0 01-.888.864.889.864 0 01-.89-.864.889.864 0 01.89-.865.889.864 0 01.888.865M15.4-6.07l.582-12.974H1.796l.8 17.776c.028.693.615 1.24 1.328 1.24h9.29A3.386 3.386 0 0112.2-3.77c.482-1.33 1.75-2.242 3.199-2.3zm4.156-15.567h-1.334v.865h1.334a.438.438 0 00.444-.432.438.438 0 00-.444-.433zM15.809-5.2h-.005a2.348 2.348 0 00-.248-.013c-1.456-.008-2.652 1.116-2.694 2.531-.042 1.415 1.085 2.604 2.539 2.678 1.453.075 2.702-.993 2.813-2.404.111-1.412-.957-2.651-2.405-2.792zm-.253 4.308c-.982 0-1.778-.773-1.778-1.728s.796-1.729 1.778-1.729c.981 0 1.777.774 1.777 1.729 0 .458-.187.898-.52 1.222a1.803 1.803 0 01-1.257.506zm1.333-19.015a.439.439 0 00.444-.432v-.432H.444A.438.438 0 000-20.34c0 .239.199.432.444.432zm.444-2.16c0-.24-.199-.433-.444-.433H2.667c-.565 0-1.069.347-1.258.864h15.924z",
+                binBody:    "M15.4-6.069l.582-12.974H1.796l.8 17.776c.028.693.615 1.24 1.328 1.24h9.29A3.386 3.386 0 0112.2-3.77c.482-1.33 1.75-2.242 3.199-2.3z",
+                binWheel:   "M16.444-2.62a.877.877 0 01-.888.864.877.877 0 01-.89-.864c0-.478.399-.865.89-.865.49 0 .888.387.888.865M15.81-5.2h-.005a2.348 2.348 0 00-.248-.013c-1.456-.008-2.652 1.116-2.694 2.531-.042 1.415 1.085 2.604 2.539 2.678 1.453.075 2.702-.993 2.813-2.404.111-1.412-.957-2.651-2.405-2.792zm-.253 4.308c-.982 0-1.778-.773-1.778-1.728s.796-1.729 1.778-1.729c.981 0 1.777.774 1.777 1.729 0 .458-.187.898-.52 1.222a1.803 1.803 0 01-1.257.506z",
+                binLid:     "M19.556-21.636h-1.334v.865h1.334a.438.438 0 00.444-.432.438.438 0 00-.444-.433zm-2.667 1.729a.439.439 0 00.444-.432v-.432H.444A.438.438 0 000-20.34c0 .239.199.432.444.432zm.444-2.16c0-.24-.199-.433-.444-.433H2.667c-.565 0-1.069.347-1.258.864h15.924z",
+            }
 
                 // a. Flow scale
                 const flowScale = d3.scaleLinear()
@@ -1085,7 +1046,7 @@
 
                 // b. Setup SVG Canvas ans layers
                 const xTransform = 370, yTransform = 300,
-                    svg = d3.select('#streetscene-vis').attr('viewBox', `${xTransform} ${yTransform} ${settings.dims.width} ${settings.dims.height} `),
+                    svg = d3.select(`#${settings.svgID}`).attr('viewBox', `${xTransform} ${yTransform} ${settings.dims.width} ${settings.dims.height} `),
                     defs = d3.select('defs'),
                     annotationLayer = svg.append('g').classed('annotation-group', true).attr('transform', `translate(${xTransform}, ${yTransform})`),
                     infographicLayer = annotationLayer.append('g') 
@@ -1109,107 +1070,109 @@
                     landfillY = 430, flowRadius = 80, contaminationRadius = 50
         
             // 1. Add Kerbside waste stream headers
-            annotationLayer.append('text').classed('lga-stream-title recycling', true)
+            annotationLayer.append('text').classed('lga-stream-title recycling street', true)
                 .attr('x', settings.dims.width / 6)
                 .attr('y', streamLabelY)
                 .text('Recyclables')
-            annotationLayer.append('text').classed('lga-stream-title garbage', true)
+            annotationLayer.append('text').classed('lga-stream-title garbage street', true)
                 .attr('x', settings.dims.width / 2)
                 .attr('y', streamLabelY)
                 .text('Garbage')
-            annotationLayer.append('text').classed('lga-stream-title organics', true)
+            annotationLayer.append('text').classed('lga-stream-title organics street', true)
                 .attr('x', settings.dims.width * 5/ 6)
                 .attr('y', streamLabelY)
                 .text('Organics')
 
             // 2. Add Kerbside waste destinations headers
-            annotationLayer.append('text').classed('waste-destination-title recycling', true)
+            annotationLayer.append('text').classed('waste-destination-title recycling destination', true)
                 .attr('x', settings.dims.width / 6)
                 .attr('y', facilityLabelY)
                 .attr('dy', 0)
                 .text('Materials recovery facilities')
                 .call(helpers.wrap, 300, 1)
-            annotationLayer.append('text').classed('waste-destination-title garbage', true)
+            annotationLayer.append('text').classed('waste-destination-title garbage destination', true)
                 .attr('x', settings.dims.width / 2)
                 .attr('y', facilityLabelY + 10)
                 .attr('dy', 0)
                 .text('Landfill')
                 .call(helpers.wrap, 300, 1)
-            annotationLayer.append('text').classed('waste-destination-title organics', true)
+            annotationLayer.append('text').classed('waste-destination-title organics destination', true)
                 .attr('x', settings.dims.width * 5/ 6)
                 .attr('y', facilityLabelY)
                 .attr('dy', 0)
                 .text('Organics reprocessing')
                 .call(helpers.wrap, 280, 1)
 
-            // 3. Recycling Info group: 
-                const recyclingGroup = infographicLayer.append('g').classed('recycling-group', true)
-                    .attr('transform', `translate(${xMargin} , ${collectionGroupY})`)
+            // 3. Recycling info group: 
+            const recyclingGroup = infographicLayer.append('g').classed('recycling-group street', true)
+                .attr('transform', `translate(${xMargin} , ${collectionGroupY})`)
                 // a. Recycling volume label
-                    recyclingGroup.append('text').classed('lga-data-label large recycling', true)
-                        .html(`A total of <tspan class = "bold">${helpers.numberFormatters.formatComma2dec(yearData.Recycling_volume/1000000)} million tonnes</tspan> were `)
-                    recyclingGroup.append('text').classed('lga-data-label large recycling', true)
-                        .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Recycling_properties/1000000)} million households`)
+                recyclingGroup.append('text').classed('lga-data-label large recycling', true)
+                    .html(`A total of <tspan class = "bold">${helpers.numberFormatters.formatComma2dec(yearData.Recycling_volume/1000000)} million tonnes</tspan> were `)
+                recyclingGroup.append('text').classed('lga-data-label large recycling', true)
+                    .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Recycling_properties/1000000)} million households`)
                         .attr('y', 20)
-                // b. Recycling iconograph 
-                    const noWholeRecycleBins = Math.floor(yearData.Recycling_volume/100000),
-                        partialRecycleBin = yearData.Recycling_volume/100000 - noWholeRecycleBins,
-                        recyclingIconChart = recyclingGroup.append('g').classed('icon-chart', true)
-                            .attr('id', 'recycling-icon-chart')
-                            .attr('transform', `translate(${0} , ${10})`)                        
-                        // For all 'whole' bins
-                    for(let i =0; i < Math.floor(yearData.Recycling_volume/100000); i++){
-                        rowNo = Math.floor(i / iconGraphMaxPerRow)
-                        colNo = i % iconGraphMaxPerRow
-                        recyclingIconChart.append('path').classed('recycling', true)
-                            .attr('d', icons.bin)
-                            .attr('transform', `translate(${colNo * colSpace } , ${xMargin + rowNo * rowSpace}) scale(${iconScale})`)
-                            .style('fill', binColour)
-                    }
-                    // Add the partial bin with its own clip path
-                    defs.append("clipPath")
-                        .attr('id', 'recycle-icon-partial')
-                        .append('rect')
-                            .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeRecycleBins + 1) / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
-                            .attr('x', 0)
-                            .attr('y', -(partialRecycleBin * iconHeight))
-                            .attr('height', partialRecycleBin * iconHeight)
-                            .attr('width', iconWidth)
 
-                    recyclingIconChart.append('g').attr('clip-path', `url(#recycle-icon-partial)`)
-                        .append('path').classed('recycling', true)
+                // b. Recycling iconograph 
+                const noWholeRecycleBins = Math.floor(yearData.Recycling_volume/100000),
+                    partialRecycleBin = yearData.Recycling_volume/100000 - noWholeRecycleBins,
+                    recyclingIconChart = recyclingGroup.append('g').classed('icon-chart', true)
+                        .attr('id', 'recycling-icon-chart')
+                        .attr('transform', `translate(${0} , ${10})`)                        
+                // For all 'whole' bins                   
+                for(let i =0; i < Math.floor(yearData.Recycling_volume/100000); i++){     
+                    rowNo = Math.floor(i / iconGraphMaxPerRow) 
+                    colNo = i % iconGraphMaxPerRow
+                    recyclingIconChart.append('path').classed('recycling', true)
                         .attr('d', icons.bin)
-                        .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeRecycleBins + 1)  / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
+                        .attr('transform', `translate(${colNo * colSpace } , ${xMargin + rowNo * rowSpace}) scale(${iconScale})`)
                         .style('fill', binColour)
+                }
+                // Add the partial bin with its own clip path
+                defs.append("clipPath")
+                    .attr('id', 'recycle-icon-partial')
+                    .append('rect')
+                        .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeRecycleBins + 1) / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
+                        .attr('x', 0)
+                        .attr('y', -(partialRecycleBin * iconHeight))
+                        .attr('height', partialRecycleBin * iconHeight)
+                        .attr('width', iconWidth)
+
+                recyclingIconChart.append('g').attr('clip-path', `url(#recycle-icon-partial)`)
+                    .append('path').classed('recycling', true)
+                    .attr('d', icons.bin)
+                    .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeRecycleBins + 1)  / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
+                    .style('fill', binColour)
 
                 // d. Add the flow paths
-                    const recyclingPath = `M${flowScale(yearData.Recycling_volume)/2} ${(rowNo + 1) * rowSpace + 40}  V${facilityY - flowRadius}  q 0, ${flowRadius}  ${flowRadius}, ${flowRadius}  H${mrfX}`,
-                        recyclingContaminationPath = `M${mrfXOut} ${facilityY}   H${settings.dims.width/2 - flowScale(yearData.Garbage_volume)/2 - xMargin - contaminationRadius - 5}   q ${contaminationRadius},0  ${contaminationRadius}, ${contaminationRadius} `,
-                        recycleContaminationRate = recycleBinData.filter(d => d.group ==='Contaminants')[0].volume / d3.sum(Object.values(recycleBinData).map(d => d.volume))
-                    recyclingGroup.append('path').classed('flowPath recycling paper', true)
-                        .attr('d', recyclingPath)
-                        .style('stroke-width', flowScale(yearData.Recycling_volume))
+                const recyclingPath = `M${flowScale(yearData.Recycling_volume)/2} ${(rowNo + 1) * rowSpace + 40}  V${facilityY - flowRadius}  q 0, ${flowRadius}  ${flowRadius}, ${flowRadius}  H${mrfX}`,
+                    recyclingContaminationPath = `M${mrfXOut} ${facilityY}   H${settings.dims.width/2 - flowScale(yearData.Garbage_volume)/2 - xMargin - contaminationRadius - 5}   q ${contaminationRadius},0  ${contaminationRadius}, ${contaminationRadius} `,
+                    recycleContaminationRate = recycleBinData.filter(d => d.group ==='Contaminants')[0].volume / d3.sum(Object.values(recycleBinData).map(d => d.volume))
 
-                    recyclingGroup.append('path').classed('flowPath recycling plastic', true)
-                        .attr('d', recyclingPath)
-                        .style('stroke-width', flowScale(yearData.Recycling_volume))
+                recyclingGroup.append('path').classed('flowPath recycling paper destination', true)
+                    .attr('d', recyclingPath)
+                    .style('stroke-width', flowScale(yearData.Recycling_volume))
 
-                    recyclingGroup.append('path').classed('flowPath recycling glass', true)
-                        .attr('d', recyclingPath)
-                        .style('stroke-width', flowScale(yearData.Recycling_volume))
+                recyclingGroup.append('path').classed('flowPath recycling plastic destination', true)
+                    .attr('d', recyclingPath)
+                    .style('stroke-width', flowScale(yearData.Recycling_volume))
 
-                    recyclingGroup.append('path').classed('flowPath recycling metal', true)
-                        .attr('d', recyclingPath)
-                        .style('stroke-width', flowScale(yearData.Recycling_volume))
+                recyclingGroup.append('path').classed('flowPath recycling glass destination', true)
+                    .attr('d', recyclingPath)
+                    .style('stroke-width', flowScale(yearData.Recycling_volume))
 
+                recyclingGroup.append('path').classed('flowPath recycling metal destination', true)
+                    .attr('d', recyclingPath)
+                    .style('stroke-width', flowScale(yearData.Recycling_volume))
 
-                    recyclingGroup.append('path').classed('flowPath garbage', true)
-                        .attr('d', recyclingContaminationPath)
-                        .style('stroke-width', flowScale(yearData.Recycling_volume * recycleContaminationRate))
+                recyclingGroup.append('path').classed('flowPath garbage destination', true)
+                    .attr('d', recyclingContaminationPath)
+                    .style('stroke-width', flowScale(yearData.Recycling_volume * recycleContaminationRate))
 
             // 4. Garbage Info group
-                const garbageGroup = infographicLayer.append('g').classed('recycling-group', true)
-                        .attr('transform', `translate(${settings.dims.width / 2 - settings.dims.width / 6 + xMargin} , ${collectionGroupY})`)
+            const garbageGroup = infographicLayer.append('g').classed('garbage-group street', true)
+                    .attr('transform', `translate(${settings.dims.width / 2 - settings.dims.width / 6 + xMargin} , ${collectionGroupY})`)
+
                 // a. Garbage volume label
                 garbageGroup.append('text').classed('lga-data-label large garbage', true)
                     .html(`A total of <tspan class = "bold">${helpers.numberFormatters.formatComma2dec(yearData.Garbage_volume/1000000)} million tonnes</tspan> were`)
@@ -1223,8 +1186,8 @@
                     garbageIconChart = garbageGroup.append('g').classed('icon-chart', true)
                         .attr('id', 'garbage-icon-chart')
                         .attr('transform', `translate(${0} , ${10})`)     
-                // For all 'whole' bins
-                for(let i =0; i < Math.floor(yearData.Garbage_volume/100000); i++){
+               
+                for(let i =0; i < Math.floor(yearData.Garbage_volume/100000); i++){      // For all 'whole' bins
                     rowNo = Math.floor(i / iconGraphMaxPerRow)
                     colNo = i % iconGraphMaxPerRow
                     garbageIconChart.append('path').classed('recycling', true)
@@ -1240,6 +1203,7 @@
                         .attr('y', -(partialGarbageBin * iconHeight))
                         .attr('height', partialGarbageBin * iconHeight)
                         .attr('width', iconWidth)
+
                 garbageIconChart.append('g').attr('clip-path', `url(#garbage-icon-partial)`)
                     .append('path').classed('garbage', true)
                     .attr('d', icons.bin)
@@ -1248,102 +1212,105 @@
 
                 // c. Garbage flow path
                 const  garbagePath = `M${-xMargin - settings.dims.width / 3 + settings.dims.width / 2} ${(rowNo + 1) * rowSpace + 40} V${landfillY}`
-                garbageGroup.append('path').classed('flowPath garbage', true)
+                garbageGroup.append('path').classed('flowPath garbage destination', true)
                     .attr('d', garbagePath) 
                     .style('stroke-width', flowScale(yearData.Garbage_volume))
 
             // 5. Organics group
-            const organicsGroup = infographicLayer.append('g').classed('organics-group', true)
+            const organicsGroup = infographicLayer.append('g').classed('organics-group street', true)
                 .attr('transform', `translate(${settings.dims.width * 2 / 3 + xMargin} , ${collectionGroupY})`)
-                // a. Volume label
-                    organicsGroup.append('text').classed('lga-data-label large organics', true)
-                        .html(`A total of <tspan class ="bold">${helpers.numberFormatters.formatComma2dec(yearData.Organics_volume/1000000)} million tonnes</tspan> were`)
-                    organicsGroup.append('text').classed('lga-data-label large organics', true)
-                        .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Organics_properties/1000000)} million households`)
-                        .attr('transform', `translate(${0}, ${20})`)
-                // b. Iconograph 
-                    const noWholeOrganicsBins = Math.floor(yearData.Organics_volume/100000),
-                        partialOrganicsBin = yearData.Organics_volume/100000 - noWholeOrganicsBins,
-                        organicsIconChart = organicsGroup.append('g').classed('icon-chart', true)
-                            .attr('id', 'organics-icon-chart')
-                            .attr('transform', `translate(${0} , ${10})`)    
-                    // For all 'whole' bins
-                    for(let i =0; i < Math.floor(yearData.Organics_volume/100000); i++){
-                        rowNo = Math.floor(i / iconGraphMaxPerRow)
-                        colNo = i % iconGraphMaxPerRow
-                        organicsIconChart.append('path').classed('organics', true)
-                            .attr('d', icons.bin)
-                            .attr('transform', `translate(${colNo * colSpace } , ${xMargin + rowNo * rowSpace})  scale(${iconScale})`)
-                            .style('fill', binColour)
-                    }
-                    // Add the partial bin with its own clip path
-                    defs.append("clipPath").attr('id', 'organics-icon-partial')
-                        .append('rect')
-                            .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeOrganicsBins + 1) / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
-                            .attr('x', 0)
-                            .attr('y', -(partialOrganicsBin * iconHeight))
-                            .attr('height', partialOrganicsBin * iconHeight)
-                            .attr('width', iconWidth)
 
-                    organicsIconChart.append('g').attr('clip-path', `url(#organics-icon-partial)`)
-                        .append('path').classed('organics', true)
+                // a. Volume label
+                organicsGroup.append('text').classed('lga-data-label large organics', true)
+                    .html(`A total of <tspan class ="bold">${helpers.numberFormatters.formatComma2dec(yearData.Organics_volume/1000000)} million tonnes</tspan> were`)
+                organicsGroup.append('text').classed('lga-data-label large organics', true)
+                    .text(`collected from ${helpers.numberFormatters.formatComma2dec(yearData.Organics_properties/1000000)} million households`)
+                    .attr('transform', `translate(${0}, ${20})`)
+
+                // b. Iconograph 
+                const noWholeOrganicsBins = Math.floor(yearData.Organics_volume/100000),
+                    partialOrganicsBin = yearData.Organics_volume/100000 - noWholeOrganicsBins,
+                    organicsIconChart = organicsGroup.append('g').classed('icon-chart', true)
+                        .attr('id', 'organics-icon-chart')
+                        .attr('transform', `translate(${0} , ${10})`)    
+                // For all 'whole' bins
+                for(let i =0; i < Math.floor(yearData.Organics_volume/100000); i++){
+                    rowNo = Math.floor(i / iconGraphMaxPerRow)
+                    colNo = i % iconGraphMaxPerRow
+                    organicsIconChart.append('path').classed('organics', true)
                         .attr('d', icons.bin)
-                        .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeOrganicsBins + 1)  / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
+                        .attr('transform', `translate(${colNo * colSpace } , ${xMargin + rowNo * rowSpace})  scale(${iconScale})`)
                         .style('fill', binColour)
+                }
+                // Add the partial bin with its own clip path
+                defs.append("clipPath").attr('id', 'organics-icon-partial')
+                    .append('rect')
+                        .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeOrganicsBins + 1) / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
+                        .attr('x', 0)
+                        .attr('y', -(partialOrganicsBin * iconHeight))
+                        .attr('height', partialOrganicsBin * iconHeight)
+                        .attr('width', iconWidth)
+
+                organicsIconChart.append('g').attr('clip-path', `url(#organics-icon-partial)`)
+                    .append('path').classed('organics', true)
+                    .attr('d', icons.bin)
+                    .attr('transform', `translate(${(colNo+ 1) * colSpace } , ${xMargin + Math.floor((noWholeOrganicsBins + 1)  / iconGraphMaxPerRow) * rowSpace})  scale(${iconScale})`)
+                    .style('fill', binColour)
 
                 // c.  Flow paths
-                    const organicsPath = `M${-xMargin - settings.dims.width * 2/ 3 + settings.dims.width -xMargin} ${(rowNo + 1) * rowSpace + 40} V${facilityY - flowRadius}  q 0, ${flowRadius}  ${-flowRadius}, ${flowRadius}  H${organicsFacilityX}`,
-                        organicsContaminationPath = `M${organicsFacilityXOut} ${facilityY}   H${-(settings.dims.width * 2 / 3 + xMargin) + settings.dims.width / 2  + flowScale(yearData.Garbage_volume)/2 + contaminationRadius + 5}  q ${-contaminationRadius},0  ${-contaminationRadius}, ${contaminationRadius} `,
-                        organicsContaminationRate = 0
-                    organicsGroup.append('path').classed('flowPath organics', true)
-                        .attr('d', organicsPath)
-                        .style('stroke-width', flowScale(yearData.Organics_volume))
-                    organicsGroup.append('path').classed('flowPath garbage', true)
-                        .attr('d', organicsContaminationPath)
-                        .style('stroke-width', flowScale(yearData.Recycling_volume * organicsContaminationRate))
+                const organicsPath = `M${-xMargin - settings.dims.width * 2/ 3 + settings.dims.width -xMargin} ${(rowNo + 1) * rowSpace + 40} V${facilityY - flowRadius}  q 0, ${flowRadius}  ${-flowRadius}, ${flowRadius}  H${organicsFacilityX}`,
+                    organicsContaminationPath = `M${organicsFacilityXOut} ${facilityY}   H${-(settings.dims.width * 2 / 3 + xMargin) + settings.dims.width / 2  + flowScale(yearData.Garbage_volume)/2 + contaminationRadius + 5}  q ${-contaminationRadius},0  ${-contaminationRadius}, ${contaminationRadius} `,
+                    organicsContaminationRate = 0
+                organicsGroup.append('path').classed('flowPath organics destination', true)
+                    .attr('d', organicsPath)
+                    .style('stroke-width', flowScale(yearData.Organics_volume))
+                organicsGroup.append('path').classed('flowPath garbage destination', true)
+                    .attr('d', organicsContaminationPath)
+                    .style('stroke-width', flowScale(yearData.Recycling_volume * organicsContaminationRate))
 
             // 7. Recycling breakdown "Bin breakdown graphic"
-                const recycleBinScale = 4.5, chartBgRadius = 90,
-                    recyclingBreakdownChart = annotationLayer.append('g').classed('icon-chart', true).attr('id', 'recycling-breakdown-icon-chart')
-                        .attr('transform', `translate(${recyclingInsert.x}, ${recyclingInsert.y})`)
+            const recycleBinScale = 4.5, 
+                chartBgRadius = 90,
+                recyclingBreakdownChart = annotationLayer.append('g').classed('icon-chart destination', true).attr('id', 'recycling-breakdown-icon-chart')
+                    .attr('transform', `translate(${recyclingInsert.x}, ${recyclingInsert.y})`)
 
                 let cumulativeProp = -iconBinHeight
                 // a. Chart background circle
-                    recyclingBreakdownChart.append('circle')
-                        .classed('recycling-breakdown-chart-bg', true)
-                        .attr('r', chartBgRadius)
-                        .attr('transform', `translate(${chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
+                recyclingBreakdownChart.append('circle')
+                    .classed('recycling-breakdown-chart-bg', true)
+                    .attr('r', chartBgRadius)
+                    .attr('transform', `translate(${chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
 
                 // b. Breakdown chart label
-                    const breakdownLabelOffset = 10,
-                        breakdownLabelPath = `M${0} ${0}  A${chartBgRadius + breakdownLabelOffset}, ${chartBgRadius + breakdownLabelOffset}, 0, 0, 1, ${0}, ${(chartBgRadius+ breakdownLabelOffset) * 2}
-                                A${chartBgRadius+ breakdownLabelOffset}, ${chartBgRadius+ breakdownLabelOffset}, 0, 0, 1, ${0}, ${0}`
-                    defs.append('path').attr('id', 'breakdown-chart-label-path')
-                        .attr('d',breakdownLabelPath )
-                    recyclingBreakdownChart.append('text').classed('recycling-breakdown-label', true)
-                        .attr('transform', `translate(${(chartBgRadius + breakdownLabelOffset) *0.25}, ${-(chartBgRadius) * 1.5 - breakdownLabelOffset })`)
-                            .append('textPath').attr("xlink:href", `#breakdown-chart-label-path`)
-                            .attr("startOffset", '100%')
-                            .style("text-anchor", 'end')
-                            .text(`What's in our mixed recyclables?`)	
-                    recyclingBreakdownChart.append('path').classed('recycling-breakdown-outer', true)
-                        .attr('d', icons.binBody)
-                        .attr('transform', `scale(${recycleBinScale})`)
+                const breakdownLabelOffset = 10,
+                    breakdownLabelPath = `M${0} ${0}  A${chartBgRadius + breakdownLabelOffset}, ${chartBgRadius + breakdownLabelOffset}, 0, 0, 1, ${0}, ${(chartBgRadius+ breakdownLabelOffset) * 2}
+                            A${chartBgRadius+ breakdownLabelOffset}, ${chartBgRadius+ breakdownLabelOffset}, 0, 0, 1, ${0}, ${0}`
+                defs.append('path').attr('id', 'breakdown-chart-label-path')
+                    .attr('d',breakdownLabelPath )
+                recyclingBreakdownChart.append('text').classed('recycling-breakdown-label', true)
+                    .attr('transform', `translate(${(chartBgRadius + breakdownLabelOffset) *0.25}, ${-(chartBgRadius) * 1.5 - breakdownLabelOffset })`)
+                        .append('textPath').attr("xlink:href", `#breakdown-chart-label-path`)
+                        .attr("startOffset", '100%')
+                        .style("text-anchor", 'end')
+                        .text(`What's in our mixed recyclables?`)	
+                recyclingBreakdownChart.append('path').classed('recycling-breakdown-outer', true)
+                    .attr('d', icons.binBody)
+                    .attr('transform', `scale(${recycleBinScale})`)
 
                 // c. Render Breakdown chart 
-                    // Create chart data
+                    // i. Create chart data
                     const recycleBinChartData = []
                     data.schema.list.kerbsideRecycleMaterialGroups.forEach (group => {
                         recycleBinChartData.push({ group,  volume: d3.sum(recycleBinData.filter(d => d.group === group).map(d => d.volume)) })
                     })
-                    // Add each material group
+                    // ii. Add each material group
                     recycleBinChartData.forEach((d, i) => {
                         const material = d.group,
                             materialSlug = helpers.slugify(d.group),
                             materialProp = d.volume / d3.sum(recycleBinData.map(d => d.volume)),
                             clipHeight =  materialProp * iconBinHeight
                         
-                        // Add part of an icon with a clipath                
+                        // Add part of an icon with a clip path                
                         defs.append('clipPath').attr('id', `recycle-bin-${materialSlug}`)
                             .append('rect')
                             .attr('x', 0)                            
@@ -1365,7 +1332,7 @@
                         cumulativeProp += clipHeight     // Update cumulative position for label
                     })
 
-                    // Add Bin wheel and lid
+                    // iii. Add bin wheel and lid
                     recyclingBreakdownChart.append('path')
                         .attr('d', icons.binWheel)
                         .attr('transform', `translate(${0} , ${0})  scale(${recycleBinScale})`)
@@ -1373,70 +1340,74 @@
                         .attr('d', icons.binLid)
                         .attr('transform', `translate(${0} , ${0})  scale(${recycleBinScale})`)
 
-            // 8. Diversion 
-            const diversionCallout =  annotationLayer.append('g')
+            // 8. Diversion rate circular callout
+            const diversionCallout =  annotationLayer.append('g').classed('destination', true)
                 .attr('transform', `translate(${diversionInsert.x}, ${diversionInsert.y})`)
-            // a. Diversion callout background circle
-            diversionCallout.append('circle')
-                .classed('recycling-breakdown-chart-bg', true)
-                .attr('r', chartBgRadius)
-                .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
 
-            const diversionLabelPath = `M${0} ${0}  A${chartBgRadius + breakdownLabelOffset}, ${chartBgRadius + breakdownLabelOffset}, 0, 0, 1, ${0}, ${(chartBgRadius+ breakdownLabelOffset) * 2}
-                A${chartBgRadius+ breakdownLabelOffset}, ${chartBgRadius+ breakdownLabelOffset}, 0, 0, 1, ${0}, ${0}`
-            defs.append('path').attr('id', 'diversion-callout-label-path')
-                .attr('d',diversionLabelPath )
+                // a. Diversion callout background circle
+                diversionCallout.append('circle')
+                    .classed('recycling-breakdown-chart-bg', true)
+                    .attr('r', chartBgRadius)
+                    .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
 
-            diversionCallout.append('text').classed('recycling-breakdown-label', true)
-                .attr('transform', `translate(${-(chartBgRadius + breakdownLabelOffset) *0.25}, ${-(chartBgRadius) * 1.5 - breakdownLabelOffset })`)
-                    .append('textPath').attr("xlink:href", `#diversion-callout-label-path`)
-                    .text(`How much kerbside waste was recovered?`)	
-            diversionCallout.append('text').classed('recycling-rate-label', true)
-                .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
-                .attr('x', 0).attr('y', -82).attr('dy', 0)
-                .text(`Diversion rate of`)	
-            diversionCallout.append('text').classed('recycling-rate-main', true)
-                .text(`${helpers.numberFormatters.formatPct1dec(1 - ((yearData.Garbage_volume + yearData.Recycling_volume * recycleContaminationRate + yearData.Organics_volume * organicsContaminationRate) / totalCollection))}`)	
-                .attr('x', 0).attr('y', 0).attr('dy', 0)
-                .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
-            diversionCallout.append('text').classed('recycling-rate-label', true)
-                .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
-                .attr('x', 0).attr('y', -12).attr('dy', 0)
-                .text(`after contamination`)	
+                // b. Circular label
+                const diversionLabelPath = `M${0} ${0}  A${chartBgRadius + breakdownLabelOffset}, ${chartBgRadius + breakdownLabelOffset}, 0, 0, 1, ${0}, ${(chartBgRadius+ breakdownLabelOffset) * 2}
+                    A${chartBgRadius+ breakdownLabelOffset}, ${chartBgRadius+ breakdownLabelOffset}, 0, 0, 1, ${0}, ${0}`
+                defs.append('path').attr('id', 'diversion-callout-label-path')
+                    .attr('d',diversionLabelPath )
 
-            // 9. Add annotations and main title
-            annotationLayer.append('text').classed('lga-label-title', true)
+                diversionCallout.append('text').classed('recycling-breakdown-label', true)
+                    .attr('transform', `translate(${-(chartBgRadius + breakdownLabelOffset) *0.25}, ${-(chartBgRadius) * 1.5 - breakdownLabelOffset })`)
+                        .append('textPath').attr("xlink:href", `#diversion-callout-label-path`)
+                        .text(`How much kerbside waste was recovered?`)	
+
+                // c. Headline diversion rate label
+                diversionCallout.append('text').classed('recycling-rate-label', true)
+                    .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
+                    .attr('x', 0).attr('y', -82).attr('dy', 0)
+                    .text(`Diversion rate of`)	
+                diversionCallout.append('text').classed('recycling-rate-main', true)
+                    .text(`${helpers.numberFormatters.formatPct1dec(1 - ((yearData.Garbage_volume + yearData.Recycling_volume * recycleContaminationRate + yearData.Organics_volume * organicsContaminationRate) / totalCollection))}`)	
+                    .attr('x', 0).attr('y', 0).attr('dy', 0)
+                    .attr('transform', `translate(${-chartBgRadius*0.25}, ${-chartBgRadius *0.5})`)
+                diversionCallout.append('text').classed('recycling-rate-label', true)
+                    .attr('transform', `translate(${-chartBgRadius*0.25}, 0)`)
+                    .attr('x', 0).attr('y', -12).attr('dy', 0)
+                    .text(`after contamination`)	
+
+            // 9. Add main title and kerbside scene annotations and main title
+            annotationLayer.append('text').classed('main-title street', true)
                 .text(`Household collections at a glance, ${settings.year}`)
                 .attr('x', 50)
                 .attr('y', 60)
-            annotationLayer.append('text').classed('lga-label-small', true)
+            annotationLayer.append('text').classed('lga-label-small street', true)
                 .text("Council's collected a total of")
                 .attr('x', xMargin)
                 .attr('y', headlineOffsetY)
-            annotationLayer.append('text').classed('lga-label-headline', true)
+            annotationLayer.append('text').classed('lga-label-headline street', true)
                 .text(`${helpers.numberFormatters.formatComma1dec(totalCollection/1000000)} million tonnes`)
                 .attr('x', xMargin)
                 .attr('y', headlineOffsetY + 30)
-            annotationLayer.append('text').classed('lga-label-small', true)
+            annotationLayer.append('text').classed('lga-label-small street', true)
                 .html(`of waste from Victorian households`)
                 .attr('x', xMargin)
                 .attr('y', headlineOffsetY + 50)
 
-            // 10. Council spend data 
-            annotationLayer.append('text').classed('lga-label-headline', true)
+            // 10. Council spend data table
+            annotationLayer.append('text').classed('lga-label-headline council', true)
                 .text(`${helpers.numberFormatters.formatCostInteger(totalCouncilCost/1000000)} million`)
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y)
-            annotationLayer.append('text').classed('lga-label-small', true)
+            annotationLayer.append('text').classed('lga-label-small council', true)
                 .html(`spent by Councils on waste services in ${settings.year}, to collect`)
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y + 24)
 
-            annotationLayer.append('text').classed('lga-label-small', true)
+            annotationLayer.append('text').classed('lga-label-small council', true)
                 .html(`<tspan class='bold'>${helpers.numberFormatters.formatComma1dec(totalCollection/1000000)} million tonnes</tspan> of <tspan class='garbage bold shadow'>garbage</tspan>, <tspan class ="recycling bold shadow">recyclables</tspan> and <tspan class ="organics bold shadow">organics</tspan>`)
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y + 44)
-            annotationLayer.append('text').classed('lga-label-small', true)
+            annotationLayer.append('text').classed('lga-label-small council', true)
                 .html(`at average cost to Council of <tspan class ="bold">${helpers.numberFormatters.formatCostInteger(totalCouncilCost/totalCollection)} per tonne collected</tspan> `)
                 .attr('x', councilSpendLabel.x)
                 .attr('y', councilSpendLabel.y + 64)
@@ -1446,7 +1417,6 @@
 
             const councilTable = annotationLayer.append('g')
                 .attr('transform', `translate(${councilSpendTable.x}, ${councilSpendTable.y})`)
-
 
             const councilTableHeaderRow = councilTable.append('g')
             councilTableHeaderRow.append('rect').classed('table-header garbage rect', true)
@@ -1516,6 +1486,35 @@
         };
 
 
+        //////////////////////////////////////////////
+        // 3. ANIMATION | FADE IN ONLY (FOR NOW)   ///
+        //////////////////////////////////////////////
+
+        async function animateVis(settings){
+            d3.selectAll('#street-scene, .street, #destination-scene, .destination, #council-scene, .council').style('opacity', 0)
+
+            d3.select(`#${settings.svgID}`).transition().duration(1000)
+                .style('opacity', null)
+
+            d3.selectAll('#street-scene, .street').transition().duration(2000).delay(0)
+                .style('opacity', null)
+
+            d3.selectAll('#destination-scene, .destination').transition().duration(2000).delay(2000)
+                .style('opacity', null)
+
+            d3.selectAll('#council-scene, .council').transition().duration(2000).delay(4000)
+                .style('opacity', null)
+
+            d3.select('#waste-truck').attr('transform', 'translate(300, 0)')
+                .transition().duration(5000)
+                .attr('transform', 'translate(200, 0)')
+                .transition().duration(5000)
+                .attr('transform', 'translate(100, 0)')
+                .transition().duration(5000)
+                .attr('transform', 'translate(5, 0)')
+
+        };
+
         ////////////////////////////////////
         /// X. HELPER FUNCTIONS |        ///
         ////////////////////////////////////
@@ -1578,31 +1577,7 @@
                     }
                 })
             },
-            exportPNG: function(settings){
-                d3.select('body').append('canvas')
-                    .attr('id', `${settings.svgID}-canvas`)
-                    .attr('width', settings.dims.width)
-                    .attr('height', settings.dims.height)
-                d3.select('body').append('div')
-                    .attr('id', `png-container`)
-
-                var svgString = new XMLSerializer().serializeToString(document.querySelector(`#${settings.svgID}`));
-                var canvas = document.getElementById(`${settings.svgID}-canvas`);
-                var ctx = canvas.getContext("2d");
-                var DOMURL = self.URL || self.webkitURL || self;
-                var img = new Image();
-                var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-                var url = DOMURL.createObjectURL(svg);
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0);
-                    var png = canvas.toDataURL("image/png");
-                    document.querySelector('#png-container').innerHTML = '<img src="'+png+'"/>';
-                    DOMURL.revokeObjectURL(png);
-                };
-                img.src = url;
-            }
-
-        }
+          }
 
     </script>
 </html>

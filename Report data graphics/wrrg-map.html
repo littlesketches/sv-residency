@@ -6,83 +6,28 @@
         <meta name="description" content="Victorian WRRG data map">
         <meta name="author" content="Sustainability Victoria">
         <script src="https://d3js.org/d3.v7.min.js"></script>
+        <link rel="stylesheet" href="./css/core.css">
         <style>
-                /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
-                :root {
-                    /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                    --svGreen:                       #9ACA3C;
-                    /** SECONDARY PALLETTE **/
-                    --secondaryGreenLight:           hsl(70, 50%, 75%);
-                    --secondaryBottleGreen:          #174F37;
-                    --secondaryBottleGreenLight:     #79B5AA;
-                    --secondaryGrey:                 #B1B1B0;
-                    --secondaryGreyLight:            #CFCFCF;
-                    --secondaryGreyLightest:         #ECECEC;
-                    /** TERTIARY PALETTE **/
-                    --tertiaryPurple:       #51284F;
-                    --tertiaryPurpleLight:  #8276B3;
-                    --tertiaryRed:          #E04F39;
-                    --tertiaryRedLight:     #F78684;
-                    --tertiaryYellow:       #EFC041;
-                    --tertiaryYellowLight:  #F5E065;
-                    --tertiaryCard:         #B39981;
-                    --tertiaryCardLight:    #DCBFA6;
-                    --tertiaryEmerald:      #009E71;
-                    --tertiaryEmeraldLight: #93CCB9;
-                    --tertiaryBlue:         #005E88;
-                    --tertiaryBlueLight:    #A0D6E9;
-                }
 
-            /***************************************/
-            /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-            /***************************************/
+            /***********************************************************/
+            /***********************************************************/
+            /****                                                   ****/
+            /**** VICTORRINA WRRG WASTE DATA MAP  | CUSTOM CSS      ****/
+            /**** -----------------------------------------------   ****/
+            /**** - CSS Variables and loaded fonts from core.css    ****/
+            /****                                                   ****/
+            /***********************************************************/
+            /***********************************************************/
 
-                @font-face {
-                    font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
-                        url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                        url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                        url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                    font-weight: 300;
-                    font-style: light;
-                }
-                @font-face {
-                    font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                        url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                        url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                        url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                    font-weight: 400;
-                    font-style: normal;
-                }
-                @font-face {
-                    font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                        url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                        url('fonts/DINNextLTPro-Medium.woff') format('woff'),
-                        url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                    font-weight: 500;
-                    font-style: medium;
-                }
-                @font-face {
-                    font-family: 'DIN Next LT Pro';
-                    src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                        url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                        url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                        url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                    font-weight: 800;
-                    font-style: heavy;
-                }
-                body{
-                    font-family: 'DIN Next LT Pro';
-                    margin: 0;
-                }
+            body{
+                font-family: 'DIN Next LT Pro';
+                margin: 0;                          /* Full bleed presentation */
+            }
 
 
             /********************************/
             /*****  WRRG MAP TYPOGRAPHY   ***/
             /********************************/
-
                 .align-middle{
                     text-anchor: middle;
                 }
@@ -141,7 +86,6 @@
             /************************************/
             /*****  WRRG MAP GENERAL STYLING  ***/
             /************************************/
-
                 .lga-base{
                     fill: none;
                     stroke-width: 0.25px;
@@ -162,10 +106,72 @@
                 .donut-arc{
                     stroke: #fff;
                     stroke-width: 0.5px;
-                    fill: var(--secondaryGrey);
+                    fill: var(--secondaryGreyLight);
                 }
                 .donut-arc.diversion{
                     fill: var(--svGreen);       
+                }
+
+
+            /************************************/
+            /*****  CATEGEGORIAL WRRG COLOURS ***/
+            /************************************/
+
+                .multi-colour .wrrg-infoPane-background.barwon-south-west-waste-and-resource-recovery-group,
+                .multi-colour .diversion.barwon-south-west-waste-and-resource-recovery-group,
+                .multi-colour .lga-base.barwon-south-west-waste-and-resource-recovery-group{
+                    fill: var(--svLightGreen);
+                }
+                .multi-colour .lga-base.barwon-south-west-waste-and-resource-recovery-group{
+                    stroke: var(--svLightGreen);
+                }
+                .multi-colour .wrrg-infoPane-background.gippsland-waste-and-resource-recovery-group,
+                .multi-colour .diversion.gippsland-waste-and-resource-recovery-group,
+                .multi-colour .lga-base.gippsland-waste-and-resource-recovery-group{
+                    fill: var(--tertiaryCardLight);
+                }
+                .multi-colour .lga-base.gippsland-waste-and-resource-recovery-group{
+                    stroke: var(--tertiaryCardLight);
+                }
+                .multi-colour .wrrg-infoPane-background.goulburn-valley-waste-and-resource-recovery-group,
+                .multi-colour .diversion.goulburn-valley-waste-and-resource-recovery-group,
+                .multi-colour .lga-base.goulburn-valley-waste-and-resource-recovery-group{
+                    fill: var(--tertiaryRedLight);
+                }
+                .multi-colour .lga-base.goulburn-valley-waste-and-resource-recovery-group{
+                    stroke: var(--tertiaryRedLight);
+                }
+                .multi-colour .wrrg-infoPane-background.grampians-central-west-waste-and-resource-recovery-group,
+                .multi-colour .diversion.grampians-central-west-waste-and-resource-recovery-group,
+                .multi-colour .lga-base.grampians-central-west-waste-and-resource-recovery-group{
+                    fill: var(--tertiaryYellowLight);
+                }
+                .multi-colour .lga-base.grampians-central-west-waste-and-resource-recovery-group{
+                    stroke: var(--tertiaryYellowLight);
+                }
+                .multi-colour .wrrg-infoPane-background.loddon-mallee-waste-and-resource-recovery-group,
+                .multi-colour .diversion.loddon-mallee-waste-and-resource-recovery-group,
+                .multi-colour .lga-base.loddon-mallee-waste-and-resource-recovery-group{
+                    fill: var(--tertiaryBlueLight);
+                }
+                .multi-colour .lga-base.loddon-mallee-waste-and-resource-recovery-group{
+                    stroke: var(--tertiaryBlueLight);
+                }
+                .multi-colour .wrrg-infoPane-background.metropolitan-waste-and-resource-recovery-group,
+                .multi-colour .diversion.metropolitan-waste-and-resource-recovery-group,
+                .multi-colour .lga-base.metropolitan-waste-and-resource-recovery-group{
+                    fill: var(--tertiaryPurpleLight);
+                }
+                .multi-colour .lga-base.metropolitan-waste-and-resource-recovery-group{
+                    stroke: var(--tertiaryPurpleLight);
+                }
+                .multi-colour .wrrg-infoPane-background.north-east-waste-and-resource-recovery-group,        
+                .multi-colour .lga-base.north-east-waste-and-resource-recovery-group,
+                .multi-colour .diversion.north-east-waste-and-resource-recovery-group{
+                    fill: var(--secondaryBottleGreenLight);
+                }
+                .multi-colour .lga-base.north-east-waste-and-resource-recovery-group{
+                    stroke: var(--secondaryBottleGreenLight);
                 }
         </style>
     </head>
@@ -184,6 +190,8 @@
             const settings = { 
                 svgID:                  'map',
                 year:                   '2019-20',
+                colourScale:         'ramp',         // 'ramp' or 'categorical'
+                showGlass:              true,
                 dims: {
                     width:              1080,
                     height:             720,
@@ -195,9 +203,7 @@
                     projection:         d3.geoMercator(),      // Choice of map projection (see d3 docs for standard projections, and add d3-geo-projection plugin for further projections)
                     centerLong:         143.7,                 // Used to center the map on Victoria
                     centerLat:          -36.1,                 // ..
-                    projectionScale:    4000,                  // and scale the projection to fit the canvas (note: )
-                    translationPctX:    0.47,                  // Setting used (as a proportion of width to horizontally position the map 
-                    translationPctY:    0.435,                  // .. (use with geometry settings to create margins and space for annotation)
+                    projectionScale:    4000                    // and scale the projection to fit the canvas (note: )
                 },
                 infoPane: {
                     dims: {
@@ -205,57 +211,6 @@
                         height:     140,
                         rx:         10,
                         ry:         10    
-                    },
-                    wrrgPos: {
-                        "Barwon South West Waste and Resource Recovery Group": {
-                            label: "Barwon South West",
-                            labelOffsetY: 20,
-                            cx: 150,         cy: 610,
-                            pointerX: 390,   pointerY: -60,
-                            pointerSide: 'right'
-                        }, 
-                        "Gippsland Waste and Resource Recovery Group": {
-                            label: "Gippsland",
-                            labelOffsetY: 20,
-                            cx:       860,        cy: 610,
-                            pointerX: -10,        pointerY: -80,
-                            pointerSide: 'top'
-                        }, 
-                        "Goulburn Valley Waste and Resource Recovery Group": {
-                            label: "Goulburn Valley",
-                            labelOffsetY: 20,
-                            cx: 670,        cy: 200,
-                            pointerX: 60,   pointerY: 230,
-                            pointerSide: 'bottom'                    
-                        },
-                        "Grampians Central West Waste and Resource Recovery Group": {
-                            label: "Grampians Central West",
-                            labelOffsetY: 20,
-                            cx: 150,         cy: 405,
-                            pointerX: 400,   pointerY: 40,
-                            pointerSide: 'right'
-                        },
-                        "Loddon Mallee Waste and Resource Recovery Group": {
-                            label: "Loddon Mallee",
-                            labelOffsetY: 40,
-                            cx: 150,         cy: 200,
-                            pointerX: 430,   pointerY: 120,
-                            pointerSide: 'right'
-                        },
-                        "Metropolitan Waste and Resource Recovery Group": {
-                            label: "Metropolitan",
-                            labelOffsetY: 40,
-                            cx: 510,        cy: 650,
-                            pointerX: 220,  pointerY: -120,
-                            pointerSide: 'top'
-                        },
-                        "North East Waste and Resource Recovery Group": {
-                            label: "North East",
-                            labelOffsetY: 40,
-                            cx: 940,        cy: 300,
-                            pointerX: -120, pointerY: 130,
-                            pointerSide: 'left'
-                        }   
                     }    
                 }
             }
@@ -323,6 +278,13 @@
                 if (settings.queryParameters.has('year')) { 
                     settings.year = settings.queryParameters.get('year')  
                 }
+                if (settings.queryParameters.has('colourScale')) { 
+                    settings.colourScale = settings.queryParameters.get('colourScale')  
+                    d3.select(`#${settings.svgID}`).classed('multi-colour', settings.colourScale === 'categorical')
+                }
+                if (settings.queryParameters.has('showGlass')) { 
+                    settings.showGlass = settings.queryParameters.get('showGlass').toLowerCase() === 'false' ? false : true  
+                }   
             };
 
             async function parseData(wrrgData){
@@ -354,7 +316,128 @@
             ///////////////////////////////////////
 
             function renderMap(settings, mapShapeData, mapMetaData){
-            // 0. WRANGLE DATA
+                // 0. OPTIMISE LAYOUT FOR GLASS INCLUSION/EXCLUSION
+                switch(settings.showGlass){
+                    case true: 
+                        // Center map
+                        settings.geometry.translationPctX =  0.47,             // Setting used (as a proportion of width to horizontally position the map 
+                        settings.geometry.translationPctY =  0.435             // .. (use with geometry settings to create margins and space for annotation)
+                        // Position callouts
+                        settings.infoPane.wrrgPos = {
+                            "Barwon South West Waste and Resource Recovery Group": {
+                                label: "Barwon South West",
+                                labelOffsetY: 20,
+                                cx: 150,         cy: 610,
+                                pointerX: 390,   pointerY: -60,
+                                pointerSide: 'right'
+                            }, 
+                            "Gippsland Waste and Resource Recovery Group": {
+                                label: "Gippsland",
+                                labelOffsetY: 20,
+                                cx:       860,        cy: 610,
+                                pointerX: -10,        pointerY: -80,
+                                pointerSide: 'top'
+                            }, 
+                            "Goulburn Valley Waste and Resource Recovery Group": {
+                                label: "Goulburn Valley",
+                                labelOffsetY: 20,
+                                cx: 670,        cy: 200,
+                                pointerX: 60,   pointerY: 230,
+                                pointerSide: 'bottom'                    
+                            },
+                            "Grampians Central West Waste and Resource Recovery Group": {
+                                label: "Grampians Central West",
+                                labelOffsetY: 20,
+                                cx: 150,         cy: 405,
+                                pointerX: 400,   pointerY: 40,
+                                pointerSide: 'right'
+                            },
+                            "Loddon Mallee Waste and Resource Recovery Group": {
+                                label: "Loddon Mallee",
+                                labelOffsetY: 40,
+                                cx: 150,         cy: 200,
+                                pointerX: 430,   pointerY: 120,
+                                pointerSide: 'right'
+                            },
+                            "Metropolitan Waste and Resource Recovery Group": {
+                                label: "Metropolitan",
+                                labelOffsetY: 40,
+                                cx: 510,        cy: 650,
+                                pointerX: 220,  pointerY: -120,
+                                pointerSide: 'top'
+                            },
+                            "North East Waste and Resource Recovery Group": {
+                                label: "North East",
+                                labelOffsetY: 40,
+                                cx: 940,        cy: 300,
+                                pointerX: -120, pointerY: 130,
+                                pointerSide: 'left'
+                            }
+                        }
+                        break
+
+                    case false:     
+                        // Center map
+                        settings.geometry.translationPctX =  0.45,             // Setting used (as a proportion of width to horizontally position the map 
+                        settings.geometry.translationPctY =  0.435             // .. (use with geometry settings to create margins and space for annotation)
+                        // Position callouts
+                        settings.infoPane.wrrgPos = {
+                            "Barwon South West Waste and Resource Recovery Group": {
+                                label: "Barwon South West",
+                                labelOffsetY: 20,
+                                cx: 200,        cy: 610,
+                                pointerX: 350,   pointerY: -50,
+                                pointerSide: 'right'
+                            }, 
+                            "Gippsland Waste and Resource Recovery Group": {
+                                label: "Gippsland",
+                                labelOffsetY: 20,
+                                cx:         860,        cy: 610,
+                                pointerX: -30,   pointerY: -100,
+                                pointerSide: 'top'
+                            }, 
+                            "Goulburn Valley Waste and Resource Recovery Group": {
+                                label: "Goulburn Valley",
+                                labelOffsetY: 20,
+                                cx: 670,        cy: 200,
+                                pointerX: 30,   pointerY: 250,
+                                pointerSide: 'bottom'                    
+                            },
+                            "Grampians Central West Waste and Resource Recovery Group": {
+                                label: "Grampians Central Valley",
+                                labelOffsetY: 20,
+                                cx: 150,         cy: 405,
+                                pointerX: 400,   pointerY: 40,
+                                pointerSide: 'right'
+                            },
+                            "Loddon Mallee Waste and Resource Recovery Group": {
+                                label: "Loddon Mallee",
+                                labelOffsetY: 40,
+                                cx: 150,        cy: 200,
+                                pointerX: 400,   pointerY: 150,
+                                pointerSide: 'right'
+                            },
+                            "Metropolitan Waste and Resource Recovery Group": {
+                                label: "Metropolitan",
+                                labelOffsetY: 40,
+                                cx: 530,    cy: 650,
+                                pointerX: 180,   pointerY: -130,
+                                pointerSide: 'top'
+                            },
+                            "North East Waste and Resource Recovery Group": {
+                                label: "North East",
+                                labelOffsetY: 40,
+                                cx: 940,        cy: 300,
+                                pointerX: -150,   pointerY: 150,
+                                pointerSide: 'left'
+                            }   
+                        }   
+                        break
+
+                    default: 
+                }
+
+                // 1. WRANGLE DATA
                 // a. Setup a mapping object of of LGA to WRRG
                 const lgaNameWrrgMap = {}
                 mapMetaData.map(d => lgaNameWrrgMap[d.vic_lga__3] = d.wrrg   )          // Note: "vic_lga__3" is the LGA name field name shared between the geojson and txt data files. The "wrrg" field in the txt file maps the WRRG to LGA name 
@@ -363,7 +446,7 @@
                 mapMetaData.map(x => mapMetaDataUnique.filter(a => a.vic_lga__3 == x.vic_lga__3).length > 0 ? null : mapMetaDataUnique.push(x))
                 mapMetaDataUnique = mapMetaDataUnique.filter(d => d.type === 'lga')  
 
-            // 1. SPECIFY LAYOUT GROUPS: Layers appended in rendering order
+                // 2. SPECIFY LAYOUT GROUPS: Layers appended in rendering order
                 const svg = d3.select(`#${settings.svgID}`).attr('viewBox', `0 0 ${settings.dims.width} ${settings.dims.height}`),
                     mapGroup = svg.append('g').classed('map-group', true),
                     lgas = mapGroup.append('g').classed('lga-group', true), 
@@ -380,7 +463,7 @@
                     'Glass':                'M7.292 20.833H-3.125a1.041 1.041 0 01-1.042-1.041V-3.125a1.041 1.041 0 011.042-1.042H7.208a1.04 1.04 0 01.737.305 1.338 1.338 0 01.388.82v22.834a1.041 1.041 0 01-1.041 1.041zm-9.375-2.083H6.25V-2.083h-8.333zm4.166-37.5h-4.166a1.042 1.042 0 010-2.083h4.166a1.042 1.042 0 010 2.083zM5.134 25h-9.779a3.693 3.693 0 01-3.688-3.689V-2.083a10.398 10.398 0 012.725-5.699 29.42 29.42 0 002.386-3.433l.097-.162v-10.816c0-2.605 1.546-2.807 2.02-2.807h2.21a2.023 2.023 0 012.02 2.02v11.624l.226.374a24.995 24.995 0 002.46 3.357A9.369 9.369 0 018.24-3.27a6.513 6.513 0 01.093 1.187V21.8A3.203 3.203 0 015.134 25zM-1.01-22.92c.025.065-.032.288-.032.727v11.106a1.047 1.047 0 01-.15.538l-.246.41a31.309 31.309 0 01-2.557 3.675 8.426 8.426 0 00-2.255 4.38v23.395a1.607 1.607 0 001.605 1.606h9.78A1.117 1.117 0 006.25 21.8V-2.083a4.655 4.655 0 00-.065-.849A7.868 7.868 0 004.23-6.268a27.113 27.113 0 01-2.661-3.636l-.377-.622a1.039 1.039 0 01-.15-.539V-22.98z'
                 }
 
-            // 2. SPECIFY MAP PROJECTION AND MAP PROJECTION PATH GENERATOR
+                // 3. SPECIFY MAP PROJECTION AND MAP PROJECTION PATH GENERATOR
                 const projection = settings.geometry.projection,				   // Specify map projection type
                     path = d3.geoPath().projection(projection)                     // Path generator function
                 projection 																
@@ -388,15 +471,14 @@
                     .scale(settings.geometry.projectionScale)
                     .center([settings.geometry.centerLong, settings.geometry.centerLat]);
 
-            // 3. COLOUR SCALE
+                // 4. COLOUR SCALE (USED FOR ENCODING DATA IN REGION COLOURS)
                 const diversionRate = {}
-
                 data.schema.list.wrrg.forEach( wrrg => diversionRate[wrrg] = d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.processed)) /d3.sum(Object.values(data.byWRRG[wrrg]).map(d => d.collected)) )
                 const wrrgColor = d3.scaleLinear()
                     .domain(d3.extent(Object.values(diversionRate)) )
                     .range(['#D5E0A1', '#00502e'])
 
-            // 3. ADD VICTORIAN LGA MAP SHAPE: this is a base layer with no fill but with an outline
+                // 5. ADD VICTORIAN LGA MAP SHAPE: this is a base layer with no fill but with an outline
                 lgas.selectAll('path')
                     .data(mapShapeData.features)
                     .join('path')
@@ -407,12 +489,12 @@
                             className +=  typeof(lgaNameWrrgMap[d.properties.vic_lga__3]) !== 'undefined' ? helpers.slugify(lgaNameWrrgMap[d.properties.vic_lga__3]) : '' 
                             return className
                         })
-                        .style('fill',  d => wrrgColor(diversionRate[lgaNameWrrgMap[d.properties.vic_lga__3]]) )
-                        .style('stroke', d =>  wrrgColor(diversionRate[lgaNameWrrgMap[d.properties.vic_lga__3]]) )
+                        .style('fill',  d => settings.colourScale === 'ramp' ? wrrgColor(diversionRate[lgaNameWrrgMap[d.properties.vic_lga__3]]) : null)
+                        .style('stroke', d => settings.colourScale === 'ramp' ? d =>  wrrgColor(diversionRate[lgaNameWrrgMap[d.properties.vic_lga__3]]) : null )
                         .on('mouseover', onWrrgMouseover)
                         .on('mouseout', onWrrgMouseout)
 
-            // 4. MAP ANNOTATION LAYER
+                // 6. MAP ANNOTATION LAYER
                 // a. Add LGA names (for testing or to show on hover)
                 lgaLabels.selectAll('text')
                     .data(mapMetaDataUnique)
@@ -433,7 +515,7 @@
                         .text(d => d.vic_lga__3)
                         .style('opacity', 0)        // Set as invisible
 
-            // 5. EVENT LISTENERS
+                // 7. EVENT LISTENERS
                 function onWrrgMouseover(){
                     const wrrgClass  = this.classList[2]  
                     d3.selectAll(`.lga-label.${wrrgClass}`).style('opacity', null)            // Show label           
@@ -446,15 +528,15 @@
                         .classed('showStroke', false)  
                 }
 
-            // 6.  ADD INFO PANES BY WRRG
+                // 8. ADD INFO PANES BY WRRG
                 data.schema.list.wrrg.forEach( wrrg => {
                     let headerLines
                     const garbageOffset = 90,
                         recyclablesOffset = 145,
                         organicsOffset = 200,
                         glassOffset = 250,
-                        extraWidth = glassOffset - organicsOffset - 10, 
-                        includeGlass = data.byWRRG[wrrg]['Glass'].collected > 0 ? true :false           // Test for whether to add glass to the WRGg pane
+                        extraWidth = glassOffset - organicsOffset - 10,
+                        includeGlass = (data.byWRRG[wrrg]['Glass'].collected > 0 && settings.showGlass) ? true :false           // Test for whether to add glass to the WRGg pane
 
                     // a. Pane background and pointer
                     const wrrgPane = infoPanes.append('g')
@@ -467,25 +549,53 @@
                         .attr('rx', settings.infoPane.dims.rx)
                         .attr('ry', settings.infoPane.dims.ry)
 
-                    const pointerSide = settings.infoPane.wrrgPos[wrrg].pointerSide,
-                        pointerCoords = {
-                            top: {
-                                start:      {x: (settings.infoPane.dims.width + (includeGlass ? extraWidth : 0)) / 2 - settings.infoPane.dims.ry * 5, y: 0},
-                                end:        {x: (settings.infoPane.dims.width + (includeGlass ? extraWidth : 0)) / 2 + settings.infoPane.dims.ry * 5, y: 0}  
-                            },
-                            right:{ 
-                                start:      {x: settings.infoPane.dims.width  + (includeGlass ? extraWidth : 0), y: +settings.infoPane.dims.ry * 3},
-                                end:        {x: settings.infoPane.dims.width  + (includeGlass ? extraWidth : 0), y: +settings.infoPane.dims.height - settings.infoPane.dims.ry * 3}  
-                            },
-                            bottom: {
-                                start:      {x: (settings.infoPane.dims.width + (includeGlass ? extraWidth : 0))/ 2 - settings.infoPane.dims.ry * 5, y: +settings.infoPane.dims.height},
-                                end:        {x: (settings.infoPane.dims.width  + (includeGlass ? extraWidth : 0))/ 2 + settings.infoPane.dims.ry * 5, y: +settings.infoPane.dims.height}  
-                            },
-                            left:{ 
-                                start:      {x: 0, y: 0 +settings.infoPane.dims.ry * 3},
-                                end:        {x: 0, y: +settings.infoPane.dims.height - settings.infoPane.dims.ry * 3}    
+                    let pointerCoords
+                    switch(settings.showGlass){
+                        case true:
+                            pointerCoords = {
+                                top: {
+                                    start:      {x: (settings.infoPane.dims.width + (includeGlass ? extraWidth : 0)) / 2 - settings.infoPane.dims.ry * 5, y: 0},
+                                    end:        {x: (settings.infoPane.dims.width + (includeGlass ? extraWidth : 0)) / 2 + settings.infoPane.dims.ry * 5, y: 0}  
+                                },
+                                right:{ 
+                                    start:      {x: settings.infoPane.dims.width  + (includeGlass ? extraWidth : 0), y: +settings.infoPane.dims.ry * 3},
+                                    end:        {x: settings.infoPane.dims.width  + (includeGlass ? extraWidth : 0), y: +settings.infoPane.dims.height - settings.infoPane.dims.ry * 3}  
+                                },
+                                bottom: {
+                                    start:      {x: (settings.infoPane.dims.width + (includeGlass ? extraWidth : 0))/ 2 - settings.infoPane.dims.ry * 5, y: +settings.infoPane.dims.height},
+                                    end:        {x: (settings.infoPane.dims.width  + (includeGlass ? extraWidth : 0))/ 2 + settings.infoPane.dims.ry * 5, y: +settings.infoPane.dims.height}  
+                                },
+                                left:{ 
+                                    start:      {x: 0, y: 0 +settings.infoPane.dims.ry * 3},
+                                    end:        {x: 0, y: +settings.infoPane.dims.height - settings.infoPane.dims.ry * 3}    
+                                }
                             }
-                        },
+                            break
+
+                       case false:
+                            pointerCoords = {
+                                top: {
+                                    start:      {x: settings.infoPane.dims.width / 2 - settings.infoPane.dims.ry * 5, y: 0},
+                                    end:        {x: settings.infoPane.dims.width / 2 + settings.infoPane.dims.ry * 5, y: 0}  
+                                },
+                                right:{ 
+                                    start:      {x: settings.infoPane.dims.width, y: +settings.infoPane.dims.ry * 3},
+                                    end:        {x: settings.infoPane.dims.width, y: +settings.infoPane.dims.height - settings.infoPane.dims.ry * 3}  
+                                },
+                                bottom: {
+                                    start:      {x: settings.infoPane.dims.width / 2 - settings.infoPane.dims.ry * 5, y: +settings.infoPane.dims.height},
+                                    end:        {x: settings.infoPane.dims.width / 2 + settings.infoPane.dims.ry * 5, y: +settings.infoPane.dims.height}  
+                                },
+                                left:{ 
+                                    start:      {x: 0, y: 0 +settings.infoPane.dims.ry * 3},
+                                    end:        {x: 0, y: +settings.infoPane.dims.height - settings.infoPane.dims.ry * 3}    
+                                }
+                            }
+                            break
+                        default:
+                    }
+
+                    const pointerSide = settings.infoPane.wrrgPos[wrrg].pointerSide,                        
                         pointerPath = `M${pointerCoords[pointerSide].start.x},${pointerCoords[pointerSide].start.y} L${settings.infoPane.wrrgPos[wrrg].pointerX},${settings.infoPane.wrrgPos[wrrg].pointerY}  L${pointerCoords[pointerSide].end.x}, ${pointerCoords[pointerSide].end.y} Z`
         
                     const backgroundPointer = wrrgPane.append('path')
@@ -582,12 +692,12 @@
                 })
 
             // 7. ADD TITLE ANNOTATION
-                annotation.append('text').classed('main-title', true)
-                    .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top})`)
-                    .text('Victorian waste collection data')
-                annotation.append('text').classed('main-subtitle', true)
-                    .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top + 25})`)
-                    .text(`by Waste Resource and Recovery Group in ${settings.year}`)
+            annotation.append('text').classed('main-title', true)
+                .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top})`)
+                .text('Victorian waste collection data')
+            annotation.append('text').classed('main-subtitle', true)
+                .attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top + 25})`)
+                .text(`by Waste Resource and Recovery Group in ${settings.year}`)
 
         }; // end renderMap()
 

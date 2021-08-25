@@ -3,96 +3,26 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Waste annual report graphic">
+        <meta name="description" content="Kerbside collection summary infographic">
         <meta name="author" content="Sustainability Victoria">
         <script src="https://d3js.org/d3.v7.min.js"></script>
+        <link rel="stylesheet" href="./css/core.css">
         <style>
-            /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
-            :root {
-                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                       #9ACA3C;
-                /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:           #D5E0A1;
-                --secondaryBottleGreen:          #174F37;
-                --secondaryBottleGreenLight:     #79B5AA;
-                --secondaryGrey:                 #B1B1B0;
-                --secondaryGreyLight:            #CFCFCF;
-                --secondaryGreyLightest:         #ECECEC;
-                /** TERTIARY PALETTE **/
-                --tertiaryPurple:               #51284F;
-                --tertiaryPurpleLight:          #8276B3;
-                --tertiaryRed:                  #E04F39;
-                --tertiaryRedLight:             #F78684;
-                --tertiaryYellow:               #EFC041;
-                --tertiaryYellowLight:          #F5E065;
-                --tertiaryCard:                 #B39981;
-                --tertiaryCardLight:            #DCBFA6;
-                --tertiaryEmerald:              #009E71;
-                --tertiaryEmeraldLight:         #93CCB9;
-                --tertiaryBlue:                 #005E88;
-                --tertiaryBlueLight:            #A0D6E9;
-                /*** EXTENDED PALETTE  ***/
-                --xLightestPurple:              #A59DC8;     
-                --xOrange:                      #feb076;     
-                --xLime:                        #BBCC66;     
-                --xGreen:                       #66CCAC;     
-                --xBlueCyan:                    #94E1EC;     
-                --xMidBlue:                     #48B5EB;     
-                --xMagenta:                     #d780c3;     
-                --xCharcoal:                    #36454F; 
-                --xDarkOrange:                  #863F13; 
-                --xDarkLime:                    #77862D;     
-                --xDarkYellow:                  #A57A0E; 
-                --xDarkCard:                    #6F5843; 
-                --xDarkBlueCyan:                #177283; 
-                --xDarkMagenta:                 #73264C; 
-                --darkGrey:                     rgb(100, 100, 100);
 
-            }
+            /***********************************************************/
+            /***********************************************************/
+            /****                                                   ****/
+            /**** KERBSIDE COLLECTION SUMMARY GRAPHIC | CUSTOM CSS  ****/
+            /**** ---------------------------------------------     ****/
+            /**** - CSS Variables and loaded fonts from core.css    ****/
+            /****                                                   ****/
+            /***********************************************************/
+            /***********************************************************/
 
-        /***************************************/
-        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-        /***************************************/
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: light;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                font-weight: 400;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                font-weight: 500;
-                font-style: medium;
-            }
 
             body{
                 font-family: 'DIN Next LT Pro';
-                margin: 0;
+                margin: 0;                          /* Full bleed presentation */
             }
 
             /***************************/
@@ -122,7 +52,10 @@
                 font-weight: 500;
                 text-transform: uppercase;
                 letter-spacing: 1px;
-            } 
+            }
+            .middle{
+                text-anchor: middle;
+            }
             .garbage{
                 fill: var(--tertiaryRed);
             }
@@ -138,7 +71,7 @@
 
     <body>
         <div class = "svg-container">
-            <svg id = "streetscene-vis" viewBox="0 0 1080 720">
+            <svg id = "streetscene-vis" viewBox="0 0 1080 720" class =extended-typography''>
                 <defs>
                     <clipPath id="clipPath205" clipPathUnits="userSpaceOnUse">
                         <rect width="115.155" height="116.277" x="361.85" y="57.914" ry="1.43"/>
@@ -372,6 +305,7 @@
         buildFromGSheetData(settings)
 
         function buildFromGSheetData(settings) {
+             d3.select(`#${settings.svgID}`).style('opacity', 0)   
             // 1. Specify data table links for each table used (tsv published output from each separate sheet/table)
             const gsTableLinks =   {
                 kerbsideCollectionData:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vSimVJWCqYLTijgqeU-SPGdAFT6wpGprHgjPdpxEElWurVvl28JYr7dHGE3OCSjF4VYH2_QggJUnveO/pub?gid=204435756&single=true&output=tsv',
@@ -447,7 +381,7 @@
                 organicsPerPropertyCost = yearData.Organics_cost / yearData.Population * settings.variables.peoplePerHousehold,
                 organicsPerTonneCost = yearData.Organics_cost / yearData.Organics_volume
 
-            const svg = d3.select('#streetscene-vis'),
+            const svg = d3.select(`#${settings.svgID}`),
                 annotationLayer = svg.append('g').classed('annotation-group', true),
                 headlineOffsetY = 140
 
@@ -465,6 +399,7 @@
                 .text(helpers.numberFormatters.formatCostInteger(totalCouncilCost/1000000))
                 .attr('x', 50)
                 .attr('y', headlineOffsetY+60)
+
             annotationLayer.append('text').classed('lga-label-headline', true)
                 .text("million")
                 .attr('x', 50)
@@ -490,9 +425,9 @@
                 .attr('x', 310)
                 .attr('y', headlineOffsetY +118)
 
-            annotationLayer.append('text').classed('lga-label garbage', true)
+            annotationLayer.append('text').classed('lga-label garbage middle', true)
                 .text("Garbage")
-                .attr('x', 323)
+                .attr('x', 323 + 75)
                 .attr('y', 350)
 
             annotationLayer.append('text').classed('lga-annotation', true)
@@ -502,9 +437,9 @@
                 .attr('dy', 0)
                 .call(helpers.wrap, 160, 1.1)
 
-            annotationLayer.append('text').classed('lga-label recyclables', true)
+            annotationLayer.append('text').classed('lga-label recyclables middle', true)
                 .text("Recyclables")
-                .attr('x', 608)
+                .attr('x', 608 + 75)
                 .attr('y', 350)
 
             annotationLayer.append('text').classed('lga-annotation', true)
@@ -514,17 +449,21 @@
                 .attr('dy', 0)
                 .call(helpers.wrap, 160, 1.1)
 
-            annotationLayer.append('text').classed('lga-label organics', true)
+            annotationLayer.append('text').classed('lga-label organics middle', true)
                 .text("Organics")
-                .attr('x', 893)
+                .attr('x', 893 + 75)
                 .attr('y', 350)
-
             annotationLayer.append('text').classed('lga-annotation', true)
                 .text(`On average, ${helpers.numberFormatters.formatComma(organicsPerPropertyTonnes*1000)} kg of organics were collected from each serviced property at a cost of ${helpers.numberFormatters.formatCostInteger(organicsPerPropertyCost)}.`)
                 .attr('x', 893)
                 .attr('y', 368)
                 .attr('dy', 0)
                 .call(helpers.wrap, 160, 1.1)
+
+            // Animate in
+            d3.select(`#${settings.svgID}`).transition().duration(1500)
+                .style('opacity', null)   
+
         };
 
 

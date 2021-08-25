@@ -3,100 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Kerbside bin composition">
+        <meta name="description" content="Waste trends summary tables">
         <meta name="author" content="Sustainability Victoria">
         <script src="https://d3js.org/d3.v7.min.js"></script>
+        <link rel="stylesheet" href="./css/core.css">
         <style>
-            /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
-            :root {
-                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                      #9ACA3C;
-                /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:          #D5E0A1;
-                --secondaryBottleGreen:         #174F37;
-                --secondaryBottleGreenLight:    #79B5AA;
-                --secondaryGrey:                #B1B1B0;
-                --secondaryGreyLight:           #CFCFCF;
-                --secondaryGreyLightest:        #ECECEC;
-                /** TERTIARY PALETTE **/
-                --tertiaryPurple:               #51284F;
-                --tertiaryPurpleLight:          #8276B3;
-                --tertiaryRed:                  #E04F39;
-                --tertiaryRedLight:             #F78684;
-                --tertiaryYellow:               #EFC041;
-                --tertiaryYellowLight:          #F5E065;
-                --tertiaryCard:                 #B39981;
-                --tertiaryCardLight:            #DCBFA6;
-                --tertiaryEmerald:              #009E71;
-                --tertiaryEmeraldLight:         #93CCB9;
-                --tertiaryBlue:                 #005E88;
-                --tertiaryBlueLight:            #A0D6E9;
-                /*** EXTENDED PALETTE  ***/
-                --xLightestPurple:              #A59DC8;     
-                --xOrange:                      #feb076;     
-                --xLime:                        #BBCC66;     
-                --xGreen:                       #66CCAC;     
-                --xBlueCyan:                    #94E1EC;     
-                --xMidBlue:                     #48B5EB;     
-                --xMagenta:                     #d780c3;     
-                --xCharcoal:                    #36454F; 
-                --xDarkOrange:                  #863F13; 
-                --xDarkLime:                    #77862D;     
-                --xDarkYellow:                  #A57A0E; 
-                --xDarkCard:                    #6F5843; 
-                --xDarkBlueCyan:                #177283; 
-                --xDarkMagenta:                 #73264C; 
-                --darkGrey:                     rgb(100, 100, 100);
-            }
 
-        /***************************************/
-        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-        /***************************************/
+            /***********************************************************/
+            /***********************************************************/
+            /****                                                   ****/
+            /**** VICTORRINA WRRG WASTE DATA MAP  | CUSTOM CSS      ****/
+            /**** -----------------------------------------------   ****/
+            /**** - CSS Variables and loaded fonts from core.css    ****/
+            /****                                                   ****/
+            /***********************************************************/
+            /***********************************************************/
 
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
-                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: light;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                font-weight: 400;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                font-weight: 500;
-                font-style: medium;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
-            }
 
-        /*******************************************/
-        /***  PAGE LAYOUT | HEADLINE + MATERIAL ***/
-        /******************************************/
+            /*******************************************/
+            /***  PAGE LAYOUT | HEADLINE + MATERIAL ***/
+            /******************************************/
             body{
                 font-family: 'DIN Next LT Pro';
-                margin: 0;
-            }
+                margin: 0;                          /* Full bleed presentation */
+            } 
 
             /* Main grid with 3 vertical content blocks */
             main.main-container{
@@ -117,19 +47,11 @@
                 row-gap: 3.5vw; 
                 margin-top: 2vw;
             }
-
             .divider-block{
                 grid-area: 4 / 2 / 5 / 3;
                 width: 100%;
                 height: 2vw;
                 margin-top: 0vw;
-                /* background: repeating-linear-gradient(
-                    45deg,
-                    transparent,
-                    transparent 0.5vw,
-                    var(--xcharcoal) 0.5vw,
-                    var(--xcharcoal)  1vw
-                ); */
                 border-bottom: 1px solid gray;
             }
             .headline-tables-container{
@@ -183,36 +105,35 @@
                     grid-template-columns: 1fr 1.35fr; 
                     grid-template-rows: 1fr 1fr; 
                 }
-                    .performance-label-change{
-                        grid-area: 1 / 1 / 3 / 2;
-                    }
-                    .performance-label-1yr{
-                        grid-area: 1 / 2 / 2 / 3;
-                    }
-                    .performance-label-5yr{
-                        grid-area: 2 / 2 / 3 / 3;
-                    }
-                    .performance-label-1yr,
-                    .performance-label-5yr{
-                        justify-content: end;
-                    }
-                    .material-summary-table-performance-1yr-container,
-                    .material-summary-table-performance-5yr-container{
-                        display: grid;
-                        grid-template-columns: 1fr 1fr 1fr; 
-                    }
-                    .material-summary-table-performance-1yr-container{
-                        grid-area: 2 / 2 / 3 / 5;
-                    }
-                    .material-summary-table-performance-5yr-container{
-                        grid-area: 3 / 2 / 4 / 5;
-                    }
+                .performance-label-change{
+                    grid-area: 1 / 1 / 3 / 2;
+                }
+                .performance-label-1yr{
+                    grid-area: 1 / 2 / 2 / 3;
+                }
+                .performance-label-5yr{
+                    grid-area: 2 / 2 / 3 / 3;
+                }
+                .performance-label-1yr,
+                .performance-label-5yr{
+                    justify-content: end;
+                }
+                .material-summary-table-performance-1yr-container,
+                .material-summary-table-performance-5yr-container{
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr; 
+                }
+                .material-summary-table-performance-1yr-container{
+                    grid-area: 2 / 2 / 3 / 5;
+                }
+                .material-summary-table-performance-5yr-container{
+                    grid-area: 3 / 2 / 4 / 5;
+                }
 
 
-
-        /******************************************/
-        /***  TYPOGRAPHY | HEADLINE + MATERIAL ***/
-        /*****************************************/
+            /******************************************/
+            /***  TYPOGRAPHY | HEADLINE + MATERIAL ***/
+            /*****************************************/
 
             /* Headline Typography */
             .main-title,
@@ -224,10 +145,6 @@
                 text-transform: uppercase;
                 margin-block-end: 1.5vw;
             }
-            /* .section-title{
-                font-size: 2.5vw;
-                margin-block-end: 1.5vw;
-            } */
             .headline-label,
             .headline-unit{
                 font-weight: 500;
@@ -314,274 +231,275 @@
                 text-align: center;
             }
 
-        /***********************************/
-        /**** HEADLINE METRICS COLOURS  ***/
-        /**********************************/
+            /***********************************/
+            /**** HEADLINE METRICS COLOURS  ***/
+            /**********************************/
 
-        #total-waste-container{
-            color: #000;
-        }
-        #total-waste-container .sparkline{
-            stroke: #000;
-        }
-        #total-waste-container  .marker{
-            fill: #000;
-        }
-        #diversion-rate-container{
-            color: var(--xcharcoal);
-        }
-        #diversion-rate-container .sparkline{
-            stroke: var(--xcharcoal);
-        }
-        #diversion-rate-container .marker{
-            fill: var(--xcharcoal);
-        }
-        #landfill-waste-container{
-            color: var(--tertiaryCard);
-        }
-        #landfill-waste-container .sparkline{
-            stroke: var(--tertiaryCard);
-        }
-        #landfill-waste-container  .marker{
-            fill: var(--tertiaryCard);
-        }
-        #total-recovery-container{
-            color: var(--xcharcoal);
-        }
-        #total-recovery-container .sparkline{
-            stroke: var(--xcharcoal);
-        }
-        #total-recovery-container .marker{
-            fill: var(--xcharcoal);
-        }
-        #local-recovery-container{
-            color: var(--secondaryBottleGreen);
-        }
-        #local-recovery-container .sparkline{
-            stroke: var(--secondaryBottleGreen);
-        }
-        #local-recovery-container .marker{
-            fill: var(--secondaryBottleGreen);
-        }
-        #export-container{
-            color: var(--secondaryBottleGreenLight);
-        }
-        #export-container .sparkline{
-            stroke: var(--secondaryBottleGreenLight);
-        }
-        #export-container .marker{
-            fill: var(--secondaryBottleGreenLight);
-        }
+            #total-waste-container{
+                color: #000;
+            }
+            #total-waste-container .sparkline{
+                stroke: #000;
+            }
+            #total-waste-container  .marker{
+                fill: #000;
+            }
+            #diversion-rate-container{
+                color: var(--xCharcoal);
+            }
+            #diversion-rate-container .sparkline{
+                stroke: var(--xCharcoal);
+            }
+            #diversion-rate-container .marker{
+                fill: var(--xCharcoal);
+            }
+            #landfill-waste-container{
+                color: var(--tertiaryCard);
+            }
+            #landfill-waste-container .sparkline{
+                stroke: var(--tertiaryCard);
+            }
+            #landfill-waste-container  .marker{
+                fill: var(--tertiaryCard);
+            }
+            #total-recovery-container{
+                color: var(--xCharcoal);
+            }
+            #total-recovery-container .sparkline{
+                stroke: var(--xCharcoal);
+            }
+            #total-recovery-container .marker{
+                fill: var(--xCharcoal);
+            }
+            #local-recovery-container{
+                color: var(--secondaryBottleGreen);
+            }
+            #local-recovery-container .sparkline{
+                stroke: var(--secondaryBottleGreen);
+            }
+            #local-recovery-container .marker{
+                fill: var(--secondaryBottleGreen);
+            }
+            #export-container{
+                color: var(--secondaryBottleGreenLight);
+            }
+            #export-container .sparkline{
+                stroke: var(--secondaryBottleGreenLight);
+            }
+            #export-container .marker{
+                fill: var(--secondaryBottleGreenLight);
+            }
 
-        /***************************/
-        /**** MATERIALS COLOURS  ***/
-        /***************************/
-        .materials-tables-container{
-            color: var(--xcharcoal)
-        }
-        .material-summary-label-bar.building-and-demolition-materials,
-        .material-summary-label-bar.aggregates-masonry-and-soil{
-            background: repeating-linear-gradient(
-                45deg, transparent, transparent 0.25vw,
-                var(--tertiaryRedLight) 0.25vw,
-                var(--tertiaryRedLight) 0.5vw
-            );
-        }
-        .material-summary-table-performance.building-and-demolition-materials,
-        .material-summary-table-performance.aggregates-masonry-and-soil{
-            border-top:var(--tertiaryRedLight) 0.2vw solid;
-            border-bottom:var(--tertiaryRedLight) 0.2vw solid;
-        }
-        .material-summary-table-volumes.building-and-demolition-materials,
-        .material-summary-table-volumes.aggregates-masonry-and-soil{
-            border-bottom:var(--tertiaryRedLight) 0.125vw dotted;
-        }
-        .material-summary-label.building-and-demolition-materials,
-        .material-summary-label.aggregates-masonry-and-soil{
-            color: var(--tertiaryRed);
-        }
-        #building-and-demolition-materials-sparkline .sparkline,
-        #aggregates-masonry-and-soil-sparkline .sparkline{
-            stroke: var(--tertiaryRedLight);
-        }
-        #building-and-demolition-materials-sparkline .marker,
-        #aggregates-masonry-and-soil-sparkline .marker{
-            fill: var(--tertiaryRedLight);
-        }
-        .material-summary-label-bar.glass{
-            background: repeating-linear-gradient(
-                45deg, transparent, transparent 0.25vw,
-                var(--tertiaryPurpleLight) 0.25vw,
-                var(--tertiaryPurpleLight) 0.5vw
-            );
-        }
-        .material-summary-table-performance.glass{
-            border-top:var(--tertiaryPurpleLight) 0.2vw solid;
-            border-bottom:var(--tertiaryPurpleLight) 0.2vw solid;
-        }
-        .material-summary-table-volumes.glass{
-            border-bottom:var(--tertiaryPurpleLight) 0.125vw dotted;
-        }
-        .material-summary-label.glass{
-            color: var(--tertiaryPurple)
-        }
-        #glass-sparkline .sparkline{
-            stroke: var(--tertiaryPurpleLight);
-        }
-        #glass-sparkline .marker{
-            fill: var(--tertiaryPurpleLight);
-        }
+            /***************************/
+            /**** MATERIALS COLOURS  ***/
+            /***************************/
+            .materials-tables-container{
+                color: var(--xCharcoal)
+            }
+            .material-summary-label-bar.building-and-demolition-materials,
+            .material-summary-label-bar.aggregates-masonry-and-soil{
+                background: repeating-linear-gradient(
+                    45deg, transparent, transparent 0.25vw,
+                    var(--tertiaryRedLight) 0.25vw,
+                    var(--tertiaryRedLight) 0.5vw
+                );
+            }
+            .material-summary-table-performance.building-and-demolition-materials,
+            .material-summary-table-performance.aggregates-masonry-and-soil{
+                border-top:var(--tertiaryRedLight) 0.2vw solid;
+                border-bottom:var(--tertiaryRedLight) 0.2vw solid;
+            }
+            .material-summary-table-volumes.building-and-demolition-materials,
+            .material-summary-table-volumes.aggregates-masonry-and-soil{
+                border-bottom:var(--tertiaryRedLight) 0.125vw dotted;
+            }
+            .material-summary-label.building-and-demolition-materials,
+            .material-summary-label.aggregates-masonry-and-soil{
+                color: var(--tertiaryRed);
+            }
+            #building-and-demolition-materials-sparkline .sparkline,
+            #aggregates-masonry-and-soil-sparkline .sparkline{
+                stroke: var(--tertiaryRedLight);
+            }
+            #building-and-demolition-materials-sparkline .marker,
+            #aggregates-masonry-and-soil-sparkline .marker{
+                fill: var(--tertiaryRedLight);
+            }
+            .material-summary-label-bar.glass{
+                background: repeating-linear-gradient(
+                    45deg, transparent, transparent 0.25vw,
+                    var(--tertiaryPurpleLight) 0.25vw,
+                    var(--tertiaryPurpleLight) 0.5vw
+                );
+            }
+            .material-summary-table-performance.glass{
+                border-top:var(--tertiaryPurpleLight) 0.2vw solid;
+                border-bottom:var(--tertiaryPurpleLight) 0.2vw solid;
+            }
+            .material-summary-table-volumes.glass{
+                border-bottom:var(--tertiaryPurpleLight) 0.125vw dotted;
+            }
+            .material-summary-label.glass{
+                color: var(--tertiaryPurple)
+            }
+            #glass-sparkline .sparkline{
+                stroke: var(--tertiaryPurpleLight);
+            }
+            #glass-sparkline .marker{
+                fill: var(--tertiaryPurpleLight);
+            }
 
-        .material-summary-label-bar.plastics{
-            background: repeating-linear-gradient(
-                45deg, transparent, transparent 0.25vw,
-                var(--tertiaryYellow) 0.25vw,
-                var(--tertiaryYellow) 0.5vw
-            );
-        }
-        .material-summary-table-performance.plastics{
-            border-top:var(--tertiaryYellow) 0.2vw solid;
-            border-bottom:var(--tertiaryYellow) 0.2vw solid;
-        }
-        .material-summary-table-volumes.plastics{
-            border-bottom:var(--tertiaryYellow) 0.125vw dotted;
-        }
-        .material-summary-label.plastics{
-            color: var(--xDarkYellow)
-        }
-        #plastics-sparkline .sparkline{
-            stroke: var(--tertiaryYellow);
-        }
-        #plastics-sparkline .marker{
-            fill: var(--tertiaryYellow);
-        }
+            .material-summary-label-bar.plastics{
+                background: repeating-linear-gradient(
+                    45deg, transparent, transparent 0.25vw,
+                    var(--tertiaryYellow) 0.25vw,
+                    var(--tertiaryYellow) 0.5vw
+                );
+            }
+            .material-summary-table-performance.plastics{
+                border-top:var(--tertiaryYellow) 0.2vw solid;
+                border-bottom:var(--tertiaryYellow) 0.2vw solid;
+            }
+            .material-summary-table-volumes.plastics{
+                border-bottom:var(--tertiaryYellow) 0.125vw dotted;
+            }
+            .material-summary-label.plastics{
+                color: var(--xDarkYellow)
+            }
+            #plastics-sparkline .sparkline{
+                stroke: var(--tertiaryYellow);
+            }
+            #plastics-sparkline .marker{
+                fill: var(--tertiaryYellow);
+            }
 
-        .material-summary-label-bar.paper-and-cardboard{
-            background: repeating-linear-gradient(
-                45deg, transparent, transparent 0.25vw,
-                var(--xBlueCyan) 0.25vw,
-                var(--xBlueCyan) 0.5vw
-            );
-        }
-        .material-summary-table-performance.paper-and-cardboard{
-            border-top:var(--xBlueCyan) 0.2vw solid;
-            border-bottom:var(--xBlueCyan) 0.2vw solid;
-        }
-        .material-summary-table-volumes.paper-and-cardboard{
-            border-bottom:var(--xBlueCyan) 0.125vw dotted;
-        }
-        .material-summary-label.paper-and-cardboard{
-            color: var(--xDarkBlueCyan)
-        }
-        #paper-and-cardboard-sparkline .sparkline{
-            stroke: var(--xBlueCyan);
-        }
-        #paper-and-cardboard-sparkline .marker{
-            fill: var(--xBlueCyan);
-        }
+            .material-summary-label-bar.paper-and-cardboard{
+                background: repeating-linear-gradient(
+                    45deg, transparent, transparent 0.25vw,
+                    var(--xBlueCyan) 0.25vw,
+                    var(--xBlueCyan) 0.5vw
+                );
+            }
+            .material-summary-table-performance.paper-and-cardboard{
+                border-top:var(--xBlueCyan) 0.2vw solid;
+                border-bottom:var(--xBlueCyan) 0.2vw solid;
+            }
+            .material-summary-table-volumes.paper-and-cardboard{
+                border-bottom:var(--xBlueCyan) 0.125vw dotted;
+            }
+            .material-summary-label.paper-and-cardboard{
+                color: var(--xDarkBlueCyan)
+            }
+            #paper-and-cardboard-sparkline .sparkline{
+                stroke: var(--xBlueCyan);
+            }
+            #paper-and-cardboard-sparkline .marker{
+                fill: var(--xBlueCyan);
+            }
 
-        .material-summary-label-bar.organics{
-            background: repeating-linear-gradient(
-                45deg, transparent, transparent 0.25vw,
-                var(--xGreen) 0.25vw,
-                var(--xGreen) 0.5vw
-            );
-        }
-        .material-summary-table-performance.organics{
-            border-top:var(--xGreen) 0.2vw solid;
-            border-bottom:var(--xGreen) 0.2vw solid;
-        }
-        .material-summary-table-volumes.organics{
-            border-bottom:var(--xGreen) 0.125vw dotted;
-        }
-        .material-summary-label.organics{
-            color: var(--tertiaryEmerald)
-        }
-        #organics-sparkline .sparkline{
-            stroke: var(--xGreen);
-        }
-        #organics-sparkline .marker{
-            fill: var(--xGreen);
-        }
+            .material-summary-label-bar.organics{
+                background: repeating-linear-gradient(
+                    45deg, transparent, transparent 0.25vw,
+                    var(--xGreen) 0.25vw,
+                    var(--xGreen) 0.5vw
+                );
+            }
+            .material-summary-table-performance.organics{
+                border-top:var(--xGreen) 0.2vw solid;
+                border-bottom:var(--xGreen) 0.2vw solid;
+            }
+            .material-summary-table-volumes.organics{
+                border-bottom:var(--xGreen) 0.125vw dotted;
+            }
+            .material-summary-label.organics{
+                color: var(--tertiaryEmerald)
+            }
+            #organics-sparkline .sparkline{
+                stroke: var(--xGreen);
+            }
+            #organics-sparkline .marker{
+                fill: var(--xGreen);
+            }
 
-        .material-summary-label-bar.metals{
-            background: repeating-linear-gradient(
-                45deg, transparent, transparent 0.25vw,
-                var(--xMidBlue) 0.25vw,
-                var(--xMidBlue) 0.5vw
-            );
-        }
-        .material-summary-table-performance.metals{
-            border-top:var(--xMidBlue) 0.2vw solid;
-            border-bottom:var(--xMidBlue) 0.2vw solid;
-        }
-        .material-summary-table-volumes.metals{
-            border-bottom:var(--xMidBlue) 0.125vw dotted;
-        }
-        .material-summary-label.metals{
-            color: var(--tertiaryBlue)
-        }
-        #metals-sparkline .sparkline{
-            stroke: var(--xMidBlue);
-        }
-        #metals-sparkline .marker{
-            fill: var(--xMidBlue);
-        }
+            .material-summary-label-bar.metals{
+                background: repeating-linear-gradient(
+                    45deg, transparent, transparent 0.25vw,
+                    var(--xMidBlue) 0.25vw,
+                    var(--xMidBlue) 0.5vw
+                );
+            }
+            .material-summary-table-performance.metals{
+                border-top:var(--xMidBlue) 0.2vw solid;
+                border-bottom:var(--xMidBlue) 0.2vw solid;
+            }
+            .material-summary-table-volumes.metals{
+                border-bottom:var(--xMidBlue) 0.125vw dotted;
+            }
+            .material-summary-label.metals{
+                color: var(--tertiaryBlue)
+            }
+            #metals-sparkline .sparkline{
+                stroke: var(--xMidBlue);
+            }
+            #metals-sparkline .marker{
+                fill: var(--xMidBlue);
+            }
 
-        .material-summary-label-bar.rubber{
-            background: repeating-linear-gradient(
-                45deg, transparent,  transparent 0.25vw,
-                var(--xMagenta) 0.25vw,
-                var(--xMagenta) 0.5vw
-            );
-        }
-        .material-summary-table-performance.rubber{
-            border-top:var(--xMagenta) 0.2vw solid;
-            border-bottom:var(--xMagenta) 0.2vw solid;
-        }
-        .material-summary-table-volumes.rubber{
-            border-bottom:var(--xMagenta) 0.125vw dotted;
-        }
-        .material-summary-label.rubber{
-            color: var(--xDarkMagenta)
-        }
-        #rubber-sparkline .sparkline{
-            stroke: var(--xMagenta);
-        }
-        #rubber-sparkline .marker{
-            fill: var(--xMagenta);
-        }
+            .material-summary-label-bar.rubber{
+                background: repeating-linear-gradient(
+                    45deg, transparent,  transparent 0.25vw,
+                    var(--xMagenta) 0.25vw,
+                    var(--xMagenta) 0.5vw
+                );
+            }
+            .material-summary-table-performance.rubber{
+                border-top:var(--xMagenta) 0.2vw solid;
+                border-bottom:var(--xMagenta) 0.2vw solid;
+            }
+            .material-summary-table-volumes.rubber{
+                border-bottom:var(--xMagenta) 0.125vw dotted;
+            }
+            .material-summary-label.rubber{
+                color: var(--xDarkMagenta)
+            }
+            #rubber-sparkline .sparkline{
+                stroke: var(--xMagenta);
+            }
+            #rubber-sparkline .marker{
+                fill: var(--xMagenta);
+            }
 
-        .material-summary-label-bar.textiles{
-            background: repeating-linear-gradient(
-                45deg, transparent, transparent 0.25vw,
-                var(--xOrange) 0.25vw,
-                var(--xOrange) 0.5vw
-            );
-        }
-        .material-summary-table-performance.textiles{
-            border-top:var(--xOrange) 0.2vw solid;
-            border-bottom:var(--xOrange) 0.2vw solid;
-        }
-        .material-summary-table-volumes.textiles{
-            border-bottom:var(--xOrange) 0.125vw dotted;
-        }
-        .material-summary-label.textiles{
-            color: var(--xDarkOrange)
-        }
-        #textiles-sparkline .sparkline{
-            stroke: var(--xOrange);
-        }
-        #textiles-sparkline .marker{
-            fill: var(--xOrange);
-        }
+            .material-summary-label-bar.textiles{
+                background: repeating-linear-gradient(
+                    45deg, transparent, transparent 0.25vw,
+                    var(--xOrange) 0.25vw,
+                    var(--xOrange) 0.5vw
+                );
+            }
+            .material-summary-table-performance.textiles{
+                border-top:var(--xOrange) 0.2vw solid;
+                border-bottom:var(--xOrange) 0.2vw solid;
+            }
+            .material-summary-table-volumes.textiles{
+                border-bottom:var(--xOrange) 0.125vw dotted;
+            }
+            .material-summary-label.textiles{
+                color: var(--xDarkOrange)
+            }
+            #textiles-sparkline .sparkline{
+                stroke: var(--xOrange);
+            }
+            #textiles-sparkline .marker{
+                fill: var(--xOrange);
+            }
 
-        /*********************/
-        /**** SPARKLINES  ***/
-        /*********************/
+            /*********************/
+            /**** SPARKLINES  ***/
+            /*********************/
             .sparkline{
                 fill: none;
                 stroke-width: 2.5px;
+                stroke: #000;
             }
             .headline-figures-container .sparkline{
                 stroke-width: 1.5px;
@@ -597,7 +515,7 @@
                 opacity: 0.05
             }
             .sparkline-annotation{
-                fill: var(--xcharcoal)
+                fill: var(--xCharcoal)
             }
             .sparkline-annotation{
                 font-size: 8px;
