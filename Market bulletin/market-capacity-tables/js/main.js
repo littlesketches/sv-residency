@@ -42,62 +42,42 @@
     }
 
     const data = {
-        tables:             {},
+        table:             {},
         schema: {
             lists: {
                 date:           {},
                 materials:      {},
-                fields:         {}
+                fields:         []
             }
         }
     }
 
 
-/////////////////////////////////////////
-//// BUILD FROM GOOGLE SHEET INPUT   //// 
-/////////////////////////////////////////
+//////////////////////////////////////////////////
+//// INITIALISE VISUALISAITN FROM DATA INPUT  //// 
+//////////////////////////////////////////////////
 
-    buildFromGSheetData(settings) 
+    initVis(settings) 
 
     //  1. Load data and call to build sequence
-    function buildFromGSheetData(config) {
-        // Data table links for each table used from same Google Sheet
-        const gsTableLinks =  {
-            data_marketCapacity:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=352975485&single=true&output=tsv'
-        }
-        const tablesToLoad = Object.keys(gsTableLinks)
-        let noLoadedTables = 0
+    function initVis(config) {
+        // 1 Setup and specification of data endpoint tables
+        const dataTables =  ['data_marketCapacity']   // Table names matched to the dataEndpointURls object (held in the data-endpoints.js file)
 
-        // Load each table as tsv source using Papa parse
-        for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-            Papa.parse(tableURL,  {
-                download: true,
-                header: true,
-                delimiter: '\t',    
-                transformHeader: (d) => {   // Use this to record the table headers in order; and return data without transformation
-                    if(!data.schema.lists.fields[tableName]){
-                        data.schema.lists.fields[tableName] = []
-                    }
-                    if(d !== 'date' && d !== 'material'){
-                        data.schema.lists.fields[tableName].push(d)
-                    }
-                    return d
-                },                    
-                complete: async (results) => {
-                    parseTable(tableName, results.data)
-                    noLoadedTables++
-                    // Call to buildVis after all tables are loaded and parsed
-                    if(noLoadedTables === tablesToLoad.length){
-                        await applyQuerySettings(config)        // a.  Update (default) settings that might be set from query string
-                        await buildCapabilityTable(config)                  // c. Build report
-                    }
-                }
-            })
-        }   
+        // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+        Promise.all(
+            dataTables.map(d => d3.tsv(dataEndpointURLs[d]) )
+        ).then( async (rawData) => {
+            data.schema.lists.fields = rawData[0].columns.filter(d => d !== 'date' && d !== 'material')
+            await parseTable(config.dataTable, rawData[0])      // a. Parse and store data table
+            await applyQuerySettings(config)                    // b.  Update (default) settings that might be set from query string
+            await buildCapabilityTable(config)                  // c. Build report
+
+        })
 
         // Table data parsing function
         const parseTable = async (tableName, tableData) => {
-            data.tables[tableName] = tableData.map(row => {
+            data.table[tableName] = tableData.map(row => {
                 const newObj = {}
                 Object.entries(row).forEach(([key, value]) => {
                     newObj[key] = isNaN(parseFloat(value.replace(/,/g, ''))) ? value : parseFloat(value.replace(/,/g, '')) 
@@ -111,8 +91,8 @@
     // a. Update settings from query string
     async function applyQuerySettings(config){
         // i. Create a date and material list
-        data.schema.lists.date = [...new Set( data.tables[config.dataTable].map(d => d.date) )]
-        data.schema.lists.material = [...new Set( data.tables[config.dataTable].map(d => d.material) )]
+        data.schema.lists.date = [...new Set( data.table[config.dataTable].map(d => d.date) )]
+        data.schema.lists.material = [...new Set( data.table[config.dataTable].map(d => d.material) )]
         // ii. Check for query parameters and update material. A date set by the query selector is set while parsing input data 
         settings.queryParameters = new URLSearchParams(window.location.search)
         if (settings.queryParameters.has('material')) { 
@@ -124,13 +104,13 @@
 
     async function buildCapabilityTable(config){
         const material = settings.state.material,
-            tableData = data.tables[settings.dataTable].filter(d => d.date === settings.state.date && d.material === settings.state.material),
+            tableData = data.table[settings.dataTable].filter(d => d.date === settings.state.date && d.material === settings.state.material),
             tableHead = d3.select(`#${config.tableID}`).append('thead'),
             headerRow = tableHead.append('tr'),
             tableBody = d3.select(`#${config.tableID}`).append('tbody')
 
         // Add table headers
-        data.schema.lists.fields[settings.dataTable].forEach((fieldName, i) => {
+        data.schema.lists.fields.forEach((fieldName, i) => {
              headerRow.append('th')
                 .attr('class', i === 0 ? 'product' : 'supply-chain' )
                 .classed('table header', true)
@@ -142,7 +122,7 @@
         tableData.forEach(d => {
             const row = tableBody.append('tr')
 
-            data.schema.lists.fields[settings.dataTable].forEach((field, i) => {
+            data.schema.lists.fields.forEach((field, i) => {
                 const entry = d[field].replace("Yes", "&#10003;").replace("yes", "&#10003;")        // Replace Yes/yes with a tick mark
                                 .replace("No", "&#10008;").replace("no", "&#10008;")                // Replacce No/no with a cross
                 row.append('td')
@@ -156,7 +136,6 @@
             })
         })
     };                  
-
 
     const helpers= {
         numberParsers: {

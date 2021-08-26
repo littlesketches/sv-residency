@@ -9,9 +9,9 @@
 ///////////////////////////////////////////////////////////////////
 
 
-/////////////////////////
+////////////////////////
 ///// CHART OBJECT  ////
-/////////////////////////
+////////////////////////
 
 // General chart object used to store chart methods 
 const chart = {
@@ -130,8 +130,6 @@ chart.methods.seriesContext.renderChart = async(settings) => {
         // a. Set current state, (starting) chart data and selector
         chartObj.state.dataGroup = settings.group ? settings.group : selectGroup.node().value  
         chartObj.chartData = chartObj.data[chartObj.state.dataGroup]
-        // document.getElementById('material-selector').value = chartObj.state.dataGroup 
-
         // b. Shape series data into series for rendering multiple series:
         chart.byId[svgID].seriesData = chartObj.chartData.map(d => { 
             const newObj = {}
@@ -865,61 +863,48 @@ chart.methods.seriesContext.renderChart = async(settings) => {
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// BUILD FUNCTION TO LOAD SUPPORTING DATA AND CALL A RENDERING FUNCTION  ///
-////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+///// BUILD FUNCTION TO LOAD SUPPORTING DATA AND CALL A RENDERING FUNCTION  /////
+/////////////////////////////////////////////////////////////////////////////////
 
-// Loading function 
-function buildFromGSheetData(config) {
-    // Hide charts for reveal
-    d3.selectAll('.chart-container').style('opacity', 0)     
-    
-    // Data table links for each table used from same Google Sheet
-    const gsTableLinks =  {
-        data_mrfOutput:             'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=549382680&single=true&output=tsv',
-        data_materialsVicExport:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=612803144&single=true&output=tsv',
-        data_commodityValues:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=1635331988&single=true&output=tsv'
-    }
-    const tablesToLoad = Object.keys(gsTableLinks)
-    let noLoadedTables = 0
 
-    // Load each table as tsv source using Papa parse
-    for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-        Papa.parse(tableURL,  {
-            download: true,
-            header: true,
-            delimiter: '\t',                        
-            complete: async (results) => {
-                parseTable(tableName, results.data)
-                noLoadedTables++
-                // Call to buildVis after all tables are loaded and parsed
-                if(noLoadedTables === tablesToLoad.length){
-                    await buildVis(config)
-                    // Reveal chart
-                    d3.selectAll('.chart-container')
-                        .transition().duration(800)
-                        .style('opacity', null)     
-                }
-            }
-        })
-    }   
+// Init function to load data and call generic buildVis function that is setup (and customised where necessary) for each 
+function initVis(config) {
+    // 1. Setup and specification of data endpoint tables
+    d3.selectAll('.chart-container').style('opacity', 0)                  //  Hide charts for reveal
+    const dataTables =  ['data_mrfOutput', 'data_materialsVicExport']   // Table names matched to the dataEndpointURls object (held in the data-endpoints.js file)
 
-    // Table data parsing function
-    const parseTable = async (tableName, tableData) => {
+    // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+    Promise.all(
+        dataTables.map(d => d3.tsv(dataEndpointURLs[d]) )
+    ).then( rawData => {
+        // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
+        rawData.forEach((tableData, i) => {parseTable(dataTables[i], tableData) })
+        return chart.data
+    }).then( async (data) => {
+        // 3. Initiate vis build sequence with data now loaded
+        await buildVis(config)
+        d3.selectAll('.chart-container')        // Reveal chart
+            .transition().duration(800)
+            .style('opacity', null)     
+    })
+
+    // X. Table data and date parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
+    const parseTable = (tableName, tableData) => {
         chart.data[tableName] = tableData.map(row => {
             const newObj = {}
             Object.entries(row).forEach(([key, value]) => {
-                switch(key.toLowerCase()){
+                switch(key.trim().toLowerCase()){
                     case 'date':
                         newObj[key] =  helpers.numberParsers.parseDateSlash(value)
                         break     
                     default:
-                        newObj[key] = isNaN(parseFloat(value.replace(/,/g, ''))) ? value : parseFloat(value.replace(/,/g, '')) 
+                        newObj[key.trim()] = isNaN(parseFloat(value.replace(/\$|,/g, ''))) ? value : parseFloat(value.replace(/\$|,/g, '')) 
                 }
             })
             return newObj
         })
-    };
+    };   
 }; // end buildFromGSheetData
 
 

@@ -53,7 +53,7 @@
     }
 
     const state = {
-        material:    "Paper and paperboard",    // This is the 'display' title for the edition and is used for general labelling
+        material:    "Paper and cardboard",    // This is the 'display' title for the edition and is used for general labelling
         date:  {}                               // Date (month) of data for each section
     }
 
@@ -65,36 +65,29 @@
 //// INIT FUNCTION (CALLED ON LOAD)  //// 
 /////////////////////////////////////////
 
-    buildFromGSheetData(settings) 
-    //  1. Load data and call to build sequence
-    function buildFromGSheetData(config) {
-        // Data table links for each table used from same Google Sheet
-        const gsTableLinks =  {
-            data_mrfOutput:             'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=549382680&single=true&output=tsv',
-            data_materialsVicExport:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=612803144&single=true&output=tsv',
-            data_commodityValues:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=1635331988&single=true&output=tsv'
-        }
-        const tablesToLoad = Object.keys(gsTableLinks)
-        let noLoadedTables = 0
+    initVis(settings) 
 
-        // Load each table as tsv source using Papa parse
-        for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-            Papa.parse(tableURL,  {
-                download: true,
-                header: true,
-                delimiter: '\t',                        
-                complete: async (results) => {
-                    parseTable(tableName, results.data)
-                    noLoadedTables++
-                    // Call to buildVis after all tables are loaded and parsed
-                    if(noLoadedTables === tablesToLoad.length){
-                        await applyQuerySettings(config)        // a.  Update (default) settings that might be set from query string
-                        await parseData(data.tables, config)    // b.        
-                        await buildDashboard()                  // c. Build report
-                    }
-                }
-            })
-        }   
+    // Init function to load data and call generic buildVis function that is setup (and customised where necessary) for each 
+    function initVis(config) {
+        // 1 Setup and specification of data endpoint tables
+        const dataTables =  ['data_mrfOutput', 'data_materialsVicExport', 'data_commodityValues']   // Table names matched to the dataEndpointURls object (held in the data-endpoints.js file)
+
+        // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+        Promise.all(
+            dataTables.map(d => d3.tsv(dataEndpointURLs[d]) )
+        ).then( rawData => {
+            // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
+            rawData.forEach((tableData, i) => {parseTable(dataTables[i], tableData) })
+            return data.tables
+        }).then( async (data) => {
+            // 3. Initiate vis build sequence with data now loaded
+            await applyQuerySettings(config)        // a. Update (default) settings that might be set from query string
+            await parseData(data, config)           // b. Parse and transform data        
+            await buildDashboard()                  // c. Build report
+            d3.selectAll('.main-container')        // Reveal chart
+                .transition().duration(800)
+                .style('opacity', null)     
+        })
 
         // Table data parsing function
         const parseTable = async (tableName, tableData) => {
@@ -249,7 +242,7 @@
             .attr('height', 4)
             .append('path')
                 .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                .attr('stroke', 'var(--secondaryBottleGreen)')
+                .attr('stroke', 'var(--xCharcoal)')
                 .attr('stroke-width', 0.25)
                 .attr("opacity", 1);
 
@@ -260,7 +253,7 @@
             .attr('height', 4)
             .append('path')
                 .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                .attr('stroke', 'var(--tertiaryEmeraldLight)')
+                .attr('stroke', 'var(--secondaryBottleGreen)')
                 .attr('stroke-width', 0.75)
                 .attr("opacity", 1);
 
@@ -271,7 +264,7 @@
             .attr('height', 4)
             .append('path')
                 .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                .attr('stroke', 'var(--tertiaryBlue)')
+                .attr('stroke', 'var(--tertiaryEmeraldLight)')
                 .attr('stroke-width', 0.75)
                 .attr("opacity", 1);
 

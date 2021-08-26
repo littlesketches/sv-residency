@@ -37,7 +37,7 @@
     // Positioning of nodes and links
     settings.geometry.chainY = settings.dims.height * 0.5 
     settings.geometry.chain = {
-        'Paper and paperboard': {
+        'Paper and cardboard': {
             'Collection and sorting': {
                 position:  {x: settings.dims.width * 0.125,   dy: settings.dims.height * 0.0 },
                 from:   null,
@@ -54,7 +54,7 @@
                 label:  'below'
             } 
         },
-        'Plastic packaging': {
+        'Plastics': {
             'Collection and sorting': {
                 position:  {x: settings.dims.width * 0.125,   dy: settings.dims.height * 0.0 },
                 from:   null,
@@ -71,7 +71,7 @@
                 label:  'below'
             } 
         },
-        'Metal packaging':  {
+        'Metals':  {
             'Collection and sorting': {
                 position:  {x: settings.dims.width * 0.125,   dy: settings.dims.height * 0.0 },
                 from:   null,
@@ -88,7 +88,7 @@
                 label:  'below'
             } 
         },
-        'Glass packaging': {
+        'Glass': {
             'Collection': {
                 position:  {x: settings.dims.width * 0.125,   dy: settings.dims.height * 0.0 },
                 from:   null,
@@ -114,7 +114,7 @@
 
     // Positioning and labellin oof individual price labels
     settings.geometry.price = {
-        'Paper and paperboard': {
+        'Paper and cardboard': {
             'MRF output':{
                 label: 'Reprocessed fibre',
                 labelPos: {
@@ -122,8 +122,8 @@
                     y: settings.dims.height * 0.235 
                 },
                 subMaterials: {
-                    'Fibre – Mixed paper and paperboard': {
-                        label: 'Mixed paper and paperboard',
+                    'Fibre – Mixed paper and cardboard': {
+                        label: 'Mixed paper and cardboard',
                         labelXOffset: settings.dims.width * 0,
                         x: settings.dims.width * 0.13,
                         y: settings.dims.height * 0.275
@@ -158,7 +158,7 @@
                 } 
             }
         },
-        'Plastic packaging': {
+        'Plastics': {
             'MRF output':{
                 label: 'Reprocessed plastic resin',
                 labelPos: {
@@ -244,7 +244,7 @@
                 }
             },
         },
-        'Metal packaging':  {
+        'Metals':  {
             'MRF output':{
                 label: 'Reprocessed metals',
                 labelPos: {
@@ -288,7 +288,7 @@
                 }
             }
         },
-        'Glass packaging': {
+        'Glass': {
             'MRF output':{
                 label: 'Recovered glass',
                 labelPos: {
@@ -307,14 +307,14 @@
             'Virgin': {
                 label: 'Virgin glass',
                 labelPos: {
-                    x: settings.dims.width * 0.75,    
+                    x: settings.dims.width * 0.60,    
                     y: settings.dims.height * 0.8 
                 },
                 subMaterials: {
                     'Glass – Virgin materials':{
                         label: 'Virgin glass',
                         labelXOffset: settings.dims.width * 0,
-                        leaderStartYOffset: settings.dims.height * 0.15,
+                        leaderStartYOffset: settings.dims.height * 0.1,
                         x: settings.dims.width * 0.80 ,
                         y: settings.dims.height * 0.825,
                         
@@ -341,38 +341,31 @@
 //// VISUALISATION BUILD  //// 
 //////////////////////////////
 
-    buildFromGSheetData(settings)      //  Load data and call to build sequence
+    initVis(settings)      //  Load data and call to build sequence
 
+    function initVis(config) {
+        // 1. Setup and specification of data endpoint tables
+        const dataTables =  ['data_commodityValues']   // Table names matched to the dataEndpointURls object (held in the data-endpoints.js file)
 
-    function buildFromGSheetData(config) {
-        // Data table links for each table used from same Google Sheet
-        const gsTableLinks =  {
-            data_commodityValues:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=1635331988&single=true&output=tsv'
-        }
-        const tablesToLoad = Object.keys(gsTableLinks)
-        let noLoadedTables = 0
+        // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+        Promise.all(
+            dataTables.map(d => d3.tsv(dataEndpointURLs[d]) )
+        ).then( rawData => {
+            // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
+            rawData.forEach((tableData, i) => {parseTable(dataTables[i], tableData) })
+            return data.tables
+        }).then( async (data) => {
+            // 3. Initiate vis build sequence with data now loaded
+            await applyQuerySettings(config)            // a. Update (default) settings that might be set from query string
+            await parseData(config)                     // b. Shape data        
+            await setupInterface(config)                // c. Setup user interface       
+            await buildVis(config)                      // d. Build vis
+            d3.selectAll('.main-container')            // e. Reveal vis
+                .transition().duration(1200)
+                .style('opacity', null)     
+        })
 
-        // Load each table as tsv source using Papa parse
-        for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-            Papa.parse(tableURL,  {
-                download: true,
-                header: true,
-                delimiter: '\t',                        
-                complete: async (results) => {
-                    parseTable(tableName, results.data)
-                    noLoadedTables++
-                    // Call to buildVis after all tables are loaded and parsed
-                    if(noLoadedTables === tablesToLoad.length){
-                        await applyQuerySettings(config)            // a.  Update (default) settings that might be set from query string
-                        await parseData(config)        // b.        
-                        await setupInterface(config)   // c.        
-                        await buildVis(config)                      // d. Build vis
-                    }
-                }
-            })
-        }   
-
-        // Table data parsing function
+        // X. Table data and date parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
         const parseTable = async (tableName, tableData) => {
             data.tables[tableName] = tableData.map(row => {
                 const newObj = {}
@@ -388,7 +381,7 @@
                 return newObj
             })
         };
-    }; // end buildFromGSheetData()
+    }; // end initVis()
 
     // a. Update settings from query string
     async function applyQuerySettings(){
@@ -405,13 +398,10 @@
             document.querySelector('.step-current span')
             settings.state.material = document.querySelector('.step-current span').innerHTML
         }
-
-
     }; // end applyQuerySettings()
 
     // b. Parse/shape data for rendering
     async function parseData(settings){
-        console.log('Parsing data')
         //  Reshape data: data lists and shape by material
         const priceData = data.tables[settings.tableName]
             // Extract Date lists
@@ -420,20 +410,19 @@
             // Extract materials list (sorted alphabetically)
             data.schema.lists.materials = [...new Set(  
                 Object.keys(priceData[0])
-                        .filter(d => d !== 'date') 
-                        .map(d => d.slice(d.indexOf('?') + 1) ) 
-                        .map(d => d.slice(0, d.indexOf('|') ) ) 
+                    .filter(d => d !== 'date') 
+                    .map(d => d.slice(d.indexOf('?') + 1) ) 
+                    .map(d => d.slice(0, d.indexOf('|') ) ) 
             )].sort()
 
         // Shape data grouped by materials
         data.schema.lists.materials.forEach( material => {
             data.byMaterial[material] = {}
-
             data.byMaterial[material] = priceData.map(dataObj => { 
                 const obj = {}
                 Object.entries(dataObj).forEach( ([key, value]) => {
                     const materialType = key === 'date' ? key : key.slice(0, key.indexOf('?')),
-                        materialName =  key.slice(key.indexOf('?') +1, key.indexOf('|') )
+                        materialName =  key.slice(key.indexOf('?') +1, key.indexOf('|') ),
                         valueChain =  key.slice(key.indexOf('|') +1 )
                     
                     if(typeof obj[valueChain] === 'undefined'){         // Add a property or valueChain
@@ -452,19 +441,16 @@
 
     // c. Setup the dropdown interface
     async function setupInterface(  settings){
-        console.log('Setting up interface')
         if(document.getElementById('date-selector')){
             const dateSelector = d3.select('#date-selector').classed('vis-selector', true)    
             data.schema.lists.month.forEach(d => { dateSelector.append('option').attr('value', d).html(d) })
             document.getElementById('date-selector').value = settings.state.date = settings.state.date ? settings.state.date : data.schema.lists.month[0]
         }
-
         if(document.getElementById('material-selector')){
             const materialSelector = d3.select('#material-selector').classed('vis-selector', true)
             data.schema.lists.materials.forEach( d => { materialSelector.append('option').attr('value', d).html(d) })
             document.getElementById('material-selector').value = settings.state.material = settings.state.material ? settings.state.material : data.schema.lists.materials[0]
         }
-
         // Dropdown events
         d3.selectAll('.vis-selector').on('change',  function(){
             settings.state.date = document.getElementById('date-selector').value
@@ -473,34 +459,32 @@
             }
             rebuild()
         })
-
         // Stepper events
         if(document.querySelectorAll('.step-item').length > 0){
             d3.selectAll('.step-item').on('click', function(){
                 settings.state.material = this.children[0].children[0].innerHTML
                 d3.selectAll('.step-item').classed('step-current', false)
                 d3.select(this).classed('step-current', true)
-            
                 rebuild()
             })
         }
 
-    }; // end setupInterface()
-
-    function rebuild(){
-        const duration = 500
-        d3.select(`#${settings.svgID}`)
-            .transition().duration(duration * 0.5)
-            .style('opacity', 0)
-
-        setTimeout(() => {
-            d3.selectAll(`#${settings.svgID} *`).remove()
-            buildVis(settings)
+        // Build method
+        function rebuild(){
+            const duration = 500
             d3.select(`#${settings.svgID}`)
                 .transition().duration(duration * 0.5)
-                .style('opacity', null)
-        }, duration * 0.5);
-    }
+                .style('opacity', 0)
+
+            setTimeout(() => {
+                d3.selectAll(`#${settings.svgID} *`).remove()
+                buildVis(settings)
+                d3.select(`#${settings.svgID}`)
+                    .transition().duration(duration * 0.5)
+                    .style('opacity', null)
+            }, duration * 0.5);
+        };// end rebuild()
+    }; // end setupInterface()
 
     // d. Build the diagram
     async function buildVis(settings){
@@ -581,8 +565,6 @@
                     source: [0, settings.geometry.chainY - obj.y + (obj.leaderStartYOffset ? obj.leaderStartYOffset  : 0)],
                     target: [obj.labelXOffset, settings.geometry.chainY - obj.y + settings.geometry.linkCurveYoffset ]
                 },
-
-
                 vLength = textGroup.node().getBBox().height - (settings.geometry.chainY - obj.y + settings.geometry.linkCurveYoffset),
                 leaderPath = `${linkVertical(points)} v${vLength}`
 
@@ -641,9 +623,6 @@
             .attr('x', settings.geometry.price[settings.state.material]['Virgin'].labelPos.x )
             .attr('y', settings.geometry.price[settings.state.material]['Virgin'].labelPos.y )
             .text(settings.geometry.price[settings.state.material]['Virgin'].label)
-
-
-
 
     }; // end buildVis()
 

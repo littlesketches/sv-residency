@@ -1,67 +1,6 @@
-/**********************************************/
-/*** MARKET BULLETIN MATERIALS DASHBOARD ***/
-/**********************************************/
-
-    /* 2021 BRAND COLOUR PALETTE */
-    :root {
-        /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-        --svGreen:                      #9ACA3C;
-        /** SECONDARY PALLETTE **/
-        --secondaryGreenLight:          #D5E0A1;
-        --secondaryBottleGreen:         #174F37;
-        --secondaryBottleGreenLight:    #79B5AA;
-        --secondaryGrey:                #B1B1B0;
-        --secondaryGreyLight:           #CFCFCF;
-        --secondaryGreyLightest:        #ECECEC;
-        /** TERTIARY PALETTE **/
-        --tertiaryPurple:               #51284F;
-        --tertiaryPurpleLight:          #8276B3;
-        --tertiaryRed:                  #E04F39;
-        --tertiaryRedLight:             #F78684;
-        --tertiaryYellow:               #EFC041;
-        --tertiaryYellowLight:          #F5E065;
-        --tertiaryCard:                 #B39981;
-        --tertiaryCardLight:            #DCBFA6;
-        --tertiaryEmerald:              #009E71;
-        --tertiaryEmeraldLight:         #93CCB9;
-        --tertiaryBlue:                 #005E88;
-        --tertiaryBlueLight:            #A0D6E9;
-        /*** ADDED MONOCHROME ***/
-        --charcoal:         rgb(100, 100, 100);        
-    }
-
-    /***************************************/
-    /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-    /***************************************/
-
-        @font-face {
-            font-family: 'DIN Next LT Pro';
-            src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                url('../../shared-assets/fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                url('../../shared-assets/fonts/DINNextLTPro-Regular.woff') format('woff'),
-                url('../../shared-assets/fonts/DINNextLTPro-Regular.ttf') format('truetype');
-            font-weight: 400;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'DIN Next LT Pro';
-            src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                url('../../shared-assets/fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                url('../../shared-assets/fonts/DINNextLTPro-Medium.woff') format('woff'),
-                url('../../shared-assets/fonts/DINNextLTPro-Medium.ttf') format('truetype');
-            font-weight: 500;
-            font-style: medium;
-        }
-        @font-face {
-            font-family: 'DIN Next LT Pro';
-            src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                url('../../shared-assets/fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-            font-weight: 800;
-            font-style: heavy;
-        }
-
+/***************************************************/
+/*** MARKET BULLETIN VALUE CHAIN PRICE DASHBOARD ***/
+/***************************************************/
 
 
 /*******************************/
@@ -71,7 +10,7 @@
     body, 
     select{
         font-family: 'DIN Next LT Pro';
-        color: var(--charcoal);
+        color: var(--xCharcoal);
     }
     h1.vis-header{ 
         font-size: 4vw;
@@ -90,7 +29,7 @@
     }
     .dropdown-container select{
         border: none;
-        border-bottom: dotted 0.5px var(--charcoal);
+        border-bottom: dotted 0.5px var(--xCharcoal);
     }
 
 /***************************/
@@ -98,13 +37,13 @@
 /***************************/
 
     .node-label{
-        fill: var(--charcoal);
+        fill: var(--xCharcoal);
         font-size: 24px;
         text-shadow: 2px 2px 0px #fff;
     }
     .node,
     .link{
-        stroke: var(--charcoal);
+        stroke: var(--xCharcoal);
     }
     .node{ 
         fill: #fff;        
@@ -156,7 +95,9 @@
         overflow: hidden;
         margin: 0 auto 2rem auto;
         width: 100%;
-        border-top: solid var(--charcoal) 2px;
+        border-top: solid var(--secondaryGrey) 1px;
+        color: var(--secondaryGrey);
+        margin-top: 1vw;
         font-size: 2vw;
     }
     .stepper-container nav {
@@ -234,10 +175,6 @@
         -webkit-transform: translate3d(-100%,0,0);
         transform: translate3d(-100%,0,0);
     }
-    /* .stepper-container nav li:nth-child(4).step-current ~ li:last-child::before {
-        -webkit-transform: translate3d(-100%,0,0);
-        transform: translate3d(-100%,0,0);
-    } */
     .stepper-container nav a {
         padding: 0.75rem 0.2rem 1.25rem 0.2rem;
         line-height: 1;
@@ -248,6 +185,7 @@
     .stepper-container nav li.step-current a {
         -webkit-transform: translate3d(0,8px,0);
         transform: translate3d(0,8px,0);
+        color: var(--tertiaryEmerald);
     }
     @media screen and (max-width: 58em) {
         .stepper-container nav a:before {

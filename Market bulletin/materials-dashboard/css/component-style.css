@@ -2,73 +2,6 @@
 /*** MARKET BULLETIN MATERIALS DASHBOARD ***/
 /**********************************************/
 
-    /* 2021 BRAND COLOUR PALETTE */
-    :root {
-        /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-        --svGreen:                       #9ACA3C;
-        /** SECONDARY PALLETTE **/
-        --secondaryGreenLight:           #D5E0A1;
-        --secondaryBottleGreen:          #174F37;
-        --secondaryBottleGreenLight:     #79B5AA;
-        --secondaryGrey:                 #B1B1B0;
-        --secondaryGreyLight:            #CFCFCF;
-        --secondaryGreyLightest:         #ECECEC;
-        /** TERTIARY PALETTE **/
-        --tertiaryPurple:       #51284F;
-        --tertiaryPurpleLight:  #8276B3;
-        --tertiaryRed:          #E04F39;
-        --tertiaryRedLight:     #F78684;
-        --tertiaryYellow:       #EFC041;
-        --tertiaryYellowLight:  #F5E065;
-        --tertiaryCard:         #B39981;
-        --tertiaryCardLight:    #DCBFA6;
-        --tertiaryEmerald:      #009E71;
-        --tertiaryEmeraldLight: #93CCB9;
-        --tertiaryBlue:         #005E88;
-        --tertiaryBlueLight:    #A0D6E9;
-        /*** ADDED MONOCHROME ***/
-        --charcoal:         rgb(100, 100, 100);        
-    }
-
-    /***************************************/
-    /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-    /***************************************/
-        @font-face {
-            font-family: 'DIN Next LT Pro';
-            src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                url('../../shared-assets/fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                url('../../shared-assets/fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                url('../../shared-assets/fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-            font-weight: 100;
-            font-style: ultraLight;
-        }
-        @font-face {
-            font-family: 'DIN Next LT Pro';
-            src: local('DIN Next LT Pro Light'), local('DIN-Next-LT-Pro-Light'),
-                url('../../shared-assets/fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                url('../../shared-assets/fonts/DINNextLTPro-Light.woff') format('woff'),
-                url('../../shared-assets/fonts/DINNextLTPro-Light.ttf') format('truetype');
-            font-weight: 300;
-            font-style: light;
-        }
-        @font-face {
-            font-family: 'DIN Next LT Pro';
-            src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                url('../../shared-assets/fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                url('../../shared-assets/fonts/DINNextLTPro-Regular.woff') format('woff'),
-                url('../../shared-assets/fonts/DINNextLTPro-Regular.ttf') format('truetype');
-            font-weight: 400;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'DIN Next LT Pro';
-            src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                url('../../shared-assets/fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                url('../../shared-assets/fonts/DINNextLTPro-Medium.woff') format('woff'),
-                url('../../shared-assets/fonts/DINNextLTPro-Medium.ttf') format('truetype');
-            font-weight: 500;
-            font-style: medium;
-        }
 
 
 /*********************************/
@@ -78,7 +11,7 @@
     body, 
     select{
         font-family: 'DIN Next LT Pro';
-        color: var(--charcoal);
+        color: var(--xCharcoal);
         margin: 0;
     }
     .hidden{
@@ -92,7 +25,7 @@
     }
     .selector-container,
     .dropdown-container select{
-        color: var(--charcoal);
+        color: var(--xCharcoal);
         font-size: 1.75vw;
     }
     .dropdown-container{
@@ -101,7 +34,7 @@
     }
     .dropdown-container select{
         border: none;
-        border-bottom: dotted 0.5px var(--charcoal);
+        border-bottom: dotted 0.5px var(--xCharcoal);
     }
 
     /* Typeface colours grouped */
@@ -109,16 +42,16 @@
     h4.material-price-card-header,
     .material-volume-headline,
     .material-price-headline{
-        color: var(--charcoal);
+        color: var(--xCharcoal);
     }    
     .text-minor,
     .chart-trend-label{
-        color: var(--chartGray); 
+        color: var(--secondaryGrey); 
     }
     .label,
     h3.card-subheader{
         color: var(--secondaryBottleGreenLight);
-        color: var(--charcoal);
+        color: var(--xCharcoal);
         font-weight: 500;
     }
     /* Typeface size grouped */
@@ -167,7 +100,7 @@
     }
     h3.card-subheader{
         margin-block-end: 0.75rem;
-        border-bottom: solid 2px var(--charcoal);
+        border-bottom: solid 2px var(--xCharcoal);
     }
     h3.card-subheader.destination-trend{  
         margin-top: 2vw;
@@ -183,6 +116,7 @@
     h4.material-price-card-header, 
     h4.subcard-header.destination{
         padding-bottom: 0.5rem;
+        color: var(--secondaryBottleGreen);
     }
     h4.subcard-header.destination{
         padding-top: 1rem;
@@ -215,7 +149,7 @@
     .material-volume-headline,
     .material-price-headline{
         grid-area: 1 / 1 / 2 / 2;
-        font-weight: bold;    
+        font-weight: 500;    
         align-self: end;
         justify-self: end;
         margin-top: 1rem;
@@ -305,7 +239,6 @@
     /* Top level grid tile layout */
     .title-container{
         grid-area: 1 / 1 / 2 / 3;
-        /* border-bottom: 2px solid var(--charcoal); */
     }
     .sub-card{
         opacity: 0
@@ -329,7 +262,6 @@
     .plastic-packaging .export-market-container{
         grid-area: 4 / 1 / 5 / 2;
     }
-
 
     /** MATERIAL FLOW CARD **/
     .material-collection-container{
@@ -512,7 +444,7 @@
     /** EXPORT MARKET CARDS **/
         #export-market-subheader{
             padding: 1rem 0rem;
-            border-top: solid 2px var(--charcoal);
+            border-top: solid 2px var(--xCharcoal);
         }
         .export-market-table-rows{
             display: grid;
@@ -523,12 +455,12 @@
         .export-market-table-header-volumes{
             grid-area: 1 / 3 / 2 / 5; 
             text-align: center;
-            font-weight: 600;
+            font-weight: 500;
         }
         .export-market-table-header-vsHistorical{
             grid-area: 1 / 6 / 2 / 10; 
             text-align: center;
-            font-weight: 600;
+            font-weight: 500;
         }
         .export-market-table-country-header{
             grid-area: 1 / 1 / 2 / 2;     
@@ -556,7 +488,7 @@
         }
         .export-market-table-country-name{
             grid-area: 1 / 1 / 3 / 2;  
-            font-weight: 600;   
+            font-weight: 500;   
         }
         .export-market-table-trend-chart{
             grid-area: 1 / 2 / 3 / 3;     
@@ -672,9 +604,11 @@
     .stepper-container {
         position: relative;
         overflow: hidden;
-        margin: 0 auto 2rem auto;
+        margin: 0 auto 1vw auto;
         width: 100%;
-        border-top: solid var(--charcoal) 2px;
+        border-top: solid var(--secondaryGrey) 1px;
+        color: var(--secondaryGrey);
+        margin-top: 1vw;
         font-size: 2vw;
     }
     .stepper-container nav {
@@ -762,6 +696,7 @@
     .stepper-container nav li.step-current a {
         -webkit-transform: translate3d(0,8px,0);
         transform: translate3d(0,8px,0);
+        color: var(--tertiaryEmerald);
     }
     @media screen and (max-width: 58em) {
         .stepper-container nav a:before {

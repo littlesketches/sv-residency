@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Plastics exports trend chart">
+        <meta name="description" content="Paper and cardboard exports trend chart">
         <meta name="author" content="Sustainability Victoria">
 		<link rel="stylesheet" type="text/css" href="../core/css/core.css" />
         <link rel="stylesheet" type="text/css"  href="css/chart-style.css"/>
@@ -12,9 +12,10 @@
         <script src="../core/js/data-endpoint.js"></script>     
         <script src="js/charts.js"></script>      
     </head>
+    </head>
 
     <body>
-        <h1 class = "chart-header">Exported recovered plastic material</h1>
+        <h1 class = "chart-header">Exported paper and cardboard</h1>
         <div class = "chart-container">
             <div class = "chart-sub-header">
                 Volume exported by country each month between <span id="fromDate-subheader"></span> and <span id="toDate-subheader"></span>
@@ -39,6 +40,7 @@
                     source:             'GS',
                     tableName:          'data_materialsVicExport'
                 },
+
                 svgID:                 'chart-export-main',                  
                 contextSvgID:          'chart-export-context',                  
                 config: {
@@ -57,8 +59,8 @@
                     markerRadius:   5,
                     strokeWidth:   3,
                 },
-                group:              'Plastics',                          // b. Materials group as named in the source data header (after the '_') : ['All collected materials, Paper and Paperboard, Glass packaging, Plastic packaging, Metal packaging]
-                series:             ['Indonesia', 'Vietnam', 'Malaysia', 'Taiwan', 'China', 'All other countries'],      // c. Names of the data series in the source data header (before the '_') 
+                group:              'Paper and cardboard',                          // b. Materials group as named in the source data header (after the '_') : ['All collected materials, Paper and Paperboard, Glass packaging, Plastic packaging, Metal packaging]
+                series:             ['Indonesia', 'Thailand', 'Vietnam', 'Malaysia', 'India', 'Korea', 'All other countries'],      // c. Names of the data series in the source data header (before the '_') 
                 labelOffset: {  
                     x: 20, 
                     y: 0
@@ -86,8 +88,8 @@
 
             // 3. Custom build function calling custom charting methods in charts.js
             async function buildVis(config){
-                await chart.methods.misc.applyQuerySettings(config)     // a.  Update (default) settings that might be set from query string
-                await chart.methods.seriesContext.renderChart(config)     // c. Render the chart specifying
+                await chart.methods.misc.applyQuerySettings(config)         // a. Update (default) settings that might be set from query string
+                await chart.methods.seriesContext.renderChart(config)       // b. Render the chart specifying
             };
         </script>
     </body>
