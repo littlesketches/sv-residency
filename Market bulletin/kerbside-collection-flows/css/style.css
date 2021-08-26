@@ -2,73 +2,12 @@
 /*** KERBSIDE COLLECTION TO MRF FLOW VISUALISATION ***/
 /*****************************************************/
 
-    /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
-    :root {
-        /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-        --svGreen:                      #9ACA3C;
-        /** SECONDARY PALLETTE **/
-        --secondaryGreenLight:          #f8faf0;
-        --secondaryBottleGreen:         #174F37;
-        --secondaryBottleGreenLight:    #79B5AA;
-        --secondaryGrey:                #B1B1B0;
-        --secondaryGreyLight:           #CFCFCF;
-        --secondaryGreyLightest:        #ECECEC;
-        /** TERTIARY PALETTE **/
-        --tertiaryPurple:               #51284F;
-        --tertiaryPurpleLight:          #8276B3;
-        --tertiaryRed:                  #E04F39;
-        --tertiaryRedLight:             #F78684;
-        --tertiaryYellow:               #EFC041;
-        --tertiaryYellowLight:          #F5E065;
-        --tertiaryCard:                 #B39981;
-        --tertiaryCardLight:            #DCBFA6;
-        --tertiaryEmerald:              #009E71;
-        --tertiaryEmeraldLight:         #93CCB9;
-        --tertiaryBlue:                 #005E88;
-        --tertiaryBlueLight:            #A0D6E9;
-        /*** ADDED MONOCHROME ***/
-        --charcoal:                    rgb(100, 100, 100);     
-    }
-
-
-/***************************************/
-/*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-/***************************************/
-    @font-face {
-        font-family: 'DIN Next LT Pro';
-        src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-            url('../../shared-assets/fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-            url('../../shared-assets/fonts/DINNextLTPro-Regular.woff') format('woff'),
-            url('../../shared-assets/fonts/DINNextLTPro-Regular.ttf') format('truetype');
-        font-weight: 400;
-        font-style: normal;
-    }
-    @font-face {
-        font-family: 'DIN Next LT Pro';
-        src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-            url('../../shared-assets/fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-            url('../../shared-assets/fonts/DINNextLTPro-Medium.woff') format('woff'),
-            url('../../shared-assets/fonts/DINNextLTPro-Medium.ttf') format('truetype');
-        font-weight: 500;
-        font-style: medium;
-    }
-    @font-face {
-        font-family: 'DIN Next LT Pro';
-        src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-            url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-            url('../../shared-assets/fonts/DINNextLTPro-Heavy.woff') format('woff'),
-            url('../../shared-assets/fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-        font-weight: 700;
-        font-style: heavy;
-    }
-
-
 /*************************/
 /*  HTML LAYOUT STYLING  */
 /************************/
     body, select{
         font-family: 'DIN Next LT Pro';
-        color: var(--charcoal)
+        color: var(--xCharcoal)
     }
     h1.vis-header{ 
         font-size: 4vw;
@@ -82,7 +21,7 @@
     }
     .stepper-container nav a{
         color: var(--secondaryGrey);
-        font-size: 1.75vw;
+        font-size: 2vw;
         font-weight: 400;
     }
     .stepper-container nav li.step-current a {
@@ -98,7 +37,7 @@
     }
     .dropdown-container select{
         border: none;
-        border-bottom: dotted 0.5px #000;
+        border-bottom: dotted 0.5px var(--xCharcoal);
         margin-right: 0.75rem;
     }
 
@@ -111,7 +50,7 @@
         overflow: hidden;
         margin: 0 auto 2rem auto;
         width: 100%;
-        border-top: solid var(--charcoal) 2px;
+        border-top: solid var(--secondaryGrey) 1px;
         font-size: 2vw;
     }
     .stepper-container nav {
@@ -199,6 +138,7 @@
     .stepper-container nav li.step-current a {
         -webkit-transform: translate3d(0,8px,0);
         transform: translate3d(0,8px,0);
+        color: var(--tertiaryEmerald);
     }
     @media screen and (max-width: 58em) {
         .stepper-container nav a:before {
@@ -238,12 +178,18 @@
     }
     text.label.node,
     text.label.node.unit{
+        pointer-events: none;
         fill: #fff;
         text-anchor: middle;
         font-weight: 500;
         stroke: none;
         letter-spacing: -1px;
-    }
+        color: transparent;
+        text-shadow: 0px 2px 3px rgba(0,0,0,0.5);
+        -webkit-background-clip: text;
+            -moz-background-clip: text;
+                background-clip: text;
+            }
     text.label.node.unit{
         letter-spacing: 0px;
     }
@@ -262,9 +208,8 @@
     .node-label-centered{
         pointer-events: none;
     }
-
     .system-contamination{
-        stroke: var(--charcoal);
+        stroke: var(--xCharcoal);
         stroke-width: 1.5px;
         fill: transparent;
     }
@@ -278,10 +223,10 @@
     }
     .system-recovery{
         font-weight: 800;
-        fill:  var(--charcoal);
+        fill:  var(--xCharcoal);
     }
     .system-recovery.title{
-        fill:  var(--charcoal);
+        fill:  var(--xCharcoal);
         font-size: 180px;
         letter-spacing: -2px
     }
@@ -294,14 +239,12 @@
         stroke: var(--secondaryBottleGreenLight);
         fill: transparent;
     }
-
-
     #step-annotation{
         pointer-events: none;
         font-size: 46px;
         dominant-baseline: middle;
         text-anchor: middle;
-        fill: var(--charcoal);
+        fill: var(--secondaryGrey);
     }
 
     /**********************************/
@@ -340,48 +283,59 @@
     .nodeLabel.local-reprocessing{ 
         fill: var(--secondaryBottleGreen);
     }
-    .linkLabel.export,
-    .linkLabel.export.destination-colour,
-    .node.export, 
-    .nodeLabel.export{ 
+    .node.export{ 
         fill: var(--secondaryBottleGreenLight);
     }
-
-    .linkLabel.landfill,
-    .linkLabel.landfill.destination-colour,
+    .linkLabel.export,
+    .linkLabel.export.destination-colour,
+    .nodeLabel.export{ 
+        fill: var(--xBottleGreenMid);
+    }
     .node.landfill, 
     .nodeLabel.landfill{ 
         fill:  var(--tertiaryCard);
     }
-    .linkLabel.paper-and-paperboard, 
-    .linkLabel.paper-and-paperboard.collection-colour, 
-    .node.paper-and-paperboard, 
-    .nodeLabel.paper-and-paperboard{ 
+    .linkLabel.paper-and-cardboard, 
+    .linkLabel.paper-and-cardboard.collection-colour, 
+    .node.paper-and-cardboard, 
+    .nodeLabel.paper-and-cardboard{
+        fill: var(--xDarkBlueCyan);
+    }
+    .node.paper-and-cardboard{
+        fill: var(--xDarkBlueCyan);
+    }
+    .linkLabel.glass, 
+    .linkLabel.glass.collection-colour, 
+    .node.glass, 
+    .nodeLabel.glass{ 
+        fill:  var(--tertiaryPurpleLight);
+    }
+    .nodeLabel.glass{ 
+        fill:  var(--tertiaryPurpleLight);
+    }
+    .linkLabel.plastics,
+    .linkLabel.plastics.collection-colour,
+    .node.plastics,
+    .nodeLabel.plastics{ 
         fill: var(--tertiaryYellow);
     }
-    .linkLabel.glass-packaging, 
-    .linkLabel.glass-packaging.collection-colour, 
-    .node.glass-packaging, 
-    .nodeLabel.glass-packaging{ 
-        fill:  var(--tertiaryPurple);
+    .nodeLabel.plastics{ 
+        fill: var(--xDarkYellow);
     }
-    .linkLabel.plastic-packaging,
-    .linkLabel.plastic-packaging.collection-colour,
-    .node.plastic-packaging,
-    .nodeLabel.plastic-packaging{ 
-        fill: var(--tertiaryRed);
-    }
-    .linkLabel.metal-packaging,
-    .linkLabel.metal-packaging.collection-colour,
-    .node.metal-packaging,
-    .nodeLabel.metal-packaging{ 
+
+    .linkLabel.metals,
+    .linkLabel.metals.collection-colour,
+    .node.metals,
+    .nodeLabel.metals{ 
         fill: var(--tertiaryBlue);
     }
+    .linkLabel.landfill,
+    .linkLabel.landfill.destination-colour,
     .linkLabel.contamination,
     .linkLabel.contamination.collection-colour,
     .node.contamination,
     .nodeLabel.contamination{ 
-        fill: var(--secondaryGrey);
+        fill: var(--xDarkCard);
     }
 
     /* Link styling */
@@ -417,12 +371,8 @@
         stroke: none;
     }
 
-    /* Illustration stylgin */
+    /* Illustration styling */
     .flow-icon{
         transition: transform 1s ease-in-out;	
         pointer-events: none;
-    }
-    .bin-illustration-group path{
-        stroke: rgb(152, 152, 152);
-        stoke-width: 4px;  
     }

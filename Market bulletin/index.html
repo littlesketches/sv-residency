@@ -5,81 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="SV Resource recovery market bulletin graphics">
         <meta name="author" content="Little Sketches ">
+		<link rel="stylesheet" type="text/css" href="./core/css/core.css" />
         <style>
-            /* COLOUR PALETTES */
-            :root {
-                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                       #9ACA3C;
-                /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:           #D5E0A1;
-                --secondaryBottleGreen:          #174F37;
-                --secondaryBottleGreenLight:     #79B5AA;
-                --secondaryGrey:                 #B1B1B0;
-                --secondaryGreyLight:            #CFCFCF;
-                --secondaryGreyLightest:         #ECECEC;
-                /** TERTIARY PALETTE **/
-                --tertiaryPurple:       #51284F;
-                --tertiaryPurpleLight:  #8276B3;
-                --tertiaryRed:          #E04F39;
-                --tertiaryRedLight:     #F78684;
-                --tertiaryYellow:       #EFC041;
-                --tertiaryYellowLight:  #F5E065;
-                --tertiaryCard:         #B39981;
-                --tertiaryCardLight:    #DCBFA6;
-                --tertiaryEmerald:      #009E71;
-                --tertiaryEmeraldLight: #93CCB9;
-                --tertiaryBlue:         #005E88;
-                --tertiaryBlueLight:    #A0D6E9;
-            }
-
-        /***************************************/
-        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-        /***************************************/
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
-                    url('shared-assets/fonts/DINNextLTPro-UltraLight.woff2') format('woff2'),
-                    url('shared-assets/fonts/DINNextLTPro-UltraLight.woff') format('woff'),
-                    url('shared-assets/fonts/DINNextLTPro-UltraLight.ttf') format('truetype');
-                font-weight: 100;
-                font-style: ultraLight;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('shared-assets/fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('shared-assets/fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('shared-assets/fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: light;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('shared-assets/fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('shared-assets/fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('shared-assets/fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                font-weight: 400;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                    url('shared-assets/fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                    url('shared-assets/fonts/DINNextLTPro-Medium.woff') format('woff'),
-                    url('shared-assets/fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                font-weight: 500;
-                font-style: medium;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('shared-assets/fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('shared-assets/fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('shared-assets/fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
-            }
             body{
                 font-family: 'DIN Next LT Pro';
                 margin: 10vw;
@@ -124,22 +51,21 @@
             </p>
             <p>The linked dataset supporting these visualisations can be found and updated <a href="https://docs.google.com/spreadsheets/d/1rg66KhwEbN_FhpD0hhdd6SMIb9ApKlxh_93N4y9Qx_s/edit#gid=549382680" target="_blank">here</a>. 
                 These tables should be replaced with connectors to SV operated cloud database services (when available) - the current data connection is made to a text file database (tab seperated values) provided by the Google Sheets service. 
-                These connections are supported by the <a href="https://www.papaparse.com/" target = "_blank">Papa Parse 5</a> library.
+                These connections are supported by the <a href="https://d3js.org/" target = "_blank">D3.js</a> library.
             </p>
             <p> The GitHub repository (i.e. code) for these visualisations and apps can be found <a href = "https://github.com/littlesketches/sv-stuff" target = "_blank"> here</a> (note: this will be moved to a SV data team repo shortly).             
             </p>
 
-            <p class = 'highlight'>CURRENT STATUS - 16-Aug PM</p>
+            <p class = 'highlight'>CURRENT STATUS - 26-Aug PM</p>
             <ul>
-                <li>Graphics being tested for embedding in the CMS version of the Market Bulletin </li>
+                <li>All vis apps refactored and tested => Removed dependency on PapaParse (now D3 fetch) and centralised data table links and brand styling</li>
+                <li>Data source (tables) and all code and CSS styling  have all been changed to reflect standardised labelling (i.e. 'Paper and cardboard', 'Plastics', 'Metals' and 'Glass'</li>
+                <li>Graphics tested for embedding in the CMS version of the Market Bulletin: successful pending with minor optimisation to come in final</li>
+                <li>Styling optimisation and application of proposed standardised materials colour palette applied</li>
+                <li>Accessiblity optmisation in progress (ETA with final on 31-Aug)</li>
                 <li>Flows diagram mostly complete pending: data and treatment/labelling of contamination flows. The 'system' view may eventually be be removed or completed with better illustations </li>
                 <li>Value chain price diagrams are pending feedback on which sub-material prices to include, and where all should be positioned </li>
-                <li>Steppers to be added to some graphics to improve UI within the CMS (i.e to act as pseudo 'tabs' but with reliable rendering perfomance </li>
-                <li>All graphics will be updated to 'animate in' smoothly</li>
-                <li>All graphics will be updated to included embed/non-embed options, so that they could be (better) used independently of the SV site </li>
                 <li>An option to download the source data series data may be included </li>
-                <li>There are some minor optimisations to be included in the time series charts </li>
-                <li>Series titles (i.e. 'Paper and ??') and colours to be finalised</li>
                 <li>Documentation on query strings to be added: this will mostly apply to choosing dates and date ranges to display</li>
             </ul>
         </div>
@@ -153,34 +79,34 @@
 
             <div class ="vis-list-type">Materials destination monthly time series</div> 
             <ul>
-                <li><a href ="time-series-charts/mrf-destination.html">All materials with material selector</a></li>
-                <li><a href ="time-series-charts/mrf-destination-all.html">All materials</a></li>
-                <li><a href ="time-series-charts/mrf-destination-paper.html">Paper and cardboard materials </a></li>
-                <li><a href ="time-series-charts/mrf-destination-glass.html">Glass packaging </a></li>
-                <li><a href ="time-series-charts/mrf-destination-plastics.html">Plastic packaging materials </a></li>
-                <li><a href ="time-series-charts/mrf-destination-paper.html">Metal packaging materials  </a></li>
+                <li><a href ="time-series-charts/destination.html">All materials with material selector</a></li>
+                <li><a href ="time-series-charts/destination-all-materials.html">All materials</a></li>
+                <li><a href ="time-series-charts/destination-paper-and-cardboard.html">Paper and cardboard materials </a></li>
+                <li><a href ="time-series-charts/destination-glass.html">Glass packaging </a></li>
+                <li><a href ="time-series-charts/destination-plastics.html">Plastic packaging materials </a></li>
+                <li><a href ="time-series-charts/destination-metals.html">Metal packaging materials</a></li>
             </ul>    
 
             <div  class ="vis-list-type">Storage volume (accumulated) by month series</div> 
             <ul>
-                <li><a href ="time-series-charts/storage-all.html">All materials (used in market overview section) </a></li>
+                <li><a href ="time-series-charts/storage-all-materials.html">All materials (used in market overview section) </a></li>
                 <li>Storage "by material" could be added pending assessment of data quality (i.e. is estimated cumulative storage data able to be shown?)</li> 
             </ul>    
 
             <div  class ="vis-list-type">Export volumes monthly time series and tables</div> 
             <ul>
                 <li><a href ="time-series-charts/export.html">All materials with material selector</a></li>
-                <li><a href ="time-series-charts/export-all.html">All materials</a></li>
-                <li><a href ="time-series-charts/export-paper.html">Paper and paperboard materials </a></li>
+                <li><a href ="time-series-charts/export-all-materials.html">All materials</a></li>
+                <li><a href ="time-series-charts/export-paper-and-cardboard.html">Paper and paperboard materials </a></li>
                 <li><a href ="time-series-charts/export-glass.html">Glass packaging </a></li>
                 <li><a href ="time-series-charts/export-plastics.html">Plastic packaging materials </a></li>
                 <li><a href ="time-series-charts/export-metals.html">Metal packaging materials  </a></li>
             </ul>   
             <ul>
-                <li><a href ="materials-dashboard/export-by-material.html?material=Paper and paperboard">Paper and paperboard exports by country table</a></li>
-                <li><a href ="materials-dashboard/export-by-material.html?material=Glass packaging">Glass packaging exports by country table</a></li>
-                <li><a href ="materials-dashboard/export-by-material.html?material=Plastic packaging">Plastic packaging exports by country table</a></li>
-                <li><a href ="materials-dashboard/export-by-material.html?material=Metal packaging">Metal packaging exports by country table</a></li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Paper and cardboard">Paper and cardboard exports by country table</a></li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Glass">Glass packaging exports by country table</a></li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Plastics">Plastic packaging exports by country table</a></li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Metals">Metal packaging exports by country table</a></li>
             </ul>  
 
             <div  class ="vis-list-type">Material prices: Value chain price diagrams and price performance tables</div> 
@@ -189,40 +115,40 @@
                 <li><a href ="value-chain-price/index.html">All materials with material selector</a></li>
             </ul>
             <ul>
-                <li><a href ="value-chain-price/by-material.html?material=Paper and paperboard">Paper and paperboard sub material prices </a></li>
-                <li><a href ="value-chain-price/by-material.html?material=Glass packaging">Glass sub material prices</a></li>
-                <li><a href ="value-chain-price/by-material.html?material=Plastic packaging">Plastics  sub material prices</a></li>
-                <li><a href ="value-chain-price/by-material.html?material=Metal packaging">Metals sub material prices</a></li>
+                <li><a href ="value-chain-price/by-material.html?material=Paper and cardboard">Paper and cardboard sub material prices </a></li>
+                <li><a href ="value-chain-price/by-material.html?material=Glass">Glass sub material prices</a></li>
+                <li><a href ="value-chain-price/by-material.html?material=Plastics">Plastics sub material prices</a></li>
+                <li><a href ="value-chain-price/by-material.html?material=Metals">Metals sub material prices</a></li>
             </ul>   
             <ul>
-                <li><a href ="materials-dashboard/price.html">Price performance tables with  material selector </a></li>
-                <li><a href ="materials-dashboard/price-by-material.html?material=Paper and paperboard">Paper and paperboard price performance table</a></li>
-                <li><a href ="materials-dashboard/price-by-material.html?material=Glass packaging">Glass packaging price performance table</a></li>
-                <li><a href ="materials-dashboard/price-by-material.html?material=Plastic packaging">Plastic packaging price performance table</a></li>
-                <li><a href ="materials-dashboard/price-by-material.html?material=Metal packaging">Metal packaging price performance table</a></li>
+                <li><a href ="materials-dashboard/price.html">Price performance tables with material selector </a></li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Paper and cardboard">Paper and cardboard price performance table</a></li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Glass">Glass packaging price performance table</a></li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Plastics">Plastic packaging price performance table</a></li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Metals">Metal packaging price performance table</a></li>
             </ul>  
 
             <div  class ="vis-list-type">End market capacity tables</div> 
             <ul>
-                <li><a href ="market-capacity-tables/index.html?material=Paper and paperboard">Paper and paperboard</a></li>
-                <li><a href ="market-capacity-tables/index.html?material=Glass packaging">Glass packaging</a></li>
-                <li><a href ="market-capacity-tables/index.html?material=Plastic packaging">Plastic packaging</a></li>
-                <li><a href ="market-capacity-tables/index.html?material=Metal packaging">Metal packaging</a></li>
+                <li><a href ="market-capacity-tables/index.html?material=Paper and cardboard">Paper and cardboard</a></li>
+                <li><a href ="market-capacity-tables/index.html?material=Glass">Glass</a></li>
+                <li><a href ="market-capacity-tables/index.html?material=Plastics">Plastics</a></li>
+                <li><a href ="market-capacity-tables/index.html?material=Metals">Metals</a></li>
             </ul>
 
             <div  class ="vis-list-type">Unused dashboard and table components</div> 
             <ul>            
                 <li><a href ="materials-dashboard/all-components.html">Performance dashboard with date and material selector </a></li>
-                <li><a href ="materials-dashboard/all-components.html?material=Paper and paperboard">Paper and paperboard performance dashboard</a></li>
-                <li><a href ="materials-dashboard/all-components.html?material=Glass packaging">Glass packaging performance dashboard</a></li>
-                <li><a href ="materials-dashboard/all-components.html?material=Plastic packaging">Plastic packaging performance dashboard</a></li>
-                <li><a href ="materials-dashboard/all-components.html?material=Metal packaging">Metal packaging performance dashboard</a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Paper and cardboard">Paper and cardboard performance dashboard</a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Glass">Glass packaging performance dashboard</a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Plastics">Plastic packaging performance dashboard</a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Metals">Metal packaging performance dashboard</a></li>
             </ul>  
             <ul>
-                <li><a href ="materials-dashboard/flow.html?material=Paper and paperboard">Paper and paperboard material flow trends</a></li>
-                <li><a href ="materials-dashboard/flow.html?material=Glass packaging">Glass packaging exports material flow trends</a></li>
-                <li><a href ="materials-dashboard/flow.html?material=Plastic packaging">Plastic packaging exports material flow trends</a></li>
-                <li><a href ="materials-dashboard/flow.html?material=Metal packaging">Metal packaging exports material flow trends</a></li>
+                <li><a href ="materials-dashboard/flow.html?material=Paper and cardboard">Paper and cardboard material flow trends</a></li>
+                <li><a href ="materials-dashboard/flow.html?material=Glass">Glass packaging exports material flow trends</a></li>
+                <li><a href ="materials-dashboard/flow.html?material=Plastics">Plastic packaging exports material flow trends</a></li>
+                <li><a href ="materials-dashboard/flow.html?material=Metals">Metal packaging exports material flow trends</a></li>
             </ul>
         </div>
         <hr>

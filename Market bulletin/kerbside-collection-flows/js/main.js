@@ -64,10 +64,10 @@
         },
         nodes: { // Node arrays are manually listed in node position (vertical plot order)
             sources:    [
-                {name: 'Paper and paperboard',  label: 'Paper and paperboard'},
-                {name: 'Glass packaging',       label: 'Glass'},
-                {name: 'Plastic packaging',     label: 'Plastic'},
-                {name: 'Metal packaging',       label: 'Metals'},
+                {name: 'Paper and cardboard',   label: 'Paper and cardboard'},
+                {name: 'Glass',                 label: 'Glass'},
+                {name: 'Plastics',              label: 'Plastics'},
+                {name: 'Metals',                label: 'Metals'},
                 {name: 'Contamination',         label: 'Contamination'}
             ],     
             targets:    [
@@ -136,7 +136,7 @@
         // 1. Load data from source and build vis
         switch(settings.loader) {
             case 'GSheet':   
-                loadFromGSheetData()      
+                loadFromTSV()      
                 break
             case 'Azure':
                 alert('Azure endpoint connections have not been defined') 
@@ -147,40 +147,32 @@
         }
 
         // HELPERS FOR LOADING
-        // Load data from TSV files from GSheet, using Papa Parse library
-        function loadFromGSheetData(config){    
-            // Data table links for each table used from same Google Sheet
-            const gsTableLinks =  {
-                data_mrfOutput:             'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYe9XdZL2TKia_B1Ncw8eKuwNTiTFhzNST0PWuCNqIUEFBbOlqCpW3ri5odmhng2vpXa5lL3PTHhzD/pub?gid=549382680&single=true&output=tsv',
-            }
-            const tablesToLoad = Object.keys(gsTableLinks)
-            let noLoadedTables = 0
+        // Load data from TSV files endpoints 
+        function loadFromTSV(config){    
 
-            // Load each table as tsv source using Papa parse
-            for (const [tableName, tableURL] of Object.entries(gsTableLinks))   {
-                Papa.parse(tableURL,  {
-                    download: true,
-                    header: true,
-                    delimiter: '\t',                        
-                    complete: async (results) => {
-                        parseTable(tableName, results.data)
-                        noLoadedTables++
-                        // Call to buildVis after all tables are loaded and parsed
-                        if(noLoadedTables === tablesToLoad.length){
-                            await vis.flow.methods.parseData(vis.flow.data.tables[settings.tableName], settings)
-                            await vis.flow.methods.applyQuerySettings()
-                            await vis.flow.methods.setInterface()
-                            await vis.flow.methods.setPalette() 
-                            await vis.flow.methods.renderFlowVis(vis.flow.data.chart, settings)
-                            vis.flow.methods.addNav() 
-                        }
-                    }
-                })
-            }   
+            // 1. Setup and specification of data endpoint tables
+            const dataTables =  ['data_mrfOutput']          // Table names matched to the dataEndpointURls object (held in the data-endpoints.js file)
 
-            // Table data parsing function
+            // 2. Asynchronous data load (with Promise.all) and D3 (Fetch API) 
+            Promise.all(
+                dataTables.map(d => d3.tsv(dataEndpointURLs[d]) )
+            ).then( rawData => {
+                // a. Parse each loaded data table and store in data.table object, using the parseTable helper 
+                rawData.forEach((tableData, i) => {parseTable(dataTables[i], tableData) })
+
+            }).then( async () => {
+                // 3. Initiate vis build sequence with data now loaded
+                await vis.flow.methods.parseData(vis.flow.data.tables[settings.tableName], settings)
+                await vis.flow.methods.applyQuerySettings()
+                await vis.flow.methods.setInterface()
+                await vis.flow.methods.setPalette() 
+                await vis.flow.methods.renderFlowVis(vis.flow.data.chart, settings)
+                vis.flow.methods.addNav() 
+            })
+
+            // X. Table data and date parsing function: trim() header white space and prase numbers with "$" and "," stripped. 
             const parseTable = async (tableName, tableData) => {
-                vis.flow.data.tables[settings.tableName] = tableData.map(row => {
+                vis.flow.data.tables[settings.tableName]  = tableData.map(row => {
                     const newObj = {}
                     Object.entries(row).forEach(([key, value]) => {
                         switch(key.toLowerCase()){
@@ -193,7 +185,7 @@
                     })
                     return newObj
                 })
-            };
+            };  
         }; // end buildFromGSheetData
 
         // Set DOM elements to reveal on intro
@@ -721,7 +713,7 @@
                 .on('mouseout', groupLabelMouseout)
             recycledLabel.append('text')
                 .classed('title-label recycling', true)
-                .text('Recycled products')
+                .text('Products made from reprocessed materials')
             recycledLabel.append('path').classed('node-group-arrow upper recycling', true)
                 .attr('d', 'M-.132-1.892v1.879h-6.483v1.905h13.23z')  
                 .attr('transform', `translate(0, -${58}) scale(-5, 5)`)
@@ -741,7 +733,6 @@
                 .attr('y', settings.dims.height * 0.5)
                 .attr('dy', 0)
                 .text(settings.annotation.commentary['step-1'])
-
 
 
         //-------------- INTRO & SVG ILLUSTRATION LAYER ---//
@@ -810,9 +801,6 @@
         function groupLabelMouseover(){
             const duration = 200,
                 groupType =  this.classList[1]
-            // d3.selectAll(`.links-group, .node-group :not(.${groupType}), .title-label-group:not(.${groupType}), .nodeLabel:not(.${groupType}), .${groupType}.node-group-arrow, .annotation-direction`)
-            //     .transition().duration(duration)
-            //     .style('opacity', 0)
         };
 
         function groupLabelMouseout(){
@@ -820,10 +808,6 @@
                 selection = vis.flow.state.circularFlow 
                     ?`.links-group, .node-group *, .title-label-group, .nodeLabel, .node-group-arrow, .annotation-direction`  
                     : `.links-group, .node-group *, .title-label-group:not(.recycling), .nodeLabel, .node-group-arrow, .annotation-direction`
-
-            // d3.selectAll(selection)
-            //     .transition().duration(duration)
-            //     .style('opacity', null)
         };
 
     }; // renderFlowVis()
@@ -937,11 +921,11 @@
         settings.palette = {
             'local-reprocessing':       helpers.getCSSVarHex('secondaryBottleGreen'),     
             'export':                   helpers.getCSSVarHex('secondaryBottleGreenLight'),  
-            'landfill':                 helpers.getCSSVarHex('tertiaryCard'),   
-            'paper-and-paperboard':     helpers.getCSSVarHex('tertiaryYellow'),      
-            'glass-packaging':          helpers.getCSSVarHex('tertiaryPurple'), 
-            'plastic-packaging':        helpers.getCSSVarHex('tertiaryRed'), 
-            'metal-packaging':          helpers.getCSSVarHex('tertiaryBlue'),
+            'landfill':                 helpers.getCSSVarHex('xDarkCard'),   
+            'paper-and-cardboard':      helpers.getCSSVarHex('xDarkBlueCyan'),      
+            'glass':                    helpers.getCSSVarHex('tertiaryPurple'), 
+            'plastics':                 helpers.getCSSVarHex('xDarkYellow'), 
+            'metals':                   helpers.getCSSVarHex('tertiaryBlue'),
             'contamination':            helpers.getCSSVarHex('tertiaryCard')
         }
     }; // end setPalette() | Only used in render
@@ -1404,12 +1388,15 @@
 
     // Block all interaction during intro animation/transition
     vis.flow.methods.anim.blockEvents = function(duration){
-        d3.selectAll(`#${settings.svgID} *`).style('pointer-events', 'none') 
+        d3.selectAll(`#${settings.svgID}`).style('pointer-events', 'none') 
         if(duration){
             setTimeout(() => { 
-                d3.selectAll(`#${settings.svgID} *`).style('pointer-events', null)}, 
-            duration)
+                d3.selectAll(`#${settings.svgID}`).style('pointer-events', null)
+console.log('Unblocked')
+            }, duration)
+console.log('Block for '+duration)
         }
+
     }; // end blockEvents()
 
     vis.flow.methods.anim.animatePath = (pathID, forward = true, duration = settings.animation.updateDuration, delay = 0, ease = d3.easeCubicIn) => {
@@ -1417,9 +1404,11 @@
         d3.select(`#${pathID}`)
             .style('opacity', null)
             .style('stroke-dasharray',  `${pathLength} ${pathLength}`)
-            .style('stroke-dashoffset',  forward ? pathLength : 0)
+            .style('stroke-dashoffset',  forward ? `${pathLength}px` :'0px')
             .transition().duration(duration).delay(delay).ease(ease)
-            .style('stroke-dashoffset', forward ?  0 : pathLength )
+            .style('stroke-dashoffset', forward ?  '0px' : `${pathLength}px` )
+
+        d3.select(`#${pathID}`).style('stroke-dashoffset')
     }; // end animatePath()
 
     vis.flow.methods.anim.setVerticalNodeAxis = function(vertical = true, duration = settings.animation.updateDuration, introAnim = false){
@@ -1433,33 +1422,35 @@
         // 2. Move to horizontal positioning 
         } else {
             // b. Move the collection (source) nodes
-            d3.selectAll('.node-group.source .node-group')
-                .style('transform', function(d, i){
-                    const nodeData = JSON.parse(this.getAttribute('node-data'))
-                    return introAnim ? `scale(1) translate(${0}px, ${settings.dims.height * 0.4 - nodeData.yPos - nodeData.radius}px)` : null
-                })
-                .transition().duration(duration)
-                    .style('opacity', null)
+            setTimeout( () => {
+                d3.selectAll('.node-group.source .node-group')
                     .style('transform', function(d, i){
                         const nodeData = JSON.parse(this.getAttribute('node-data'))
-                        return `scale(1.65) translate(
-                            ${nodeData.yPos - settings.dims.height * 0.45}px, 
-                            ${settings.dims.height * 0.2 - nodeData.yPos - nodeData.radius}px)`
+                        return introAnim ? `scale(1) translate(${0}px, ${settings.dims.height * 0.4 - nodeData.yPos - nodeData.radius}px)` : null
                     })
-            // c. Move the destination (target) nodes
-            d3.selectAll('.node-group.target .node-group')
-                .style('transform', function(d, i){
-                    const nodeData = JSON.parse(this.getAttribute('node-data'))
-                    return introAnim ? `translate(${0}px, ${settings.dims.height * 0.75 - nodeData.yPos - nodeData.radius}px)` : null
-                })
-                .transition().duration(duration)
-                    .style('opacity', null)
+                    .transition().duration(duration)
+                        .style('opacity', null)
+                        .style('transform', function(d, i){
+                            const nodeData = JSON.parse(this.getAttribute('node-data'))
+                            return `scale(1.65) translate(
+                                ${nodeData.yPos - settings.dims.height * 0.45}px, 
+                                ${settings.dims.height * 0.2 - nodeData.yPos - nodeData.radius}px)`
+                        })
+                // c. Move the destination (target) nodes
+                d3.selectAll('.node-group.target .node-group')
                     .style('transform', function(d, i){
                         const nodeData = JSON.parse(this.getAttribute('node-data'))
-                        return `scale(1.65) translate(  
-                            ${-settings.dims.width * 0.6 + nodeData.yPos - settings.dims.height * 0.25}px, 
-                            ${settings.dims.height * 0.575 - nodeData.yPos - nodeData.radius}px)`
+                        return introAnim ? `translate(${0}px, ${settings.dims.height * 0.75 - nodeData.yPos - nodeData.radius}px)` : null
                     })
+                    .transition().duration(duration)
+                        .style('opacity', null)
+                        .style('transform', function(d, i){
+                            const nodeData = JSON.parse(this.getAttribute('node-data'))
+                            return `scale(1.65) translate(  
+                                ${-settings.dims.width * 0.6 + nodeData.yPos - settings.dims.height * 0.25}px, 
+                                ${settings.dims.height * 0.575 - nodeData.yPos - nodeData.radius}px)`
+                        })
+            }, duration)
         }
     }; // end setVerticalNodeAxis()
 
@@ -1467,41 +1458,44 @@
         // Control the position the Collection, Destination and Recycling labels
         switch(step){
             case 'step-1': // Horizontal node intro scene
-                d3.select(`.title-label-group.collection`).style('opacity', null)
-                    .transition().duration(duration)
-                    .attr('transform', `scale(1.25) translate(
-                        ${settings.geometry.nodeGroupPos.sources.x - settings.geometry.nodeGroupPos.targets.x * 0.05}, 
-                        ${settings.dims.margin.top + settings.dims.height * 0.175})`
-                    )
-                d3.select(`.title-label-group.destination`).style('opacity', null)
-                    .transition().duration(duration)
-                    .attr('transform', `scale(1.25) translate(
-                        ${settings.geometry.nodeGroupPos.targets.x * 0.825}, 
-                        ${settings.dims.margin.top + settings.dims.height* 0.35})`
-                    )
-                d3.select('.title-label-group.recycling').style('pointer-events', 'none')
-                    .transition().duration(duration)
-                    .style('opacity', 0)
-                d3.select('#step-annotation').style('pointer-events', 'none')
-                    .transition().duration(duration)
-                    .style('opacity', null)
+                setTimeout( () => {
+                    d3.select(`.title-label-group.collection`).style('opacity', null)
+                        .transition().duration(duration)
+                        .attr('transform', `scale(1.25) translate(
+                            ${settings.geometry.nodeGroupPos.sources.x - settings.geometry.nodeGroupPos.targets.x * 0.05}, 
+                            ${settings.dims.margin.top + settings.dims.height * 0.175})`
+                        )
+                    d3.select(`.title-label-group.destination`).style('opacity', null)
+                        .transition().duration(duration)
+                        .attr('transform', `scale(1.25) translate(
+                            ${settings.geometry.nodeGroupPos.targets.x * 0.825}, 
+                            ${settings.dims.margin.top + settings.dims.height* 0.35})`
+                        )
+                    d3.select('.title-label-group.recycling').style('pointer-events', 'none')
+                        .transition().duration(duration)
+                        .style('opacity', 0)
+                    d3.select('#step-annotation').style('pointer-events', 'none')
+                        .transition().duration(duration)
+                        .style('opacity', null)
 
-                // Reset commentary annotation
-                d3.select('#step-annotation').transition().duration(duration * 0.25)
-                    .style('opacity', 0)
-                setTimeout(() => {
-                    d3.select('#step-annotation')
-                        .text(settings.annotation.commentary['step-1'])
-                        .transition().duration(duration * 0.75)
-                            .attr('transform', null)
-                            .style('opacity', null)                    
-                }, duration * 0.25);
+                    // Reset commentary annotation
+                    d3.select('#step-annotation').transition().duration(duration * 0.25)
+                        .style('opacity', 0)
+                    setTimeout(() => {
+                        d3.select('#step-annotation')
+                            .text(settings.annotation.commentary['step-1'])
+                            .transition().duration(duration * 0.75)
+                                .attr('transform', null)
+                                .style('opacity', null)                    
+                    }, duration * 0.25);
 
-                // Move collection and destination labels, and transition arrows
-                d3.select('.node-group-arrow.upper.collection').transition().duration(duration)
-                    .attr('transform', `translate(0, -58) scale(5)`)
-                d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
-                    .attr('transform', `translate(0, 18) scale(5)`)
+                    // Move collection and destination labels, and transition arrows
+                    d3.select('.node-group-arrow.upper.collection').transition().duration(duration)
+                        .attr('transform', `translate(0, -58) scale(5)`)
+                    d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
+                        .attr('transform', `translate(0, 18) scale(5)`)
+
+                }, duration)
                 break
 
             case 'step-2': // Vertical node 'default' view for Collection and destination
@@ -1555,7 +1549,6 @@
                 d3.select('.node-group-arrow.lower.collection').transition().duration(duration)
                     .attr('transform', `translate(0, 18) scale(5)`)
 
-
                 d3.selectAll('#step-annotation').style('pointer-events', 'none')
                     .transition().duration(duration)
                     .style('opacity', 0)
@@ -1584,7 +1577,6 @@
                     .style('opacity', 0)
 
                 setTimeout( () => {
-                    d3.select('.title-label.destination').html('Recovered materials')
                     d3.selectAll('.title-label.destination, .node-group-arrow.destination')
                         .transition().duration(250)
                         .style('opacity', null)
@@ -1604,7 +1596,7 @@
         // Control the interactions (pointer-events) available on each scene and during transitions
         switch(step){
             case 'step-1': // Horizontal node intro scene
-                vis.flow.methods.anim.blockEvents(null)         // No events
+                vis.flow.methods.anim.blockEvents(settings.animation.updateDuration * 2)         // No events
                 d3.selectAll(` 
                         .link.collection_destination, 
                         .link.destination_collection, 
@@ -1622,14 +1614,14 @@
                 break
 
             case 'step-2': // Vertical node 'default' view for Collection and destination
-                vis.flow.methods.anim.blockEvents(settings.animation.updateDuration)        
+                vis.flow.methods.anim.blockEvents(settings.animation.updateDuration * 2)        
                 setTimeout(() => {
                     d3.selectAll('.link.destination_collection, .title-label-group.recycling')
                         .style('pointer-events', 'none')
                     d3.selectAll('.link.collection_destination, .link.destination_landfill')
                         .style('pointer-events', 'auto')
                         .style('opacity', null)                    
-                }, settings.animation.updateDuration + 10);
+                }, settings.animation.updateDuration * 2 + 10);
 
                 break
 
@@ -1656,9 +1648,11 @@
             offsetDuration = duration - document.querySelectorAll('.link.collection_destination').length * animOffset           
         // a. Draw destination links 
         if(forward){
-            document.querySelectorAll('.link.collection_destination').forEach((node, i) => {
-                vis.flow.methods.anim.animatePath(node.id, true, offsetDuration, i * animOffset)
-            })
+            setTimeout( () => {
+                document.querySelectorAll('.link.collection_destination').forEach((node, i) => {
+                    vis.flow.methods.anim.animatePath(node.id, true, offsetDuration, i * animOffset)
+                })
+            }, duration)
             d3.selectAll('.link.destination_landfill, .landfill-arrow')
                 .transition().duration(500).delay(duration)
                 .style('opacity', null) 
@@ -1698,7 +1692,7 @@
             // Show the illustrations
             d3.select('.illustration-isometric-layer').transition().duration(duration)
                 .style('opacity', null)
-
+            d3.select('.title-label.destination').html('Recovered materials')
         // b. Isometric to 2D
         } else {
             const nodePosY = vis.flow.state.circularFlow ? settings.dims.height - settings.dims.margin.top/4 : settings.dims.margin.top 
@@ -1706,21 +1700,11 @@
             // Hide the illustrations
             d3.select('.illustration-isometric-layer').transition().duration(duration)
                 .style('opacity', 0)
+            d3.select('.title-label.destination').html('Destination')
         }
         // c. Update state
         vis.flow.state.isometric = !vis.flow.state.isometric 
     }; // end showIsometric()
-
-
-    vis.flow.methods.anim.drawBin = function(forward = true, duration = 2000){
-        d3.select('.illustration-collection-layer').style('opacity', null)
-        document.querySelectorAll('.bin-illustration-group path').forEach(path => { 
-            vis.flow.methods.anim.animatePath(path.id, forward, duration, 20, d3.easeCubicInOut)
-        })
-        if(!forward){ setTimeout(() => {
-            d3.select('.illustration-collection-layer').style('opacity', 0)        
-        }, duration);}
-    };
 
 
     ////////////////////////////
@@ -1748,7 +1732,6 @@
         document.getElementById('toDate').value =  vis.flow.state.dateRange.to 
         document.getElementById('fromDate').value = vis.flow.state.dateRange.from 
         d3.select('#monthsLabel').html(`${dateFromIndex - dateToIndex + 1} month`)
-
     }; // end setInterface()
 
 
@@ -1807,7 +1790,7 @@
 
         // Step-2 Collection to Destination
         function destinationFlows() {
-            // 0. Move annotation labeas 
+            // 0. Move annotation labels
             vis.flow.methods.anim.setAnnotation(vis.flow.state.step, settings.animation.updateDuration) 
 
             // 1. Transition nodes to vertical position
