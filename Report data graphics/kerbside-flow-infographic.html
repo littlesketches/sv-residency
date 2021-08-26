@@ -5,8 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Kerbside waste flow infographic">
         <meta name="author" content="Sustainability Victoria">
-        <script src="https://d3js.org/d3.v7.min.js"></script>
         <link rel="stylesheet" href="./css/core.css">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.contentWindow.js" integrity="sha512-cJ7aOLpXbec1Km9craM6xL6UOdlWf9etIz7f+cwQv2tuarLm3PLb3dv3ZqIK++SE4ui+EE0nWqKB0dOaAOv9gQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+
         <style>
 
             /***********************************************************/
@@ -130,14 +132,24 @@
                 font-weight: 500;
                 text-transform: uppercase;
             }
+
+            .lga-data-label.large{
+                mix-blend-mode: multiply;
+            }
+            /* Extended typography options */
+            .extended-typography .main-title,
             .extended-typography .waste-destination-title,
             .extended-typography .lga-stream-title{
                 font-family: 'Better Times';
                 font-size: 30px;
             }
-
-            .lga-data-label.large{
-                mix-blend-mode: multiply;
+            .extended-typography .waste-destination-title.garbage{
+                font-size: 40px;
+                letter-spacing: 2px;
+            }
+            .extended-typography .main-title{
+                font-size: 50px;
+                transform: translateY(25px);
             }
 
             /* Inset circular graphics including material colour assignment */
@@ -224,7 +236,6 @@
 
     <body>
         <div class = "svg-container">
-
             <svg id = "kerbside-graphic" class ='extended-typography'>
                 <!-- FULL PAGE GRAPHIC IS COMPOSED OF THREE SEPARATE ILLUSTRATIONS WITH DATA VIS AND ANNOTATIONS OVERLAID FROM A JS   -->
 
@@ -1089,7 +1100,7 @@
                 .attr('y', facilityLabelY)
                 .attr('dy', 0)
                 .text('Materials recovery facilities')
-                .call(helpers.wrap, 300, 1)
+                .call(helpers.wrap, 320, 1)
             annotationLayer.append('text').classed('waste-destination-title garbage destination', true)
                 .attr('x', settings.dims.width / 2)
                 .attr('y', facilityLabelY + 10)
@@ -1101,7 +1112,7 @@
                 .attr('y', facilityLabelY)
                 .attr('dy', 0)
                 .text('Organics reprocessing')
-                .call(helpers.wrap, 280, 1)
+                .call(helpers.wrap, 240, 1)
 
             // 3. Recycling info group: 
             const recyclingGroup = infographicLayer.append('g').classed('recycling-group street', true)
@@ -1377,7 +1388,7 @@
 
             // 9. Add main title and kerbside scene annotations and main title
             annotationLayer.append('text').classed('main-title street', true)
-                .text(`Household collections at a glance, ${settings.year}`)
+                .text(`Household waste collection at a glance in ${settings.year}`)
                 .attr('x', 50)
                 .attr('y', 60)
             annotationLayer.append('text').classed('lga-label-small street', true)
@@ -1416,6 +1427,7 @@
                 costPerTonneRowOffsetY = 24,      costPerPropertyRowOffsetY = 44,   amountPerPropertyRowOffsetY = 64
 
             const councilTable = annotationLayer.append('g')
+                .classed('council', true)
                 .attr('transform', `translate(${councilSpendTable.x}, ${councilSpendTable.y})`)
 
             const councilTableHeaderRow = councilTable.append('g')

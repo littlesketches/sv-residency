@@ -111,6 +111,15 @@
                 text-shadow: 2px 2px 0px var(--nightSky);
             }
 
+            /* Extended typography options */
+            .extended-typography .vis-title{
+                font-family: 'Better Times';
+            }
+            .extended-typography .vis-title{
+                font-size: 130px;
+                transform: translateY(40px);
+            }
+
             /**************************************/
             /*****  MATERIAL COLOUR ASSIGNMENT  ***/
             /**************************************/
@@ -172,8 +181,8 @@
     </head>
 
     <body>
-        <div class = "svg-container">
-            <svg id = "scene-vis" viewBox="0 0 2481 3508">
+        <div class = "svg-container" >
+            <svg id = "scene-vis" viewBox="0 0 2481 3508" class ='extended-typography'>
                 <defs>
                     <clipPath id="_clip2">
                         <path d="M1032.93 3211.99h260.51v170.37h-260.51z"/>
@@ -1287,7 +1296,7 @@
                         x: document.getElementById('mrf-plastics-roof').getBBox().x + document.getElementById('mrf-plastics-roof').getBBox().width * 0.5,
                         y: document.getElementById('mrf-plastics-roof').getBBox().y,
                         yOffset: 200,
-                        dataLabelOffset: {x: -80, y: -40}
+                        dataLabelOffset: {x: -65, y: -32}
                     },
                     'rubber': {
                         x: document.getElementById('mrf-rubber-roof').getBBox().x + document.getElementById('mrf-rubber-roof').getBBox().width * 0.5,
@@ -1684,7 +1693,7 @@
                 annotationLayer.append('text')
                     .attr('id', 'main-title')
                     .classed('vis-title', true)
-                    .text("Victorian material flow at a glance, "+settings.year)
+                    .text("Victorian material flows at a glance in "+settings.year)
                     .attr('x', 50)
                     .attr('y', 140)
 
@@ -1993,10 +2002,10 @@
                 const pathLength = node.getTotalLength()
                 d3.select(node)
                     .style('opacity', null)
-                    .style('stroke-dasharray',  `${pathLength} ${pathLength}`)
-                    .style('stroke-dashoffset',  pathLength)
+                    .style('stroke-dasharray',  `${pathLength}px ${pathLength}px`)
+                    .style('stroke-dashoffset',  `${pathLength}px`)
                     .transition().duration(duration).delay(delay)
-                    .style('stroke-dashoffset', 0)
+                    .style('stroke-dashoffset', '0px')
             }
         }
 
