@@ -1386,6 +1386,9 @@
             if (settings.queryParameters.has('year')) { 
                 settings.year = settings.queryParameters.get('year')  
             }
+            if (settings.queryParameters.has('extended-typography')) { 
+                d3.select(`#${settings.svgID}`).classed('extended-typography', settings.queryParameters.get('extended-typography') === "false" ? false  : true)
+             }
         };
 
         async function transformData(materialData) {
@@ -1586,10 +1589,10 @@
                     nodeLabel.append('text').attr('id', `${className}-label`)
                         .classed(`nodeLabel textOnPath material ${className}}`, true)
                         .append('textPath').attr("xlink:href", `#${className}-labelPath`)				
-                            .attr('startOffset',  	className === 'aggregates-masonry-and-soil' ? '70%' : '75%') 
+                            .attr('startOffset', className === 'aggregates-masonry-and-soil' ? '70%' : '75%') 
                             .style('text-anchor',  'middle')    // place the text halfway on the arc
                             .style('letter-spacing', 0)         
-                            .text(material)
+                            .text(className === 'aggregates-masonry-and-soil' ? 'Aggregates, masonry, soil' : material)
 
                     // iv. Add volume circular label
                     const nodeVolumeLabel = materialNodeGroup.append('g').classed('nodeVolumeLabel-group', true)
@@ -1685,7 +1688,6 @@
                             .attr('stroke-width', flowScale(exportValue))
                     }
                 })
-
 
 
             // GENERAL ANNOTATION
@@ -1858,7 +1860,6 @@
             }, animDelay); 
 
             animDelay += duration['step-2'] + document.querySelectorAll('.generation.flow-link').length * 200
-
 
 
             ////////////////////////////////////////// 

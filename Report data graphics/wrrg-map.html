@@ -246,7 +246,7 @@
                     }).then( async (rawData) => {
                         // 4. Initiate vis build sequence with data now loaded
                         await applyQuerySettings(settings)                      // a. Update settings if a query string is passed in
-                        await parseData(data.table.kerbsideByWRRG)             // b. Parse data used in visualisation
+                        await transformData(data.table.kerbsideByWRRG)             // b. Parse data used in visualisation
                         await renderMap(settings, rawData[1], rawData[2])	    // c. Renders map and export data annotation
                     })
 
@@ -287,7 +287,7 @@
                 }   
             };
 
-            async function parseData(wrrgData){
+            async function transformData(wrrgData){
                 // Extract lists 
                 data.schema.list.wrrg = [...new Set(wrrgData.map(d => d.WRRG))]
                 data.schema.list.year = [...new Set(wrrgData.map(d => d.year))]

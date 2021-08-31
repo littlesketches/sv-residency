@@ -345,7 +345,7 @@
             }).then( async (data) => {
                 // 3. Initiate vis build sequence with data now loaded
                 await applyQuerySettings(settings)              // a. Update settings if a query string is passed in
-                await parseData(data.table.byMaterialFlow)      // b. Parse data
+                await transformData(data.table.byMaterialFlow)      // b. Parse data
                 await renderVis()                               // c. Render visualisation(s)
             })
 
@@ -380,7 +380,7 @@
             }
         };
 
-        async function parseData(materialData) {
+        async function transformData(materialData) {
             // 1. Extract lists 
             materialData = materialData.filter(d => d.year === settings.year && d.sankey.toLowerCase() === 'yes')
 

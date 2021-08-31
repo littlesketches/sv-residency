@@ -431,7 +431,7 @@
 
                 // 3. Initiate vis build sequence with data now loaded
                 await applyQuerySettings(settings)
-                await parseData(settings)
+                await transformData(settings)
                 await renderVis(settings)                               // c. Render visualisation(s)
             })
 
@@ -469,7 +469,7 @@
             }
         };
 
-        async function parseData() {   
+        async function transformData() {   
             // 1. Create lists based on 'toYear'
             data.schema.list.year  = [...new Set(data.table.wasteByMaterialFlow.map(d => d.year) )]
             data.schema.list.material  = [...new Set(data.table.wasteByMaterialFlow.filter(d => d.year === settings.yearTo && d.level === 1 && d.source !== 'Other materials').map(d => d.source) )].sort()

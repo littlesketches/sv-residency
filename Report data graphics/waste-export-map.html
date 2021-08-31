@@ -7,77 +7,10 @@
     <meta name="author" content="Sustainability Victoria">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        /* COLOUR PALETTES | MID-2021 BRAND STYLE GUIDE*/
-            :root {
-                /** PRIMARY SV GREEN AND SECONDARY PALLETTE **/
-                --svGreen:                       #9ACA3C;
-                /** SECONDARY PALLETTE **/
-                --secondaryGreenLight:           #D5E0A1;
-                --secondaryBottleGreen:          #174F37;
-                --secondaryBottleGreenLight:     #79B5AA;
-                --secondaryGrey:                 #B1B1B0;
-                --secondaryGreyLight:            #CFCFCF;
-                --secondaryGreyLightest:         #ECECEC;
-                /** TERTIARY PALETTE **/
-                --tertiaryPurple:       #51284F;
-                --tertiaryPurpleLight:  #8276B3;
-                --tertiaryRed:          #E04F39;
-                --tertiaryRedLight:     #F78684;
-                --tertiaryYellow:       #EFC041;
-                --tertiaryYellowLight:  #F5E065;
-                --tertiaryCard:         #B39981;
-                --tertiaryCardLight:    #DCBFA6;
-                --tertiaryEmerald:      #009E71;
-                --tertiaryEmeraldLight: #93CCB9;
-                --tertiaryBlue:         #005E88;
-                --tertiaryBlueLight:    #A0D6E9;
-            }
-
-        /***************************************/
-        /*** IMPORTED FONTS  | ALL WEIGHTS  ***/
-        /***************************************/
-
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
-                    url('fonts/DINNextLTPro-Light.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Light.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Light.ttf') format('truetype');
-                font-weight: 300;
-                font-style: light;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Regular'), local('DIN-Next-LT-Pro-Regular'),
-                    url('fonts/DINNextLTPro-Regular.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Regular.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Regular.ttf') format('truetype');
-                font-weight: 400;
-                font-style: normal;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Medium'), local('DIN-Next-LT-Pro-Medium'),
-                    url('fonts/DINNextLTPro-Medium.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Medium.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Medium.ttf') format('truetype');
-                font-weight: 500;
-                font-style: medium;
-            }
-            @font-face {
-                font-family: 'DIN Next LT Pro';
-                src: local('DIN Next LT Pro Heavy'), local('DIN-Next-LT-Pro-Heavy'),
-                    url('fonts/DINNextLTPro-Heavy.woff2') format('woff2'),
-                    url('fonts/DINNextLTPro-Heavy.woff') format('woff'),
-                    url('fonts/DINNextLTPro-Heavy.ttf') format('truetype');
-                font-weight: 800;
-                font-style: heavy;
-            }
-
             body{
-                font-family: 'DIN Next LT Pro';
-                margin: 0;
-            }
+            font-family: 'DIN Next LT Pro';
+            margin: 0;
+        }
 
         /******************************/
         /*** VISUALISATION STYLING  ***/
@@ -264,7 +197,7 @@
             }).then( async (rawData) => {
                 // 4. Initiate vis build sequence with data now loaded
                 await applyQuerySettings(settings)                      // a. Update settings if a query string is passed in
-                await parseData(data.table.exportWasteData)             // b. Parse data used in visualisation
+                await transformData(data.table.exportWasteData)             // b. Parse data used in visualisation
                 await renderMap(settings, rawData[1], rawData[2])	    // c. Renders map and export data annotation
             })
 
@@ -300,7 +233,7 @@
         };
 
         // Parse input data for export volumes by country
-        async function parseData(exportData){
+        async function transformData(exportData){
             // 1. Extract lists 
             const yearData = exportData.filter(d => d.year === settings.year)
             data.schema.list.country = [...new Set(yearData.sort((a, b) => (a.Total < b.Total) ? 1 : -1).map(d => d.Destination).filter(d => d !== 'Others'))]            // Sort ensures list is ranked by total
