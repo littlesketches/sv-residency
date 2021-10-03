@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="SV Resource recovery market bulletin graphics">
+        <meta name="author" content="Little Sketches ">
+		<link rel="stylesheet" type="text/css" href="./core/css/core.css" />
+        <style>
+            body{
+                font-family: 'DIN Next LT Pro';
+                margin: 10vw;
+            }
+            h1{
+                font-size: 2.5rem;
+                text-transform: uppercase;
+                font-weight: 700;
+                color: var(--secondaryBottleGreen);
+            }
+            p, ul, ol{
+                color: rgb(40, 40, 40);
+                font-weight: 300;
+            }
+            .vis-list-type{
+                font-weight: 500;
+                font-size: 1rem;
+                margin: 2rem 0rem 1rem;
+                text-transform: uppercase;
+                color: var(--secondaryBottleGreen);
+            }
+            .highlight{
+                font-size: 1.25rem;
+                font-weight: 500;
+                text-transform: uppercase;
+                margin: 2rem 0rem 0rem;
+                color: var(--secondaryBottleGreenLight);
+            }
+            
+        </style>
+    </head>
+
+    <body>
+        <h1>SV Recovered Resources Market Bulletin graphics index</h1>
+        <div>
+            <p>This page contains links to HTML/SVG/JS based data visualisations for embedding into various sections of online version of the <a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin' target="_blank">SV Recovered Resources Market Bulletin</a>.
+                Each of these visualisations will automatically update when data is updated in the supporting data tables (hosted in a Google Sheet) <a href="https://docs.google.com/spreadsheets/d/1rg66KhwEbN_FhpD0hhdd6SMIb9ApKlxh_93N4y9Qx_s/edit#gid=549382680" target="_blank">here</a>. 
+                This Google Sheet also contains some user guidance documentation, including a tool for generating URLs and iframe links (for CMS component creation), with date query strings. 
+                However all technical documentation can be found in the readme.md file of the <a href = "https://github.com/littlesketches/sv-stuff" target = "_blank">GitHub repository</a> 
+            </p>
+            <p> The following links are grouped by pages in the <a href="https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin-v2-0/market-bulletin-menu" target="_blank">draft HTML version</a> 
+                of the Market Bulletin, as built in Craft CMS (note: link available at time of writing in mid-September, 2021 and should be updated once a production link is established)
+
+            <p class = 'highlight'>Notes:</p>
+            <ul>
+                <li>Value chain price diagrams include all sub-material prices Instructions to limit/hide and reposition are in the documentation </li>
+                <li>Documentation for adapting the bin composition graphic (future need) is included in the github and GSheet documentation</li>
+            </ul>
+        </div>
+
+        <hr>
+        <div>
+            <div class ="highlight">Graphics embedded grouped by Market Bulletin page</div> 
+
+            <div class ="vis-list-type "><a href = 'https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin-v2-0/market-bulletin-menu/market-overview' target ="_blank">Market overview </a></div> 
+            <ul>
+                <li><a href ="kerbside-collection-flows/index.html">Victorian kerbside recovered resource flows</a>: flow graphic with tabbed step-through views</li>
+                <li><a href ="time-series-charts/destination.html">Destination of collected kerbside waste</a>: time-series line chart with tabbed material selector</li>
+                <li><a href ="time-series-charts/storage-all-materials.html">Recovered kerbside waste in storage</a>: time-series area chart showing volume of all materials estimated to be in storage </li>
+                <ul>
+                    <li>Storage "by material" could be added pending assessment of data quality (i.e. is estimated cumulative storage data able to be shown?)</li> 
+                </ul>
+                <li><a href ="value-chain-price/all-materials.html">Value chain material prices</a>: diagram of sub-material prices positioned on a value chain, with tabbed material selector</li>
+                <li><a href ="materials-dashboard/price.html">Material price performance and trend data:</a>: set of price performance 'cards' for each sub-material, with tabbed material selector</li>
+                <li><a href ="time-series-charts/export.html">Exported recovered materials:</a>: time series stacked layer chart with destination countries as layers, with tabbed material selector </li>
+            </ul>    
+
+            <div class ="vis-list-type"><a href="https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin-v2-0/market-bulletin-menu/market-bulletin-paper-and-cardboard" target="_blank">
+                Paper and cardboard markets</a></div> 
+            <ul>
+                <li><a href ="time-series-charts/destination-paper-and-cardboard.html">Destination of kerbside paper and cardboard</a>: time-series line chart by destination</li>
+                <li><a href ="market-capacity-tables/index.html?material=Paper and cardboard">End market capacity</a>: heat map table describing condition of end markets by sub-material</li>
+                <li><a href ="value-chain-price/by-material.html?material=Paper and cardboard">Value chain material prices</a>: diagram of sub-material prices positioned on a value chain</li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Paper and cardboard">Material price performance and trend data</a>: set of price performance 'cards' for each sub-material</li>
+                <li><a href ="time-series-charts/export-paper-and-cardboard.html">Exported recovered paper and cardboard materials</a>:  time series stacked layer chart with destination countries as layers</li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Paper and cardboard">Paper and cardboard exports by country table</a></li>
+            </ul>
+
+            <div class ="vis-list-type"><a href="https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin-v2-0/market-bulletin-menu/market-bulletin-glass" target="_blank">
+                Glass packaging markets</a></div> 
+            <ul>
+                <li><a href ="time-series-charts/destination-glass.html">Destination of kerbside glass</a>: time-series line chart by destination</li>
+                <li><a href ="market-capacity-tables/index.html?material=Glass">End market capacity</a>: heat map table describing condition of end markets by sub-material</li>
+                <li><a href ="value-chain-price/by-material.html?material=Glass">Value chain material prices</a>: diagram of sub-material prices positioned on a value chain</li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Glass">Material price performance and trend data</a>: set of price performance 'cards' for each sub-material</li>
+                <li><a href ="time-series-charts/export-glass.html">Exported recovered glass materials</a>:  time series stacked layer chart with destination countries as layers</li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Glass">Glass exports by country table</a></li>
+            </ul>
+
+            <div class ="vis-list-type"><a href="https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin-v2-0/market-bulletin-menu/market-bulletin-plastics" target="_blank">
+                Plastic packaging markets</a></div> 
+            <ul>
+                <li><a href ="time-series-charts/destination-plastics.html">Destination of kerbside plastics</a>: time-series line chart by destination</li>
+                <li><a href ="market-capacity-tables/index.html?material=Plastics">End market capacity</a>: heat map table describing condition of end markets by sub-material</li>
+                <li><a href ="value-chain-price/by-material.html?material=Plastics">Value chain material prices</a>: diagram of sub-material prices positioned on a value chain</li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Plastics">Material price performance and trend data</a>: set of price performance 'cards' for each sub-material</li>
+                <li><a href ="time-series-charts/export-plastics.html">Exported recovered plastics materials</a>:  time series stacked layer chart with destination countries as layers</li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Plastics">Plastics exports by country table</a></li>
+            </ul>
+
+
+            <div class ="vis-list-type"><a href ="https://www.sustainability.vic.gov.au/research-data-and-insights/waste-data/recovered-resources-market-bulletin-v2-0/market-bulletin-menu/market-bulletin-metals" target ="_blank">
+                Metal packaging markets</a></div> 
+            <ul>
+                <li><a href ="time-series-charts/destination-metals.html">Destination of kerbside glass</a>: time-series line chart by destination</li>
+                <li><a href ="market-capacity-tables/index.html?material=Metals">End market capacity</a>: heat map table describing condition of end markets by sub-material</li>
+                <li><a href ="value-chain-price/by-material.html?material=Metals">Value chain material prices</a>: diagram of sub-material prices positioned on a value chain</li>
+                <li><a href ="materials-dashboard/price-by-material.html?material=Metals">Material price performance and trend data</a>: set of price performance 'cards' for each sub-material</li>
+                <li><a href ="time-series-charts/export-metals.html">Exported recovered metals materials</a>:  time series stacked layer chart with destination countries as layers</li>
+                <li><a href ="materials-dashboard/export-by-material.html?material=Metals">Metals exports by country table</a></li>
+            </ul>
+
+             <hr>
+
+            <div class ="highlight">Extra options and graphic layouts not used in Market Bulletin</div> 
+            <div  class ="vis-list-type">Draft stage graphics</div> 
+            <ul>
+                <li><a href ="bin-composition/index.html">Bin graphic</a>: a general purpose bin composition graphic with month selectable via a query string</li>
+            </ul>
+
+            <div  class ="vis-list-type">Unused dashboard and table components</div> 
+            <ul>
+                <li><a href ="time-series-charts/destination-all-materials.html">Destination of all kerbside materials</a>: standalone chart</li>
+                <li><a href ="value-chain-price/index.html">Value chain price diagram with in line text material selector </a>: alternative to tabbed material selector</li>
+            </ul>
+            <ul>            
+                <li><a href ="materials-dashboard/all-components.html">Performance dashboard with date and material selector </a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Paper and cardboard">Paper and cardboard performance dashboard</a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Glass">Glass packaging performance dashboard</a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Plastics">Plastic packaging performance dashboard</a></li>
+                <li><a href ="materials-dashboard/all-components.html?material=Metals">Metal packaging performance dashboard</a></li>
+            </ul>  
+            <ul>
+                <li><a href ="materials-dashboard/flow.html?material=Paper and cardboard">Paper and cardboard material flow trend tables</a></li>
+                <li><a href ="materials-dashboard/flow.html?material=Glass">Glass packaging exports material flow trend tables</a></li>
+                <li><a href ="materials-dashboard/flow.html?material=Plastics">Plastic packaging exports material flow trend tables</a></li>
+                <li><a href ="materials-dashboard/flow.html?material=Metals">Metal packaging exports material flow trend tables</a></li>
+            </ul>
+        </div>
+
+    </body>
+</html>

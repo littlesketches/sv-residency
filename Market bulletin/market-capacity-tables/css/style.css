@@ -1,0 +1,40 @@
+/********************************/
+/*** END MARKET TABLE STYLING ***/
+/********************************/
+
+
+    body{
+        margin: 0;
+        font-family: 'DIN Next LT Pro';
+        color: var(--xCharcoal);
+    }
+    table{
+        width: 100vw;
+        border-collapse: collapse
+    }
+    th{
+        padding: 0.5rem 0;
+        font-size: 2vw;
+        font-weight: 500;
+    }
+    td{
+        padding: 0.5rem 0;
+        font-size: 2vw;
+    }
+    .spacer-header{
+        border-top: 2px solid var(--xCharcoal);
+        height: 0.5rem
+    }
+    .product{ 
+        text-align: start;
+        width: 30%;
+        padding-right: 2.5vw;
+    }
+    .supply-chain{ 
+        text-align: center;
+        width: 17.5%;
+    }
+    td.supply-chain{ 
+        border: #fff 3px solid;
+        border-radius: 1vw;
+    }

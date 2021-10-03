@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Area chart">
+        <meta name="author" content="Sustainability Victoria">
+		<link rel="stylesheet" type="text/css" href="../core/css/core.css"/>
+        <link rel="stylesheet" type="text/css"  href="css/chart-style.css"/>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.contentWindow.js" integrity="sha512-cJ7aOLpXbec1Km9craM6xL6UOdlWf9etIz7f+cwQv2tuarLm3PLb3dv3ZqIK++SE4ui+EE0nWqKB0dOaAOv9gQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+        <script src="../core/js/data-endpoint.js"></script>     
+        <script src="js/charts.js"></script>   
+    </head>
+
+    <body>
+        <h1 class = "chart-header">Recovered kerbside waste in storage</h1>
+        <div class = "chart-container">
+            <div class = "chart-sub-header">
+                Estimated volume of all materials in storage between <span id="fromDate-subheader"></span> and <span id="toDate-subheader"></span>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <svg id = "chart-MRF-storage-main"></svg>
+            <div class="context-chart-title">Historical data: use the interactive time window below to change the data range of the main chart.</div>
+            <svg id = "chart-MRF-storage-context"></svg>
+        </div>
+
+        <script>
+
+            //////////////////////////////////////////////////////////////
+            ///// CUSTOM DATA VIS CONFIG AND BUILD SEQUENCE SCRIPT   ///// 
+            //////////////////////////////////////////////////////////////
+
+            // 1. Chart settings and configuration object
+            const settings = {   
+                data: {
+                    source:             'GS',
+                    tableName:          'data_mrfOutput'
+                },
+                svgID:                 'chart-MRF-storage-main',                  
+                contextSvgID:          'chart-MRF-storage-context',                  
+                config: {
+                    chartType:          'area',     
+                    interactive:       true
+                }, 
+                dims: {                             // a. Dims are used to set the aspect ratio (heigh and width) and margins
+                    width:          1080,    
+                    height:         540,
+                    margin: { 
+                        top:        20,
+                        right:      250,
+                        bottom:     60,
+                        left:       80,
+                    },
+                    markerRadius:   5,
+                    strokeWidth:    3,
+                },
+                group:              'All collected materials',           // b. Materials group as named in the source data header (after the '_') : ['All collected materials, Paper and Paperboard, Glass packaging, Plastic packaging, Metal packaging]
+                series:             ['Storage'],                         // c. Names of the data series in the source data header (before the '_') 
+                labelOffset: {  
+                    x: 20, 
+                    y: 0
+                },                                                       // d. Enables manual placement (offsetting) of series labels. Each object/row is in the order of the series names above
+                scales: {   
+                    x: {type: 'time',       unit: 'date' },
+                    y: {type: 'linear',     unit: 'number'}
+                },
+                axis: {
+                    x: {
+                        label:  "", 
+                        unit:   "", 
+                        defaultRange:   12,
+                        offset:         -3
+                    },
+                    y: {
+                        label:  'tonnes', 
+                        unit:   'tonnes'
+                    }
+                }
+            } 
+
+            // 2. Call to method the custom charts.js script to initiate the chart by loading data from endpoints and calls the buildVis function (below) 
+            initVis(settings)
+
+            // 3. Custom build function calling custom charting methods in charts.js
+            async function buildVis(config){
+                await chart.methods.misc.applyQuerySettings(config)         // a. Update (default) settings that might be set from query string
+                await chart.methods.seriesContext.renderChart(config)       // b. Render the chart specifying
+            };
+        </script>
+    </body>
+
+</html>
+

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Materials dashboard">
+		<link rel="stylesheet" type="text/css" href="../core/css/core.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.contentWindow.js" integrity="sha512-cJ7aOLpXbec1Km9craM6xL6UOdlWf9etIz7f+cwQv2tuarLm3PLb3dv3ZqIK++SE4ui+EE0nWqKB0dOaAOv9gQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+        <script src="../core/js/data-endpoint.js"></script>     
+        <script src="js/materials-dashboard.js"></script>   
+    </head>
+
+    <body>
+        <main class = "main-container"> 
+            <div class = 'title-container'>
+                <h1 id ='material-title'></h1>
+            </div>
+
+            <div id = "material-flow-container" class = 'material-flow-container card'>
+                <div class = 'card-header-container'>
+                    <h2 class = 'card-header'>Material flow</h2>
+                </div>
+                <!-- Destination of kerbside waste -->
+                <div class = "material-collection-destination sub-card">
+                    <h3 id = "recyclables-collected-subheader" class = 'card-subheader'>Destinations of kerbside collection in XXX  </h3>
+                    <div class = 'material-collection-container'>
+                        <!-- Recyclables collected header and subcard -->
+                        <div class = "recyclables-collected-container subcard-container">
+                            <h4  class = 'collected-subheader subcard-header'>Recyclables collected</h4>
+                            <div class = 'material-volume-headline-container'>
+                                <span  id ='collected-total' class = 'material-volume-headline'></span><span class = 'material-volume-unit'>tonnes</span>
+                            </div>
+                            <div  class = 'collected-vs-last-label text-minor align-right'>vs last month: </div>
+                            <div id ='collected-vs-last-change' class = 'collected-vs-last-change text-minor '> tonnes</div>
+                            <div id ='collected-vs-last-pct'    class = 'collected-vs-last-pct text-minor'>+ increase</div>
+                        </div>
+                        <!-- Recyclables collection to destination subcard -->
+                        <div class = "recyclables-destination-container subcard-container">
+                            <div class="recyclables-destination-container-rows header">
+                                <h4 id = "destination-subheader"                class = 'subcard-header'>Destination</h4>
+                                <div id = "destination-table-header-tonnes"     class = 'table-header-bold align-right'> tonnes</div>
+                                <div id = "destination-table-header-proportion" class = 'table-header-bold align-right'> proportion</div>
+                            </div>
+                            <div class="recyclables-destination-container-rows">
+                                <div id = "destination-table-local-reprocessing-label"      class = 'local-reprocessing destination-label'>Local reprocessing</div>
+                                <div id = "destination-table-local-reprocessing-tonnes"     class = 'local-reprocessing data-destination-table tonnes align-right'>xxx</div>
+                                <div id = "destination-table-local-reprocessing-proportion" class = 'local-reprocessing data-destination-table proportion align-right'>xx%</div>
+                                <div class = 'destination-table-bar-container'>
+                                    <div id = "destination-table-local-reprocessing-bar"    class = "table-chart-bar local-reprocessing fill"></div>
+                                </div>
+                            </div>
+                            <div class="recyclables-destination-container-rows">
+                                <div id = "destination-table-export-label"      class = 'export destination-label'>Export</div>
+                                <div id = "destination-table-export-tonnes"     class = 'export data-destination-table tonnes align-right'>xxx</div>
+                                <div id = "destination-table-export-proportion" class = 'export data-destination-table proportion align-right'>xx%</div>
+                                <div class = 'destination-table-bar-container'>
+                                    <div id = "destination-table-export-bar"    class = "table-chart-bar export fill"></div>
+                                </div>
+                            </div>
+                            <div class="recyclables-destination-container-rows">
+                                <div id = "destination-table-landfill-label"      class = 'landfill destination-label'>Landfill</div>
+                                <div id = "destination-table-landfill-tonnes"     class = 'landfill data-destination-table tonnes align-right'>xxx</div>
+                                <div id = "destination-table-landfill-proportion" class = 'landfill data-destination-table proportion align-right'>xx%</div>
+                                <div class = 'destination-table-bar-container'>
+                                    <div id = "destination-table-landfill-bar"    class = "table-chart-bar landfill fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All materials destination trends-->
+                <div class = "material-destination-trends sub-card">
+                    <!-- Collection trend indicators subcard -->
+                    <div id ="collection-trend-comparison-container" class = 'material-destination-container'>
+                        <div class = "destination-trend-chart-container subcard-container">
+                            <h4  class = 'destination-card-header destination all'>All kerbside recyclables</h4>
+                            <div id = "destination-trend-chart-header" class = "text-minor">12 mth trend to XXX</div>
+                            <div id ="destination-trend-vis-container" class = "chart-container">
+                                <svg id="destination-trend-chart"  width="100%"></svg>
+                            </div>
+                        </div>
+                        <div id="collection-destination-comparison-container" class = "destination-trend-table-container subcard-container">
+                            <div id = "collection-comparison-table-header"  class = "label all">Comparison of this months collection vs historical averages</div>
+                            <div class='destination-trend-table-container-row header'>
+                                <div class = 'data-destination-table-3mth table-header align-right'>3 months</div>
+                                <div class = 'data-destination-table-1yr table-header align-right'>1 year</div>
+                                <div class = 'data-destination-table-3yr table-header align-right'>3 years</div>
+                                <div class = 'data-destination-table-5yr table-header align-right'>5 years</div>
+                            </div>
+                            <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                <div class = 'data-destination-table-label table-data'>Ave. tonnes per month</div>
+                                <div id='destination-3mth-ave-vol' class = 'data-destination-table-3mth table-data align-right'>0</div>
+                                <div id='destination-1yr-ave-vol' class = 'data-destination-table-1yr table-data align-right'>0</div>
+                                <div id='destination-3yr-ave-vol' class = 'data-destination-table-3yr table-data align-right'>0</div>
+                                <div id='destination-5yr-ave-vol' class = 'data-destination-table-5yr table-data align-right'>0</div>
+                            </div>
+                            <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                <div class = 'data-collection-table-label table-data comparison-label'>This month vs average</div>
+                                <div id='destination-3mth-total-pct' class = 'data-destination-table-3mth table-data align-right'>+0.0%</div>
+                                <div id='destination-1yr-total-pct' class = 'data-destination-table-1yr table-data align-right'>+0.0%</div>
+                                <div id='destination-3yr-total-pct' class = 'data-destination-table-3yr table-data align-right'>+0.0%</div>
+                                <div id='destination-5yr-total-pct' class = 'data-destination-table-5yr table-data align-right'>+0.0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destination trends-->
+                <div class = "material-destination-trends sub-card">
+                    <h3 class = 'card-subheader destination-trend'>Kerbside recyclables trends by destination</h3>
+                    <div class = "material-destination-trends-local-reprocessing">
+                        <div class = 'material-destination-container'>
+                            <div class = "destination-trend-chart-container subcard-container">
+                                <h4  class = 'destination-card-header destination local-reprocessing'>Local reprocessing</h4>
+                                <div id = "local-reprocessing-trend-chart-header" class = "text-minor">12 mth trend to XXX</div>
+                                <div id ="local-reprocessing-trend-vis-container" class = "chart-container">
+                                    <svg id="local-reprocessing-trend-chart"  width="100%"></svg>
+                                </div>
+                            </div>
+                            <div  class = "destination-trend-table-container subcard-container">
+                                <div id = "local-reprocessing-comparison-table-header" class = "label local-reprocessing">Comparison of XXXX collected tonnes in the last month vs historical averages</div>
+                                <div class='destination-trend-table-container-row header'>
+                                    <div class = 'data-destination-table-3mth table-header align-right'>3 months</div>
+                                    <div class = 'data-destination-table-1yr table-header align-right'>1 year</div>
+                                    <div class = 'data-destination-table-3yr table-header align-right'>3 years</div>
+                                    <div class = 'data-destination-table-5yr table-header align-right'>5 years</div>
+                                </div>
+                                <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                    <div class = 'data-collection-table-label table-data'>Ave. tonnes per month</div>
+                                    <div id="local-reprocessing-3mth-ave-vol" class = 'data-destination-table-3mth table-data align-right'>0</div>
+                                    <div id="local-reprocessing-1yr-ave-vol" class = 'data-destination-table-1yr table-data align-right'>0</div>
+                                    <div id="local-reprocessing-3yr-ave-vol" class = 'data-destination-table-3yr table-data align-right'>0</div>
+                                    <div id="local-reprocessing-5yr-ave-vol" class = 'data-destination-table-5yr table-data align-right'>0</div>
+                                </div>
+                                <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                    <div class = 'data-collection-table-label table-data comparison-label'>This month vs average</div>
+                                    <div id="local-reprocessing-3mth-pct" class = 'data-destination-table-3mth table-data align-right'>+0.0%</div>
+                                    <div id="local-reprocessing-1yr-pct" class = 'data-destination-table-1yr table-data align-right'>+0.0%</div>
+                                    <div id="local-reprocessing-3yr-pct" class = 'data-destination-table-3yr table-data align-right'>+0.0%</div>
+                                    <div id="local-reprocessing-5yr-pct" class = 'data-destination-table-5yr table-data align-right'>+0.0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "material-destination-trends-export">
+                        <div class = 'material-destination-container'>
+                            <div class = "destination-trend-chart-container subcard-container">
+                                <h4 class = 'destination-card-header export'>Export</h4>
+                                <div id = "export-trend-chart-header" class = "text-minor">12 mth trend to XXX</div>
+                                <div id ="destination-trend-vis-container" class = "chart-container">
+                                    <svg id="export-trend-chart" width="100%"></svg>
+                                </div>
+                            </div>
+                            <div  class = "destination-trend-table-container subcard-container">
+                                <div id = "export-comparison-table-header" class = "label export">Comparison of XXXX collected tonnes in the last month vs historical averages</div>
+                                <div class='destination-trend-table-container-row header'>
+                                    <div class = 'data-destination-table-3mth table-header align-right'>3 months</div>
+                                    <div class = 'data-destination-table-1yr table-header align-right'>1 year</div>
+                                    <div class = 'data-destination-table-3yr table-header align-right'>3 years</div>
+                                    <div class = 'data-destination-table-5yr table-header align-right'>5 years</div>
+                                </div>
+                                <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                    <div class = 'data-destination-table-label table-data'>Ave. tonnes per month</div>
+                                    <div id="export-3mth-ave-vol" class = 'data-destination-table-3mth table-data align-right'>0</div>
+                                    <div id="export-1yr-ave-vol" class = 'data-destination-table-1yr table-data align-right'>0</div>
+                                    <div id="export-3yr-ave-vol" class = 'data-destination-table-3yr table-data align-right'>0</div>
+                                    <div id="export-5yr-ave-vol" class = 'data-destination-table-5yr table-data align-right'>0</div>
+                                </div>
+                                <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                    <div class = 'data-destination-table-label table-data comparison-label'>This month vs average</div>
+                                    <div id="export-3mth-pct" class = 'data-destination-table-3mth table-data align-right'>0.0%</div>
+                                    <div id="export-1yr-pct" class = 'data-destination-table-1yr table-data align-right'>0.0%</div>
+                                    <div id="export-3yr-pct" class = 'data-destination-table-3yr table-data align-right'>0.0%</div>
+                                    <div id="export-5yr-pct" class = 'data-destination-table-5yr table-data align-right'>0.0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "material-destination-trends-landfill">
+                        <div class = 'material-destination-container'>
+                            <div class = "destination-trend-chart-container subcard-container">
+                                <h4  class = 'destination-card-header destination landfill'>Landfill</h4>
+                                <div id = "landfill-trend-chart-header" class = "text-minor">12 mth trend to XXX</div>
+                                <div id ="destination-trend-vis-container" class = "chart-container">
+                                    <svg id="landfill-trend-chart" width="100%"></svg>
+                                </div>
+                            </div>
+                            <div  class = "destination-trend-table-container subcard-container">
+                                <div id = "landfill-comparison-table-header" class = "label landfill">Comparison of XXXX collected tonnes in the last month vs historical averages</div>
+                                <div class='destination-trend-table-container-row header'>
+                                    <div class = 'data-destination-table-3mth table-header align-right'>3 months</div>
+                                    <div class = 'data-destination-table-1yr table-header align-right'>1 year</div>
+                                    <div class = 'data-destination-table-3yr table-header align-right'>3 years</div>
+                                    <div class = 'data-destination-table-5yr table-header align-right'>5 years</div>
+                                </div>
+                                <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                    <div class = 'data-collection-table-label table-data'>Ave. tonnes per month</div>
+                                    <div id="landfill-3mth-ave-vol" class = 'data-destination-table-3mth table-data align-right'>0</div>
+                                    <div id="landfill-1yr-ave-vol"  class = 'data-destination-table-1yr table-data align-right'>0</div>
+                                    <div id="landfill-3yr-ave-vol"  class = 'data-destination-table-3yr table-data align-right'>0</div>
+                                    <div id="landfill-5yr-ave-vol"  class = 'data-destination-table-5yr table-data align-right'>0</div>
+                                </div>
+                                <div id="tonnes-per-month" class='destination-trend-table-container-row'>
+                                    <div class = 'data-destination-table-label table-data comparison-label'>This month vs average</div>
+                                    <div id="landfill-3mth-pct"  class = 'data-destination-table-3mth table-data align-right'>+0.0%</div>
+                                    <div id="landfill-1yr-pct"  class = 'data-destination-table-1yr table-data align-right'>+0.0%</div>
+                                    <div id="landfill-3yr-pct"  class = 'data-destination-table-3yr table-data align-right'>+0.0%</div>
+                                    <div id="landfill-5yr-pct" class = 'data-destination-table-5yr table-data align-right'>+0.0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id = 'material-price-container' class = 'material-price-container card'>
+                <div class = 'card-header-container'>
+                    <h2 class = 'card-header'>Material price data</h2>
+                </div>
+                <div class = 'sub-card'>
+                    <h3 class = 'material-price-card-group card-subheader'>Virgin materials </h3>
+                    <div id ="material-price-card-container-virgin" class = "material-price-card-container">
+                    </div>  
+                </div>
+                <div class = 'sub-card'>
+                    <h3 class = 'material-price-card-group card-subheader recycled'>Recycled materials</h3>
+                    <div id ="material-price-card-container-mrfOutput" class = "material-price-card-container">
+                    </div>
+                </div>              
+            </div>
+
+
+            <div id = 'export-market-container' class = 'export-market-container card'>
+                <div class = 'card-header-container'>
+                    <h2 class = 'card-header'>Export market data</h2>
+                </div>
+                <div class = 'sub-card'>
+                    <h3 class = 'card-subheader'>Breakdown by country</h3>
+                    <div id = "export-market-subheader" class = 'label'>of xxxx tonnes of paper and paperboard exported in XXXX</div>
+                    <div class = 'export-market-table-container'></div>
+                </div>
+
+            </div>
+        </main>
+
+        <div id="settings-container" class = 'onscreen settings-container'>
+            <div class = 'settings-header'>Materials dashboard settings</div> 
+            <div class = 'dropdown-container'>
+                <label for = 'materials-selector'>Collected material: </label>
+                <select name="materials" id="materials-selector"></select>
+            </div> 
+            <div class = 'dropdown-container'>
+                <label for = 'date-selector'>Date: </label>
+                <select name="date" id="date-selector"> </select>                
+            </div> 
+            <svg id = "defs" width="0" height="0"></svg>
+        </div>
+    </body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Value chain materials prices">
+		<link rel="stylesheet" type="text/css" href="../core/css/core.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.contentWindow.js" integrity="sha512-cJ7aOLpXbec1Km9craM6xL6UOdlWf9etIz7f+cwQv2tuarLm3PLb3dv3ZqIK++SE4ui+EE0nWqKB0dOaAOv9gQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+        <script src="../core/js/data-endpoint.js"></script>     
+        <script src="js/main.js"></script>    
+    </head>
+
+    <body>
+        <main class = "main-container" style="opacity:0"> 
+            <h1 class ="vis-header">Value chain material prices</h1>
+            <div class = "selector-container">
+                <div class = 'dropdown-container'>
+                    <label for="dateSelector">Estimated prices per tonne in</label>
+                    <select name="dateSelector" id="date-selector" class = "date-selector"></select>
+                </div>
+            </div>
+            <div class = 'svg-container'>
+                <svg id = 'supply-chain-vis'></svg>
+            </div>
+        </main>
+    </body>
+
+</html>

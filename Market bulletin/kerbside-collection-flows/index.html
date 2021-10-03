@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Victorian kerbside materials flows">
+        <meta name="author" content="Sustainability Victoria">
+		<link rel="stylesheet" type="text/css" href="../core/css/core.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.contentWindow.js" integrity="sha512-cJ7aOLpXbec1Km9craM6xL6UOdlWf9etIz7f+cwQv2tuarLm3PLb3dv3ZqIK++SE4ui+EE0nWqKB0dOaAOv9gQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+        <script src="../core/js/data-endpoint.js"></script>
+        <script src="js/main.js"></script>     
+    </head>
+
+    <body>
+        <main>
+            <h1 class = "vis-header">Victorian kerbside recovered resource flows </h1>
+            <div class = "date-selector-container">
+                <div class = 'dropdown-container'>
+                    <label for="fromDate">For the <span id = "monthsLabel"> </span> period from start of </label>
+                    <select name="fromDate" id="fromDate" class = "date-selector"></select>
+                </div>
+                <div class = 'dropdown-container'>
+                    <label for="toDate">to the end of</label>
+                    <select name="toDate" id="toDate" class = "date-selector"></select>
+                </div>
+            </div>
+            <div class="stepper-container">
+                <nav class = "stepper-nav" role="tablist">
+                    <ul>
+                        <li id="step-1" class ="step-item step-current" role="tab" aria-selected = 'true'><a><span>Collection volumes</span></a></li>
+                        <li id="step-2" class ="step-item" role="tab"><a><span>Destination flows</span></a></li>
+                        <li id="step-3" class ="step-item" role="tab"><a><span>Recovery flows</span></a></li>
+                        <li id="step-4" class ="step-item" role="tab"><a><span>Circular system</span></a></li>
+                    </ul>
+                </nav>
+            </div><!-- /tabs -->
+            <div id = "flow-vis-container" class = 'svg-container'>
+                <svg id = "flow-vis"> </svg>
+            </div>
+        </main>
+    </body>
+</html>
+

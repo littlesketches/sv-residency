@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Recovered material export trends">
+        <meta name="author" content="Sustainability Victoria">
+		<link rel="stylesheet" type="text/css" href="../core/css/core.css" />
+        <link rel="stylesheet" type="text/css"  href="css/chart-style.css"/>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.contentWindow.js" integrity="sha512-cJ7aOLpXbec1Km9craM6xL6UOdlWf9etIz7f+cwQv2tuarLm3PLb3dv3ZqIK++SE4ui+EE0nWqKB0dOaAOv9gQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+        <script src="../core/js/data-endpoint.js"></script>     
+        <script src="js/charts.js"></script>     
+    </head>
+
+    <body>
+        <h1 class = "chart-header">Exported recovered materials</h1>
+        <div class = "chart-container">
+            <div class = "chart-sub-header">
+                Volume exported by country each month between <span id="fromDate-subheader"></span> and <span id="toDate-subheader"></span>
+            </div>
+        </div>
+        <div class="stepper-container">
+            <nav class = "stepper-nav">
+                <ul>
+                    <li id="step-1" class ="step-item step-current"><a><span value='All collected materials'>All materials</span></a></li>
+                    <li id="step-1" class ="step-item"><a><span value='Paper and cardboard'>Paper and cardboard</span></a></li>
+                    <li id="step-2" class ="step-item"><a><span value='Glass'>Glass</span></a></li>
+                    <li id="step-3" class ="step-item"><a><span value='Plastics'>Plastics</span></a></li>
+                    <li id="step-4" class ="step-item"><a><span value='Metals'>Metals</span></a></li>
+                </ul>
+            </nav>
+        </div><!-- /tabs -->
+        <div class="chart-container">
+            <svg id = "chart-export-main"></svg>
+            <div class="context-chart-title">Historical data: use the interactive time window below to change the data range of the main chart.</div>
+            <svg id = "chart-export-context"></svg>
+        </div>
+        
+        <script>
+
+            //////////////////////////////////////////////////////////////
+            ///// CUSTOM DATA VIS CONFIG AND BUILD SEQUENCE SCRIPT   ///// 
+            //////////////////////////////////////////////////////////////
+
+            // 1. Chart settings and configuration object
+            const settings = {   
+                data: {
+                    source:             'GS',
+                    tableName:          'data_materialsVicExport'
+                },
+
+                svgID:                 'chart-export-main',                  
+                contextSvgID:          'chart-export-context',                  
+                config: {
+                    chartType:          'layer',     
+                    interactive:       true
+                }, 
+                dims: {                             // a. Dims are used to set the aspect ratio (heigh and width) and margins
+                    width:      1080,    
+                    height:     540,
+                    margin: { 
+                        top:        20,
+                        right:      250,
+                        bottom:     60,
+                        left:       80,
+                    },
+                    markerRadius:   5,
+                    strokeWidth:   3,
+                },
+                group:              'All collected materials',                          // b. Materials group as named in the source data header (after the '_') : ['All collected materials, Paper and Paperboard, Glass packaging, Plastic packaging, Metal packaging]
+                series:             ['Indonesia', 'Malaysia', 'Korea', 'India', 'Pakistan', 'China', 'All other countries'],      // c. Names of the data series in the source data header (before the '_') 
+                seriesByMaterial: {
+                    'All collected materials':  ['Indonesia', 'Malaysia', 'Korea', 'India', 'Pakistan', 'China', 'All other countries'],
+                    'Paper and cardboard':      ['Indonesia', 'Thailand', 'Vietnam', 'Malaysia', 'India', 'Korea', 'All other countries'],
+                    'Glass':                    ['Malaysia', 'Bangladesh'],
+                    'Plastics':                 ['Indonesia', 'Vietnam', 'Malaysia', 'Taiwan', 'China', 'All other countries'],
+                    'Metals':                   ['Indonesia', 'Thailand', 'India', 'Taiwan', 'Korea', 'All other countries']
+                },
+                labelOffset: {    x: 20,   y: 0 },                                                       // d. Enables manual placement (offsetting) of series labels. Each object/row is in the order of the series names above
+                scales: {   
+                    x: {type: 'time',       unit: 'date' },
+                    y: {type: 'linear',     unit: 'number'}
+                },
+                axis: {
+                    x: {
+                        label: "", 
+                        unit: "per month", 
+                        defaultRange: 12,
+                        offset: -3
+                    },
+                    y: {
+                        label: "tonnes", 
+                        unit: 'tonnes'
+                    }
+                }
+            } 
+
+            // 2. Call to method the custom charts.js script to initiate the chart by loading data from endpoints and calls the buildVis function (below) 
+            initVis(settings)
+
+            // 3. Custom build function calling custom charting methods in charts.js
+            async function buildVis(config){
+                await chart.methods.misc.applyQuerySettings(config)     // a.  Update (default) settings that might be set from query string
+                await chart.methods.seriesContext.renderChart(config)     // c. Render the chart specifying
+            };
+
+            // 4. Add stepper interface to re-render charts by material
+            d3.selectAll('.step-item')
+                .on('click', function(){
+                    d3.selectAll('.step-item').classed('step-current', false)
+                    d3.select(this).classed('step-current', true)
+                    settings.group = this.children[0].children[0].getAttribute('value')
+                    settings.series = settings.seriesByMaterial[this.children[0].children[0].getAttribute('value')]
+                    rebuild(settings)
+                })
+
+            function rebuild(config){
+                const duration = 500
+                d3.selectAll(`#${config.svgID}, #${config.contextSvgID}`)
+                    .transition().duration(duration * 0.5)
+                    .style('opacity', 0)
+
+                setTimeout(() => {
+                    d3.selectAll(`#${config.svgID} *, #${config.contextSvgID} *`).remove()
+                    chart.methods.seriesContext.renderChart(config) 
+                    d3.selectAll(`#${config.svgID}, #${config.contextSvgID}`)
+                        .transition().duration(duration * 0.5)
+                        .style('opacity', null)
+                }, duration * 0.5);
+            };
+        </script>
+    </body>
+
+</html>
+

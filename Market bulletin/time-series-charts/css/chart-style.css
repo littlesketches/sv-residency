@@ -1,0 +1,455 @@
+/*************************************/
+/*** MARKET BULLETIN CHART STYLING ***/
+/*************************************/
+
+
+/***********************************/
+/*****  HTML STYLING & LAYOUT    ***/
+/***********************************/
+
+    body{
+        font-family: 'DIN Next LT Pro';
+        margin: 0;
+    }
+    h1.chart-header{ 
+        font-size: 4vw;
+        margin-block-end: 0rem;
+        color: var(--tertiaryEmerald);  
+        font-weight: 500;
+    }
+    .chart-selector{
+        color: var(--xCharcoal);
+    }
+    .chart-sub-header{
+        color: var(--xCharcoal);
+        font-size: 1.75vw;
+        padding-bottom: 1rem;
+    }
+    .selector-group-container{
+        display: inline-flex;
+        padding: 0.5rem 0rem 0.5rem 0rem;
+    }
+    .selector-group-container,
+    .dropdown-container select,
+    .dropdown-container label{
+        font-size: 0.75rem;
+    }
+    .dropdown-container select{
+        border: none;
+        border-bottom: dotted 0.5px #000;
+        margin-right: 0.25rem;
+    }
+    .tooltip{
+        opacity:   0;
+        position:   absolute;
+    }
+    .tooltip-group{
+        pointer-events: none;
+    }
+    .blur{
+        opacity: 0;
+    }
+    .hidden{
+        display: none;
+    }
+
+/***************************/
+/*****  TYPOGRAPHY       ***/
+/***************************/
+
+    .context-chart-title{
+        font-size: 1.25vw;
+        font-weight: 400;
+        padding: 1rem 0rem 0.25rem;
+        margin-left: 7.5%;
+        color: var(--xCharcoal);
+    }
+    /* Set font family for all chart label elements */
+    svg.line-context-chart .axis text,
+    svg.area-context-chart .axis text,
+    svg.layer-context-chart .axis text,
+    svg.layer-chart .axis text{
+        font-family: 'DIN Next LT Pro', 'Roboto', 'Helvetica';
+        font-size: 20px;
+    }
+    /* Tooltip styling */
+    .listening-rect{
+        fill: transparent;
+    }
+    .tooltip {
+        fill: var(--xCharcoal);
+        pointer-events: none;
+    }
+    .tooltip-x{
+        font-size: 10px;
+        font-weight: 200;
+    }
+    .tooltip-y{
+        font-size: 15px;
+    }
+    .annotation-label-main,
+    .annotation-sub-label-main{
+        font-weight: 500;
+        fill: var(--xCharcoal);
+    }
+    .annotation-label-main{
+        font-size: 26px;
+    }
+    .annotation-sub-label-main{
+        font-size: 14px;
+    }
+    .centered{
+        text-anchor: middle;
+    }
+    .uppercase{
+        text-transform: uppercase;
+    }
+
+/***************************/
+/*****  ELEMENT COLOURS  ***/
+/***************************/
+
+    /* Charts series colour palettes for text, line  and layer series */
+    .local-reprocessing,
+    .local-reprocessing-or-storage,
+    .local-reprocessing-or-stockpiles{
+        fill: var(--secondaryBottleGreen);
+    }
+    .local-reprocessing.line,
+    .local-reprocessing-or-storage.line,
+    .local-reprocessing-or-stockpiles.line {
+        stroke: var(--secondaryBottleGreen);
+    }
+    .export {
+        fill: var(--secondaryBottleGreenLight);
+    }
+    .export.line {
+        stroke: var(--secondaryBottleGreenLight);
+    }
+    .landfill {
+        fill: var(--tertiaryCard);
+    }
+    .landfill.line {
+        stroke: var(--tertiaryCard);
+    }
+    .storage {
+        fill: var(--xCharcoal);
+    }
+    .storage.line {
+        stroke: var(--xCharcoal);
+    }
+
+    /* Export countries */
+    .indonesia{
+        fill: var(--tertiaryPurpleLight);
+    }
+    .malaysia{
+        fill: var(--tertiaryBlueLight);
+    }
+    .korea{
+        fill: var(--secondaryBottleGreenLight);
+    }
+    .taiwan,
+    .bangladesh{
+        fill: var(--tertiaryYellowLight);
+    }
+    .india{
+        fill: var(--tertiaryEmeraldLight);
+    }
+    .thailand,
+    .pakistan{
+        fill: var(--tertiaryCardLight);
+    }
+    .vietnam{
+        fill: var(--secondaryGreenLight);
+    }
+    .china{
+        fill: var(--tertiaryRedLight)
+    }
+    .all-other-countries{
+        fill: var(--secondaryGreyLight);
+    }
+
+    .chart-cumulative-label{
+        fill: var(--secondaryGreyLight);
+        mix-blend-mode: color-dodge;
+    }
+    /* Axes */
+    svg.line-context-chart .axis text,
+    svg.area-context-chart .axis text,
+    svg.layer-context-chart .axis text,
+    svg .axis-label{
+        fill:rgb(100, 100, 100)
+    }
+
+
+    /*************************************/
+    /**  LINE, AREAS AND LAYER CHARTS  ***/
+    /*************************************/
+    svg .axis line{
+        stroke-width: 0.125px;
+    }
+    svg .line{
+        fill: none;
+        stroke-width: 2.5px;
+    }
+    svg .line.context{
+        stroke-width: 0.5px;
+    }
+    svg .area{
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    svg .data-point,
+    svg .layer{
+        stroke: #fff;
+    }
+    svg .layer{
+        stroke-width: 0.25px;
+    }
+
+    /* Line-layer Series labelling */
+    svg .series-label{
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        dominant-baseline: middle;
+    }
+    svg .series-sublabel{
+        font-size: 10px;
+        pointer-events: none;
+    }
+
+    /* Axes labelling and appearances\ */
+    svg.line-context-chart .axis text,
+    svg.area-context-chart .axis text,
+    svg.layer-context-chart .axis text{
+        font-weight: 300;
+        font-size: 12px;
+    }
+    /* Axes labelling */
+    svg .axis-label{
+        font-size: 12px;
+        font-weight: 300;
+    }
+    svg .axis-label.x,
+    svg .axis-label.y{
+        text-anchor: middle;
+    }
+    svg.line-context-chart .axis.y-axis path,
+    svg.line-context-chart .axis.x-axis path,
+    svg.area-context-chart .axis.y-axis path,
+    svg.area-context-chart .axis.x-axis path,
+    svg.layer-context-chart .axis.y-axis path,
+    svg.layer-context-chart .axis.x-axis path{
+        display: none;
+    }
+
+    svg.line-context-chart .tooltip-bg,
+    svg.area-context-chart .tooltip-bg,
+    svg.layer-context-chart .tooltip-bg{
+        fill: #fff;
+        opacity: 0.9
+    }
+    svg.line-context-chart .tooltip-slicer,
+    svg.area-context-chart .tooltip-slicer,
+    svg.layer-context-chart .tooltip-slicer{
+        stroke-width: 0.5px;
+        stroke:rgb(100, 100, 100);
+        stroke-dasharray: 2 2;
+        fill: none
+    }
+    svg.line-context-chart .tooltip-slicer-header,
+    svg.line-context-chart .tooltip-slicer-label,
+    svg.area-context-chart .tooltip-slicer-header,
+    svg.area-context-chart .tooltip-slicer-label,
+    svg.layer-context-chart .tooltip-slicer-header,
+    svg.layer-context-chart .tooltip-slicer-label{
+        dominant-baseline: hanging;
+        fill: var(--xCharcoal)
+    }
+    .tooltip-slicer-header{
+        font-size: 20px;
+        font-weight: 500;
+    }
+    .tooltip-slicer-label{
+        font-size: 12px;
+        font-weight: 400;
+    }
+    .tooltip-slicer-label.total{
+        font-weight: 500;
+    }
+    .tooltip-slicer-label.value{
+        text-anchor: end;
+    }
+    .tooltip-slicer-divider{
+        stroke:rgb(100, 100, 100);
+        stroke-width: 0.5px;
+        fill: none;   
+    }
+
+    /* Rotate and placement of x-axis labels */
+
+    svg.line-context-chart .axis.x-axis text,
+    svg.area-context-chart .axis.x-axis text,
+    svg.layer-context-chart .axis.x-axis text{
+        text-anchor: end;
+        transform: translate(-4px, 2px) rotate(-45deg);
+    }
+
+    /* Special offsetting and x axis for charts with negative values */
+    #chart-MRF-storage .axis.x-axis text{
+        text-anchor: end;
+        transform: translate(-4px, 50px) rotate(-45deg);
+    }
+    #chart-vic-commodity-prices .axis.x-axis text{
+        text-anchor: end;
+        transform: translate(-4px, 100px) rotate(-45deg);
+    }
+
+    svg.layer-chart#chart-MRF-storage  .axis.x-axis path,
+    svg.layer-chart#chart-vic-commodity-prices  .axis.x-axis path{
+        display: normal;
+    }
+
+    /* Dropdown selector */
+    .selector-container{
+        border: 2px solid #999999; border-radius: 20px;
+        width: fit-content;
+        font-size: 16px;
+        background-color: #4e5658; color: #FFFFFF;    
+        height: 30px;
+        line-height: 30px;
+    }
+    .selector-container label,
+    .selector-container select{
+        margin: 5px;
+        background-color: transparent;
+        color: #FFFFFF;
+    }
+    .selector-container label{
+        margin-left: 16px;
+        font-weight: normal;
+    }
+    .selector-container select{
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+    .selector-container select:focus{
+        outline: none;
+    }
+
+
+/****************************************/
+/*** HTML STEPPER NAVIGATION STYLING  ***/
+/****************************************/
+
+    .stepper-container {
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto 2rem auto;
+        width: 100%;
+        border-top: solid var(--secondaryGrey) 1px;
+        color: var(--secondaryGrey);
+        margin-top: 1vw;
+        font-size: 2vw;
+    }
+    .stepper-container nav {
+        text-align: center;
+        background: #fff;
+    }
+    .stepper-container nav ul {
+        position: relative;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: flex;
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+        -ms-box-orient: horizontal;
+        -ms-box-pack: center;
+        -webkit-flex-flow: row wrap;
+        -moz-flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        justify-content: center;
+        align-items: center;
+    }
+    .stepper-container nav ul li {
+        position: relative;
+        z-index: 1;
+        display: block;
+        margin: 0;
+        text-align: center;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        cursor: pointer;
+    }
+    .stepper-container nav a {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 2.5;
+    }
+    .stepper-container nav a span {
+        vertical-align: middle;
+    }
+    .stepper-container nav a:focus {
+        outline: none;
+    }
+    .stepper-container nav li:last-child::before {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--tertiaryEmerald);
+        content: '';
+        -webkit-transition: -webkit-transform 0.3s;
+        transition: transform 0.3s;
+    }
+
+    /* Stepper underline */
+    .stepper-container nav li:first-child.step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-400%,0,0);
+        transform: translate3d(-400%,0,0);
+    }
+    .stepper-container nav li:nth-child(2).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-300%,0,0);
+        transform: translate3d(-300%,0,0);
+    }
+    .stepper-container nav li:nth-child(3).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-200%,0,0);
+        transform: translate3d(-200%,0,0);
+    }
+    .stepper-container nav li:nth-child(4).step-current ~ li:last-child::before {
+        -webkit-transform: translate3d(-100%,0,0);
+        transform: translate3d(-100%,0,0);
+    }
+    .stepper-container nav a {
+        padding: 0.75rem 0.2rem 1.25rem 0.2rem;
+        line-height: 1;
+        -webkit-transition: color 0.3s, -webkit-transform 0.3s; 
+        transition: color 0.3s, transform 0.3s;
+        font-weight: 400;
+    }
+    .stepper-container nav li.step-current a {
+        -webkit-transform: translate3d(0,8px,0);
+        transform: translate3d(0,8px,0);
+        color: var(--tertiaryEmerald);
+    }
+    @media screen and (max-width: 58em) {
+        .stepper-container nav a:before {
+            margin-right: 0;
+        }
+    }
