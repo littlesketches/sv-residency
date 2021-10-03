@@ -1,0 +1,98 @@
+/***********************************************************/
+/***********************************************************/
+/****                                                   ****/
+/**** GENERAL BIN COMPOSITION GRAPHIC  | CUSTOM CSS    ****/
+/**** ---------------------------------------------     ****/
+/**** - CSS Variables and loaded fonts from core.css    ****/
+/****                                                   ****/
+/***********************************************************/
+/***********************************************************/
+
+body{
+    font-family: 'DIN Next LT Pro';
+}
+
+/************************/
+/*****  TYPOGRAPHY    ***/
+/************************/
+.recycling-breakdown-material-label{
+    font-size: 14px;
+    font-weight: 300;
+    dominant-baseline: middle;
+    text-anchor: end;
+}
+.bin-outline{
+    stroke:  var(--xCharcoal);
+    stroke-width: 0.5px;
+    stroke-linejoin: round;
+}
+
+/*******************************/
+/*****  COLOUR ASSIGNMENT    ***/
+/*******************************/
+.bin{
+    fill: var(--xCharcoal );
+}
+.recycling{
+    fill: var(--xCharcoal );
+}
+.paper,
+.paper-and-cardboard{
+    fill: var(--xBlueCyan );
+}
+.recycling-breakdown-material-label.paper,
+.recycling-breakdown-material-label.paper-and-cardboard{
+    fill: var(--xDarkBlueCyan);
+}
+.plastics{
+    fill: var(--tertiaryYellow);
+}
+.recycling-breakdown-material-label.plastics{
+    fill: var(--xDarkYellow);
+}
+.metals{
+    fill: var(--xMidBlue);
+}
+.recycling-breakdown-material-label.metals{
+    fill: var(--tertiaryBlue);
+}
+.glass{
+    fill: var(--tertiaryPurpleLight)
+}
+.recycling-breakdown-material-label.glass{
+    fill: var(--tertiaryPurple);
+}
+.organics{
+    fill: var(--xGreen);
+}
+.recycling-breakdown-material-label.organics{
+    fill: var(--xGreen);
+}
+.aggregates-masonry-and-soil{
+    fill: var(--tertiaryRedLight);
+}
+.recycling-breakdown-material-label.aggregates-masonry-and-soil{
+    fill: var(--tertiaryRedLight);
+}
+.rubber{
+    fill: var(--xMagenta);
+}
+.recycling-breakdown-material-label.rubber{
+    fill: var(--xDarkMagenta);
+}
+.textiles{
+    fill: var(--xOrange);
+}
+.recycling-breakdown-material-label.textiles{
+    fill: var(--xDarkOrange);
+}
+
+.contamination{
+    fill: var(--tertiaryRed);
+}
+.recycling-breakdown-material-label.contamination{
+    fill: var(--tertiaryRed);
+}
+
+
+
