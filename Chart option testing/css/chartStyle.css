@@ -1,0 +1,373 @@
+/***********************/
+/*  CHART STYLING   */
+/**********************/
+
+    /* SV Colour palette */
+    :root {
+        --svGreen:                            #9ACA3C;
+        --gippslandGreen:                     #CED99E;
+        --secondary_greatOceanBlue:           #0070BB;
+        --secondary_hepburnClay:              #9B0B32;
+        --secondary_meredithGold:             #E3BA5A;
+        --campaign_corrangamiteEggplant:      #550055;
+        --campaign_corrangamiteEggplantLight: #B273B2;
+        --campaign_gannarawwaPink:            #D00236;
+        --campaign_gannarawwaPinkLight:       #EE5F83;
+        --campaign_surfCoastTeal:             #00848F;
+        --campaign_surfCoastTealLight:        #47ABB4;
+        --campaign_queenscliffeMarine:        #0A3055;
+        --campaign_queenscliffeMarineLight:   #7991A9;
+        --campaign_milduraOrange:             #D3410B;
+        --campaign_milduraOrangeLight:        #F2855D;
+        --campaign_otwaysGreen:               #008848;
+        --campaign_otwaysGreenLight:          #8DBF87;
+        --monochrome_youYangsGranite:         #B2B2B2;
+        --monochrome_lakeMountainMorning:     #CCCCCC;
+        --monochrome_mtBullaMist:             #E5E5E5;
+    }
+
+    /* Typefaces */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700&display=swap');
+    @font-face {
+        font-family: 'DIN Next LT Pro';
+        src:  url('../fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+            url('../fonts/DINNextLTPro-Bold.woff') format('woff');
+    }
+
+    /* Set font family for all chart label elements */
+    svg .series-label,
+    svg.line-chart .axis text,
+    svg.layer-chart .axis text,
+    svg .axis-label {
+        font-family: 'Roboto';
+    }
+
+    /********************/
+    /**  LINE CHARTS  ***/
+    /********************/
+
+    svg.line-chart .axis path,
+    svg.line-chart .axis line{
+        stroke-width: 0.25px;
+    }
+
+    /* Points on line series */
+    svg .all-points-group circle,
+    svg .points-group circle {
+        stroke: #fff;
+        stroke-width: 0.75px;
+    }
+    svg .line{
+        fill: none;
+        stroke-width: 2.5px;
+    }
+
+    /* Line-layer Series labelling */
+
+    svg .series-label{
+        font-family: 'DIN Next LT Pro';        
+        font-weight: normal;
+        font-size: 14px;
+        cursor: pointer;
+        dominant-baseline: middle;
+    }
+    svg .series-sublabel{
+        font-family: 'DIN Next LT Pro';   
+        font-size: 10px;
+        cursor: pointer;
+    }
+/* 
+    svg text.series-sub-label{
+        font-family: 'DIN Next LT Pro';        
+        font-weight: normal;
+        font-size: 10px;
+        cursor: pointer;
+    } */
+
+    /* svg .series-label:hover{
+        font-weight: bold;
+        font-size: 14px;
+    } */
+
+    svg#chart-vic-commodity-prices .series-label{
+        font-size: 10px;
+    }
+
+    /* Axes labelling and appearances\ */
+    svg.line-chart .axis text,
+    svg.layer-chart .axis text{
+        font-weight: normal;
+        font-size: 8px;
+        fill:rgb(150, 150, 150)
+    }
+    /* Axes labelling */
+    svg .axis-label{
+        font-family: 'DIN Next LT Pro';   
+        font-size: 12px;
+        font-weight: bold;
+        fill:rgb(150, 150, 150);
+    }
+    svg .axis-label.x,
+    svg .axis-label.y{
+        text-anchor: end
+    }
+
+    svg.line-chart .axis.y-axis path,
+    svg.layer-chart .axis.y-axis path,
+    svg.line-chart .axis.x-axis path,
+    svg.layer-chart .axis.x-axis path{
+        display: none;
+    }
+
+    #chart-vic-export-materials .axis.x-axis path,
+    #chart-MRF-outputs .axis.x-axis path{
+        display: none;
+    }
+
+    /* Rotate and placement of x-axis labels */
+    svg.line-chart .axis.x-axis text,
+    svg.layer-chart .axis.x-axis text{
+        text-anchor: end;
+        transform: translate(-4px, 2px) rotate(-45deg);
+    }
+
+    /* Special offsetting and x axis for charts with negative values */
+    #chart-MRF-storage .axis.x-axis text{
+        text-anchor: end;
+        transform: translate(-4px, 50px) rotate(-45deg);
+    }
+    #chart-vic-commodity-prices .axis.x-axis text{
+        text-anchor: end;
+        transform: translate(-4px, 100px) rotate(-45deg);
+    }
+
+    svg.layer-chart#chart-MRF-storage  .axis.x-axis path,
+    svg.layer-chart#chart-vic-commodity-prices  .axis.x-axis path{
+        display: normal;
+    }
+
+/* Charts series colour palettes for text, line  and layer series */
+    /* Materials flows charts*/
+    .local-reprocessing,
+    .local-reprocessing-or-storage,
+    .local-reprocessing-or-stockpiles{
+        fill: var(--svGreen);
+    }
+    .local-reprocessing.line,
+    .local-reprocessing-or-storage.line,
+    .local-reprocessing-or-stockpiles.line {
+        stroke: var(--svGreen);
+    }
+    .export {
+        fill: var(--campaign_surfCoastTealLight);
+    }
+    .export.line {
+        stroke: var(--campaign_surfCoastTealLight);
+    }
+    .landfill {
+        fill: var(--monochrome_youYangsGranite);
+    }
+    .landfill.line {
+        stroke: var(--monochrome_youYangsGranite);
+    }
+
+
+    /* Recovered materials colors: used for commodity prices and  ?? */
+        /* Metals family */
+        .aluminium{
+            fill:  var(--campaign_surfCoastTealLight);
+        }
+        .aluminium.line{
+            stroke:  var(--campaign_surfCoastTealLight);
+        }
+        .steel{
+            fill:  var(--campaign_surfCoastTealLight);
+        }
+        .steel.line{
+            stroke:   var(--campaign_surfCoastTealLight);
+        }
+        /* Glass family */
+        .glass-mixed{
+            fill: var(--campaign_corrangamiteEggplant);
+        }
+        .glass-mixed.line{
+            stroke: var(--campaign_corrangamiteEggplant);
+        }
+        /* Paper and paperboard family */
+        .fibre-mixed-paper-paperboard{
+            fill: var(--campaign_gannarawwaPinkLight);
+        }	
+        .fibre-mixed-paper-paperboard.line{
+            stroke: var(--campaign_gannarawwaPinkLight);
+        }	
+        .fibre-old-corrugated-cardboard{
+            fill: var(--campaign_gannarawwaPinkLight);
+        }
+        .fibre-old-corrugated-cardboard.line{
+            stroke: var(--campaign_gannarawwaPinkLight);
+        }
+        /* Plastics family */
+        .plastic-hdpe-2{
+            fill: var(--campaign_queenscliffeMarineLight);
+        }
+        .plastic-hdpe-2.line{
+            stroke: var(--campaign_queenscliffeMarineLight);
+        }
+        .plastic-pet-1{
+            fill: var(--campaign_queenscliffeMarineLight);
+        }
+        .plastic-pet-1.line{
+            stroke: var(--campaign_queenscliffeMarineLight);
+        }
+        .plastic-mixed-17{
+            fill: var(--campaign_queenscliffeMarineLight);
+        }
+        .plastic-mixed-17.line{
+            stroke: var(--campaign_queenscliffeMarineLight);
+        }
+        .plastic-mixed-37{
+            fill: var(--campaign_queenscliffeMarineLight);
+        }
+        .plastic-mixed-37.line{
+            stroke: var(--campaign_queenscliffeMarineLight);
+        }
+
+    /* Export countries: layer charts and lines */
+        .wedge{
+            stroke: #fff;
+            stroke-width: 0.5px;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .wedge:hover{
+            opacity: 1
+        }
+        .china.wedge,
+        .china.series-label{
+            fill: var(--secondary_hepburnClay);
+        }   
+        .indonesia.wedge,
+        .indonesia.series-label{
+            fill: var(--campaign_surfCoastTeal);
+        } 
+        .india.wedge,
+        .india.series-label{
+            fill: var(--secondary_meredithGold);
+        }   
+        .malaysia.wedge,
+        .malaysia.series-label{
+            fill: var(--campaign_corrangamiteEggplantLight);
+        }   
+        .korea.wedge,
+        .korea.series-label{
+            fill: var(--secondary_greatOceanBlue);
+        }   
+        .pakistan.wedge,
+        .pakistan.series-label{
+            fill: var(--campaign_otwaysGreen);
+        }  
+        .thailand.wedge,
+        .thailand.series-label{
+            fill: var(--campaign_milduraOrange);
+        }  
+        .vietnam.wedge,
+        .vietnam.series-label{
+            fill: var(--campaign_queenscliffeMarine);
+        }  
+        .taiwan.wedge,
+        .taiwan.series-label{
+            fill: var(--campaign_gannarawwaPink);
+        }  
+        .all-other-countries.wedge,
+        .all-other-countries.series-label{
+            fill: rgb(50, 50, 50);
+        }   
+
+    svg .total.line{
+        stroke: #000;
+        /* stroke-dasharray: 4px 4px; */
+    }
+    svg .leader-line{
+       stroke: #000;
+       stroke-width: 0.5px;
+       fill: none;
+    }
+
+    /* Tooltip styling */
+    .tooltip {
+        fill: #2b2929;
+        pointer-events: none;
+    }
+    .tooltip-x{
+        font-size: 10px;
+        font-weight: 200;
+    }
+    .tooltip-y{
+        font-size: 15px;
+    }
+
+    /* Unfocus */
+    .blur{
+        opacity: 0.1;
+        transition: all 300ms
+    }
+
+    /* Chart toggle button */
+    .chart-selector-container {
+        display: grid;
+        align-items: center;
+        justify-items: end;
+        padding: 0 5%   ;
+    }
+    .onoffswitch {
+        position: relative; width: 200px;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    }
+    .onoffswitch-checkbox {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 2px solid #999999; border-radius: 20px;
+    }
+    .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+        font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+        box-sizing: border-box;
+    }
+    .onoffswitch-inner:before {
+        padding-left: 10px;
+        background-color: #4e5658; color: #FFFFFF;
+    }
+    .onoffswitch-inner:after {
+        padding-right: 10px;
+        background-color: #EEEEEE; color: #999999;
+        text-align: right;
+    }
+    .onoffswitch-switch {
+        display: block; width: 20px; margin: 5px;
+        background: #FFFFFF;
+        position: absolute; top: 0; bottom: 0;
+        right: 166px;
+        border: 2px solid #999999; border-radius: 20px;
+        transition: all 0.3s ease-in 0s; 
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px; 
+    }
+
+    .layer-chart .onoffswitch-inner:before {
+        content: "Destinations as layers ";
+    }
+    .layer-chart .onoffswitch-inner:after {
+        content: "Individual destinations";
+    }

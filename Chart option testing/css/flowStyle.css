@@ -1,0 +1,362 @@
+/***********************/
+/*  DIAGRAM STYLING   */
+/**********************/
+
+    /* SV Colour palette */
+    :root {
+        --svGreen:                            #9ACA3C;
+        --gippslandGreen:                     #CED99E;
+        --secondary_greatOceanBlue:           #0070BB;
+        --secondary_hepburnClay:              #9B0B32;
+        --secondary_meredithGold:             #E3BA5A;
+        --campaign_corrangamiteEggplant:      #550055;
+        --campaign_corrangamiteEggplantLight: #B273B2;
+        --campaign_gannarawwaPink:            #D00236;
+        --campaign_gannarawwaPinkLight:       #EE5F83;
+        --campaign_surfCoastTeal:             #00848F;
+        --campaign_surfCoastTealLight:        #47ABB4;
+        --campaign_queenscliffeMarine:        #0A3055;
+        --campaign_queenscliffeMarineLight:   #7991A9;
+        --campaign_milduraOrange:             #D3410B;
+        --campaign_milduraOrangeLight:        #F2855D;
+        --campaign_otwaysGreen:               #008848;
+        --campaign_otwaysGreenLight:          #8DBF87;
+            /** NEW BRAND GUIDELINES **/
+            --chartLightGreen:  #cbe197;
+            --chartGray:        #b1b1b0;
+            --chartTeal:        #52baba;
+            --chartEmerald:     #00502e;
+            --chartPowderBlue:  #9bddfa;
+            --chartGreen:       #77bf00;
+            --chartDarkGreen:   #009857;
+            --chartOrange:      #cea98d;
+            --chartBlue:        #00568f;
+            --chartPurple:      #816bb4;
+            --chartLightGrey:   #cfcfcf;
+            --chartYellow:      #ffd300;
+
+    }
+
+        /****************************/
+        /*** IMPORTED FONTS       ***/
+        /****************************/
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('../fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('../fonts/DINNextLTPro-Bold.woff') format('woff'),
+                    url('../fonts/DINNextLTPro-Bold.ttf') format('truetype');
+                font-weight: 700;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Bold'), local('DIN-Next-LT-Pro-Bold'),
+                    url('../fonts/DINNextLTPro-Light.woff2') format('woff2'),
+                    url('../fonts/DINNextLTPro-Light.woff') format('woff'),
+                    url('../fonts/DINNextLTPro-Light.ttf') format('truetype');
+                font-weight: 300;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src: local('DIN Next LT Pro Ultra Light'), local('DIN-Next-LT-Pro-Ultra-Light'),
+                    url('../DINNextLTPro-UltraLight.woff2') format('woff2'),
+                    url('../DINNextLTPro-UltraLight.woff') format('woff'),
+                    url('../DINNextLTPro-UltraLight.ttf') format('truetype');
+                font-weight: 200;
+                font-style: normal;
+            }
+
+
+            /***************************/
+            /*****  TYPOGRAPHY       ***/
+            /***************************/
+
+            body{
+                font-family: 'DIN Next LT Pro';
+            }
+    .hidden{ 
+        display: none;
+    }
+    h1{
+        color: var(--chartEmerald)
+    }
+    /******************************/
+    /* FLOW VISUALISATION STYLING */
+    /******************************/
+
+    .node{
+        cursor: pointer;
+    }
+    .node:hover{
+
+    }
+    .node.source{ 
+        stroke: #fff;
+        stroke-width: 8px;
+    }
+    .node.target{ 
+        stroke: #fff;
+        stroke-width: 8px;
+    }
+    .node-group-arrow{
+    }
+    .node-arrow{
+        fill: #fff;
+        opacity: 0.25;
+    }
+    .linkLabel{
+        text-shadow: #fff 1px 1px 3px
+    }
+    .linkLabel.local-reprocessing,
+    .linkLabel.local-reprocessing.destination-colour,
+    .node.local-reprocessing, 
+    .nodeLabel.local-reprocessing{ 
+        fill: var(--chartDarkGreen);
+    }
+    .linkLabel.export,
+    .linkLabel.export.destination-colour,
+    .node.export, 
+    .nodeLabel.export{ 
+        fill: var(--chartTeal);
+    }
+    .linkLabel.landfill,
+    .linkLabel.landfill.destination-colour,
+    .node.landfill, 
+    .nodeLabel.landfill{ 
+        fill:  var(--chartGray);
+    }
+    .linkLabel.paper-and-paperboard, 
+    .linkLabel.paper-and-paperboard.collection-colour, 
+    .node.paper-and-paperboard, 
+    .nodeLabel.paper-and-paperboard{ 
+        fill: var(--chartYellow);
+    }
+    .linkLabel.glass, 
+    .linkLabel.glass.collection-colour, 
+    .node.glass, 
+    .nodeLabel.glass{ 
+        fill:  var(--chartPurple);
+    }
+    .linkLabel.plastic,
+    .linkLabel.plastic.collection-colour,
+    .node.plastic,
+    .nodeLabel.plastic{ 
+        fill: var(--campaign_gannarawwaPinkLight);
+    }
+    .linkLabel.metal,
+    .linkLabel.metal.collection-colour,
+    .node.metal,
+    .nodeLabel.metal{ 
+        fill: var(--campaign_queenscliffeMarineLight);
+    }
+    .linkLabel.contamination,
+    .linkLabel.contamination.collection-colour,
+    .node.contamination,
+    .nodeLabel.contamination{ 
+        fill: var(--chartOrange);
+    }
+    .link-group{
+        mix-blend-mode: multiply;
+    }
+    .link{
+        fill: none;
+        cursor: pointer;
+    }
+    .link.collection_destination,
+    .link.destination_collection,
+    .link.destination_landfill,
+    .landfill-arrow{
+        opacity: 0.2;
+    }
+    .link.collection_destination.monochrome,
+    .link.destination_collection.monochrome,
+    .link.destination_landfill.monochrome{
+        stroke: #000;
+        opacity: 0.1;
+    }
+    .link.destination_collection{
+        opacity: 0.2;
+    }
+    .link.destination_landfill{
+        stroke: #000;
+    }
+    .link:hover{
+        opacity: 0.8;
+    }
+    .landfill-arrow{
+        fill: #000;
+    }
+    .title-label-group{
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+    .title-label{
+        font-family:    'DIN Next LT Pro';
+        font-size:      60px;
+        font-weight:    bold;
+        text-anchor:    middle;
+    }
+    .title-label.small{
+        font-size: 32px;
+    }
+    .title-label.collection,
+    .node-group-arrow.collection{ 
+        fill: url(#collection-gradient)
+    }
+    .title-label.destination,
+    .node-group-arrow.destination{
+        fill: url(#destination-gradient)
+    }
+    .title-label.recycling,
+    .node-group-arrow.recycling{
+        fill: url(#recycling-gradient)
+    }
+    .annotationPath{
+        stroke: none;
+        fill: none;
+    }
+    .layer{
+        transition: transform 3s ease-in-out;	
+        transform-origin: 50% 50% 0px;	
+    }
+    .layer.isometric{
+        transform: rotateY(0deg) rotateX(55deg) rotateZ(45deg) scale(0.95);
+        transform-origin: 50% 50% 0px;
+    }
+    .label.node,
+    .label.node.unit{
+        font-family: 'DIN Next LT Pro';
+        fill: #fff;
+        text-anchor: middle;
+        font-weight: bold;
+        stroke: none;
+    }
+    .nodeLabelPath{
+        stroke: none;
+        stroke-width: 0px;
+        fill: none;
+    }
+    .nodeLabel.textOnPath{
+        font-family: 'DIN Next LT Pro';
+        font-size: 20px;
+        font-weight: bold;
+        cursor: none;
+        text-shadow: #fff 5px 5px 10px;
+    }
+    .node-label-centered{
+        pointer-events: none;
+    }
+    .linkLabel{
+        font-size: 14px;
+        font-weight: bold;
+        pointer-events: none;
+    }
+
+    /* Chart toggle button */
+    .chart-selector-container {
+        display: grid;
+        align-items: center;
+        justify-items: end;
+        padding: 0 5%   ;
+    }
+    .onoffswitch{
+        position: relative; width: 210px;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    }
+    .onoffswitch-checkbox {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 2px solid #999999; border-radius: 20px;
+    }
+    .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+        font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+        box-sizing: border-box;
+    }
+    .onoffswitch-inner:before {
+        padding-left: 10px;
+        background-color: #4e5658; color: #FFFFFF;
+    }
+    .onoffswitch-inner:after {
+        padding-right: 10px;
+        background-color: #EEEEEE; color: #999999;
+        text-align: right;
+    }
+    .onoffswitch-switch {
+        display: block; width: 20px; margin: 5px;
+        background: #FFFFFF;
+        position: absolute; top: 0; bottom: 0;
+        right: 176px;
+        border: 2px solid #999999; border-radius: 20px;
+        transition: all 0.3s ease-in 0s; 
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px; 
+    }
+    /* Dropdown selector */
+    .selector-container{
+        font-family: 'DIN Next LT Pro';
+        border: 2px solid #999999; border-radius: 20px;
+        width: fit-content;
+        font-size: 14px;
+        background-color: #4e5658; color: #FFFFFF;    
+        height: 30px;
+        line-height: 30px;
+    }
+    .selector-container label,
+    .selector-container select{
+        margin: 5px;
+        background-color: transparent;
+        color: #FFFFFF;
+    }
+    .selector-container label{
+        margin-left: 15px;
+        font-weight: normal;
+    }
+    .selector-container select{
+        border: none;
+        font-family: 'DIN Next LT Pro';
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+    .selector-container select:focus{
+        outline: none;
+    }
+
+
+    .flow-diagram .onoffswitch-inner:before {
+        content: "Collection to destination ";
+    }
+    .flow-diagram .onoffswitch-inner:after {
+        content: "Recycling flows";
+    }
+
+    .flow-icon{
+        transition: transform 1s ease-in-out;	
+        pointer-events: none;
+    }
+    .flow-icon.text-header{
+        font-family: 'DIN Next LT Pro';
+        font-weight: bold;
+        font-size: 30px;
+        opacity: 0.8;
+    }
+    .flow-icon.text{
+        font-weight: bold;
+        font-size: 20px;
+        opacity: 0.8;
+    }

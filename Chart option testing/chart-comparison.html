@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Highcharts exploration">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/data.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/chartStyle.css"/>
+
+        <style>
+            :root {
+                --svGreen:                            #9ACA3C;
+                --gippslandGreen:                     #CED99E;
+                --secondary_greatOceanBlue:           #0070BB;
+                --secondary_hepburnClay:              #9B0B32;
+                --secondary_meredithGold:             #E3BA5A;
+                --campaign_corrangamiteEggplant:      #550055;
+                --campaign_corrangamiteEggplantLight: #B273B2;
+                --campaign_gannarawwaPink:            #D00236;
+                --campaign_gannarawwaPinkLight:       #EE5F83;
+                --campaign_surfCoastTeal:             #00848F;
+                --campaign_surfCoastTealLight:        #47ABB4;
+                --campaign_queenscliffeMarine:        #0A3055;
+                --campaign_queenscliffeMarineLight:   #7991A9;
+                --campaign_milduraOrange:             #D3410B;
+                --campaign_milduraOrangeLight:        #F2855D;
+                --campaign_otwaysGreen:               #008848;
+                --campaign_otwaysGreenLight:          #8DBF87;
+                --monochrome_youYangsGranite:         #B2B2B2;
+                --monochrome_lakeMountainMorning:     #CCCCCC;
+                --monochrome_mtBullaMist:             #E5E5E5;
+            }
+
+            /* Typefaces */
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700&display=swap');
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src:  url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Bold.woff') format('woff');
+            }
+            body {
+                padding: 2vw;
+                font-family: 'Roboto';
+                font-weight: 100;
+                font-weight: 100;
+                line-height: 150%;  
+             }
+            .header-content-container{
+
+            }
+            .chart-type-title {
+                opacity: 0.3;
+                font-family: 'DIN Next LT Pro';
+                font-size: 0.8rem;
+                font-weight: bold;
+            }
+            .chart-group-container{
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+                padding-top: 0.5rem;
+                border-top: 1px solid #ddd;
+            }
+            .chart-type-title{
+                grid-area: 1 / 1/ 2/ 3;
+                column-gap: 2vw;
+                padding-bottom: 1rem;
+            }
+            .chart-container{
+                grid-area: 2 / 1 / 3/ 2;
+            }
+            .chart-notes{
+                grid-area: 2 / 2 / 3/ 3;
+                border-left: 1px solid #ddd;
+                padding-left: 3vw;
+                margin-bottom: 2vw;
+                margin-left: 2vw;
+            }
+            .powerBI-container{
+                width: 100vw;
+            }
+        </style>
+
+    </head>
+
+
+    <body>
+        <div class = "header-content-container"> 
+            <h1>Comparison of chart options</h1>
+            <p>This page contains the same basic line chart built from different charting and visualisation libraries. Its purpose is to test how each renders or embeds into an HTML page through an iframe</p>
+            <p>Key features we're looking for:</p>
+            <ul>
+                <li>Responsive design: that it scales with browser/screen size</li>
+                <li>Styling options: Layout adjustments (incl. padding) and typographic options that are consistent with the SV website</li>    
+                <li>Interactivity options: available, customisation and </li>
+                <li>Data filtering options: In this chart we'd ideally like to who the last 12 mths of data and give the option to the user to zoom out/pan back in time</li>      
+                <li>Series filtering options: In this chart we'd ideally want the user to be able to select </li>      
+            </ul>
+        </div>
+
+        <div class = "chart-group-container">
+            <div class = 'chart-type-title'>Power BI ("hacked" for improved styling and standard)</div>
+            <div>
+                <iframe width="100%"  height="600px" src="https://app.powerbi.com/view?r=eyJrIjoiYjYyZDE1NmMtY2I2Yi00NGU1LWE5MDYtYTNiZWZlM2Q1NmNkIiwidCI6IjYyMDlhMzYwLTIwMGUtNDI5Yy04MDQ4LWVjMTQ3NDdjOGIwYyJ9&pageName=ReportSection" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
+            <div class = "chart-notes">
+                <div>PowerBI embedding notes</div> 
+                <ul>
+                    <li>To embed we need the SV MS admin to enable it for users (this has been done on a different account to test here)</li>
+                    <li>The banner must go. Apparently we need the Pro license for this</li>
+                    <li>There is apparently a <a ref="https://powerbi.microsoft.com/en-us/power-bi-embedded/" target="_blank">Power BI Embedded</a> application for this (needs investigation)</li>
+                    <li>The first version has some stylistic hacking for adjusting the padding on the y-axis label, title and legend. A subtitle is also added. The axis label and legend hacks however probably can tbe used in production unless there is a way to disable them being interacted with</li>
+                    <li>The second version is the 'pure' PowerBI chart. It has limited options for</li>
+                    <li>Charts aren't really responsive (the height has to be set adn the positioning always floats to center </li>
+                    <li>PowerBI is embedding the entire report which we don't particularly want in some cases (we just a simple chart). A report can of course be made with just the one chart. </li>
+                    <li>Load times are very slow. </li>
+                    <li>Tooltip interactivity is janky/laggy</li>
+                    <li>The tooltips on the MS banner are also awkward (they don't disappear until you click theme again). The fullscreen option is good though </li>
+                    <li>The data/time slicer on the x-axis works well and has to be set manually for the last 12m +ths. It is however, fairly ugly / placed too close to the axis and lacks instruction (this can be added ) </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class = 'chart-group-container'>
+            <div class = 'chart-type-title'>High Charts library (not the CraftCMS module)</div>
+            <div class = "chart-container">
+                <iframe width="100%"  height="600px" src="https://littlesketches.github.io/SV-charts/lineChart-test-highchart.html" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
+            <div class = "chart-notes">
+                <div>High Charts embedded chart notes</div> 
+                <ul>
+                    <li>This is a chart made with the HighCharts library and embedded. The HighCharts library itself has a lot more functionality and customisation options that aren't (yet) exposed in the CraftCMS modules</li>
+                    <li>This chart is made to explore what HighCharts can do</li>
+                    <li>Responsive design needs a bit more investigation - it can be done but involves setting CSS breakpoints</li> 
+                    <li>Load time is reasonable and tooltip interactivity is responsive </li>
+                    <li>The data/time slicer on the x-axis can't easily be set to the last 12mths. In this example code is called to set the zoom after the chart loads (hence the poor start animation)  </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class = 'chart-group-container' style="padding-bottom: 10vh">
+            <div class = 'chart-type-title'>D3 chart</div>
+            <div class = "chart-container">
+                <iframe width="100%"  height="600px" src="https://littlesketches.github.io/SV-charts/lineChart-test-d3.html" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
+            <div class = "chart-notes">
+                <div>D3 embedded chart notes</div> 
+                <ul>
+                    <li>This is a chart made with d3.js, so has the widest set of customisation and scripting option (for data processing, setting views an interactivity)s</li>
+                    <li>It hasn't been completed (as it may not be used); so is currently missing a slicer tooltip, and the interactivity to select a date range (all these can be added)</li>
+                    <li>It does have a view filter option that is lacking in HighCharts and needs to be investigated with PowerBI. Both can 'kind of' do it but the interface is not very good </li> 
+                    <li>Load time is reasonable and tooltip interactivity is responsive (thes do however, need to be enhanced) </li>
+                    <li>This chart also uses where direct labelling of the last data point in place of the legend. There is a hack for Power BI to do this, and HighCharts has a similar but not quite right feature that places direct labels in a 'best place' (which ends up not being great). The desire teo direct label the last point is that its the current point of interest, and it makes the legend redundant    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </body>
+
+</html>
+

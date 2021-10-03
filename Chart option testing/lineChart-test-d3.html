@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Highcharts exploration">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+
+        <style>
+            :root {
+                --svGreen:                            #9ACA3C;
+                --gippslandGreen:                     #CED99E;
+                --secondary_greatOceanBlue:           #0070BB;
+                --secondary_hepburnClay:              #9B0B32;
+                --secondary_meredithGold:             #E3BA5A;
+                --campaign_corrangamiteEggplant:      #550055;
+                --campaign_corrangamiteEggplantLight: #B273B2;
+                --campaign_gannarawwaPink:            #D00236;
+                --campaign_gannarawwaPinkLight:       #EE5F83;
+                --campaign_surfCoastTeal:             #00848F;
+                --campaign_surfCoastTealLight:        #47ABB4;
+                --campaign_queenscliffeMarine:        #0A3055;
+                --campaign_queenscliffeMarineLight:   #7991A9;
+                --campaign_milduraOrange:             #D3410B;
+                --campaign_milduraOrangeLight:        #F2855D;
+                --campaign_otwaysGreen:               #008848;
+                --campaign_otwaysGreenLight:          #8DBF87;
+                --monochrome_youYangsGranite:         #B2B2B2;
+                --monochrome_lakeMountainMorning:     #CCCCCC;
+                --monochrome_mtBullaMist:             #E5E5E5;
+            }
+
+            /* Typefaces */
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700&display=swap');
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src:  url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Bold.woff') format('woff');
+            }
+            .single-chart-container{
+                width: 100%;
+                height: auto;
+            }
+
+            /* Typefaces */
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700&display=swap');
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src:  url('../fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('../fonts/DINNextLTPro-Bold.woff') format('woff');
+            }
+            h1 {
+                font-family: 'DIN Next LT Pro';
+            }
+            /* Set font family for all chart label elements */
+            svg .series-label,
+            svg.line-chart .axis text,
+            svg.layer-chart .axis text,
+            svg .axis-label {
+                font-family: 'Roboto';
+            }
+
+            /* Tooltip styling */
+            .tooltip {
+                fill: #2b2929;
+                pointer-events: none;
+            }
+            .tooltip-x{
+                font-size: 10px;
+                font-weight: 200;
+            }
+            .tooltip-y{
+                font-size: 15px;
+            }
+
+
+            /********************/
+            /**  LINE CHARTS  ***/
+            /********************/
+            svg.line-chart .axis path,
+            svg.line-chart .axis line{
+                stroke-width: 0.25px;
+            }
+            /* Points on line series */
+            svg .all-points-group circle,
+            svg .points-group circle {
+                stroke: #fff;
+                stroke-width: 0.75px;
+            }
+            svg .line{
+                fill: none;
+                stroke-width: 2.5px;
+            }
+            /* Line-layer Series labelling */
+            svg .series-label{
+                font-family: 'DIN Next LT Pro';        
+                font-weight: normal;
+                font-size: 14px;
+                cursor: pointer;
+                dominant-baseline: middle;
+            }
+            svg .series-sublabel{
+                font-family: 'DIN Next LT Pro';   
+                font-size: 10px;
+                cursor: pointer;
+            }
+            svg#chart-vic-commodity-prices .series-label{
+                font-size: 10px;
+            }
+
+            /* Axes labelling and appearances\ */
+            svg.line-chart .axis text,
+            svg.layer-chart .axis text{
+                font-weight: normal;
+                font-size: 8px;
+                fill:rgb(150, 150, 150)
+            }
+            /* Axes labelling */
+            svg .axis-label{
+                font-family: 'DIN Next LT Pro';   
+                font-size: 12px;
+                font-weight: bold;
+                fill:rgb(150, 150, 150);
+            }
+            svg .axis-label.x,
+            svg .axis-label.y{
+                text-anchor: end
+            }
+            svg.line-chart .axis.y-axis path,
+            svg.layer-chart .axis.y-axis path,
+            svg.line-chart .axis.x-axis path,
+            svg.layer-chart .axis.x-axis path{
+                display: none;
+            }
+
+            #chart-vic-export-materials .axis.x-axis path,
+            #chart-MRF-outputs .axis.x-axis path{
+                display: none;
+            }
+            /* Rotate and placement of x-axis labels */
+            svg.line-chart .axis.x-axis text,
+            svg.layer-chart .axis.x-axis text{
+                text-anchor: end;
+                transform: translate(-4px, 2px) rotate(-45deg);
+            }
+
+            /* Special offsetting and x axis for charts with negative values */
+            #chart-MRF-storage .axis.x-axis text{
+                text-anchor: end;
+                transform: translate(-4px, 50px) rotate(-45deg);
+            }
+            #chart-vic-commodity-prices .axis.x-axis text{
+                text-anchor: end;
+                transform: translate(-4px, 100px) rotate(-45deg);
+            }
+
+            svg.layer-chart#chart-MRF-storage  .axis.x-axis path,
+            svg.layer-chart#chart-vic-commodity-prices  .axis.x-axis path{
+                display: normal;
+            }
+
+        /* Charts series colour palettes for text, line  and layer series */
+            /* Materials flows charts*/
+            .local-reprocessing,
+            .local-reprocessing-or-storage,
+            .local-reprocessing-or-stockpiles{
+                fill: var(--svGreen);
+            }
+            .local-reprocessing.line,
+            .local-reprocessing-or-storage.line,
+            .local-reprocessing-or-stockpiles.line {
+                stroke: var(--svGreen);
+            }
+            .export {
+                fill: var(--campaign_surfCoastTealLight);
+            }
+            .export.line {
+                stroke: var(--campaign_surfCoastTealLight);
+            }
+            .landfill {
+                fill: var(--monochrome_youYangsGranite);
+            }
+            .landfill.line {
+                stroke: var(--monochrome_youYangsGranite);
+            }
+
+
+            /* Dropdown selector */
+            .selector-container{
+                font-family: 'DIN Next LT Pro';
+                border: 2px solid #999999; border-radius: 20px;
+                width: fit-content;
+                font-size: 14px;
+                background-color: #4e5658; color: #FFFFFF;    
+                height: 30px;
+                line-height: 30px;
+            }
+            .selector-container label,
+            .selector-container select{
+                margin: 5px;
+                background-color: transparent;
+                color: #FFFFFF;
+            }
+            .selector-container label{
+                margin-left: 15px;
+                font-weight: normal;
+            }
+            .selector-container select{
+                border: none;
+                font-family: 'DIN Next LT Pro';
+                font-size: 14px;
+                font-weight: bold;
+                margin-right: 15px;
+            }
+            .selector-container select:focus{
+                outline: none;
+            }
+
+        </style>
+    </head>
+
+
+    <body>
+        <h1>Destination of collected kerbside waste</h1>
+        <div class = "single-chart-container">
+            <svg id ="chart-MRF-destinations"></svg>
+        </div>
+
+        <script>
+            /////////////////////////////////////////
+            ///// CHARTING METHODS               ////
+            /////////////////////////////////////////
+
+            const charts = {
+                line: {
+                    methods: {}    
+                },
+                layer: {
+                    methods: {}   
+                }
+            }
+
+            /////////////////////////////////////////
+            //// MULTI-LINE TIME SERIES CHART   /////
+            /////////////////////////////////////////
+
+            charts.line.methods.renderMultiGroupLineChart = (svgID, data, settings) => {
+                //------------------- 0. SETUP CHART DIMENSIONS, REFERENCES AND DATA OBJECTS -------------------------//
+                    charts[svgID] = {
+                        data:           {},
+                        labelFormat:    {},
+                        state:          {}             
+                    }
+                    // Set SVG and chart group dims
+                    const svg = d3.select('#'+svgID).classed('line-chart interactive', true),
+                        chartHeight = settings.dims.height - settings.dims.margin.top - settings.dims.margin.bottom,
+                        chartWidth = settings.dims.width - settings.dims.margin.left - settings.dims.margin.right,
+                        chartGroup = svg.append('g').classed('chart-group', true).attr('transform', `translate(${settings.dims.margin.left}, ${settings.dims.margin.top})`)
+
+                    svg.attr("viewBox", `0 0 ${settings.dims.width} ${settings.dims.height}`)
+                        .attr('preserveAspectRatio', 'xMidYMid meet')
+                        .attr('width', '100%')
+
+                    // Filter data for date range
+                    const dateFilter = d => d.date >= helpers.numberParsers.parseDateSlash(settings.axis.x.start) && d.date <= helpers.numberParsers.parseDateSlash(settings.axis.x.end)
+
+                //--------- 1. SETUP CHART OPTIONS AND SERIES DATA | OPTION FOR INTERACTIVE FEATURES ------------------//
+                    if(settings.config.interactive){
+                        // a. Extract and set series and scales
+                        charts[svgID].series  = [...new Set(Object.keys(data[0]).filter(d => d !== 'date').map(d => d.slice(0, d.indexOf('_'))))].sort() 
+                        charts[svgID].chartOptions  = [...new Set(Object.keys(data[0]).filter(d => d !== 'date').map(d => d.slice(d.indexOf('_') + 1)))].sort() 
+                        charts[svgID].seriesClass = charts[svgID].series.map(d => helpers.slugify(d))
+
+                        // b. Create grouped data object
+                        charts[svgID].chartOptions.forEach( group => {
+                            charts[svgID].data[group] = data.map(object => {
+                                const obj = {date: object.date}
+                                charts[svgID].series.forEach(seriesName => {
+                                    obj[seriesName] = object[`${seriesName}_${group}`]
+                                })
+                                return obj
+                            })
+                        })
+
+                        // c. Add a dropdown selector for series grouping
+                        const svgContainer = d3.select(svg.node().parentNode),
+                            selectorContainer = svgContainer.insert("div",`#${svgID}`)
+                                            .classed('selector-container', true),
+                            selectorLabel = selectorContainer.append('label')
+                                            .attr('for', `${svgID}-materials`)
+                                            .html('View:')
+                            selectGroup = selectorContainer.append('select')
+                                            .attr('id', `${svgID}-selector`)
+                                            .attr('name', `${svgID}-materials`)
+                                            .on('change', function(){ charts.line.methods.updateInteractiveLineChart(this, svgID, settings)} )
+
+                        charts[svgID].chartOptions.forEach( group =>  selectGroup.append('option').attr('value', group).html(group) )
+                    }
+
+                    // d. Set current state, (starting) chart data amd selector
+                    charts[svgID].state.dataGroup = settings.group ? settings.group : selectGroup.node().value  
+                    charts[svgID].chartData = charts[svgID].data[charts[svgID].state.dataGroup]
+                    document.getElementById(`${svgID}-selector`).value = charts[svgID].state.dataGroup 
+
+                    // e. Shape series data into slices for rendering:
+                    const seriesData = charts[svgID].chartData.map(d => { 
+                        const newObj = {}
+                        Object.entries(d).forEach(([key, value]) => {
+                            if(settings.series.indexOf(key) > -1 || key === 'date' || key === 'year'){
+                                newObj[key] = value
+                            }
+                        })
+                        return newObj
+                    }).filter(dateFilter)
+
+                    const slices = []
+                    settings.series.forEach(series => {
+                        slices.push( {
+                            [series]: seriesData.map(d => { 
+                                return {
+                                    date:       d.date, 
+                                    value:      d[series] 
+                                } 
+                            })
+                        })
+                    })
+
+
+                //----------------------------- 2. SET UP SCALES AND AXES -----------------------------//
+                    // a. Setup axes scales from series data
+                    const maxVolume = d3.max(seriesData.map(d => d3.max(Object.values(d).slice(1)) )),
+                        minVolume = d3.min([d3.min(seriesData.map(d => d3.min(Object.values(d).slice(1)))), 0])
+                    charts[svgID].scales = { xScale: null, yScale: null}
+
+                    switch(settings.scales.x.type){
+                        case 'time':
+                            charts[svgID].scales.xScale = d3.scaleTime().range([0, chartWidth]).domain(d3.extent(data.filter(dateFilter), d => d.date))
+                            break
+                        case 'linear':
+                            charts[svgID].scales.xScale = d3.scaleLinear().range([0, chartWidth]).domain(d3.extent(data.filter(dateFilter), d => d.date))
+                            break
+                    }
+                    switch(settings.scales.y.type){
+                        case 'linear':
+                            charts[svgID].scales.yScale = d3.scaleLinear().rangeRound([chartHeight, 0]).domain([ minVolume, maxVolume]).nice()
+                            break
+                    }
+
+                    // b. Set axes label formatting
+                    switch(settings.scales.y.unit){
+                        case 'number':
+                            charts[svgID].labelFormat.yFormat = d3.format(",.0f")	
+                            break
+                        case 'price':
+                            charts[svgID].labelFormat.yFormat = d3.format("$.1f")
+                            break
+                        default:
+                            charts[svgID].labelFormat.yFormat = d3.format(",.0f")	
+                    }
+                    switch(settings.scales.x.unit){
+                        case 'date':
+                            charts[svgID].labelFormat.xFormat = d3.timeFormat('%b %Y')
+                            break
+                        default:
+                            charts[svgID].labelFormat.xFormat = d3.timeFormat('%b %Y')
+                    }
+
+                    charts[svgID].axis = {
+                        x:  d3.axisBottom()
+                                .tickSize(4)
+                                .tickSizeOuter(0)
+                                .tickValues(charts[svgID].scales.xScale.ticks(10).concat(charts[svgID].scales.xScale.domain()[1]))
+                                .tickFormat(charts[svgID].labelFormat.xFormat)         // All month-year format (for now)
+                                .scale(charts[svgID].scales.xScale),
+
+                        y: d3.axisLeft()
+                                .ticks(5)
+                                .tickFormat(charts[svgID].labelFormat.yFormat)
+                                .scale(charts[svgID].scales.yScale)
+                    }
+
+                    // c. Append and call the axes rendering functions
+                    chartGroup.append("g").attr("class", "axis x-axis")
+                        .attr("transform", "translate(0," + (charts[svgID].scales.yScale(0) - settings.axis.x.offset)+ ")")
+                        .call(charts[svgID].axis.x);
+
+                    chartGroup.append("g").attr("class", "axis y-axis")
+                        .call(charts[svgID].axis.y)
+
+                //---------------------- 3. ACCESSORS, SHAPE GENERATOR AND RENDERING OF LINES -------------------------//
+                    const xAccessor = d => charts[svgID].scales.xScale(d.date)
+                    const yAccessor = d => charts[svgID].scales.yScale(d.value) 
+
+                    const line = d3.line().curve(d3.curveMonotoneX) 
+                        .x(xAccessor)
+                        .y(yAccessor)
+                        
+                    const lineGroup = chartGroup.append("g").classed("lines-group", true);
+
+                    const lines = lineGroup.selectAll(".line")
+                        .data(slices)
+                        .join("path")
+                            .attr("class", d => `${helpers.slugify(Object.keys(d)[0])} line`)
+                            .attr("d", d => line(Object.values(d)[0]) )
+
+
+                //---------------------------- 4. SERIES AND AXES LABELS -----------------------------//
+                    const annotationGroup = chartGroup.append("g").classed("labels-group", true);
+                    const getDatumObj  = d => { return {
+                                                    id: Object.keys(d)[0],
+                                                    data: Object.values(d)[0][Object.values(d)[0].length - 1]
+                                                }
+                                            }
+
+                    // a. Series labels
+                    annotationGroup.selectAll(".series-label")
+                        .data(slices)
+                        .join('text')
+                            .attr("class", d => helpers.slugify(Object.keys(d)[0])+" series-label")
+                            .datum(getDatumObj)
+                            .attr("transform", (d, i) => `translate(${charts[svgID].scales.xScale(d.data.date) + 10 + settings.labelOffset[i].x} ,  ${charts[svgID].scales.yScale(d.data.value) + settings.labelOffset[i].y})` )
+                            .text( d => `${d.id}: ${charts[svgID].labelFormat.yFormat(d.data.value)} ${settings.axis.y.unit}`)
+                                .on('mouseover', labelMouseover)
+                                .on('mouseout', labelMouseout)
+
+                    // b. Axes labels
+                    const yLabel = annotationGroup.append("g")
+                        .attr("class", "axis-label y-axis")
+                        .attr("transform", "translate(-50, -5) rotate(-90) ")
+                    yLabel.append("text").classed('axis-label y', true)
+                        .attr("dy", ".75em")
+                        .text(settings.axis.y.label)
+
+                    const xLabel = annotationGroup.append("g")
+                        .attr("class", "axis-label x-axis")
+                        .attr("transform", `translate(${chartWidth}, ${chartHeight})`)
+                    xLabel.append("text").classed('axis-label x', true)
+                        .attr("dy", "50")
+                        .text(settings.axis.x.label)
+
+                    // c. Custom labels 
+                        // i. Landfill series description sub-label: added to landfill label to differentiate contamination and garbage collections
+                        if(charts[svgID].series.indexOf('Landfill') > -1){
+                            annotationGroup.selectAll(".series-sublabel")
+                                .data(slices)
+                                .join('text')
+                                    .attr("class", d => helpers.slugify(Object.keys(d)[0])+" series-sublabel")
+                                    .datum(getDatumObj)
+                                    .attr("transform", (d, i) => `translate(${charts[svgID].scales.xScale(d.data.date) + 10 + settings.labelOffset[i].x} , ${charts[svgID].scales.yScale(d.data.value) + 5 + settings.labelOffset[i].y})` )
+                                    .attr("dy", 6)
+                                    .text( d => d.id === 'Landfill' ? 'from contaminated materials' : '' )
+                                    .style('display', d => d.id === 'Landfill' ?  'auto' : 'none')
+                                        .on('mouseover', labelMouseover)
+                                        .on('mouseout', labelMouseout)
+                        }
+
+
+                //--------------------------- 5. DATA CIRCLE POINTS -----------------------------// 
+                const pointsGroup = chartGroup.append("g").classed("all-points-group", true),
+                    points = pointsGroup.selectAll(`#${svgID} g.series-points-group`)
+                        .data(slices)
+                        .join("g").attr('class', d=> helpers.slugify(Object.keys(d)[0])+' series-points-group')
+
+                points.selectAll(`#${svgID} g.linePoints-group`)
+                    .append('g').classed('linePoints-group', true)
+                        .data(d => Object.values(d)[0])
+                        .join("circle")
+                            .attr('index', (d,i) => i)
+                            .attr("cx", xAccessor )      
+                            .attr("cy", yAccessor )    
+                            .attr("r", (d, i) =>  i < seriesData.length - 1 ? 2 : 5)
+                            .attr("class","linePoint")
+                            .style("opacity", 1)
+                                .on('mouseover', circleMouseover)                
+                                .on("mouseout", circleMouseout)
+
+                //--- TOOLTIP ----??
+                // append a g for all the mouse over nonsense
+                const mouseG = svg.append("g")
+                    .attr("class", "mouse-over-effects");
+
+                // this is the vertical line
+                mouseG.append("path")
+                    .attr("class", "mouse-line")
+                    .style("stroke", "black")
+                    .style("stroke-width", "1px")
+                    .style("opacity", "0");
+
+                // here's a g for each circle and text on the line
+                var mousePerLine = mouseG.selectAll('.mouse-per-line')
+                    .data(slices)
+                    .enter()
+                    .append("g")
+                    .attr("class", "mouse-per-line");
+
+                // the circle
+                mousePerLine.append("circle")
+                .attr("r", 7)
+                .style("stroke", function(d) {
+                    return '#000';
+                })
+                .style("fill", "none")
+                .style("stroke-width", "1px")
+                .style("opacity", "0");
+
+                // the text
+                mousePerLine.append("text")
+                .attr("transform", "translate(10,3)");
+
+                // rect to capture mouse movements
+                mouseG.append('svg:rect')
+                    .attr('width', chartWidth)
+                    .attr('height', chartHeight)
+                    .attr('fill', 'none')
+                    .attr('pointer-events', 'all')
+                    .on('mouseout', function() { // on mouse out hide line, circles and text
+                        d3.select(".mouse-line")
+                        .style("opacity", "0");
+                        d3.selectAll(".mouse-per-line circle")
+                        .style("opacity", "0");
+                        d3.selectAll(".mouse-per-line text")
+                        .style("opacity", "0");
+                    })
+                .on('mouseover', function() { // on mouse in show line, circles and text
+                    d3.select(".mouse-line")
+                    .style("opacity", "1");
+                    d3.selectAll(".mouse-per-line circle")
+                    .style("opacity", "1");
+                    d3.selectAll(".mouse-per-line text")
+                    .style("opacity", "1");
+                })
+                .on('mousemove', function() { // mouse moving over canvas
+                    var mouse = d3.mouse(this);
+
+                    // move the vertical line
+                    d3.select(".mouse-line")
+                    .attr("d", function() {
+                        var d = "M" + mouse[0] + "," + chartHeight;
+                        d += " " + mouse[0] + "," + 0;
+                        return d;
+                    });
+
+                    // position the circle and text
+                    d3.selectAll(".mouse-per-line")
+                        .attr("transform", function(d, i) {
+                            console.log(chartWidth/mouse[0])
+                            var xDate = charts[svgID].scales.xScale.invert(mouse[0]),
+                                bisect = d3.bisector(function(d) { return d.date; }).right;
+console.log(d)
+console.log(xDate, bisect)
+                                idx = bisect(d.values, xDate);
+
+                        // since we are use curve fitting we can't relay on finding the points like I had done in my last answer
+                        // this conducts a search using some SVG path functions
+                        // to find the correct position on the line
+                        // from http://bl.ocks.org/duopixel/3824661
+                        var beginning = 0,
+                            end = lines[i].getTotalLength(),
+                            target = null;
+
+                        while (true){
+                        target = Math.floor((beginning + end) / 2);
+                        pos = lines[i].getPointAtLength(target);
+                        if ((target === end || target === beginning) && pos.x !== mouse[0]) {
+                            break;
+                        }
+                        if (pos.x > mouse[0])      end = target;
+                        else if (pos.x < mouse[0]) beginning = target;
+                        else break; //position found
+                        }
+
+                        // update the text with y value
+                        d3.select(this).select('text')
+                        .text(y.invert(pos.y).toFixed(2));
+
+                        // return position
+                        return "translate(" + mouse[0] + "," + pos.y +")";
+                    });
+                });
+
+                //------------------------ 6. EVENT LISTENERS --------------------------//    
+                function circleMouseover(d){
+                    const selection = d3.select(this),
+                        otherSeries = settings.series.map(d => helpers.slugify(d)).filter(d => d !== this.parentNode.classList[0]).map(d => '.'+d),
+                        xLabel = charts[svgID].labelFormat.xFormat(seriesData[+this.getAttribute('index')].date)
+                    charts.tooltip.transition().duration(200).delay(30)
+                        .style("opacity", 1);
+                    charts.tooltip.html(`<div class="tooltip-x">${xLabel}</div> 
+                                <div class="tooltip-y">${charts[svgID].labelFormat.yFormat(d.value)} ${settings.axis.y.unit}</div>`)
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 35) + "px");
+                    selection.transition().duration(50).delay(0)             
+                        .attr("r", 5)
+                    d3.select('.series-label.'+this.parentNode.classList[0])
+                        .style('font-weight', 'bold')            
+                    d3.selectAll(otherSeries.toString()).classed('blur', true)
+                }; // end circleMouseover
+
+                function circleMouseout(d){
+                    const selection = d3.select(this),
+                        seriesClassSelector = settings.series.map(d => '.'+helpers.slugify(d)).toString()
+                    charts.tooltip.transition().duration(100)      
+                        .style("opacity", 0);  
+                    selection.transition().delay(20).duration(200)
+                        .attr("r", d=> +this.getAttribute('index') < seriesData.length - 1 ? 2 : 5)
+                        .style("opacity", null);
+                    d3.select('.series-label.'+this.parentNode.classList[0])
+                        .style('font-weight', null)    
+                    d3.selectAll(seriesClassSelector).classed('blur', false)
+                }; // end circleMouseout
+
+                function labelMouseover(d){
+                    const selection = d3.select(this),
+                        otherSeries = settings.series.map(d => helpers.slugify(d)).filter(d => d !== this.classList[0]).map(d => '.'+d),
+                        xLabel = charts[svgID].labelFormat.xFormat(seriesData[+this.getAttribute('index')].date)
+                    d3.select('.series-label.'+this.classList[0])
+                        .style('font-weight', 'bold')    
+                    d3.selectAll(otherSeries.toString()).classed('blur', true)
+                }; // end circleMouseover
+
+                function labelMouseout(d){
+                    const selection = d3.select(this),
+                        seriesClassSelector = settings.series.map(d => '.'+helpers.slugify(d)).toString()
+                    selection.transition().delay(20).duration(200)
+                        .attr("r", d=> +this.getAttribute('index') < seriesData.length - 1 ? 2 : 5)
+                        .style("opacity", null);
+                    d3.select('.series-label.'+this.parentNode.classList[0])
+                        .style('font-weight', null)    
+                    d3.selectAll(seriesClassSelector).classed('blur', false)
+                }; // end circleMouseover
+
+
+            }; // end renderMultiGroupLineChart()
+
+
+            charts.line.methods.updateInteractiveLineChart = (selector, svgID, settings) => {
+                const group = selector.value, duration = 2000
+                // Pause pointer events for the duration of the transition
+                d3.selectAll(`#${svgID} *`).style('pointer-events', 'none')
+                setTimeout( () => { d3.selectAll(`#${svgID} *`).style('pointer-events', null)}, duration)
+
+                //------------------------------- 0. UPDATE CHART DATA ---------------------------------//
+                    // a. Set current state and chart data
+                    charts[svgID].state.dataGroup = group
+                    charts[svgID].chartData =  charts[svgID].data[group]
+                    const dateFilter = d => d.date >= helpers.numberParsers.parseDateSlash(settings.axis.x.start) && d.date <= helpers.numberParsers.parseDateSlash(settings.axis.x.end)
+                    const xAccessor = d => charts[svgID].scales.xScale(d.date)
+                    const yAccessor = d => charts[svgID].scales.yScale(d.value) 
+                    const getDatumObj  = d => { return {
+                                                    id: Object.keys(d)[0],
+                                                    data: Object.values(d)[0][Object.values(d)[0].length - 1]
+                                                }
+                                            }
+
+                    const seriesData = charts[svgID].chartData.map(d => { 
+                        const newObj = {}
+                        Object.entries(d).forEach(([key, value]) => {
+                            if(settings.series.indexOf(key) > -1 || key === 'date' || key === 'year'){
+                                newObj[key] = value
+                            }
+                        })
+                        return newObj
+                    }).filter(dateFilter)
+
+                    const slices = []
+                    settings.series.forEach(series => {
+                        slices.push( {
+                            [series]: seriesData.map(d => { 
+                                return {
+                                    date:       d.date, 
+                                    value:      d[series] 
+                                } 
+                            })
+                        })
+                    })
+
+                //----------------------------- 2. SET UP SCALES AND AXES -----------------------------//
+                    // a. Setup scales (y axis)
+                    const maxVolume = d3.max(seriesData.map(d => d3.max(Object.values(d).slice(1)) )),
+                        minVolume = d3.min([d3.min(seriesData.map(d => d3.min(Object.values(d).slice(1)))), 0])
+                    // b. Update X and Y axis
+                    charts[svgID].scales.yScale.domain([ minVolume, maxVolume]).nice()
+                    charts[svgID].axis.y = d3.axisLeft().scale(charts[svgID].scales.yScale).ticks(6)
+                    // c. Call transition to new axis 
+                    d3.select(`#${svgID} .axis.y-axis`)
+                        .transition().duration(duration)
+                        .call(charts[svgID].axis.y)
+
+                //---------------------- 3. UPDATE LINES-------------------------//
+                    const line = d3.line().curve(d3.curveMonotoneX) 
+                        .x(xAccessor)
+                        .y(yAccessor)
+                        
+                    d3.selectAll(`#${svgID} .line`)
+                        .data(slices)
+                        .transition().duration(duration)
+                            .attr("d", d => line(Object.values(d)[0]) )
+
+                //---------------------------- 4. UPDATE LABEL POSITION AND VALUES-----------------------------//
+                    d3.selectAll(`#${svgID} .series-label`)
+                        .data(slices)
+                        .datum(getDatumObj)
+                        .transition().duration(duration)
+                            .attr("transform", (d, i) => `translate(${charts[svgID].scales.xScale(d.data.date) + 10 + settings.labelOffset[i].x}, ${charts[svgID].scales.yScale(d.data.value) + settings.labelOffset[i].y})` )
+                            .tween("text", function(d) {
+                                let that = d3.select(this),
+                                    i = d3.interpolateNumber(parseFloat(this.innerHTML.replace(/\D/g,'')), d.data.value );
+                                return function(t) {   that.text(`${d.id}: ${charts[svgID].labelFormat.yFormat(i(t))} ${settings.axis.y.unit}`)  };
+                            })
+
+                    if(charts[svgID].series.indexOf('Landfill') > -1){
+                        d3.selectAll(".series-sublabel")
+                            .data(slices)
+                            .datum(getDatumObj)
+                            .transition().duration(duration)
+                                .attr("transform", (d, i) => `translate(${charts[svgID].scales.xScale(d.data.date) + 10 + settings.labelOffset[i].x} , ${charts[svgID].scales.yScale(d.data.value) + 5 + settings.labelOffset[i].y})` )
+                                .text( d => d.id === 'Landfill' ?  'from contaminated collection' : '' )
+                    }
+
+
+                //--------------------------- 5. UPDATE DATA CIRCLE POINTS -----------------------------// 
+                const points = d3.selectAll(`#${svgID} g.series-points-group`).data(slices)
+
+                points.selectAll(`#${svgID} .linePoint`)
+                    .data(d =>  Object.values(d)[0])
+                    .style('pointer-events', 'none')
+                    .transition().duration(duration)
+                        .attr("cx", xAccessor )      
+                        .attr("cy", yAccessor )    
+                        .attr("r", (d, i) =>  i < seriesData.length - 1 ? 2 : 3.5)
+            
+                points.selectAll(`#${svgID} .linePoint-hover`)
+                    .data(d => Object.values(d)[0] )
+                    .style('pointer-events', 'none')
+                    .transition().duration(duration)
+                        .attr("cx", xAccessor )      
+                        .attr("cy", yAccessor )       
+
+            }; // end update InteractiveLineChart
+
+            //////////////////////////////////////////////////////////////////////////////////////////
+            // 1. INITIATION FUNCTION TO LOAD SUPPORTING DATA AND CALL THE BUILD REPORT FUNCTION   ///
+            //////////////////////////////////////////////////////////////////////////////////////////
+
+            const content = {
+                    textByEdition:  {},
+                    data:           {},
+                    table:          {},
+                },
+                schema = {
+                    editions: [],
+                    tables: [],
+                    table: {}
+                }
+                state = {
+                    editionName:    "November 2020",        // This is the 'display' title for the edition and is used for general labelling
+                    editionDate:    "01/11/2020",           // This is the data that is parsed and used to filer data in table and charts. Use the first day of the edition month as this will be used to filter data series that are also configured for the 1st of each month
+                }
+
+            init()
+            function init(){
+                Tabletop.init({
+                    key: 	'https://docs.google.com/spreadsheets/d/16sQGA0lV-c4lIGe8aJ9mmIeembzwKrY51XwopQHXizM/',
+                    callback: async(loadedData) => {	
+                        // a. Parse table data
+                        schema.data = Object.keys(loadedData).filter(d => d.slice(0,4) === 'data')
+                        schema.data.forEach(name => {
+                            content.data[name] = loadedData[name].elements.map(row => {
+                                const newObj = {}
+                                Object.entries(row).forEach(([key, value]) => {
+                                    switch(key.toLowerCase()){
+                                        case 'date':
+                                            newObj[key] =  helpers.numberParsers.parseDateSlash(value)
+                                            break     
+                                        case 'year':
+                                        case 'label':
+                                            newObj[key] = value
+                                            break 
+                                        default:
+                                            newObj[key] = isNaN(parseFloat(value.replace(/,/g, ''))) ? value : parseFloat(value.replace(/,/g, '')) 
+                                    }
+                                })
+                                return newObj
+                            })
+                        })
+
+                        // d. Build report
+                        await addRegularCharts()   
+                    },
+                    simpleSheet: false,
+                    wanted: [  'data_mrfOutput_master'  
+                    ]   // Specifies which Google sheets to bring in (and in what order)
+                });
+            }; // end init()
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////
+            // 2. BUILD HTML REPORT LAYOUT INCL. DATA GRAPHICS : Called from init function)        ///
+            //////////////////////////////////////////////////////////////////////////////////////////
+                        
+                async function addRegularCharts(){
+                    // 0. Iniitalise tooltip
+                    charts.tooltip = d3.select("body").append("div")
+                        .attr("class", "tooltip")
+                        .style("opacity", 0)
+                        .style("position", "absolute")
+
+                    // 0. Filterable MRF Outputs chart
+                    charts.line.methods.renderMultiGroupLineChart('chart-MRF-destinations',     // 1. DOM ID of the chart 
+                            content.data.data_mrfOutput_master,         // 2. Data table for the chart
+                            {                                           // 3. Chart settings/configuration object
+                                config: {
+                                    interactive:       true
+                                }, 
+                                dims: {                                 // a. Dims are used to set the aspect ratio (heigh and width) and margins
+                                    width:      960,    
+                                    height:     480,
+                                    margin: { 
+                                        top:        50,
+                                        right:      250,
+                                        bottom:     50,
+                                        left:       80,
+                                    }
+                                },
+                                group:              'All collected materials',                            // b. Materials group as named in the source data header (after the '_') : ['All collected materials, Paper and Paperboard, Glass packaging, Plastic packaging, Metal packaging]
+                                series:             ['Local reprocessing',	'Export', 'Landfill'],  // c. Names of the data series in the source data header (before the '_') 
+                                labelOffset: [              // d. Enables manual placement (offsetting) of series labels. Each object/row is in the order of the series names above
+                                    {x: 0,  y: 0},   
+                                    {x: 0,  y: 0}, 
+                                    {x: 0,  y: 0},   
+                                ],
+                                scales: {   
+                                    x: {type: 'time',       unit: 'date' },
+                                    y: {type: 'linear',     unit: 'number'}
+                                },
+                                axis: {
+                                    x: {label: "", units: "", start:'01/10/2019', end:'01/09/2020', offset: -3},
+                                    y: {label: "tonnes collected", unit: 'tonnes'}
+                                }
+                            } 
+                        ) 
+                }
+
+
+                //////////////////////////////////////////////////////////////////////////////////////////
+                /// X HELPER FUNCTIONS | Formatting and text manipulations helper functions            ///
+                //////////////////////////////////////////////////////////////////////////////////////////
+
+                const helpers= {
+                    numberFormatters: {
+                        formatComma:           	d3.format(",.0f"),
+                        formatComma1dec:       	d3.format(",.1f"),
+                        formatComma2dec:       	d3.format(",.2f"),
+                        formatInteger:         	d3.format(".0f"),   
+                        formatCostInteger:     	d3.format("$,.0f"),  
+                        formatCost1dec:        	d3.format("$,.1f"),  
+                        formatPct:          	d3.format(".0%"), 
+                        formatPct1dec:          d3.format(".1%")  
+                    },
+                    numberParsers: {
+                        parseDateSlash: d3.timeParse("%d/%m/%Y")
+                    },
+                    camelize: function(str) {
+                        return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+                            if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+                            return index === 0 ? match.toLowerCase() : match.toUpperCase();
+                        });
+                    }, 
+                    slugify: function (str) {
+                        str = str.replace(/^\s+|\s+$/g, ''); // trim
+                        str = str.toLowerCase();
+                    
+                        // remove accents, swap ñ for n, etc
+                        var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+                        var to   = "aaaaeeeeiiiioooouuuunc------";
+                        for (var i=0, l=from.length ; i<l ; i++) {
+                            str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+                        }
+
+                        str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                            .replace(/\s+/g, '-') // collapse whitespace and replace by -
+                            .replace(/-+/g, '-'); // collapse dashes
+
+                        return str;
+                    }, 
+                }
+
+
+        </script>
+    </body>
+
+</html>
+

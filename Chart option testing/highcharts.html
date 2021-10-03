@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Highcharts exploration">
+        <meta name="author" content="Little Sketches ">
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/data.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>    
+
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="css/chartStyle.css"/>
+		<link rel="stylesheet" type="text/css" href="css/flowStyle.css"/>
+
+        <style>
+            :root {
+                --svGreen:                            #9ACA3C;
+                --gippslandGreen:                     #CED99E;
+                --secondary_greatOceanBlue:           #0070BB;
+                --secondary_hepburnClay:              #9B0B32;
+                --secondary_meredithGold:             #E3BA5A;
+                --campaign_corrangamiteEggplant:      #550055;
+                --campaign_corrangamiteEggplantLight: #B273B2;
+                --campaign_gannarawwaPink:            #D00236;
+                --campaign_gannarawwaPinkLight:       #EE5F83;
+                --campaign_surfCoastTeal:             #00848F;
+                --campaign_surfCoastTealLight:        #47ABB4;
+                --campaign_queenscliffeMarine:        #0A3055;
+                --campaign_queenscliffeMarineLight:   #7991A9;
+                --campaign_milduraOrange:             #D3410B;
+                --campaign_milduraOrangeLight:        #F2855D;
+                --campaign_otwaysGreen:               #008848;
+                --campaign_otwaysGreenLight:          #8DBF87;
+            }
+
+            /* Typefaces */
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700&display=swap');
+            @font-face {
+                font-family: 'DIN Next LT Pro';
+                src:  url('fonts/DINNextLTPro-Bold.woff2') format('woff2'),
+                    url('fonts/DINNextLTPro-Bold.woff') format('woff');
+            }
+
+            .powerBI-container{
+                width: 100vw;
+            }
+        </style>
+
+    </head>
+
+
+    <body>
+        <div id="container-1"></div>
+        <div id="container-2"></div>
+        <div id="container-3"></div>
+
+        <div class = "powerBI-container">
+            <iframe width="100%"  height="600px" src="https://app.powerbi.com/view?r=eyJrIjoiYjYyZDE1NmMtY2I2Yi00NGU1LWE5MDYtYTNiZWZlM2Q1NmNkIiwidCI6IjYyMDlhMzYwLTIwMGUtNDI5Yy04MDQ4LWVjMTQ3NDdjOGIwYyJ9&pageName=ReportSection" frameborder="0" allowFullScreen="true"></iframe>
+        </div>
+
+        <script>
+            // Chart theme
+            Highcharts.theme = {
+                colors: [
+                    'var(--svGreen)', 
+                    'var(--secondary_greatOceanBlue)', 
+                    'var(--secondary_hepburnClay)', 
+                    'var(--secondary_meredithGold)', 
+                    'var(--campaign_corrangamiteEggplant)', 
+                    'var(--campaign_gannarawwaPink)', 
+                    'var(--campaign_surfCoastTeal)', 
+                    'var(--campaign_queenscliffeMarine)', 
+                    'var(--campaign_milduraOrange)', 
+                    'var(--campaign_otwaysGreen)', 
+                ],
+                chart: {
+                    marginLeft: 70,
+                    height: 500,
+                    width: 800
+                },
+                labels: {
+                    align: 'right'
+                },
+                series: {
+                    type: 'line',
+                    data: {
+                        marker: {
+                            symbol: 'circle'
+                        }                                   
+                    }
+                },
+                title: {
+                    x: 30,
+                    margin: 50,
+                    style: {
+                        color: '#000',
+                        font: 'bold 32px DIN Next LT Pro, Roboto, Arial, sans-serif',
+                    }
+                },
+                subtitle: {
+                    x: 30,
+                    style: {
+                        color: '#666666',
+                        font: 'bold 12px Roboto, Roboto, Arial, sans-serif'
+                    }
+                },
+                plotOptions:  {   
+                    line: {
+                        marker: {
+                            enabled: true,
+                            symbol: 'circle',
+                            radius: 2,
+                            fillColor: '#fff',
+                            lineColor: null,
+                            lineWidth: 1,
+                        }
+                    }                       
+                },
+                legend: {
+                    itemStyle: {
+                        font: '9pt Roboto, Roboto, Arial, sans-serif',
+                        color: 'black'
+                    },
+                    itemHoverStyle:{
+                        color: 'gray'
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            };
+
+
+            Highcharts.setOptions(Highcharts.theme);
+
+
+            const chartConfig = {
+                line: {
+                    'mrf-all-materials': {
+                        title: {
+                            text:   'All materials',
+                            align:  'left'
+                        },
+                        subtitle: {
+                            text: 'Victorian resource recovery flows',
+                            align:  'left'
+                        },
+                        yAxis: {
+                            title: {
+                                text:   'tonnes',
+                                align:  'high'
+                            }
+                        },
+                        chart: {
+                            animation:  true,
+                            panning:    true,
+                            panKey:     'shift',
+                            zoomType:   'x',
+                            events: {
+                                load: function() {
+                                    console.log('On load')
+                                    // setTimeout(() => {
+                                    //     var chart = this,
+                                    //         series = chart.series[0],
+                                    //         xAxis = chart.xAxis[0],
+                                    //         seriesLength = series.xData.length,
+                                    //         newStart = series.xData[series.xData.length -12] ,
+                                    //         newEnd = series.xData[series.xData.length];
+                                    //     xAxis.setExtremes(newStart, newEnd);
+                                    // }, 1100);
+                                }
+                            }
+                        },
+                        data: {
+                            googleSpreadsheetKey:           '1zFTjAEDXkFmeSrbAt9gC1LShERepY75fSbKEJStsWto',
+                            googleSpreadsheetWorksheet:     2,      // "Second" sheet in tab order
+                            startRow:                       1,
+                            parsed: (columns) => {
+                                const seriesLength = columns[0].length,
+                                    noGroups = columns.length,
+                                    noSeries = 3,            // Export, Landfill and Local reprocessing     
+                                    dateColumn = [columns[0]],
+                                    seriesColumns = columns.splice(1 + noSeries, seriesLength-noSeries)
+
+                                // Use splice to choose columns
+                                columns = dateColumn.concat(seriesColumns)
+                                // Modify the series data itself
+                                // columns.forEach(column => column.splice(1, seriesLength - 11) )  // Need to use splice from index 1 as each series data array includes custom properies of 'isDatatime' and 'name'
+                            },
+                            complete: (chartObj) => {
+                                console.log('Complete')
+                                console.log(mrfChart)
+                                console.log(mrfChart.series[0])
+                                    setTimeout(() => {
+                                        var chart = mrfChart,
+                                            series = chart.series[0],
+                                            xAxis = chart.xAxis[0],
+                                            seriesLength = series.xData.length,
+                                            newStart = series.xData[series.xData.length -12] ,
+                                            newEnd = series.xData[series.xData.length];
+                                        xAxis.setExtremes(newStart, newEnd);
+                                    }, 400);
+                            }
+                        },
+                        legend: {
+                            // enabled: false,
+                            align:  'right',
+                            layout: 'vertical',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            shared:         true,
+                            crosshairs:     true,
+                        },
+                        plotOptions: {
+                            series: {
+                                animation: {
+                                    duration: 0
+                                }
+                            }
+                        }
+                    },
+
+
+
+                    googleCSV: {
+                        title: {
+                                text: 'Paper and paperboard'
+                        },
+                        data: {
+                            csvURL:  'https://docs.google.com/spreadsheets/d/1zFTjAEDXkFmeSrbAt9gC1LShERepY75fSbKEJStsWto/gviz/tq?tqx=out:csv&sheet=data',
+                            startRow: 1,
+                            dateFormat:  'dd/mm/YYYY',
+                            beforeParse: (csv) => {
+                                console.log('Parse before')
+                                return csv
+                            },
+                            parsed:     (columns) => {
+                                const seriesLength = columns[0].length
+                                console.log(seriesLength)
+                                console.log(columns)
+                                columns.splice(3,1)
+                                // columns.forEach(column => column.splice(0, seriesLength -12) )  // Need to use splice as each series data array includes custom properties of 'isDatatime' and 'name'
+                            },
+                            complete: (data) => {
+                                // console.log('Complete')
+                                // console.log(data)
+                            }
+                        },
+                        series: [
+                            {name: "name"},
+                            {name: "name"},
+                            {name: "name"}
+                        ],
+
+                        tooltip: {
+                            shared: true,
+                            crosshairs: true,
+
+                        },
+                    }
+
+
+                }
+            }
+
+
+            // Add chart
+            let mrfChart
+            document.addEventListener('DOMContentLoaded', () => {
+               mrfChart = Highcharts.chart('container-1', chartConfig.line['mrf-all-materials']);
+                // Highcharts.chart('container-2', chartConfig.line.googleCSV);
+
+            });
+
+            function updatePaperboard(){
+                mrfChart.update({
+                    title: {
+                        text:   'Paper and paperboard',
+                        align:  'left'
+                    },
+                    data: {
+                        googleSpreadsheetKey:           '1zFTjAEDXkFmeSrbAt9gC1LShERepY75fSbKEJStsWto',
+                        googleSpreadsheetWorksheet:     2,      // "Second" sheet in tab order
+                        startRow:                       1,
+                        parsed: (columns) => {
+                            const seriesLength = columns[0].length,
+                                noGroups = columns.length,
+                                noSeries = 3            // Export, Landfill and Local reprocessing                                
+                            // Use splice to choose columns
+                            console.log(columns)
+                                console.log(seriesLength, noGroups)
+                            // columns.splice(
+                            //     (1 + noSeries),
+                            //     (noGroups - noSeries)
+                            // )
+                            // Modify the series data itself
+                            // columns.forEach(column => column.splice(1, seriesLength - 11) )  // Need to use splice from index 1 as each series data array includes custom properies of 'isDatatime' and 'name'
+                        }
+                    },
+
+                });
+
+
+
+            };
+
+
+        </script>
+
+    </body>
+
+</html>
+
